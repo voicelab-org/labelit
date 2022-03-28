@@ -1,0 +1,10 @@
+env/
+.idea/
+media/
+notes/
+__pycache__/
+Makefile
+*.pyc
+docker-compose-dev.yml
+package-lock.json
+export.json

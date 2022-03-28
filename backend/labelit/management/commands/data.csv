@@ -1,0 +1,5 @@
+text,document_filename,document_sequence_filename,document_index
+dummy text 4,filename0002_2.wav,filename0002.wav,2
+dummy text 2,filename0001_2.wav,filename0001.wav,2
+dummy text 1,filename0001_1.wav,filename0001.wav,1
+dummy text 3,filename0002_1.wav,filename0002.wav,1

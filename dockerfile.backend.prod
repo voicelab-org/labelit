@@ -1,0 +1,24 @@
+ARG PYTHON_VERSION="3.8.5"
+FROM python:${PYTHON_VERSION}-slim-buster 
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /code
+COPY requirements.txt /code/
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    g++ \
+    ffmpeg \
+ && apt-get clean
+
+RUN pip install -r requirements.txt
+
+COPY ./backend /code/
+
+RUN pip install uwsgi
+
+WORKDIR /code/
+
+CMD uwsgi --http "0.0.0.0:8000" --module config.wsgi --master --processes 2 --threads 2
+
+
