@@ -1,19 +1,13 @@
+.. Labelit documentation master file, created by
+   sphinx-quickstart on Mon Mar 28 17:28:51 2022.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
 Welcome to Labelit's documentation!
 ===================================
 
-**Labelit** (/lu'make/) is an open-source (Affero GPL) speech annotation platform designed for flexibility,
-extensibility and scalability. It is suitable for collaborative annotation of large text and audio datasets.
-
-Check out the :doc:`gettingstarted` section for further information, including
-how to :ref:`installation` the project.
-
-.. note::
-
-   This project is under active development.
-
-Contents
---------
-
 .. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
    gettingstarted

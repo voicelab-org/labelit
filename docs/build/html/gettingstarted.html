@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting started &mdash; Labelit 0.1 documentation</title>
+  <title>Getting started &mdash; Labelit 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,9 +28,6 @@
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> Labelit
           </a>
-              <div class="version">
-                0.1.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -39,9 +36,10 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-installation">Local installation</a></li>
 </ul>
 </li>
 </ul>
@@ -62,7 +60,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Getting started</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/gettingstarted.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/gettingstarted.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -72,9 +70,34 @@
              
   <section id="getting-started">
 <h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
-<section id="installation">
-<span id="id1"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
-<p>Under construction…</p>
+<section id="local-installation">
+<h2>Local installation<a class="headerlink" href="#local-installation" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;labelit-project-root&gt;
+docker-compose build
+docker-compose up
+</pre></div>
+</div>
+<p>Once all services are running, labelit can be accessed at <code class="docutils literal notranslate"><span class="pre">localhost:8081</span></code>. The django admin panel
+will be accessed at <code class="docutils literal notranslate"><span class="pre">0.0.0.0/admin</span></code></p>
+<p>Create a Django superuser:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose run backend bash
+root@a397d8e22e87:/code# python manage.py createsuperuser
+</pre></div>
+</div>
+<p>Follow the instructions to create the super user, taking note of credentials.</p>
+<p>You can now login into the admin panel and add other users.</p>
+<p>If you want a user to be a QA user, check “staff status” in the user edit form.</p>
+<p>Now, you can load some toy data to get going:</p>
+<div class="highlight-bash docker-compose run backend bash notranslate"><div class="highlight"><pre><span></span>root@a397d8e22e87:/code# python manage.py loaddata toydata
+</pre></div>
+</div>
+<p>This will create a dataset and a project containing two types of tasks, one categorical and one ordinal task.
+This step also creates two users, one QA user (janedoe-qa&#64;levoicelab.org) and an annotator user (jogndoe&#64;levoicelab.org).</p>
+<p>In the future, you can create datasets, tasks, projects and users via management commands or the admin panel.</p>
+<p>As the admin user, you can now go inside a project from the projects list and create annotation batches by clicking on the “Create batch” button.
+The dialog form should be self-explanatory.</p>
+<p>Add (non-QA) annotators to the batch.
+Note that QA users will have access to all projects and will be able to review all annotations.</p>
 </section>
 </section>
 
@@ -88,7 +111,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Affero GPL.</p>
+    <p>&#169; Copyright 2022, LeVoiceLab, Batvoice.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

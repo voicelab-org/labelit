@@ -61,6 +61,7 @@ services:
       AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
       S3_DIRECT_SERVE: "true"
       SEGMENT_EXPIRATION_TIME_IN_SECONDS: 3600
+      SECRET_KEY: "o4_7tyfr^o4^4nx_(-6umggzwo%ksx32y3x^amn7o&c7*o-q!d"
     ports:
       - 8000:8000
       - 5678:5678 
