@@ -15,6 +15,7 @@ from .models import (
     BatchDocumentSequence,
     Annotation,
     TranscriptionTask,
+    TextEditionTask,
     Lexicon,
     LexiconEntry,
     LiveCorrectLabel,
@@ -32,6 +33,7 @@ admin.site.register(BatchDocument)
 admin.site.register(BatchDocumentSequence)
 admin.site.register(Annotation)
 admin.site.register(TranscriptionTask)
+admin.site.register(TextEditionTask)
 admin.site.register(LiveCorrectTask)
 admin.site.register(LiveCorrectLabel)
 

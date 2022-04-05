@@ -5,6 +5,7 @@ from labelit.models import (
     TranscriptionLabel,
     LiveCorrectLabel,
     EntityLabel,
+    TextEditionLabel,
 )
 from rest_polymorphic.serializers import PolymorphicSerializer
 from django.core.exceptions import ObjectDoesNotExist
@@ -72,6 +73,19 @@ class TranscriptionLabelSerializer(serializers.ModelSerializer):
         ]
 
 
+class TextEditionLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextEditionLabel
+        fields = [
+            'id',
+            'name',
+            'task',
+            'color',
+            'edited_text',
+        ]
+
+
+
 class LiveCorrectLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -106,6 +120,7 @@ class LabelPolymorphicSerializer(PolymorphicSerializer):
         TranscriptionLabel: TranscriptionLabelSerializer,
         LiveCorrectLabel: LiveCorrectLabelSerializer,
         EntityLabel: EntityLabelSerializer,
+        TextEditionLabel: TextEditionLabelSerializer,
     }
 
 
@@ -116,4 +131,5 @@ class LabelPolymorphicReadSerializer(PolymorphicSerializer):
         TranscriptionLabel: TranscriptionLabelSerializer,
         LiveCorrectLabel: LiveCorrectLabelReadSerializer,
         EntityLabel: EntityLabelSerializer,
+        TextEditionLabel: TextEditionLabelSerializer,
     }
