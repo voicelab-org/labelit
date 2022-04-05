@@ -6,6 +6,7 @@ from labelit.models import (
     TranscriptionTask,
     LiveCorrectTask,
     EntityTask,
+    TextEditionTask,
 )
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
@@ -124,6 +125,28 @@ class TranscriptionTaskSerializer(serializers.ModelSerializer):
         ]
 
 
+class TextEditionTaskSerializer(serializers.ModelSerializer):
+    labels = LabelPolymorphicSerializer(
+        many=True,
+        required=False,
+        read_only=True
+    )
+
+    class Meta:
+        model = TextEditionTask
+        fields = [
+            'id',
+            'name',
+            'projects',
+            'can_documents_be_invalidated',
+            'labels',
+            'image',
+            'html_guidelines',
+            'archived',
+        ]
+
+
+
 class LiveCorrectTaskSerializer(serializers.ModelSerializer):
     labels = LabelPolymorphicSerializer(
         many=True,
@@ -153,4 +176,5 @@ class TaskPolymorphicSerializer(PolymorphicSerializer):
         TranscriptionTask: TranscriptionTaskSerializer,
         LiveCorrectTask: LiveCorrectTaskSerializer,
         EntityTask: EntityTaskSerializer,
+        TextEditionTask: TextEditionTaskSerializer,
     }

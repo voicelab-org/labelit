@@ -12,7 +12,7 @@
                 <div v-if="project.is_audio_annotated">
                     <player :document="document" @loaded="audio_loaded=true" />
                 </div>
-                <div id="text-container">
+                <div id="text-container" v-if="project.is_text_annotated">
                     <!--<span v-if="document.text" v-html="document.text"></span>-->
                     <TextWithEntities
                         :text="document.text"
