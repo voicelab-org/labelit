@@ -49,6 +49,8 @@ export default {
     },
     created() {
 
+        console.log("annotation labels", this.annotation.labels)
+
         if (this.isMixinWatcherActive) {
             var vm = this
             vm.selected_labels = vm.annotation.labels.map(

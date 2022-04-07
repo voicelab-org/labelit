@@ -20,6 +20,8 @@ from .models import (
     LexiconEntry,
     LiveCorrectLabel,
     LiveCorrectTask,
+    NestedCategoricalLabel,
+    NestedCategoricalTask,
     TimedTranscript,
     TimedTranscriptSegment,
     EntityLabel,
@@ -94,6 +96,11 @@ class CategoricalTaskAdmin(admin.ModelAdmin):
 admin.site.register(Label)
 admin.site.register(CategoricalTask, CategoricalTaskAdmin)
 
+class NestedCategoricalTaskAdmin(admin.ModelAdmin):
+    inlines = [LabelInline]
+
+admin.site.register(NestedCategoricalTask, NestedCategoricalTaskAdmin)
+admin.site.register(NestedCategoricalLabel)
 
 class OrdinalLabelInline(admin.TabularInline):
     model = OrdinalLabel
