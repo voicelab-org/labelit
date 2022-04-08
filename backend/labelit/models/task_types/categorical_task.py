@@ -91,34 +91,6 @@ class CategoricalTask(Task):
 
         annotators = batch.annotators.all()
         stats = self._get_stats(done_annotations, annotators)
-        """
-        stats = {}
-        try:
-            stats['agreement'] = self.get_agreement_stats(batch)
-        except Http404:
-            stats['agreement'] = None
-
-        
-
-        stats['annotation_distribution'] = done_annotations.values('labels__name', 'labels__color').order_by('labels__name').annotate(
-            count=models.Count('id')
-        )
-
-        stats['per_annotator_distributions'] = []
-
-        for annotator in batch.annotators.all():
-            if done_annotations.filter(annotator=annotator).count():
-                stats['per_annotator_distributions'].append(
-                    done_annotations.filter(annotator=annotator).values('labels__name', 'labels__color').order_by('labels__name').annotate(
-                        count=models.Count('id'),
-                        annotator_first_name=F('annotator__first_name'),
-                        annotator_last_name=F('annotator__last_name'),
-                    )
-                )
-                
-
-
-        """
         try:
             stats['agreement'] = self.get_agreement_stats(batch)
         except Http404:

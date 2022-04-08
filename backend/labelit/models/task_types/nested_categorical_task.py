@@ -1,6 +1,7 @@
 from django.db import models
 from labelit.models.task import Task
 from django.core.exceptions import ValidationError
+from labelit.models.annotation import Annotation
 
 
 class NestedCategoricalTask(Task):
@@ -45,14 +46,42 @@ class NestedCategoricalTask(Task):
                     """
                 )
 
-    def _get_stats(self, done_annotations, annotators):
-        raise NotImplementedError
+    def _get_stats(self, done_annotations,):
+        stats = {}
+        stats['children_label_distribution'] = done_annotations.values(
+            'labels__name', 'labels__color'
+        ).order_by(
+            'labels__name'
+        ).annotate(
+            count=models.Count('id')
+        )
+        stats['parent_label_distribution'] = done_annotations.values(
+            'labels__nestedcategoricallabel__parent_label__name', 'labels__nestedcategoricallabel__parent_label__color'
+        ).order_by(
+            'labels__nestedcategoricallabel__parent_label__name'
+        ).annotate(
+            count=models.Count('id')
+        )
+
+        return stats
 
     def get_project_stats(self, project):
-        raise NotImplementedError
+        done_annotations = Annotation.objects.filter(
+            project=project,
+            task=self,
+            is_done=True,
+        )
+
+        return self._get_stats(done_annotations)
 
     def get_batch_stats(self, batch):
-        raise NotImplementedError
+        done_annotations = Annotation.objects.filter(
+            batch=batch,
+            task=self,
+            is_done=True,
+        )
+
+        return self._get_stats(done_annotations)
 
     def get_agreement_stats(self, batch):
         raise NotImplementedError
