@@ -49,7 +49,7 @@ export default {
     },
     created() {
 
-        console.log("annotation labels", this.annotation.labels)
+        console.log("&annotation labels", this.annotation.labels)
 
         if (this.isMixinWatcherActive) {
             var vm = this
@@ -60,6 +60,7 @@ export default {
                     )[0]
                 }
             )
+            console.log("&selected_labels", vm.selected_labels)
         }
 
     },

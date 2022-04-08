@@ -1,18 +1,15 @@
 <template>
   <div>
     <div v-if="focused">
-      <!--
       <span v-shortkey="['arrowleft']" @shortkey="browseLabels('left')"></span>
       <span v-shortkey="['arrowright']" @shortkey="browseLabels('right')"></span>
-      <span v-shortkey="['enter']" @shortkey="toggleLabel(orderedLabels[cursor_index])"></span>
-      -->
-    </div>
-    <div>
-      parentlabels: {{ parentLabels }}<br><br>
-      label_selections: {{ label_selections }}
     </div>
     <div class="dropdown-list" v-if="label_selections">
-      <span v-for="(label, i) in parentLabels" :key="label.label.id">
+      <span
+          v-for="(label, i) in parentLabels"
+          :key="label.label.id"
+          :class="getParentLabelClasses(label, i)"
+      >
         <v-select
             :items="label.children"
             v-model="label_selections[i].selections"
@@ -20,9 +17,12 @@
             item-value="id"
             solo
             flat
-            append-icon=keyboard_arrow_down
             hide-details
             :multiple="label.label.single_child_select"
+            :ref="'dropdown-'+label.label.id"
+            :placeholder="label.label.name"
+            autofocus
+            :disabled="readOnly"
         />
       </span>
     </div>
@@ -76,18 +76,12 @@ export default {
       handler() {
 
         if (this.label_selections == null) return
-
-        console.log("label_selections changed", JSON.parse(JSON.stringify(this.label_selections)))
         let selections = this.label_selections.reduce(
             (prev, curr) => {
-              console.log("&prev, &curr", JSON.parse(JSON.stringify(prev)), JSON.parse(JSON.stringify(curr)))
-              if (!prev.selections) return curr.selections
-              return prev.selections.concat(curr.selections)
+              return prev.concat(curr.selections)
             },
             []
         )
-
-        console.log("&sel", JSON.parse(JSON.stringify(selections)))
 
         selections = this.labels.filter(
             (l) => {
@@ -95,13 +89,35 @@ export default {
             }
         )
 
-        console.log("&selections", selections)
-
         this.$emit('input', selections)
       }
     },
+    cursor_index() {
+      if (this.focused) {
+        this.setDropdownFocus()
+      }
+    },
+    focused() {
+      this.setDropdownFocus()
+    },
   },
   methods: {
+    setDropdownFocus() {
+      for (const [index, label] of this.parentLabels.entries()) {
+        let ref = 'dropdown-' + label.label.id
+        if (index == this.cursor_index) {
+          this.$nextTick(() => {
+
+            this.$refs[ref][0].focus()
+          })
+        } else {
+          this.$nextTick(() => {
+
+            this.$refs[ref][0].blur()
+          })
+        }
+      }
+    },
     setSelections() {
       let selected_labels = this.value
       this.parentLabels.forEach(
@@ -109,18 +125,17 @@ export default {
             let l =
                 {
                   parent_label: p_label,
-                  selections: selected_labels.filter(l => l.parent_label == p_label.label.id),
+                  selections: selected_labels.filter(l => l.parent_label == p_label.label.id).map(l => l.id),
                 }
 
-            if (!this.label_selections){
-              this.label_selections=[l]
+            if (!this.label_selections) {
+              this.label_selections = [l]
               return
             }
 
             this.label_selections.push(l)
           }
       )
-      console.log("&done setSelections, label_sels", this.label_selections)
     },
     getLabelPillStyle(label) {
       return {
@@ -130,12 +145,24 @@ export default {
     isLabelSelected(label) {
       return this.value.filter(l => l[this.valueField] == label[this.valueField]).length > 0
     },
+    isParentLabelSelected(label) {
+      return this.value.filter(l => l.parent_label == label.label.id).length > 0
+    },
     getLabelClasses(label, i) {
       var classes = {
         'selected': false,
         'focused': i == this.cursor_index && this.focused,
       }
       if (this.isLabelSelected(label)) {
+        classes['selected'] = true
+      }
+      return classes
+    },
+    getParentLabelClasses(label, i) {
+      var classes = {
+        'focused': i == this.cursor_index && this.focused,
+      }
+      if (this.isParentLabelSelected(label)) {
         classes['selected'] = true
       }
       return classes
@@ -162,7 +189,7 @@ export default {
     },
     browseLabels(direction) {
       if (direction == 'right') {
-        if (this.cursor_index == this.orderedLabels.length - 1) {
+        if (this.cursor_index == this.parentLabels.length - 1) {
           this.cursor_index = 0
         } else {
           this.cursor_index++
@@ -171,7 +198,7 @@ export default {
 
       if (direction == 'left') {
         if (this.cursor_index == 0) {
-          this.cursor_index = this.orderedLabels.length - 1
+          this.cursor_index = this.parentLabels.length - 1
         } else {
           this.cursor_index--
         }
@@ -179,15 +206,6 @@ export default {
     }
   },
   computed: {
-    orderedLabels() {
-      var vm = this
-
-      var labelsCopy = []
-      Object.assign(labelsCopy, vm.labels)
-      return labelsCopy.sort((a, b) => {
-        return a[vm.valueField] > b[vm.valueField] ? 1 : -1
-      })
-    },
     parentLabels() {
       let parent_labels = this.labels.filter(
           l => l.parent_label == null
@@ -208,8 +226,9 @@ export default {
   },
 }
 </script>
-<style>
+<style lang="scss">
 
+/*
 .v-btn.label {
   margin-top: 15px;
   margin-right: 25px;
@@ -222,6 +241,39 @@ export default {
 .v-btn.label.selected.primary.focused {
 
   border: 2px solid #006494 !important;
+}
+*/
+
+.dropdown-list {
+  display: flex;
+
+  > span {
+    display: inline-block;
+    max-width: 200px;
+
+    margin-top: 15px;
+    margin-right: 25px;
+
+    &.focused {
+      /*TODO add focused style*/
+      .v-input__control {
+        border: 2px solid #03a9f4 !important;
+      }
+
+      &.selected {
+        .v-input__control {
+          border: 2px solid #006494 !important;
+        }
+
+      }
+    }
+  }
+
+  .v-input__control {
+    border: 1px solid grey !important;
+    border-radius: 4px;
+  }
+
 }
 
 </style>
