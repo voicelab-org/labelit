@@ -95,12 +95,20 @@ class CategoricalTaskAdmin(admin.ModelAdmin):
 
 admin.site.register(Label)
 admin.site.register(CategoricalTask, CategoricalTaskAdmin)
+admin.site.register(NestedCategoricalTask)
 
-class NestedCategoricalTaskAdmin(admin.ModelAdmin):
-    inlines = [LabelInline]
 
-admin.site.register(NestedCategoricalTask, NestedCategoricalTaskAdmin)
-admin.site.register(NestedCategoricalLabel)
+class NestedCategoricalLabelInline(admin.TabularInline):
+    model = NestedCategoricalLabel
+    fk_name = 'parent_label'
+
+
+class NestedCategoricalLabelAdmin(admin.ModelAdmin):
+    inlines = [NestedCategoricalLabelInline]
+
+
+admin.site.register(NestedCategoricalLabel, NestedCategoricalLabelAdmin)
+
 
 class OrdinalLabelInline(admin.TabularInline):
     model = OrdinalLabel
@@ -119,6 +127,7 @@ class EntityLabelInline(admin.TabularInline):
 
 class EntityTaskAdmin(admin.ModelAdmin):
     inlines = [EntityLabelInline]
+
 
 admin.site.register(EntityTask, EntityTaskAdmin)
 
