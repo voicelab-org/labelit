@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
+    os.environ['ALLOWED_HOST']
 ]
 
 

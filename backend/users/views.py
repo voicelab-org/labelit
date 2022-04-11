@@ -26,11 +26,14 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class UserListView(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
-    queryset = User.objects.all()
+
+    # queryset = User.objects.all()
+    queryset = User.objects.filter(is_staff=False).order_by('first_name')  # only getting non-QA users,
+    # TODO: change when needed, but then add filtering
+
     serializer_class = UserListSerializer
 
     def get_serializer_class(self):
-        print (self.request.user.is_admin)
         if self.request.user.is_admin : 
             return UserSerializer
         return super().get_serializer_class()

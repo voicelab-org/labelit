@@ -20,6 +20,8 @@ from .models import (
     LexiconEntry,
     LiveCorrectLabel,
     LiveCorrectTask,
+    NestedCategoricalLabel,
+    NestedCategoricalTask,
     TimedTranscript,
     TimedTranscriptSegment,
     EntityLabel,
@@ -93,6 +95,19 @@ class CategoricalTaskAdmin(admin.ModelAdmin):
 
 admin.site.register(Label)
 admin.site.register(CategoricalTask, CategoricalTaskAdmin)
+admin.site.register(NestedCategoricalTask)
+
+
+class NestedCategoricalLabelInline(admin.TabularInline):
+    model = NestedCategoricalLabel
+    fk_name = 'parent_label'
+
+
+class NestedCategoricalLabelAdmin(admin.ModelAdmin):
+    inlines = [NestedCategoricalLabelInline]
+
+
+admin.site.register(NestedCategoricalLabel, NestedCategoricalLabelAdmin)
 
 
 class OrdinalLabelInline(admin.TabularInline):
@@ -112,6 +127,7 @@ class EntityLabelInline(admin.TabularInline):
 
 class EntityTaskAdmin(admin.ModelAdmin):
     inlines = [EntityLabelInline]
+
 
 admin.site.register(EntityTask, EntityTaskAdmin)
 
