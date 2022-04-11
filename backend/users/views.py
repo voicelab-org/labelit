@@ -28,7 +28,7 @@ class UserListView(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
 
     # queryset = User.objects.all()
-    queryset = User.objects.filter(is_staff=False)  # only getting non-QA users,
+    queryset = User.objects.filter(is_staff=False).order_by('first_name')  # only getting non-QA users,
     # TODO: change when needed, but then add filtering
 
     serializer_class = UserListSerializer
