@@ -1,0 +1,110 @@
+<template>
+  <div>
+    <div class="header">
+      <h2 class="headline" v-if="project">Project: {{ project.name }} </h2>
+      <div class="header-right">
+        <v-btn @click="exportProject"> Export</v-btn>
+        <batch-create v-if="isAdmin" :projectId="projectId" @batchCreated="updateListToggle=!updateListToggle"/>
+      </div>
+    </div>
+
+
+    <v-tabs>
+      <v-tab @click="show_batch_list=true">
+        Batches
+      </v-tab>
+      <v-tab  @click="show_batch_list=false">
+        Stats
+      </v-tab>
+    </v-tabs>
+    <router-view />
+
+    <template v-if="project && show_batch_list">
+      <BatchList :project="project" :update="updateListToggle"/>
+    </template>
+    <template v-if="!show_batch_list && project">
+      <Stats :project-id="project.id" />
+    </template>
+  </div>
+</template>
+
+<script>
+
+import ProjectService from '@/services/project.service'
+import BatchCreate from '@/components/BatchCreate'
+import Stats from '@/components/Stats'
+import {mapGetters} from 'vuex'
+
+import BatchList from '@/components/BatchList'
+
+export default {
+  name: 'project',
+  components: {BatchCreate, BatchList, Stats},
+  props: {
+    projectId: {
+      type: String,
+      required: true
+    },
+  },
+  data() {
+    return {
+      batches: [],
+      project: null,
+      loading: true,
+      show_archived: false,
+      show_batch_list: true,
+      updateListToggle: true,
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isAdmin: 'auth/isAdmin',
+    }),
+
+  },
+  created() {
+
+    let vm = this
+    ProjectService.getProjectById(vm.projectId)
+        .then(function (response) {
+          vm.project = response.data
+          //vm.$store.commit('task/SET_TASK_LIST', response.data.tasks)
+          vm.loading = false
+        })
+        .catch(error => console.log(error))
+  },
+  methods: {
+    exportProject() {
+      //ProjectService.exportProject(this.projectId).then(
+      ProjectService.downloadExportedProject(this.projectId)/*.then(
+          (res) => {
+            console.log("&res: ", res.data)
+          }
+      )*/
+    },
+    getLink(batch) {
+      return "/batch/" + batch.id
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header-right {
+    display: flex;
+  }
+}
+
+
+.loading {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+</style>
+

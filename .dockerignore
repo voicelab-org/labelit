@@ -1,0 +1,8 @@
+env/
+.idea/
+media/
+notes/
+__pycache__/
+Makefile
+*.pyc
+package.lock.json

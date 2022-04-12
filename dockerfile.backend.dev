@@ -1,0 +1,27 @@
+ARG PYTHON_VERSION="3.8.5"
+FROM python:${PYTHON_VERSION}-slim-buster 
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /code
+COPY requirements.txt /code/
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    g++ \
+    ffmpeg \
+    tk \
+ && apt-get clean
+
+RUN pip install -r requirements.txt
+
+COPY ./backend /code/
+
+CMD python manage.py runserver 0.0.0.0:8000
+
+# RUN pip install debugpy
+
+# WORKDIR /code/
+# CMD ["python", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+
