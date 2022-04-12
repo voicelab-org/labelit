@@ -4,28 +4,33 @@
       <span v-shortkey="['arrowleft']" @shortkey="browseLabels('left')"></span>
       <span v-shortkey="['arrowright']" @shortkey="browseLabels('right')"></span>
     </div>
+
     <div class="dropdown-list" v-if="label_selections">
       <div
+          :class="getParentLabelClasses(label, i)"
           v-for="(label, i) in parentLabels"
           :key="label.label.id"
-          :class="getParentLabelClasses(label, i)"
       >
-        <div class="bolder">{{label.label.name}}</div>
-        <v-select
-            :items="label.children"
-            v-model="label_selections[i].selections"
-            item-text="name"
-            item-value="id"
-            solo
-            flat
-            hide-details
-            :multiple="label.label.single_child_select"
-            :ref="'dropdown-'+label.label.id"
-            :placeholder="label.label.name"
-            autofocus
-            :disabled="readOnly"
-        />
+        <div class="select">
+          <div class="bolder">{{ label.label.name }}</div>
+          <v-select
+              :items="label.children"
+              v-model="label_selections[i].selections"
+              item-text="name"
+              item-value="id"
+              solo
+              flat
+              hide-details
+              :multiple="label.label.single_child_select"
+              :ref="'dropdown-'+label.label.id"
+              :placeholder="label.label.name"
+              autofocus
+              :disabled="readOnly"
+          />
+        </div>
       </div>
+
+        <div v-if="i % 1 == 0" class="break"></div>
     </div>
   </div>
 </template>
@@ -229,10 +234,17 @@ export default {
 </script>
 <style lang="scss">
 
-.dropdown-list {
+.dropdown-list  {
   display: flex;
+  flex-wrap: wrap;
 
-  > div {
+    > div {
+      flex: 0 0 21%; /* explanation below */
+      margin: 5px;
+      height: 100px;
+    }
+
+  div.select {
     display: inline-block;
     max-width: 200px;
 
