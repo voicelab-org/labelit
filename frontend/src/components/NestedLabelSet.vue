@@ -5,11 +5,12 @@
       <span v-shortkey="['arrowright']" @shortkey="browseLabels('right')"></span>
     </div>
     <div class="dropdown-list" v-if="label_selections">
-      <span
+      <div
           v-for="(label, i) in parentLabels"
           :key="label.label.id"
           :class="getParentLabelClasses(label, i)"
       >
+        <div class="bolder">{{label.label.name}}</div>
         <v-select
             :items="label.children"
             v-model="label_selections[i].selections"
@@ -24,7 +25,7 @@
             autofocus
             :disabled="readOnly"
         />
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -228,26 +229,10 @@ export default {
 </script>
 <style lang="scss">
 
-/*
-.v-btn.label {
-  margin-top: 15px;
-  margin-right: 25px;
-}
-
-.v-btn.label.focused {
-  border: 2px solid #03a9f4 !important;
-}
-
-.v-btn.label.selected.primary.focused {
-
-  border: 2px solid #006494 !important;
-}
-*/
-
 .dropdown-list {
   display: flex;
 
-  > span {
+  > div {
     display: inline-block;
     max-width: 200px;
 
@@ -264,7 +249,6 @@ export default {
         .v-input__control {
           border: 2px solid #006494 !important;
         }
-
       }
     }
   }
