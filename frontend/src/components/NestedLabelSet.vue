@@ -244,7 +244,7 @@ export default {
       height: 100px;
     }
 
-  div.select {
+  > div {
     display: inline-block;
     max-width: 200px;
 
