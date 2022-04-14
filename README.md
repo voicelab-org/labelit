@@ -6,6 +6,7 @@ Labelit is an extensible web-based annotation tool currently supporting:
 * Categorical, ordinal classification
 * Transcription
 * Named entity annotation (highlighting and labeling)
+* Text edition (correction, punctuation, etc.)
 
 The tool comes with utilities for distributing work across multiple annotators,
 monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA)
