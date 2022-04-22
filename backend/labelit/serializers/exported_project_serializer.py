@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer, MinimalDocumentSerializer
+from labelit.serializers.document_serializer import MinimalDocumentSerializer
+from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
 from labelit.serializers import ExportedBatchSerializer
 from labelit.models import Project
 
