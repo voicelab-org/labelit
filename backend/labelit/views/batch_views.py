@@ -70,7 +70,6 @@ class BatchViewSet(viewsets.ModelViewSet):
         if document is None:
             raise Http404
 
-        # create an annotation for each task, user
         annotations = []
         for task in batch.project.tasks.all():
             try:
@@ -84,28 +83,7 @@ class BatchViewSet(viewsets.ModelViewSet):
                 )
             except ObjectDoesNotExist:
                 raise Http404
-            """
-            try:
-                annotations.append(
-                    Annotation.objects.get(
-                        annotator=request.user,
-                        document=document,
-                        task=task,
-                        batch=batch,
-                    )
-                )
-            except ObjectDoesNotExist:
-                annotations.append(
-                    Annotation.objects.create(
-                        annotator=request.user,
-                        task=task,
-                        batch=batch,
-                        document=document,
-                        project=batch.project,
-                        document_sequence=document.document_sequence
-                    )
-                )
-            """
+
         data = {
             'document': DocumentSerializer(instance=document).data,
             'annotations': [
@@ -117,22 +95,31 @@ class BatchViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, name='Get next document to QA')
     def get_next_document_to_qa(self, request, pk=None):
+        if request.GET['only_non_reviewed_annotations'] == "false":
+            only_non_reviewed_annotations = False
+        else:
+            only_non_reviewed_annotations = True
+
+        print("&&only_non_reviewed_annotations", only_non_reviewed_annotations, request.GET)
         batch = Batch.objects.get(pk=pk)
         skip_doc_ids = []
         try:
-            skip_doc_ids = [int(i) for i in request.GET['skipped_document_ids'].split(',')]
+            skip_doc_ids = [
+                int(i) for i in request.GET['skipped_document_ids'].split(',')
+            ]
         except:
             pass
 
-        document = batch.get_next_document_to_qa(
-            skipped_document_ids=skip_doc_ids
-        )
-        if document is None:
-            raise Http404
-
-
-
-
+        if only_non_reviewed_annotations:
+            document = batch.get_next_document_to_qa(
+                skipped_document_ids=skip_doc_ids
+            )
+            if document is None:
+                raise Http404
+        else:
+            document = batch.get_next_done_document(index=request.GET['index'])
+            if document is None:
+                raise Http404
 
         annotations = []
         for task in batch.project.tasks.all():

@@ -1,8 +1,16 @@
-W<template>
+<template>
   <div id="qa-container">
   <div v-if="noMore">
             No more to QA
         </div>
+    <div>
+
+      <v-checkbox v-model="only_non_reviewed_annotations" @change="resetIndex">
+        <div slot="label">
+          View only non-reviewed annotations
+        </div>
+      </v-checkbox>
+    </div>
     <div v-if="loaded && project">
             <div id="doc-container" v-if="document">
                 <Document :document="document" :project="project" />
@@ -39,6 +47,7 @@ W<template>
 <script>
 
 import BatchService from '@/services/batch.service'
+import DoneAnnotationService from '@/services/done_annotation.service'
 import QAForm from './QAForm.vue'
 import Document from './Document'
 import QA from './mixins/QA.js';
@@ -67,9 +76,15 @@ export default {
         noMore: false,
         project: null,
         skipped_document_ids: [],
+        only_non_reviewed_annotations: true,
+        annotation_index: 0,
     }
   },
   methods: {
+    resetIndex(){
+      console.log("&resetting")
+      this.annotation_index=0
+    },
       skip(){
         this.getNextDocument(true)
       },
@@ -90,19 +105,25 @@ export default {
                     vm.project = res.data.project
                 }
             )
-        BatchService.getNextDocumentToQA(vm.batchId, this.skipped_document_ids)
-            .then((response) => {
-                vm.annotations = response.data.annotations
-                vm.document = response.data.document
-                vm.tasks = response.data.tasks
-                vm.loaded = true
-            })
-            .catch((err) => {
-                if (err.response.status == 404) {
-                    this.noMore = true
-                    this.document = null
-                }
-            })
+
+        BatchService.getNextDocumentToQA(vm.batchId, this.skipped_document_ids, {
+          only_non_reviewed_annotations: this.only_non_reviewed_annotations,
+          index: this.annotation_index,
+        })
+          .then((response) => {
+              vm.annotations = response.data.annotations
+              vm.document = response.data.document
+              vm.tasks = response.data.tasks
+              vm.loaded = true
+          })
+          .catch((err) => {
+              if (err.response.status == 404) {
+                  this.noMore = true
+                  this.document = null
+              }
+          })
+        this.annotation_index++
+
       },
       taskAnnotations(task){
         return this.annotations.filter(a => a.task == task.id)
@@ -112,6 +133,7 @@ export default {
       },
   },
   created(){
+    this.done_annotation_service = new DoneAnnotationService()
     this.getNextDocument()
   },
 }
