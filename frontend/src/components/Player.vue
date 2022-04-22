@@ -97,7 +97,45 @@ export default {
     }
   },
   mounted() {
-    DocumentService.doesUseHls(this.document.id).then((res) => {
+    this.fetchAudio()
+    /*DocumentService.doesUseHls(this.document.id).then((res) => {
+      if (res.data["use_hls"]) {
+        this.uses_hls = true;
+        this.$nextTick(() => {
+          if (Hls.isSupported()) {
+            this.hls = new Hls({
+              audioLoadingTimeOut: 60000,
+              xhrSetup: (xhr) => {
+                xhr.setRequestHeader("Authorization", `Bearer ${this.$store.state.auth.accessToken}`);
+              },
+            });
+            this.fetchAudioHls(this.document.id);
+          } else {
+            alert("Player is not supported by your browser !");
+          }
+        });
+      } else {
+        this.uses_hls = false;
+        let vm = this
+        this.$nextTick(() => {
+          vm.player = WaveSurfer.create({
+            container: "#stream-audio-raw",
+            waveColor: "#a0dcf8",
+            progressColor: "#03a9f4",
+            hideScrollbar: 'true',
+            barWidth: '0',
+            minPxPerSec: '1000',
+            height: 100,
+            cursorColor: "#03a9f4",
+          });
+          vm.fetchAudioRaw()
+        });
+      }
+    });*/
+  },
+  methods: {
+    fetchAudio(){
+      DocumentService.doesUseHls(this.document.id).then((res) => {
       if (res.data["use_hls"]) {
         this.uses_hls = true;
         this.$nextTick(() => {
@@ -131,8 +169,7 @@ export default {
         });
       }
     });
-  },
-  methods: {
+    },
     fetchAudioHls() {
       this.audioLoading = true;
       DocumentService.getAudioInfo(this.document.id)
@@ -231,6 +268,12 @@ export default {
   watch : {
     playbackSpeed(newVal) {
       this.player.setPlaybackRate(newVal.toFixed(2) / 100.0);
+    },
+    document: {
+      deep: true,
+      handler(){
+        this.fetchAudio()
+      },
     },
   },
   computed: {
