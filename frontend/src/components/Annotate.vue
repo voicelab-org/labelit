@@ -25,6 +25,7 @@
                      :review-mode="reviewMode"
                      :document="document"
                      :focused="i == focus_index"
+                               @focus="focus_index = i"
                     />
                     <div v-if="annotation.qa_invalidation_comment">
                         {{annotation.qa_invalidation_comment}}
