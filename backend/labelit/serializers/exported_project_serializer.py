@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
+from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer, MinimalDocumentSerializer
 from labelit.serializers import ExportedBatchSerializer
 from labelit.models import Project
 
@@ -11,6 +11,7 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
     num_done_documents = serializers.SerializerMethodField()
     num_done_batches = serializers.SerializerMethodField()
     batches = ExportedBatchSerializer(many=True, required=False)
+    documents = MinimalDocumentSerializer(many=True, required=False)
 
     class Meta:
         model = Project
@@ -26,6 +27,7 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
             'num_done_batches',
             'batches',
             'archived',
+            'documents'
         ]
 
     def get_num_documents(self, obj):
