@@ -6,6 +6,7 @@ from labelit.models import (
     LiveCorrectLabel,
     EntityLabel,
     TextEditionLabel,
+    NestedCategoricalLabel,
 )
 from rest_polymorphic.serializers import PolymorphicSerializer
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,6 +35,19 @@ class EntityLabelSerializer(serializers.ModelSerializer):
             'end_offset',
             'source_label'
         ]
+
+
+class NestedCategoricalLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NestedCategoricalLabel
+        fields = [
+            'id',
+            'name',
+            'task',
+            'parent_label',
+            'single_child_select',
+        ]
+
 
 class OrdinalLabelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,7 +99,6 @@ class TextEditionLabelSerializer(serializers.ModelSerializer):
         ]
 
 
-
 class LiveCorrectLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -121,6 +134,7 @@ class LabelPolymorphicSerializer(PolymorphicSerializer):
         LiveCorrectLabel: LiveCorrectLabelSerializer,
         EntityLabel: EntityLabelSerializer,
         TextEditionLabel: TextEditionLabelSerializer,
+        NestedCategoricalLabel: NestedCategoricalLabelSerializer,
     }
 
 
@@ -132,4 +146,5 @@ class LabelPolymorphicReadSerializer(PolymorphicSerializer):
         LiveCorrectLabel: LiveCorrectLabelReadSerializer,
         EntityLabel: EntityLabelSerializer,
         TextEditionLabel: TextEditionLabelSerializer,
+        NestedCategoricalLabel: NestedCategoricalLabelSerializer,
     }

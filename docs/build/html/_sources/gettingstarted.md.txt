@@ -43,5 +43,5 @@ The dialog form should be self-explanatory.
 
 Add (non-QA) annotators to the batch.
 Note that QA users will have access to all projects and will be able to review all annotations.
-
+``
 

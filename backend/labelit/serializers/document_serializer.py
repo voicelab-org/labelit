@@ -23,3 +23,12 @@ class DocumentSerializer(serializers.ModelSerializer):
             'sequence_index',
             'timed_transcript',
         ]
+
+
+class MinimalDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = [
+            'id',
+            'audio_filename',
+        ]

@@ -7,6 +7,7 @@ from labelit.models import (
     LiveCorrectTask,
     EntityTask,
     TextEditionTask,
+    NestedCategoricalTask,
 )
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
@@ -104,6 +105,32 @@ class EntityTaskSerializer(serializers.ModelSerializer):
         ]
 
 
+class NestedCategoricalTaskSerializer(serializers.ModelSerializer):
+    labels = serializers.SerializerMethodField('get_labels')
+
+    def get_labels(self, task):
+        labels = task.labels.all()
+        serializer = LabelPolymorphicSerializer(
+            instance=labels,
+            many=True,
+            required=False,
+            read_only=True
+        )
+        return serializer.data
+
+    class Meta:
+        model = NestedCategoricalTask
+        fields = [
+            'id',
+            'name',
+            'projects',
+            'can_documents_be_invalidated',
+            'labels',
+            'image',
+            'html_guidelines',
+            'archived',
+        ]
+
 class TranscriptionTaskSerializer(serializers.ModelSerializer):
     labels = LabelPolymorphicSerializer(
         many=True,
@@ -177,4 +204,5 @@ class TaskPolymorphicSerializer(PolymorphicSerializer):
         LiveCorrectTask: LiveCorrectTaskSerializer,
         EntityTask: EntityTaskSerializer,
         TextEditionTask: TextEditionTaskSerializer,
+        NestedCategoricalTask: NestedCategoricalTaskSerializer,
     }

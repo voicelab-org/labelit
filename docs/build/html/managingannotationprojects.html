@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Managing annotation projects &mdash; Labelit 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Getting started" href="gettingstarted.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Labelit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Managing annotation projects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-annotation-tasks">Set up annotation tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-projects">Set up projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-annotators-and-qa-users">Add annotators and QA users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-datasets">Create datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#launch-annotation-batches">Launch annotation batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#monitor-progress-and-review">Monitor progress and review</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Labelit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Managing annotation projects</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/managingannotationprojects.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="managing-annotation-projects">
+<h1>Managing annotation projects<a class="headerlink" href="#managing-annotation-projects" title="Permalink to this headline"></a></h1>
+<section id="set-up-annotation-tasks">
+<h2>Set up annotation tasks<a class="headerlink" href="#set-up-annotation-tasks" title="Permalink to this headline"></a></h2>
+<p>In labelit, you can annotate text and/or audio documents in different ways. For instance, you might be transcribing speech audio
+to later train an ASR model, or highlighting entities in a text or transcript, or classifying entire documents.</p>
+<p>Labelit allows you to define different kinds of tasks and then combine them in arbitrary ways inside projects.</p>
+<p>The code is designed in such a way that extending to support other types of tasks is straightforward.</p>
+<p>To create a task, go to the Django admin panel (local deployment: <code class="docutils literal notranslate"><span class="pre">0.0.0.0:8000/admin</span></code>). The “Labelit” table
+contains all Labelit models, including models for tasks.</p>
+<p>The following task types are currently available:</p>
+<ul class="simple">
+<li><p>categorical tasks (flat categories, single- or multi-select)</p></li>
+<li><p>nested categorical tasks (two-level categories)</p></li>
+<li><p>entity tasks (named entities)</p></li>
+<li><p>ordinal tasks (discrete, ordinal labeling)</p></li>
+<li><p>text edition tasks (e.g. correction of transcription, manual punctuation of ASR transcripts, orthographic correction, normalization)</p></li>
+<li><p>transcription tasks (for transcription of audio)</p></li>
+</ul>
+<p>Here we explain how to configure categorical tasks, but the process is similar for other tasks.</p>
+<p>First, go to the admin page for categorical tasks <code class="docutils literal notranslate"><span class="pre">/admin/labelit/categoricaltask/</span></code> then click on “Add Categorical task”.</p>
+<p>The form enables you to configure the tasks and the associated labels (here, categories).</p>
+<p><img alt="Creating a Categorical Task" src="_images/configuring_categorical_task.png" /></p>
+<p>Similarly, any other type of task can be configured in the django admin.</p>
+</section>
+<section id="set-up-projects">
+<h2>Set up projects<a class="headerlink" href="#set-up-projects" title="Permalink to this headline"></a></h2>
+<p>Next, go to the admin page for projects <code class="docutils literal notranslate"><span class="pre">/admin/labelit/project/</span></code> and create a new project.</p>
+<p>At this stage you can decide whether audio, text or both are annotated (for some tasks, it can also make sense
+to leave both unchecked.)</p>
+<p>This is also where you attach one or more tasks to the project.</p>
+<p><img alt="Creating a project" src="_images/configuring_project.png" /></p>
+</section>
+<section id="add-annotators-and-qa-users">
+<h2>Add annotators and QA users<a class="headerlink" href="#add-annotators-and-qa-users" title="Permalink to this headline"></a></h2>
+<p>There are two types of users on labelit. QA users (<code class="docutils literal notranslate"><span class="pre">is_staff</span> <span class="pre">=</span> <span class="pre">true</span></code>) can create annotation batches,
+assign annotation work, and review annotations. Annotators (<code class="docutils literal notranslate"><span class="pre">is_staff</span> <span class="pre">=</span> <span class="pre">false</span></code>) do the actual annotation,
+QA users cannot annotate.</p>
+<p>User creation in labelit is the same as in any standard django project. Make sure to set <code class="docutils literal notranslate"><span class="pre">is_staff</span></code> according to the
+desired role of each user.</p>
+</section>
+<section id="create-datasets">
+<h2>Create datasets<a class="headerlink" href="#create-datasets" title="Permalink to this headline"></a></h2>
+<p>Datasets are sets of documents. Each document can contain text and/or a reference to an audio file.
+Audio files are assumed to be stored on S3 buckets (planned: extending to other audio storage backends)</p>
+<p>Since datasets typically contain many documents, it is recommended to create them programmatically.</p>
+<p>For an example, see <code class="docutils literal notranslate"><span class="pre">backend/labelit/management/commands/create_dataset.py</span></code></p>
+</section>
+<section id="launch-annotation-batches">
+<h2>Launch annotation batches<a class="headerlink" href="#launch-annotation-batches" title="Permalink to this headline"></a></h2>
+<p>Once projects, tasks and datasets are configured, the remaining setup can be done from the labelit frontend
+(local deployment: <code class="docutils literal notranslate"><span class="pre">localhost:8081</span></code>).</p>
+<p>To create your first batch, find and click on the project in the list of projects (<code class="docutils literal notranslate"><span class="pre">/projects</span></code>).</p>
+<p>Now click on the “create batch” button, which will open the batch creation dialog. Here, you can
+select the dataset from which you want to annotate, the number of documents, the desired number of
+annotators per document, and the distribution mode (equal distribution of work or “all-you-can-annotate”)</p>
+<p>Note that only non-QA users will appear in the “annotator dropdown list”</p>
+</section>
+<section id="monitor-progress-and-review">
+<h2>Monitor progress and review<a class="headerlink" href="#monitor-progress-and-review" title="Permalink to this headline"></a></h2>
+<p>You can follow annotation work in different ways in Labelit.</p>
+<p>The global dashboard (<code class="docutils literal notranslate"><span class="pre">/dashboard</span></code>) gives you an overview of all projects, but you can also
+filter by projects and annotators.</p>
+<p>Each project has a stats tab containing project-level annotation stats and visualizations.</p>
+<p>Likewise, each batch has a stats tab containing batch-level stats and visualizations.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gettingstarted.html" class="btn btn-neutral float-left" title="Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, LeVoiceLab, Batvoice.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
