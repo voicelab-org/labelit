@@ -80,11 +80,6 @@ class Project(models.Model):
             batch__in=self.batches.all(),
         ).count()
 
-    # def get_documents(self):
-    #     return BatchDocument.objects.filter(
-    #         batch__in=self.batches.all(),
-    #     ).values("document")
-
     def get_stats(self):
         # TODO: make DRY with batch.get_stats
         stats = {}
