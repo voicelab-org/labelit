@@ -135,6 +135,9 @@ export default {
   },
   methods: {
     fetchAudio(){
+      if (this.player){
+        this.player.pause()
+      }
       DocumentService.doesUseHls(this.document.id).then((res) => {
       if (res.data["use_hls"]) {
         this.uses_hls = true;
