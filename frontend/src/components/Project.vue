@@ -12,8 +12,8 @@
         class="d-flex flex-row justify-space-between"
     >
       <div># documents annotated: {{project_with_stats.num_done_documents}}</div>
-      <div>Target (# documents to annotate): {{project_with_stats.target_num_documents}} </div>
-      <div>Target date: {{project_with_stats.target_deadline}} </div>
+      <div v-if="project_with_stats.target_num_documents">Target (# documents to annotate): {{project_with_stats.target_num_documents}} </div>
+      <div v-if="project_with_stats.target_deadline">Target date: {{project_with_stats.target_deadline}} </div>
     </div>
     <v-progress-linear
         v-if="project_with_stats.target_num_documents"
