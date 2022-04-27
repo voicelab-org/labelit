@@ -22,6 +22,10 @@
         )"
         height="25"
     ></v-progress-linear>
+    <p v-if="project_with_stats.description">
+      <b>Description: </b><br>
+      <span style="white-space: pre;">{{project_with_stats.description}}</span>
+    </p>
 
 
     <v-tabs>
