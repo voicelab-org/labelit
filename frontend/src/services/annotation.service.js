@@ -21,6 +21,8 @@ class AnnotationService {
     return this.request.delete(`/annotations/${annotationId}/`)
   }
 
+
+
   getAnnotationById(annotationId) {
     return this.request.get(`/annotations/${annotationId}/`)
   }

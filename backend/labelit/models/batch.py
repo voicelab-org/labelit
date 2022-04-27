@@ -189,6 +189,20 @@ class Batch(PolymorphicModel):
             return invalidated.document
         return None
 
+    def get_next_done_document(self, index=0):
+        completed_batch_docs = BatchDocument.objects.filter(
+            batch=self,
+            num_done_annotators=self.num_annotators_per_document,
+        ).order_by('id')
+        print("completed_batch_docs", completed_batch_docs)
+        try:
+            document = Document.objects.get(
+                id=completed_batch_docs[int(index)].document_id
+            )
+            return document
+        except IndexError:
+            return None
+
     def get_next_document_to_qa(self, skipped_document_ids=[]):
         completed_batch_docs = BatchDocument.objects.filter(
             batch=self,

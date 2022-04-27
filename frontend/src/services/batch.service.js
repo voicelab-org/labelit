@@ -29,12 +29,13 @@ class BatchService {
     return this.request.get(`/batches/${batchId}/get_next_document_to_annotate/`)
   }
 
-  getNextDocumentToQA(batchId, skipped_document_ids=[]) {
+  getNextDocumentToQA(batchId, skipped_document_ids=[], params={}) {
     return this.request.get(
         `/batches/${batchId}/get_next_document_to_qa/`,
         {
           params: {
-            skipped_document_ids: skipped_document_ids.join(',')
+            skipped_document_ids: skipped_document_ids.join(','),
+            ...params,
           }
         }
 
