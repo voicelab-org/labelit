@@ -39,7 +39,10 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
             'num_documents',
             'num_done_documents',
             'num_done_batches',
-            'archived'
+            'archived',
+            'target_num_documents',
+            'target_deadline',
+            'description',
         ]
         
     def get_num_documents(self, obj):

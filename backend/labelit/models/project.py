@@ -37,6 +37,20 @@ class Project(models.Model):
         default=False,
     )
 
+    target_num_documents = models.IntegerField(
+        'The target number of documents for this project'
+    )
+
+    target_deadline = models.DateField(
+        'The target date at which we want the target number of documents to be annotated'
+    )
+
+    description = models.TextField(
+        'Description of the project',
+        null=True,
+        blank=True,
+    )
+
     class Meta:
         app_label = 'labelit'
 

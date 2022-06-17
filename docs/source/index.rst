@@ -11,3 +11,4 @@ Welcome to Labelit's documentation!
    :caption: Contents:
 
    gettingstarted
+   managingannotationprojects

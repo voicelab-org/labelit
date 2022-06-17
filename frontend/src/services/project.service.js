@@ -58,6 +58,10 @@ class ProjectService {
         return this.request.get(`/projects/${projectId}/get_stats/`)
     }
 
+    getProjectWithStats(projectId) {
+        return this.request.get(`/projects_with_stats/${projectId}/`)
+    }
+
 }
 
 export default new ProjectService()

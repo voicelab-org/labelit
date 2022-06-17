@@ -7,6 +7,25 @@
         <batch-create v-if="isAdmin" :projectId="projectId" @batchCreated="updateListToggle=!updateListToggle"/>
       </div>
     </div>
+    <div
+        v-if="project_with_stats"
+        class="d-flex flex-row justify-space-between"
+    >
+      <div># documents annotated: {{project_with_stats.num_done_documents}}</div>
+      <div>Target (# documents to annotate): {{project_with_stats.target_num_documents}} </div>
+      <div>Target date: {{project_with_stats.target_deadline}} </div>
+    </div>
+    <v-progress-linear
+        v-if="project_with_stats.target_num_documents"
+        :value="Math.round(
+            100 * project_with_stats.num_done_documents / project_with_stats.target_num_documents
+        )"
+        height="25"
+    ></v-progress-linear>
+    <p v-if="project_with_stats.description">
+      <b>Description: </b><br>
+      <span style="white-space: pre;">{{project_with_stats.description}}</span>
+    </p>
 
 
     <v-tabs>
@@ -54,6 +73,7 @@ export default {
       show_archived: false,
       show_batch_list: true,
       updateListToggle: true,
+      project_with_stats: null,
     }
   },
   computed: {
@@ -70,6 +90,12 @@ export default {
           vm.project = response.data
           //vm.$store.commit('task/SET_TASK_LIST', response.data.tasks)
           vm.loading = false
+        })
+        .catch(error => console.log(error))
+
+    ProjectService.getProjectWithStats(vm.projectId)
+        .then(function (response) {
+          vm.project_with_stats = response.data
         })
         .catch(error => console.log(error))
   },

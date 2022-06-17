@@ -5,7 +5,7 @@
         :read-only="readOnly"
     />
     <div v-if="label">
-      <textarea class="transcript" v-show="label" v-model="label.transcript" :ref="'transcript'"/>
+      <textarea @focus='$emit("focus")' class="transcript" v-show="label" v-model="label.transcript" :ref="'transcript'"/>
     </div>
     <ValidationError :message="validationError"/>
   </div>
