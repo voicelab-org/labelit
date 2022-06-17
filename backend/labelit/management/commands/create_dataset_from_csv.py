@@ -76,5 +76,6 @@ class Command(BaseCommand):
                     )
 
         # Should trigger the signal
-        dataset.is_streamed = strtobool(options["is_streamed"])
+        #dataset.is_streamed = strtobool(options["is_streamed"])
         dataset.save()
+        dataset, dataset_created = Dataset.objects.filter(id=dataset.id).update(is_streamed=True)
