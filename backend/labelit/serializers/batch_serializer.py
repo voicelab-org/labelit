@@ -5,6 +5,17 @@ from .project_serializer import ProjectSerializer
 from .dataset_serializer import DatasetSerializer
 
 
+class SimpleBatchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Batch
+        fields = [
+            'id',
+            'name',
+            'archived',
+
+        ]
+
 class BatchSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
     dataset = DatasetSerializer()
@@ -82,6 +93,9 @@ class SequenceBatchSerializer(serializers.ModelSerializer):
             'annotation_limit',
             'archived',
         ]
+        extra_kwargs = {
+            'project': {'write_only': True}
+        }
 
 
 class BatchPolymorphicSerializer(PolymorphicSerializer):

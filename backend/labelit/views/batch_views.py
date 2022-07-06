@@ -6,7 +6,8 @@ from labelit.serializers import (
     AnnotationSerializer,
     AnnotationWithUserSerializer,
     FlatBatchSerializer,
-    TaskPolymorphicSerializer
+    TaskPolymorphicSerializer,
+    SimpleBatchSerializer
 )
 from labelit.models import Batch, Annotation
 from rest_framework.decorators import action
@@ -18,7 +19,8 @@ from django.core.exceptions import ObjectDoesNotExist
 class BatchViewSet(viewsets.ModelViewSet):
     queryset = Batch.objects.all()
     serializer_action_classes = {
-        "create" : FlatBatchSerializer
+        "create": FlatBatchSerializer,
+        "list": SimpleBatchSerializer
     }
     serializer_class = BatchPolymorphicSerializer
     permission_classes = [permissions.IsAuthenticated]
