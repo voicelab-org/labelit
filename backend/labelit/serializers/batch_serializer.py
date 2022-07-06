@@ -11,7 +11,9 @@ class SimpleBatchSerializer(serializers.ModelSerializer):
         model = Batch
         fields = [
             'id',
-            'name'
+            'name',
+            'archived',
+
         ]
 
 class BatchSerializer(serializers.ModelSerializer):
