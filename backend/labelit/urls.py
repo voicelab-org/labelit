@@ -24,6 +24,7 @@ urlpatterns = [
     # path('audio/<int:pk>/segments/<str:segment_id>', views.DownloadSegment.as_view(), name='download_segment'),
     # path('audio_info/<int:pk>/', views.DownloadAudioInfo.as_view(), name='download_audio_info'),
     path('upload_image/', views.ImageUpload.as_view(), name="upload_image_view"),
+    path('upload_dataset/', views.DatasetUploadAPI.as_view(), name="upload_dataset"),
     path('download_image/<str:filename>/', views.ImageDownload.as_view(), name="download_image_view"),
     path('dashboard/', views.StatsView.as_view(), name="dashboard"),
     path('csrf', views.csrf),  # obsolete, todo: remove

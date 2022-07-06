@@ -7,6 +7,7 @@ from .label_serializer import LabelPolymorphicReadSerializer
 class AnnotationWithLabelsSerializer(serializers.ModelSerializer):
 
     labels = LabelPolymorphicReadSerializer(many=True)
+    text = serializers.CharField(source='document.text')
 
     class Meta:
         model = Annotation
@@ -15,6 +16,7 @@ class AnnotationWithLabelsSerializer(serializers.ModelSerializer):
             'batch',
             'labels',
             'document',
+            'text',
             'task',
             'project',
             'document_sequence',

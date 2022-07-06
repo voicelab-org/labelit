@@ -9,6 +9,7 @@ RUN apt-get update \
     libpq-dev \
     g++ \
     ffmpeg \
+    tk \
  && apt-get clean
 
 RUN pip install -r requirements.txt

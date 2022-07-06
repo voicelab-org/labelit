@@ -82,18 +82,21 @@ export default {
       const entities = this.sortedEntities
       let startOffset = 0
       for (const entity of entities) {
+        const entity_end_with_newline = this.text.slice(entity.start_offset, entity.end_offset).includes('\n') ? true : false
         // add non-entities to chunks.
         chunks = chunks.concat(this.makeChunks(this.text.slice(startOffset, entity.start_offset)))
-        startOffset = entity.end_offset
+        startOffset = entity_end_with_newline ? entity.end_offset - 1 : entity.end_offset
 
         // add entities to chunks.
+        entity.end_offset = startOffset
         const label = this.labels.find(l => l.name == entity.name)
         chunks.push({
           label: label,
           color: label.background_color,
           text: this.text.slice(entity.start_offset, entity.end_offset),
           start_offset: entity.start_offset,
-          end_offset: entity.end_offset
+          end_offset: entity.end_offset,
+          newline: false
         })
       }
       // add the rest of text.

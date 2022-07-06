@@ -1,6 +1,6 @@
 <template>
-  <span>
-    <span
+  <span :class="[newline ? 'newline' : '']">
+    <span 
         v-if="label"
         :style="{ borderColor: color, cursor: 'pointer' }"
         class="highlight bottom"
@@ -15,7 +15,7 @@
       <span
           :data-label="label.name" :style="{ backgroundColor: color, color: textColor }" class="highlight__label"/>
       </span>
-    <span v-else :class="[newline ? 'newline' : '']">{{ content }}</span>
+    <span v-else >{{ content }}</span>
   </span>
 
 </template>
@@ -154,5 +154,10 @@ export default {
 
 .newline {
   width: 100%;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
 }
 </style>

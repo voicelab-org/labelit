@@ -44,31 +44,38 @@ class Command(BaseCommand):
         known_doc_seq = set()
         docs_seq = {}
         for index, row in data.iterrows():
-            filename = row["document_sequence_filename"]
+            filename = row["basename"]
             if filename not in known_doc_seq:
                 known_doc_seq.add(filename)
                 docs_seq[filename] = []
             docs_seq[filename].append(
                 {
-                    "document_index": row["document_index"],
+                    "document_index": row["seq_index"],
+                    "duration": row["duration"],
                     "text": row["text"],
-                    "audio_filename": row["document_filename"],
+                    "audio_filename": row["audio_filename"],
                 }
             )
-        for doc_seq in docs_seq:
+        for doc_seq_name in docs_seq:
             document_sequence, created = DocumentSequence.objects.get_or_create(
-                name=doc_seq, dataset=dataset
+                name=doc_seq_name, dataset=dataset
             )
-            docs = sorted(docs_seq[doc_seq], key=lambda k: k["document_index"])
+            docs = sorted(docs_seq[doc_seq_name],
+                          key=lambda k: k["document_index"])
             for i, doc in enumerate(docs):
-                Document.objects.create(
-                    text=doc["text"],
-                    audio_filename=doc["audio_filename"],
-                    sequence_index=i,
-                    document_sequence=document_sequence,
-                    dataset=dataset,
-                )
+                _doc = Document.objects.filter(
+                    audio_filename=doc["audio_filename"], dataset=dataset)
+                if not _doc.count():
+                    Document.objects.create(
+                        text=doc["text"],
+                        audio_filename=doc["audio_filename"],
+                        sequence_index=i,
+                        document_sequence=document_sequence,
+                        dataset=dataset,
+                        audio_duration=doc["duration"]
+                    )
 
         # Should trigger the signal
-        dataset.is_streamed = strtobool(options["is_streamed"])
+        #dataset.is_streamed = strtobool(options["is_streamed"])
         dataset.save()
+        dataset, dataset_created = Dataset.objects.filter(id=dataset.id).update(is_streamed=True)
