@@ -1,5 +1,12 @@
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
+
 from labelit.serializers import (
     BatchPolymorphicSerializer,
     DocumentSerializer,
@@ -7,13 +14,14 @@ from labelit.serializers import (
     AnnotationWithUserSerializer,
     FlatBatchSerializer,
     TaskPolymorphicSerializer,
-    SimpleBatchSerializer
+    SimpleBatchSerializer,
+    AnnotationWithLabelsSerializer
 )
 from labelit.models import Batch, Annotation
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
+
+class AnnotationsExporterPagination(PageNumberPagination):
+    page_size = 250
+    page_size_query_param = 'page_size'
 
 
 class BatchViewSet(viewsets.ModelViewSet):
@@ -225,3 +233,18 @@ class BatchViewSet(viewsets.ModelViewSet):
     def get_stats(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         return Response(batch.get_stats())
+
+    @action(detail=True, name='Exports the annotations related to an specific batch')
+    def export_annotations(self, request, *args, **kwargs):
+        self.pagination_class = AnnotationsExporterPagination
+
+        batch = self.get_object()
+        queryset = Annotation.objects.filter(batch=batch).order_by("id")
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = AnnotationWithLabelsSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = AnnotationWithLabelsSerializer(queryset, many=True)
+        return Response(serializer.data)

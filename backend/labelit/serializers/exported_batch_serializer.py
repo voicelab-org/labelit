@@ -8,7 +8,6 @@ from .user_serializer import UserSerializer
 class ExportedBatchSerializer(serializers.ModelSerializer):
     dataset = DatasetSerializer()
     annotators = UserSerializer(many=True, required=False,)
-    annotations = AnnotationWithLabelsSerializer(many=True, required=False,)
 
     class Meta:
         model = Batch
