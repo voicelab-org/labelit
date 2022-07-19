@@ -20,7 +20,13 @@ can be created by contributors, while retaining generic features.
 
 The code uses Django for the backend, and VueJS for the frontend.
 
------------------------
+### Demo
+
+https://labelit.demo.hosting.call.watch
+annotator account: username: demo@demo.com, password: demo
+QA account: username: qa@qa.com, password: demo
+
+### Overview
 
 Entity annotation (WIP) in labelit in QA mode. Annotations can be validated or sent for review:
 
