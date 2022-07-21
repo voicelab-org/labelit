@@ -4,6 +4,7 @@ from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
 from labelit.serializers import ExportedBatchSerializer
 from labelit.models import Project, BatchDocument, Document
 
+from django.db.models import Case, When, Value, IntegerField, F
 
 class ExportedProjectSerializer(serializers.ModelSerializer):
 
@@ -35,9 +36,19 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
         return obj.get_num_documents()
 
     def get_documents(self, obj):
+        # batch_documents = BatchDocument.objects.filter(
+        #     batch__in=obj.batches.all(),
+        # )
         batch_documents = BatchDocument.objects.filter(
-            batch__in=obj.batches.all(),
-        )
+            batch__in=self.batches.all(),
+        ).annotate(is_done=Case(
+            When(
+                num_done_annotators=F('batch__num_annotators_per_document'),
+                then=Value(1)
+            ),
+            default=Value(0),
+            output_field=IntegerField()
+        )).filter(is_done=True)
         documents = Document.objects.filter(
             id__in=batch_documents.values_list("document_id", flat=True)
         )
