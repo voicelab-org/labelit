@@ -4,6 +4,7 @@ from .batch import Batch
 from django.db.models import Case, When, Value, IntegerField, F, Count, Sum
 from django.db import models
 from .batch_document import BatchDocument
+from .document import Document
 from .annotation import Annotation
 from django.db.models import Avg, F, ExpressionWrapper, FloatField, Count
 from django.db.models.functions import Cast
@@ -78,7 +79,7 @@ class Project(models.Model):
         ).filter(num_done=F('batch__num_documents')).count()
 
     def get_num_done_documents(self):
-        return BatchDocument.objects.filter(
+        batch_documents = BatchDocument.objects.filter(
             batch__in=self.batches.all(),
         ).annotate(is_done=Case(
             When(
@@ -87,7 +88,11 @@ class Project(models.Model):
             ),
             default=Value(0),
             output_field=IntegerField()
-        )).filter(is_done=True).annotate(Count('document', distinct=True))
+        )).filter(is_done=True)
+
+        return Document.objects.filter(
+            id__in=batch_documents.values("document_id")
+        ).count()
 
     def get_num_documents(self):
         return BatchDocument.objects.filter(
