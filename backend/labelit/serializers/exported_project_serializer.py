@@ -36,9 +36,6 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
         return obj.get_num_documents()
 
     def get_documents(self, obj):
-        # batch_documents = BatchDocument.objects.filter(
-        #     batch__in=obj.batches.all(),
-        # )
         batch_documents = BatchDocument.objects.filter(
             batch__in=obj.batches.all(),
         ).annotate(is_done=Case(
