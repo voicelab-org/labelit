@@ -87,7 +87,7 @@ class Project(models.Model):
             ),
             default=Value(0),
             output_field=IntegerField()
-        )).filter(is_done=True).count()
+        )).filter(is_done=True).annotate(Count('document', distinct=True))
 
     def get_num_documents(self):
         return BatchDocument.objects.filter(
