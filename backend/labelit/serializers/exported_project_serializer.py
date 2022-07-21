@@ -40,7 +40,7 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
         #     batch__in=obj.batches.all(),
         # )
         batch_documents = BatchDocument.objects.filter(
-            batch__in=self.batches.all(),
+            batch__in=obj.batches.all(),
         ).annotate(is_done=Case(
             When(
                 num_done_annotators=F('batch__num_annotators_per_document'),
