@@ -36,9 +36,6 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
         return obj.get_num_documents()
 
     def get_documents(self, obj):
-        # batch_documents = BatchDocument.objects.filter(
-        #     batch__in=obj.batches.all(),
-        # )
         batch_documents = BatchDocument.objects.filter(
             batch__in=obj.batches.all(),
         ).annotate(is_done=Case(
@@ -50,7 +47,7 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
             output_field=IntegerField()
         )).filter(is_done=True)
         documents = Document.objects.filter(
-            id__in=batch_documents.values_list("document_id", flat=True)
+            id__in=batch_documents.values("document_id")
         )
         serializer = MinimalDocumentSerializer(documents, many=True)
         return serializer.data
