@@ -50,7 +50,7 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
             output_field=IntegerField()
         )).filter(is_done=True)
         documents = Document.objects.filter(
-            id__in=batch_documents.values_list("document_id", flat=True)
+            id__in=batch_documents.values("document_id")
         )
         serializer = MinimalDocumentSerializer(documents, many=True)
         return serializer.data
