@@ -23,7 +23,7 @@ The code uses Django for the backend, and VueJS for the frontend.
 ### Demo
 
 https://labelit.demo.hosting.call.watch
-annotator account: username: demo@demo.com, password: demo
+annotator account: username: demo@demo.com, password: dem0#nnotator
 QA account: username: qa@qa.com, password: demo
 
 ### Overview
