@@ -95,6 +95,7 @@ export default {
       audioInfo: null,
       isPlaying: false,
       annotated_regions: this.value,
+      are_initial_regions_loaded: false,
     };
   },
   props: {
@@ -115,8 +116,8 @@ export default {
       required: true,
     },
   },
-  created(){
-    if (this.regionTasks.length > 1){
+  created() {
+    if (this.regionTasks.length > 1) {
       alert("Multiple Region tasks are not supported in the same project")
     }
   },
@@ -124,6 +125,69 @@ export default {
     this.fetchAudio()
   },
   methods: {
+    updateRegions() {
+      if (this.annotated_regions.length) {
+
+        console.log("list", this.player.regions.list, Object.entries(this.player.regions.list), typeof(this.player.regions.list))
+        this.annotated_regions.forEach(
+            (r) => {
+              try {
+                parseInt(r.id)
+              } catch {
+                return
+              }
+
+              let existing_frontend_region = Object.entries(this.player.regions.list).find(
+                  (entry) => {
+                    let id = entry[0]
+                    let region = entry[1]
+                    return id != r.id && region.start == r.start && region.end == r.end
+                  }
+              )
+
+              if (existing_frontend_region){
+                existing_frontend_region.id = r.id
+                return
+              }
+
+              let existing_db_region = Object.keys(this.player.regions.list).find(
+                  (id) => {
+                    return id == r.id
+                  }
+              )
+
+              if (existing_db_region) return
+              this.player.addRegion(
+                  {
+                    id: r.id,
+                    start: r.start,
+                    end: r.end,
+                  }
+              )
+            }
+        )
+        this.are_initial_regions_loaded = true
+      }
+
+      /*if (this.are_initial_regions_loaded) return
+      if (this.annotated_regions.length) {
+        this.annotated_regions.forEach(
+            (r) => {
+              this.player.addRegion(
+                  {
+                    id: r.id,
+                    color: 'blue',
+                    start: r.start,
+                    end: r.end,
+                  }
+              )
+            }
+        )
+        this.are_initial_regions_loaded = true
+      }*/
+
+
+    },
     fetchAudio() {
       if (this.player) {
         this.player.pause()
@@ -150,29 +214,14 @@ export default {
           this.$nextTick(() => {
 
             let plugins = []
-            if (this.enableRegions){
+            if (this.enableRegions) {
               plugins.push(
-                RegionsPlugin.create({
-                  regionsMinLength: 0.1,
-                  /*regions: [
-                    {
-                      start: 0.2,
-                      end: 0.5,
-                      loop: false,
-                      color: 'hsla(400, 100%, 30%, 0.5)'
-                    }, {
-                      start: 0.6,
-                      end: 1.2,
-                      loop: false,
-                      color: 'hsla(200, 50%, 70%, 0.4)',
-                      minLength: 1,
-                      maxLength: 5,
-                    }
-                  ],*/
-                  dragSelection: {
-                    slop: 5
-                  },
-                })
+                  RegionsPlugin.create({
+                    regionsMinLength: 0.1,
+                    dragSelection: {
+                      slop: 5
+                    },
+                  })
               )
             }
             vm.player = WaveSurfer.create({
@@ -186,44 +235,41 @@ export default {
               cursorColor: "#03a9f4",
               plugins: plugins
             });
-            if (this.enableRegions){
+            if (this.enableRegions) {
               this.setupRegionEventListeners()
             }
             // vm.player.enableDragSelection()
             vm.fetchAudioRaw()
+            /*vm.player.addRegion(
+                {
+                  start: 1.0,
+                  end: 2.0,
+                  color: "rbga(0, 255, 0, 1)",
+
+                }
+            )*/
           });
         }
       });
     },
-    setupRegionEventListeners(){
-      /*
-      region-created
-      region-updated
-      region-update-end
-      region-removed
-
-       */
-      /*
-        this.player.on("region-created", (e) => {
-          console.log("region created", e)
-          console.log("start & end", e.start, e.end)
-        });
-        this.player.on("region-updated", (e) => {
-          console.log("region updated", e)
-          console.log("start & end", e.start, e.end)
-        });
-      */
+    setupRegionEventListeners() {
       this.player.on("region-update-end", (e) => {
-        console.log("region update end", e)
-        console.log("start & end", e.start, e.end)
-        this.annotated_regions.push(
-            {
-              wavesurfer_region_id: e.id,
-              start: e.start,
-              end: e.end,
-            }
-        )
-        console.log("this.annotated_regions", this.annotated_regions)
+        let existing_region = this.annotated_regions.find(r => r.id == e.id)
+
+        if (existing_region) {
+          existing_region.start = e.start
+          existing_region.end = e.end
+        } else {
+          this.annotated_regions.push(
+              {
+                wavesurfer_region_id: e.id,
+                start: e.start,
+                end: e.end,
+                task: this.regionTasks[0].id, // assuming a single region task for now
+              }
+          )
+        }
+
         this.$emit('input', this.annotated_regions)
       });
     },
@@ -334,6 +380,14 @@ export default {
         this.fetchAudio()
       },
     },
+    value: {
+      deep: true,
+      handler() {
+        console.log("value changed", this.value, this.annotated_regions)
+        this.annotated_regions = this.value
+        this.updateRegions()
+      }
+    }
   },
   computed: {
     currentPlayBackTime() {
@@ -345,9 +399,10 @@ export default {
 
 <style lang="scss" scoped>
 
-.player-container{
+.player-container {
   margin: 10px 0;
 }
+
 .controls-wrapper {
   margin-top: 10px;
   position: relative;

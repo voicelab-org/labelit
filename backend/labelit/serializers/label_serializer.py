@@ -7,6 +7,7 @@ from labelit.models import (
     EntityLabel,
     TextEditionLabel,
     NestedCategoricalLabel,
+    AudioRegionLabel,
 )
 from rest_polymorphic.serializers import PolymorphicSerializer
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,6 +35,18 @@ class EntityLabelSerializer(serializers.ModelSerializer):
             'start_offset',
             'end_offset',
             'source_label'
+        ]
+
+
+class AudioRegionLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AudioRegionLabel
+        fields = [
+            'id',
+            'name',
+            'task',
+            'start',
+            'end',
         ]
 
 
@@ -135,6 +148,7 @@ class LabelPolymorphicSerializer(PolymorphicSerializer):
         EntityLabel: EntityLabelSerializer,
         TextEditionLabel: TextEditionLabelSerializer,
         NestedCategoricalLabel: NestedCategoricalLabelSerializer,
+        AudioRegionLabel: AudioRegionLabelSerializer,
     }
 
 
@@ -147,4 +161,5 @@ class LabelPolymorphicReadSerializer(PolymorphicSerializer):
         EntityLabel: EntityLabelSerializer,
         TextEditionLabel: TextEditionLabelSerializer,
         NestedCategoricalLabel: NestedCategoricalLabelSerializer,
+        AudioRegionLabel: AudioRegionLabelSerializer,
     }

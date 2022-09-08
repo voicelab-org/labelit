@@ -3,12 +3,12 @@ export const regions = {
   namespaced: true,
   state: {
     region_tasks : [
-        // TEMP
+        /*// TEMP
         {
             id: 1,
             name: "IVR",
             color: "lightblue",
-        },
+        },*/
     ],
     annotated_regions: [],
     annotation_enabled: true,

@@ -25,12 +25,13 @@ from .models import (
     TimedTranscript,
     TimedTranscriptSegment,
     EntityLabel,
-    EntityTask
+    EntityTask,
+    AudioRegionLabel,
+    AudioRegionTask,
 )
 
 admin.site.register(Project)
-# admin.site.register(OrdinalLabel)
-# admin.site.register(OrdinalTask)
+
 admin.site.register(BatchDocument)
 admin.site.register(BatchDocumentSequence)
 admin.site.register(Annotation)
@@ -38,6 +39,8 @@ admin.site.register(TranscriptionTask)
 admin.site.register(TextEditionTask)
 admin.site.register(LiveCorrectTask)
 admin.site.register(LiveCorrectLabel)
+admin.site.register(AudioRegionTask)
+admin.site.register(AudioRegionLabel)
 
 
 class TimedTranscriptSegmentInline(admin.TabularInline):

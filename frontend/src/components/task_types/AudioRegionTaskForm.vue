@@ -19,21 +19,19 @@
       </v-checkbox>
     </div>
 
-    <div>
+    <div class="current-labels">
       <div
-          v-for="(val, key) in grouped_selected_labels"
+          v-for="(val, key) in ordered_selected_labels"
           :key="key"
           style="margin-bottom:5px;"
       >
         <v-chip
             pill
             small
-            :color="val[0].color"
-            text-color="white"
+            text-color="darkgrey"
         >
-          {{ grouped_selected_labels[key].length }}
+          {{ val.start.toFixed(2) }} -> {{ val.end.toFixed(2) }}
         </v-chip>
-        {{ key }}
       </div>
     </div>
   </div>
@@ -58,6 +56,13 @@ export default {
       region_tasks: 'regions/region_tasks',
       annotated_regions: 'regions/annotated_regions',
     }),
+    ordered_selected_labels() {
+      let ordered = [...this.selected_labels]
+      ordered.sort((a, b) => {
+        return a.start > b.start
+      })
+      return ordered
+    },
     /*grouped_selected_labels() {
 
       if (!this.annotated_regions.length) {
@@ -70,8 +75,11 @@ export default {
   created() {
     this.$store.commit('regions/ADD_TASK', this.task)
 
+    // initial setup of initial state in DB
     let selected_labels = []
     let promises = []
+
+
     this.annotation.labels.forEach(
         (id) => {
           promises.push(
@@ -94,14 +102,6 @@ export default {
       showAnnotatedRegions: false,
       isMixinWatcherActive: false,
     }
-  },
-  methods: {
-    groupBy(xs, key) {
-      return xs.reduce(function (rv, x) {
-        (rv[x[key]] = rv[x[key]] || []).push(x);
-        return rv;
-      }, {});
-    },
   },
   watch: {
     showAnnotatedRegions() {
@@ -129,20 +129,20 @@ export default {
         this.selected_labels.forEach(
             (selected_label) => {
 
-              let is_label_in_labels_to_add = this.labels_to_add.find(l => l.name == selected_label.name && l.start_offset == selected_label.start_offset && l.end_offset == selected_label.end_offset)
+              let is_label_in_labels_to_add = this.labels_to_add.find(
+                  (l) => {
+                    return l.start == selected_label.start && l.end == selected_label.end
+                  }
+              )
               if (is_label_in_labels_to_add) {
-                selected_label.id = is_label_in_labels_to_add.id
+                let label_to_add = is_label_in_labels_to_add
+                selected_label.id = label_to_add.id
               } else {
                 if (!selected_label.id) { //&& !this.labels_to_add.find(l => l.name == selected_label.name && l.start_offset == selected_label.start_offset)
                   let selected_clone = JSON.parse(JSON.stringify(selected_label))
                   this.labels_to_add.push(selected_label)
 
-                  let original_label = this.region_tasks.find(t => t.id == selected_label.task)
-                      .labels.find(l => l.name == selected_label.name)
-
-                  selected_clone.source_label = original_label.id
-
-                  selected_clone.resourcetype = "RegionLabel"
+                  selected_clone.resourcetype = "AudioRegionLabel"
                   promises.push(LabelService.create(selected_clone).then(
                       (res) => {
                         selected_label.id = res.data.id
@@ -193,7 +193,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
 .task-form-container {
   margin-bottom: 15px;
@@ -205,4 +205,13 @@ export default {
   margin-bottom: 20px;
 }
 
+.current-labels {
+  display: flex;
+  flex-flow: wrap;
+
+  > div {
+    margin-right: 5px;
+  }
+
+}
 </style>
