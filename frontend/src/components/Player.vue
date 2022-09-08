@@ -128,7 +128,6 @@ export default {
     updateRegions() {
       if (this.annotated_regions.length) {
 
-        console.log("list", this.player.regions.list, Object.entries(this.player.regions.list), typeof(this.player.regions.list))
         this.annotated_regions.forEach(
             (r) => {
               try {
@@ -323,12 +322,10 @@ export default {
       });
     },
     fetchAudioRaw() {
-      console.log("fetch raw")
       let vm = this
       this.audioLoading = true;
       DocumentService.getDocumentAudioById(vm.document.id)
           .then((res) => {
-            console.log("res", res.data)
             vm.player.loadBlob(res.data);
 
             this.player.on("ready", () => {
@@ -383,7 +380,6 @@ export default {
     value: {
       deep: true,
       handler() {
-        console.log("value changed", this.value, this.annotated_regions)
         this.annotated_regions = this.value
         this.updateRegions()
       }
