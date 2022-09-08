@@ -96,3 +96,33 @@
     document_sequence: null
     sequence_index: null
     timed_transcript: null
+- model: users.user
+  fields:
+    password: "#annotat0r1245"
+    last_login: 2021-04-09 08:26:10.020751+00:00
+    is_superuser: false
+    first_name: john
+    last_name: doe
+    is_staff: false
+    is_active: true
+    date_joined: 2021-04-09 08:09:31.281467+00:00
+    username: a
+    email: "johndoe-annotator@levoicelab.org"
+    is_admin: false
+    groups: []
+    user_permissions: []
+- model: users.user
+  fields:
+    password: "q#1245q#"
+    last_login: 2021-06-23 07:39:34.760390+00:00
+    is_superuser: false
+    first_name: jane
+    last_name: doe QA
+    is_staff: true
+    is_active: true
+    date_joined: 2021-06-23 07:19:16.474568+00:00
+    username: jane.doeQA
+    email: "janedoe-qa@levoicelab.org"
+    is_admin: false
+    groups: []
+    user_permissions: []

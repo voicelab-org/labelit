@@ -24,20 +24,22 @@ class AudioViewSet(viewsets.ViewSet):
     queryset = Document.objects
 
     def get_object(self, pk):
+        print("get_object()")
         try:
             return Document.objects.get(pk=pk)
         except Document.DoesNotExist:
+            print("does not exist")
             raise Http404
 
     def _use_hls(self, audio_document):
         """Are we using HLS? Depends on the configuration and/or the availability of the file."""
-
+        print("_use_hls()")
         if not audio_document.dataset.is_streamed:
-            print("Failed on dataset")
+            # print("Failed on dataset")
             return False
 
         if not check_file_exists(audio_document.hls_audio_file_key):
-            print("Failed on file", audio_document.hls_audio_file_key)
+            # print("Failed on file", audio_document.hls_audio_file_key)
             return False
 
         if not check_hls_is_correct(audio_document.hls_audio_file_key.split("/")[1]):
@@ -47,12 +49,14 @@ class AudioViewSet(viewsets.ViewSet):
 
     def _check_file_is_reachable(self, audio_filename):
         # Checking the file exists and it is reachable
+        print("_check reachable()")
         head = None
         try:
             head = storage.connection.meta.client.head_object(
                 Bucket=storage.bucket_name, Key=audio_filename
             )
         except ClientError as err:
+            print("&err", err)
             if err.response["ResponseMetadata"]["HTTPStatusCode"] == 404:
                 # respond with HTTP 404 if the requested file does not exist
                 raise Http404
@@ -66,9 +70,10 @@ class AudioViewSet(viewsets.ViewSet):
 
     def _serve_file(self, segment_key):
         """ Directly serve a file. Used for serving segments or single files"""
-
+        print("_serve_file")
         # Not using presigned urls, serving it directly from Minio or a public bucket
         if settings.S3_DIRECT_SERVE:
+            print("&DIRECTSERVE")
             # A pre-signed URL is generated, so the client is redirected. This url is cached to avoid continuous requests
             # from the user side.
             url = storage.connection.meta.client.generate_presigned_url(
@@ -76,6 +81,7 @@ class AudioViewSet(viewsets.ViewSet):
                 Params={"Bucket": storage.bucket_name, "Key": segment_key},
                 ExpiresIn=settings.SEGMENT_EXPIRATION_TIME_IN_SECONDS,
             )
+            print("url", url)
             response = HttpResponseRedirect(url)
             # Added so avoid unnecessary requests to the django server if the user reloads or it has been there in the
             # past 0.75 * SEGMENT_EXPIRATION_TIME_IN_SECONDS
@@ -86,6 +92,7 @@ class AudioViewSet(viewsets.ViewSet):
             return response
         # Using presigned urls --> A redirection with a temporary link is sent to the browser
         else:
+            print("&not direct serve")
             segment = storage.connection.meta.client.get_object(Bucket=storage.bucket_name,
                                                                 Key=segment_key)
             segment_data = segment['Body'].read()
@@ -98,8 +105,10 @@ class AudioViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk, format=None):
         """ Gets the playlist of the file, depending on the case """
-
+        print("&retrieve")
         audio_document = self.get_object(pk)
+
+        print("got doc", audio_document)
 
         # Checking which audio format we will be using
         use_hls = self._use_hls(audio_document)
@@ -107,6 +116,8 @@ class AudioViewSet(viewsets.ViewSet):
             audio_filename = audio_document.hls_audio_file_key
         else:
             audio_filename = audio_document.audio_filename
+
+        print("fname", audio_filename)
 
         head = self._check_file_is_reachable(audio_filename)
         if not head:
@@ -133,7 +144,7 @@ class AudioViewSet(viewsets.ViewSet):
     @action(methods=["GET"], detail=True)
     def is_using_hls(self, request, pk):
         """ Indicates if we are going to use HLS for this file."""
-
+        print("is_using_hls endpoint")
         audio_document = self.get_object(pk)
 
         return JsonResponse({

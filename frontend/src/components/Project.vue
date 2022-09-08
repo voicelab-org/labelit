@@ -16,7 +16,7 @@
       <div>Target date: {{project_with_stats.target_deadline}} </div>
     </div>
     <v-progress-linear
-        v-if="project_with_stats.target_num_documents"
+        v-if="project_with_stats.target_num_documents && project_with_stats.num_done_documents"
         :value="Math.round(
             100 * project_with_stats.num_done_documents / project_with_stats.target_num_documents
         )"

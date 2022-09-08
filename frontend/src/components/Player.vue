@@ -10,18 +10,18 @@
     <div class="stream-player" v-if="!audioLoading && audioInfo">
       <div class="stream-waves">
         <StreamWaveForms
-          :current-play-back-time="currentPlayBackTime"
-          :waveform-data="audioInfo.waveform"
-          :duration="duration"
-          @waveform-clicked="updateTimeByCursor"
+            :current-play-back-time="currentPlayBackTime"
+            :waveform-data="audioInfo.waveform"
+            :duration="duration"
+            @waveform-clicked="updateTimeByCursor"
         />
       </div>
     </div>
 
     <div class="controls-wrapper">
       <template v-if="!audioLoading">
-         <div class="slider-container">
-            <v-slider
+        <div class="slider-container">
+          <v-slider
               v-model="playbackSpeed"
               prepend-icon="mdi-speedometer"
               :label="playbackSpeed + '%'"
@@ -29,23 +29,27 @@
               :max="300"
               :min="50"
               track-color="#a0dcf8"
-            ></v-slider>
+          ></v-slider>
         </div>
         <div class="player-controls">
-          <v-btn rounded color="primary" @click="skipBackward()" > <v-icon>mdi-skip-backward</v-icon> </v-btn>
+          <v-btn rounded color="primary" @click="skipBackward()">
+            <v-icon>mdi-skip-backward</v-icon>
+          </v-btn>
 
           <v-btn rounded color="primary" @click="togglePlay()">
             <v-icon v-if="this.isPlaying">mdi-pause</v-icon>
             <v-icon v-else>mdi-play</v-icon>
           </v-btn>
 
-          <v-btn rounded color="primary" @click="skipForward()"> <v-icon>mdi-skip-forward</v-icon> </v-btn>
+          <v-btn rounded color="primary" @click="skipForward()">
+            <v-icon>mdi-skip-forward</v-icon>
+          </v-btn>
         </div>
         <div class="duration-container">
           <span class="duration">
             <timer-display
-              :seconds="currentPlayBackTime"
-              :max="duration"
+                :seconds="currentPlayBackTime"
+                :max="duration"
             ></timer-display>
             /
             <timer-display :seconds="duration"></timer-display>
@@ -55,10 +59,10 @@
       <template v-else>
         <div class="progress-bar">
           <v-progress-circular
-            v-show="audioLoading"
-            indeterminate
-            color="primary"
-            :size="48"
+              v-show="audioLoading"
+              indeterminate
+              color="primary"
+              :size="48"
           ></v-progress-circular>
         </div>
       </template>
@@ -70,12 +74,14 @@
 import Hls from "hls.js";
 import StreamWaveForms from '@/components/StreamWaveForms'
 import WaveSurfer from "wavesurfer.js";
+import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js"
 import DocumentService from "@/services/document.service"
 import TimerDisplay from "./TimerDisplay"
+
 export default {
-  components : {
-      StreamWaveForms,
-      TimerDisplay,
+  components: {
+    StreamWaveForms,
+    TimerDisplay,
   },
   data() {
     return {
@@ -90,13 +96,15 @@ export default {
       isPlaying: false,
     };
   },
-  props : {
-    document : {
+  props: {
+    document: {
       type: Object,
       required: true,
     }
   },
   mounted() {
+
+    console.log("RegionsPlugin", RegionsPlugin)
     this.fetchAudio()
     /*DocumentService.doesUseHls(this.document.id).then((res) => {
       if (res.data["use_hls"]) {
@@ -134,52 +142,76 @@ export default {
     });*/
   },
   methods: {
-    fetchAudio(){
-      if (this.player){
+    fetchAudio() {
+      if (this.player) {
         this.player.pause()
       }
       DocumentService.doesUseHls(this.document.id).then((res) => {
-      if (res.data["use_hls"]) {
-        this.uses_hls = true;
-        this.$nextTick(() => {
-          if (Hls.isSupported()) {
-            this.hls = new Hls({
-              audioLoadingTimeOut: 60000,
-              xhrSetup: (xhr) => {
-                xhr.setRequestHeader("Authorization", `Bearer ${this.$store.state.auth.accessToken}`);
-              },
-            });
-            this.fetchAudioHls(this.document.id);
-          } else {
-            alert("Player is not supported by your browser !");
-          }
-        });
-      } else {
-        this.uses_hls = false;
-        let vm = this
-        this.$nextTick(() => {
-          vm.player = WaveSurfer.create({
-            container: "#stream-audio-raw",
-            waveColor: "#a0dcf8",
-            progressColor: "#03a9f4",
-            hideScrollbar: 'true',
-            barWidth: '0',
-            minPxPerSec: '1000',
-            height: 100,
-            cursorColor: "#03a9f4",
+        if (res.data["use_hls"]) {
+          this.uses_hls = true;
+          this.$nextTick(() => {
+            if (Hls.isSupported()) {
+              this.hls = new Hls({
+                audioLoadingTimeOut: 60000,
+                xhrSetup: (xhr) => {
+                  xhr.setRequestHeader("Authorization", `Bearer ${this.$store.state.auth.accessToken}`);
+                },
+              });
+              this.fetchAudioHls(this.document.id);
+            } else {
+              alert("Player is not supported by your browser !");
+            }
           });
-          vm.fetchAudioRaw()
-        });
-      }
-    });
+        } else {
+          this.uses_hls = false;
+          let vm = this
+          this.$nextTick(() => {
+            vm.player = WaveSurfer.create({
+              container: "#stream-audio-raw",
+              waveColor: "#a0dcf8",
+              progressColor: "#03a9f4",
+              hideScrollbar: 'true',
+              barWidth: '0',
+              minPxPerSec: '1000',
+              height: 100,
+              cursorColor: "#03a9f4",
+              plugins: [
+                RegionsPlugin.create({
+                  regionsMinLength: 0.1,
+                  regions: [
+                    {
+                      start: 0.2,
+                      end: 0.5,
+                      loop: false,
+                      color: 'hsla(400, 100%, 30%, 0.5)'
+                    }, {
+                      start: 0.6,
+                      end: 1.2,
+                      loop: false,
+                      color: 'hsla(200, 50%, 70%, 0.4)',
+                      minLength: 1,
+                      maxLength: 5,
+                    }
+                  ],
+                  dragSelection: {
+                    slop: 5
+                  },
+                })
+              ]
+            });
+            // vm.player.enableDragSelection()
+            vm.fetchAudioRaw()
+          });
+        }
+      });
     },
     fetchAudioHls() {
       this.audioLoading = true;
       DocumentService.getAudioInfo(this.document.id)
-      .then((res) => {
-        this.audioInfo = res.data;
-        this.duration = this.audioInfo.duration;
-     });
+          .then((res) => {
+            this.audioInfo = res.data;
+            this.duration = this.audioInfo.duration;
+          });
 
       this.hls.attachMedia(this.$refs.streamAudio);
       this.hls.on(Hls.Events.MEDIA_ATTACHED, () => {
@@ -223,33 +255,35 @@ export default {
       });
     },
     fetchAudioRaw() {
+      console.log("fetch raw")
       let vm = this
       this.audioLoading = true;
       DocumentService.getDocumentAudioById(vm.document.id)
-      .then((res) => {
-        vm.player.loadBlob(res.data);
+          .then((res) => {
+            console.log("res", res.data)
+            vm.player.loadBlob(res.data);
 
-        this.player.on("ready", () => {
-          this.duration = vm.player.getDuration();
-          vm.audioLoading = false;
-        });
+            this.player.on("ready", () => {
+              this.duration = vm.player.getDuration();
+              vm.audioLoading = false;
+            });
 
-        this.player.on("play", () => {
-          this.isPlaying = true;
-        });
+            this.player.on("play", () => {
+              this.isPlaying = true;
+            });
 
-        this.player.on("pause", () => {
-          this.isPlaying = false;
-        });
+            this.player.on("pause", () => {
+              this.isPlaying = false;
+            });
 
-        this.player.on("finish", () => {
-          this.player.currentTime = 0;
-        });
-      })
+            this.player.on("finish", () => {
+              this.player.currentTime = 0;
+            });
+          })
 
-      setInterval(()=>{
-          vm.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
-      },500);
+      setInterval(() => {
+        vm.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
+      }, 500);
     },
     skipForward() {
       this.player.skipForward(1);
@@ -257,24 +291,24 @@ export default {
     skipBackward() {
       this.player.skipBackward(1);
     },
-    togglePlay(){
+    togglePlay() {
       if (this.isPlaying) {
         this.player.pause();
       } else {
         this.player.play();
       }
-   },
-   updateTimeByCursor(newTime) {
+    },
+    updateTimeByCursor(newTime) {
       this.player.currentTime = newTime;
-   },
+    },
   },
-  watch : {
+  watch: {
     playbackSpeed(newVal) {
       this.player.setPlaybackRate(newVal.toFixed(2) / 100.0);
     },
     document: {
       deep: true,
-      handler(){
+      handler() {
         this.fetchAudio()
       },
     },
@@ -289,46 +323,52 @@ export default {
 
 <style lang="scss" scoped>
 
-.controls-wrapper{
+.controls-wrapper {
   position: relative;
+
   .slider-container {
     position: absolute;
     top: 3px;
     left: 0;
     min-width: 200px;
   }
-  .player-controls{
-      flex: 2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
 
-      .v-btn {
-          margin: 0 5px;
-      }
+  .player-controls {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .v-btn {
+      margin: 0 5px;
+    }
   }
+
   .duration-container {
     position: absolute;
     top: 3px;
     right: 0;
     align-items: center;
     text-align: right;
+
     > div {
       margin-left: auto;
     }
+
     > span.duration {
       margin-left: auto;
     }
   }
-  .progress-bar{
-      flex: 2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
 
-      .v-btn {
-          margin: 0 5px;
-      }
+  .progress-bar {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .v-btn {
+      margin: 0 5px;
+    }
   }
 }
 </style>
