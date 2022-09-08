@@ -10,7 +10,13 @@
             
             <div id="doc">
                 <div v-if="project.is_audio_annotated">
-                    <player :document="document" @loaded="audio_loaded=true" />
+                    <player
+                        :document="document"
+                        :enable-regions="true"
+                        @loaded="audio_loaded=true"
+                        v-model="annotated_regions"
+                        :region-tasks="region_tasks"
+                    />
                 </div>
                 <div id="text-container" v-if="project.is_text_annotated">
                     <!--<span v-if="document.text" v-html="document.text"></span>-->
@@ -23,6 +29,9 @@
 
                 </div>
             </div>
+      <div>
+        Annotated regions: {{annotated_regions}}
+      </div>
     </div>
 </template>
 <script>
@@ -40,6 +49,14 @@ export default {
     data(){
         return {
             audio_loaded: false,
+            /*annotated_regions: [],  // TODO: move to store
+            region_tasks: [  // TODO: move to store
+              {
+                id: 1,
+                name: "IVR",
+                color: "lightblue",
+              }
+            ],*/
         }
     },
     created(){
@@ -50,7 +67,18 @@ export default {
         ...mapGetters({
           entity_tasks : 'entities/entity_tasks',
           annotation_enabled: 'entities/annotation_enabled',
+          region_tasks : 'regions/region_tasks',
+          region_annotation_enabled: 'regions/annotation_enabled',
         }),
+      
+        annotated_regions: {
+          get () {
+            return this.$store.state.regions.annotated_regions
+          },
+          set (value) {
+            this.$store.commit('regions/SET_ANNOTATED_REGIONS', value)
+          }
+        },
         annotated_entities: {
           get () {
             return this.$store.state.entities.annotated_entities

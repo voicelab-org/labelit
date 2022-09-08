@@ -94,52 +94,34 @@ export default {
       speedRate: 100,
       audioInfo: null,
       isPlaying: false,
+      annotated_regions: this.value,
     };
   },
   props: {
     document: {
       type: Object,
       required: true,
+    },
+    enableRegions: {
+      type: Boolean,
+      default: false,
+    },
+    value: { // annotated regions
+      type: Array,
+      required: true,
+    },
+    regionTasks: {
+      type: Array,
+      required: true,
+    },
+  },
+  created(){
+    if (this.regionTasks.length > 1){
+      alert("Multiple Region tasks are not supported in the same project")
     }
   },
   mounted() {
-
-    console.log("RegionsPlugin", RegionsPlugin)
     this.fetchAudio()
-    /*DocumentService.doesUseHls(this.document.id).then((res) => {
-      if (res.data["use_hls"]) {
-        this.uses_hls = true;
-        this.$nextTick(() => {
-          if (Hls.isSupported()) {
-            this.hls = new Hls({
-              audioLoadingTimeOut: 60000,
-              xhrSetup: (xhr) => {
-                xhr.setRequestHeader("Authorization", `Bearer ${this.$store.state.auth.accessToken}`);
-              },
-            });
-            this.fetchAudioHls(this.document.id);
-          } else {
-            alert("Player is not supported by your browser !");
-          }
-        });
-      } else {
-        this.uses_hls = false;
-        let vm = this
-        this.$nextTick(() => {
-          vm.player = WaveSurfer.create({
-            container: "#stream-audio-raw",
-            waveColor: "#a0dcf8",
-            progressColor: "#03a9f4",
-            hideScrollbar: 'true',
-            barWidth: '0',
-            minPxPerSec: '1000',
-            height: 100,
-            cursorColor: "#03a9f4",
-          });
-          vm.fetchAudioRaw()
-        });
-      }
-    });*/
   },
   methods: {
     fetchAudio() {
@@ -166,19 +148,13 @@ export default {
           this.uses_hls = false;
           let vm = this
           this.$nextTick(() => {
-            vm.player = WaveSurfer.create({
-              container: "#stream-audio-raw",
-              waveColor: "#a0dcf8",
-              progressColor: "#03a9f4",
-              hideScrollbar: 'true',
-              barWidth: '0',
-              minPxPerSec: '1000',
-              height: 100,
-              cursorColor: "#03a9f4",
-              plugins: [
+
+            let plugins = []
+            if (this.enableRegions){
+              plugins.push(
                 RegionsPlugin.create({
                   regionsMinLength: 0.1,
-                  regions: [
+                  /*regions: [
                     {
                       start: 0.2,
                       end: 0.5,
@@ -192,17 +168,63 @@ export default {
                       minLength: 1,
                       maxLength: 5,
                     }
-                  ],
+                  ],*/
                   dragSelection: {
                     slop: 5
                   },
                 })
-              ]
+              )
+            }
+            vm.player = WaveSurfer.create({
+              container: "#stream-audio-raw",
+              waveColor: "#a0dcf8",
+              progressColor: "#03a9f4",
+              hideScrollbar: 'true',
+              barWidth: '0',
+              minPxPerSec: '1000',
+              height: 100,
+              cursorColor: "#03a9f4",
+              plugins: plugins
             });
+            if (this.enableRegions){
+              this.setupRegionEventListeners()
+            }
             // vm.player.enableDragSelection()
             vm.fetchAudioRaw()
           });
         }
+      });
+    },
+    setupRegionEventListeners(){
+      /*
+      region-created
+      region-updated
+      region-update-end
+      region-removed
+
+       */
+      /*
+        this.player.on("region-created", (e) => {
+          console.log("region created", e)
+          console.log("start & end", e.start, e.end)
+        });
+        this.player.on("region-updated", (e) => {
+          console.log("region updated", e)
+          console.log("start & end", e.start, e.end)
+        });
+      */
+      this.player.on("region-update-end", (e) => {
+        console.log("region update end", e)
+        console.log("start & end", e.start, e.end)
+        this.annotated_regions.push(
+            {
+              wavesurfer_region_id: e.id,
+              start: e.start,
+              end: e.end,
+            }
+        )
+        console.log("this.annotated_regions", this.annotated_regions)
+        this.$emit('input', this.annotated_regions)
       });
     },
     fetchAudioHls() {
@@ -323,7 +345,11 @@ export default {
 
 <style lang="scss" scoped>
 
+.player-container{
+  margin: 10px 0;
+}
 .controls-wrapper {
+  margin-top: 10px;
   position: relative;
 
   .slider-container {
