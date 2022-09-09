@@ -76,7 +76,9 @@ import StreamWaveForms from '@/components/StreamWaveForms'
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js"
 import DocumentService from "@/services/document.service"
+import LabelService from "../services/label.service";
 import TimerDisplay from "./TimerDisplay"
+
 
 export default {
   components: {
@@ -144,7 +146,7 @@ export default {
                   }
               )
 
-              if (existing_frontend_region){
+              if (existing_frontend_region) {
                 existing_frontend_region.id = r.id
                 return
               }
@@ -163,29 +165,13 @@ export default {
                     end: r.end,
                   }
               )
+
+              this.setupRemoveListeners()
+              //this.setupRegionEventListeners()
             }
         )
         this.are_initial_regions_loaded = true
       }
-
-      /*if (this.are_initial_regions_loaded) return
-      if (this.annotated_regions.length) {
-        this.annotated_regions.forEach(
-            (r) => {
-              this.player.addRegion(
-                  {
-                    id: r.id,
-                    color: 'blue',
-                    start: r.start,
-                    end: r.end,
-                  }
-              )
-            }
-        )
-        this.are_initial_regions_loaded = true
-      }*/
-
-
     },
     fetchAudio() {
       if (this.player) {
@@ -252,25 +238,92 @@ export default {
       });
     },
     setupRegionEventListeners() {
+
       this.player.on("region-update-end", (e) => {
         let existing_region = this.annotated_regions.find(r => r.id == e.id)
 
+        let promises = []
         if (existing_region) {
+          console.log("region exists", existing_region)
           existing_region.start = e.start
           existing_region.end = e.end
+          promises.push(LabelService.update(e.id, {
+            resourcetype: "AudioRegionLabel",
+            end: e.end,
+            start: e.start
+          }))
         } else {
-          this.annotated_regions.push(
+          console.log("region does NOT exist")
+          promises.push(LabelService.create(
               {
-                wavesurfer_region_id: e.id,
                 start: e.start,
                 end: e.end,
-                task: this.regionTasks[0].id, // assuming a single region task for now
+                resourcetype: "AudioRegionLabel",
+                task: this.regionTasks[0].id,
               }
-          )
+          ).then(
+              (res) => {
+                this.annotated_regions.push(
+                    {
+                      id: res.data.id,
+                      wavesurfer_region_id: e.id,
+                      start: e.start,
+                      end: e.end,
+                      task: this.regionTasks[0].id, // assuming a single region task for now
+                    }
+                )
+
+                let matching_wavesurfer_region = Object.entries(this.player.regions.list).find(
+                    (entry) => {
+                      return entry[0] == e.id
+                    }
+                )
+                console.log("&matching_wavesurfer_region", matching_wavesurfer_region)
+
+                //matching_wavesurfer_region.id = res.data.id
+                if (matching_wavesurfer_region) {
+                  matching_wavesurfer_region[1].remove()
+                }
+                this.player.addRegion({
+                  id: res.data.id,
+                  start: e.start,
+                  end: e.end,
+                })
+                console.log("after setting id: ", this.player.regions.list)
+              }
+          ))
+
         }
 
-        this.$emit('input', this.annotated_regions)
+        Promise.all(promises).then(() => {
+          console.log("&&Setting up remove")
+          this.setupRemoveListeners()
+          this.$emit('input', this.annotated_regions)
+        })
+
       });
+    },
+    setupRemoveListeners() {
+      Object.entries(this.player.regions.list).forEach(
+          (entry) => {
+            console.log("entry", entry)
+            let region = entry[1]
+            console.log("&region", region)
+            region.on('dblclick', (e) => {
+              console.log("&removing!!!", e)
+              LabelService.delete(region.id).then(
+                  (res) => {
+                    console.log("&delte res", res)
+                    this.annotated_regions = this.annotated_regions.filter(r => r.id != region.id)
+                    this.$emit('input', this.annotated_regions)
+                    region.remove()
+                  }
+              )
+              //region.remove()
+              // TODO: remove in backend and send input event
+            })
+          }
+      )
     },
     fetchAudioHls() {
       this.audioLoading = true;
@@ -383,7 +436,26 @@ export default {
         this.annotated_regions = this.value
         this.updateRegions()
       }
-    }
+    },
+    /*'player.regions.list': {
+      deep: true,
+      handler(){
+        console.log("&regions changed")
+        console.log("&&list", JSON.stringify(this.player.regions.list))
+        Object.entries(this.player.regions.list).forEach(
+            (entry) => {
+              console.log("entry", entry)
+              let region = entry[1]
+              console.log("&region", region)
+              region.on('dblclick', () => {
+                console.log("&removing!!!")
+                //region.remove()
+                // TODO: remove in backend and send input event
+              })
+            }
+        )
+      }
+    }*/
   },
   computed: {
     currentPlayBackTime() {

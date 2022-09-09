@@ -195,6 +195,13 @@ AWS_S3_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
 AWS_DEFAULT_ACL = None
 
 # HLS related params
+# print('&os.getenv("S3_DIRECT_SERVE", "true")', os.getenv("S3_DIRECT_SERVE", "true"))
 S3_DIRECT_SERVE = strtobool(os.getenv("S3_DIRECT_SERVE", "true")) # Set to True when in the cloud, False locally.
+# print("& settings S3_DIRECT_SERVE bool", S3_DIRECT_SERVE)
+
+### HACK ALERT !!
+# S3_DIRECT_SERVE = False
+### END HACK
+
 SEGMENT_EXPIRATION_TIME_IN_SECONDS = int(os.getenv("SEGMENT_EXPIRATION_TIME_IN_SECONDS", 3600))
 NUM_ELEMENTS_IN_WAVEFORM = 1024

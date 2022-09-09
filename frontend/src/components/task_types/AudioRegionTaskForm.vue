@@ -6,7 +6,7 @@
     />
     <br>
     <div id="region-info" v-if="!readOnly">
-      Highlight regions in the audio player displayed above.
+      Highlight regions in the audio player displayed above. Double-click on a region to remove it.
     </div>
     <span v-show="false"> Selected labels: {{ selected_labels }} </span>
     <!--HACK,  TODO: understand why it breaks after removing this line-->
@@ -112,23 +112,25 @@ export default {
       }
     },
     annotated_regions() {
+      console.log("&annotated_regions changed")
       if (this.readOnly) return
       this.selected_labels = this.annotated_regions.filter(
           (e) => {
             return e.task == this.task.id
           }
       )
+      console.log('&seld labls', this.selected_labels)
     },
     selected_labels: {
       deep: true,
-      handler() {
+      handler(newLabels, oldLabels) {
+        console.log("&labels changed", JSON.stringify(newLabels), oldLabels)
         let vm = this
         var editedAnnotation = {}
         Object.assign(editedAnnotation, vm.annotation)
         let promises = []
-        this.selected_labels.forEach(
+        /*this.selected_labels.forEach(
             (selected_label) => {
-
               let is_label_in_labels_to_add = this.labels_to_add.find(
                   (l) => {
                     return l.start == selected_label.start && l.end == selected_label.end
@@ -143,15 +145,10 @@ export default {
                   this.labels_to_add.push(selected_label)
 
                   selected_clone.resourcetype = "AudioRegionLabel"
-                  promises.push(LabelService.create(selected_clone).then(
-                      (res) => {
-                        selected_label.id = res.data.id
-                      }
-                  ))
                 }
               }
             }
-        )
+        )*/
         Promise.all(promises).then(() => {
           editedAnnotation['labels'] = this.selected_labels.map(l => l.id)
           AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)

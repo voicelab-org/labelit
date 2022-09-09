@@ -16,6 +16,10 @@ class BatchService {
   update(id, payload) {
     return this.request.patch(`/labels/${id}/`, payload)
   }
+
+  delete(id) {
+    return this.request.delete(`/labels/${id}/`)
+  }
 }
 
 export default new BatchService()
