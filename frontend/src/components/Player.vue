@@ -76,7 +76,9 @@ import StreamWaveForms from '@/components/StreamWaveForms'
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js"
 import DocumentService from "@/services/document.service"
+import LabelService from "../services/label.service";
 import TimerDisplay from "./TimerDisplay"
+
 
 export default {
   components: {
@@ -94,54 +96,83 @@ export default {
       speedRate: 100,
       audioInfo: null,
       isPlaying: false,
+      annotated_regions: this.value,
+      are_initial_regions_loaded: false,
     };
   },
   props: {
     document: {
       type: Object,
       required: true,
+    },
+    enableRegions: {
+      type: Boolean,
+      default: false,
+    },
+    value: { // annotated regions
+      type: Array,
+      required: true,
+    },
+    regionTasks: {
+      type: Array,
+      required: true,
+    },
+  },
+  created() {
+    if (this.regionTasks.length > 1) {
+      alert("Multiple Region tasks are not supported in the same project")
     }
   },
   mounted() {
-
-    console.log("RegionsPlugin", RegionsPlugin)
     this.fetchAudio()
-    /*DocumentService.doesUseHls(this.document.id).then((res) => {
-      if (res.data["use_hls"]) {
-        this.uses_hls = true;
-        this.$nextTick(() => {
-          if (Hls.isSupported()) {
-            this.hls = new Hls({
-              audioLoadingTimeOut: 60000,
-              xhrSetup: (xhr) => {
-                xhr.setRequestHeader("Authorization", `Bearer ${this.$store.state.auth.accessToken}`);
-              },
-            });
-            this.fetchAudioHls(this.document.id);
-          } else {
-            alert("Player is not supported by your browser !");
-          }
-        });
-      } else {
-        this.uses_hls = false;
-        let vm = this
-        this.$nextTick(() => {
-          vm.player = WaveSurfer.create({
-            container: "#stream-audio-raw",
-            waveColor: "#a0dcf8",
-            progressColor: "#03a9f4",
-            hideScrollbar: 'true',
-            barWidth: '0',
-            minPxPerSec: '1000',
-            height: 100,
-            cursorColor: "#03a9f4",
-          });
-          vm.fetchAudioRaw()
-        });
-      }
-    });*/
   },
   methods: {
+    updateRegions() {
+      if (this.annotated_regions.length) {
+
+        this.annotated_regions.forEach(
+            (r) => {
+              try {
+                parseInt(r.id)
+              } catch {
+                return
+              }
+
+              let existing_frontend_region = Object.entries(this.player.regions.list).find(
+                  (entry) => {
+                    let id = entry[0]
+                    let region = entry[1]
+                    return id != r.id && region.start == r.start && region.end == r.end
+                  }
+              )
+
+              if (existing_frontend_region) {
+                existing_frontend_region.id = r.id
+                return
+              }
+
+              let existing_db_region = Object.keys(this.player.regions.list).find(
+                  (id) => {
+                    return id == r.id
+                  }
+              )
+
+              if (existing_db_region) return
+              this.player.addRegion(
+                  {
+                    id: r.id,
+                    start: r.start,
+                    end: r.end,
+                  }
+              )
+
+              this.setupRemoveListeners()
+              //this.setupRegionEventListeners()
+            }
+        )
+        this.are_initial_regions_loaded = true
+      }
+    },
     fetchAudio() {
       if (this.player) {
         this.player.pause()
@@ -166,6 +197,18 @@ export default {
           this.uses_hls = false;
           let vm = this
           this.$nextTick(() => {
+
+            let plugins = []
+            if (this.enableRegions) {
+              plugins.push(
+                  RegionsPlugin.create({
+                    regionsMinLength: 0.1,
+                    dragSelection: {
+                      slop: 5
+                    },
+                  })
+              )
+            }
             vm.player = WaveSurfer.create({
               container: "#stream-audio-raw",
               waveColor: "#a0dcf8",
@@ -175,35 +218,112 @@ export default {
               minPxPerSec: '1000',
               height: 100,
               cursorColor: "#03a9f4",
-              plugins: [
-                RegionsPlugin.create({
-                  regionsMinLength: 0.1,
-                  regions: [
-                    {
-                      start: 0.2,
-                      end: 0.5,
-                      loop: false,
-                      color: 'hsla(400, 100%, 30%, 0.5)'
-                    }, {
-                      start: 0.6,
-                      end: 1.2,
-                      loop: false,
-                      color: 'hsla(200, 50%, 70%, 0.4)',
-                      minLength: 1,
-                      maxLength: 5,
-                    }
-                  ],
-                  dragSelection: {
-                    slop: 5
-                  },
-                })
-              ]
+              plugins: plugins
             });
+            if (this.enableRegions) {
+              this.setupRegionEventListeners()
+            }
             // vm.player.enableDragSelection()
             vm.fetchAudioRaw()
+            /*vm.player.addRegion(
+                {
+                  start: 1.0,
+                  end: 2.0,
+                  color: "rbga(0, 255, 0, 1)",
+
+                }
+            )*/
           });
         }
       });
+    },
+    setupRegionEventListeners() {
+
+      this.player.on("region-update-end", (e) => {
+        let existing_region = this.annotated_regions.find(r => r.id == e.id)
+
+        let promises = []
+        if (existing_region) {
+          console.log("region exists", existing_region)
+          existing_region.start = e.start
+          existing_region.end = e.end
+          promises.push(LabelService.update(e.id, {
+            resourcetype: "AudioRegionLabel",
+            end: e.end,
+            start: e.start
+          }))
+        } else {
+          console.log("region does NOT exist")
+          promises.push(LabelService.create(
+              {
+                start: e.start,
+                end: e.end,
+                resourcetype: "AudioRegionLabel",
+                task: this.regionTasks[0].id,
+              }
+          ).then(
+              (res) => {
+                this.annotated_regions.push(
+                    {
+                      id: res.data.id,
+                      wavesurfer_region_id: e.id,
+                      start: e.start,
+                      end: e.end,
+                      task: this.regionTasks[0].id, // assuming a single region task for now
+                    }
+                )
+
+                let matching_wavesurfer_region = Object.entries(this.player.regions.list).find(
+                    (entry) => {
+                      return entry[0] == e.id
+                    }
+                )
+                console.log("&matching_wavesurfer_region", matching_wavesurfer_region)
+
+                //matching_wavesurfer_region.id = res.data.id
+                if (matching_wavesurfer_region) {
+                  matching_wavesurfer_region[1].remove()
+                }
+                this.player.addRegion({
+                  id: res.data.id,
+                  start: e.start,
+                  end: e.end,
+                })
+                console.log("after setting id: ", this.player.regions.list)
+              }
+          ))
+
+        }
+
+        Promise.all(promises).then(() => {
+          console.log("&&Setting up remove")
+          this.setupRemoveListeners()
+          this.$emit('input', this.annotated_regions)
+        })
+
+      });
+    },
+    setupRemoveListeners() {
+      Object.entries(this.player.regions.list).forEach(
+          (entry) => {
+            console.log("entry", entry)
+            let region = entry[1]
+            console.log("&region", region)
+            region.on('dblclick', (e) => {
+              console.log("&removing!!!", e)
+              LabelService.delete(region.id).then(
+                  (res) => {
+                    console.log("&delte res", res)
+                    this.annotated_regions = this.annotated_regions.filter(r => r.id != region.id)
+                    this.$emit('input', this.annotated_regions)
+                    region.remove()
+                  }
+              )
+              //region.remove()
+              // TODO: remove in backend and send input event
+            })
+          }
+      )
     },
     fetchAudioHls() {
       this.audioLoading = true;
@@ -255,12 +375,10 @@ export default {
       });
     },
     fetchAudioRaw() {
-      console.log("fetch raw")
       let vm = this
       this.audioLoading = true;
       DocumentService.getDocumentAudioById(vm.document.id)
           .then((res) => {
-            console.log("res", res.data)
             vm.player.loadBlob(res.data);
 
             this.player.on("ready", () => {
@@ -312,6 +430,32 @@ export default {
         this.fetchAudio()
       },
     },
+    value: {
+      deep: true,
+      handler() {
+        this.annotated_regions = this.value
+        this.updateRegions()
+      }
+    },
+    /*'player.regions.list': {
+      deep: true,
+      handler(){
+        console.log("&regions changed")
+        console.log("&&list", JSON.stringify(this.player.regions.list))
+        Object.entries(this.player.regions.list).forEach(
+            (entry) => {
+              console.log("entry", entry)
+              let region = entry[1]
+              console.log("&region", region)
+              region.on('dblclick', () => {
+                console.log("&removing!!!")
+                //region.remove()
+                // TODO: remove in backend and send input event
+              })
+            }
+        )
+      }
+    }*/
   },
   computed: {
     currentPlayBackTime() {
@@ -323,7 +467,12 @@ export default {
 
 <style lang="scss" scoped>
 
+.player-container {
+  margin: 10px 0;
+}
+
 .controls-wrapper {
+  margin-top: 10px;
   position: relative;
 
   .slider-container {

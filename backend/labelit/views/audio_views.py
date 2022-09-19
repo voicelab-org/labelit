@@ -82,6 +82,8 @@ class AudioViewSet(viewsets.ViewSet):
                 ExpiresIn=settings.SEGMENT_EXPIRATION_TIME_IN_SECONDS,
             )
             print("url", url)
+            if os.environ['AWS_S3_OPTIONS'] == "local":
+                url = url.replace("minio", "localhost")
             response = HttpResponseRedirect(url)
             # Added so avoid unnecessary requests to the django server if the user reloads or it has been there in the
             # past 0.75 * SEGMENT_EXPIRATION_TIME_IN_SECONDS
@@ -139,6 +141,7 @@ class AudioViewSet(viewsets.ViewSet):
 
         # Serve single file
         else:
+            print("&NOT USING HLS")
             return self._serve_file(audio_filename)
 
     @action(methods=["GET"], detail=True)

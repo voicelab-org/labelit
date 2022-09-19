@@ -82,7 +82,6 @@ export default {
   },
   methods: {
     resetIndex(){
-      console.log("&resetting")
       this.annotation_index=0
     },
       skip(){

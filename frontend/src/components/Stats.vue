@@ -196,7 +196,6 @@ export default {
           })
     },
     getStats() {
-      console.log("getStats")
       if (this.batchId) {
         BatchService.getStats(this.batchId)
             .then(res => {
@@ -205,11 +204,9 @@ export default {
       }
 
       if (this.projectId) {
-        console.log("getting projstats")
         ProjectService.getStats(this.projectId)
             .then(res => {
               this.stats = res.data
-              console.log("gotprojstats")
             })
       }
     },

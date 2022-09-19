@@ -59,8 +59,9 @@ services:
       AWS_S3_OPTIONS: local
       IMAGE_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
       AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
-      S3_DIRECT_SERVE: "true"
-      SEGMENT_EXPIRATION_TIME_IN_SECONDS: 3600
+      S3_DIRECT_SERVE: "false"  # was true
+      # SEGMENT_EXPIRATION_TIME_IN_SECONDS: 3600
+      SEGMENT_EXPIRATION_TIME_IN_SECONDS: 0  # for easier debugging
       SECRET_KEY: "o4_7tyfr^o4^4nx_(-6umggzwo%ksx32y3x^amn7o&c7*o-q!d"
       ALLOWED_HOST: "localhost"
     ports:

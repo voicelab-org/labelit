@@ -76,7 +76,6 @@ export default {
               (error.response && error.response.data) ||
               error.message ||
               error.toString();
-            console.log("msg", this.message)
           }
         );
       }

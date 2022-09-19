@@ -8,6 +8,9 @@ import { player } from "./player.module";
 import { entities } from "./entities.module";
 
 
+import { regions } from "./audioregions.module";
+
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -16,5 +19,6 @@ export default new Vuex.Store({
     task,
     player,
     entities,
+    regions,
   }
 });

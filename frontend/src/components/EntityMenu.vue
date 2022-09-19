@@ -153,7 +153,6 @@ export default {
                   (eleTop < containerBottom && containerBottom < eleBottom)
               );
             };
-            console.log("&isVisible(element, container)", isVisible(element, container))
 
             if (!isVisible(element, container)) {
 
