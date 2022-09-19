@@ -112,19 +112,16 @@ export default {
       }
     },
     annotated_regions() {
-      console.log("&annotated_regions changed")
       if (this.readOnly) return
       this.selected_labels = this.annotated_regions.filter(
           (e) => {
             return e.task == this.task.id
           }
       )
-      console.log('&seld labls', this.selected_labels)
     },
     selected_labels: {
       deep: true,
-      handler(newLabels, oldLabels) {
-        console.log("&labels changed", JSON.stringify(newLabels), oldLabels)
+      handler() {
         let vm = this
         var editedAnnotation = {}
         Object.assign(editedAnnotation, vm.annotation)

@@ -78,7 +78,9 @@ export default {
             {
               match: /(\S{3,}|\(\w*)$/,
               search: (term, callback) => {
-                callback(this.lexicon.filter(l => l.startsWith(term)))
+                callback(this.lexicon.filter((l) => {
+                  return l.startsWith(term)
+                }))
               },
               index: 1,
               replace: function (element) {

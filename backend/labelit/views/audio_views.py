@@ -94,7 +94,6 @@ class AudioViewSet(viewsets.ViewSet):
             return response
         # Using presigned urls --> A redirection with a temporary link is sent to the browser
         else:
-            print("&not direct serve")
             segment = storage.connection.meta.client.get_object(Bucket=storage.bucket_name,
                                                                 Key=segment_key)
             segment_data = segment['Body'].read()
@@ -141,7 +140,6 @@ class AudioViewSet(viewsets.ViewSet):
 
         # Serve single file
         else:
-            print("&NOT USING HLS")
             return self._serve_file(audio_filename)
 
     @action(methods=["GET"], detail=True)
