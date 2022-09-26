@@ -120,7 +120,7 @@ export default {
   },
   created() {
     if (this.regionTasks.length > 1) {
-      alert("Multiple Region tasks are not supported in the same project")
+      alert("Multiple Region tasks are currently not supported in the same project")
     }
   },
   mounted() {
@@ -128,6 +128,15 @@ export default {
   },
   methods: {
     updateRegions() {
+
+      if (!this.annotated_regions.length) {
+        Object.entries(this.player.regions.list).forEach(
+            (r) => {
+              r[1].remove()
+            }
+        )
+      }
+
       if (this.annotated_regions.length) {
 
         this.annotated_regions.forEach(
@@ -244,7 +253,6 @@ export default {
 
         let promises = []
         if (existing_region) {
-          console.log("region exists", existing_region)
           existing_region.start = e.start
           existing_region.end = e.end
           promises.push(LabelService.update(e.id, {
@@ -253,7 +261,6 @@ export default {
             start: e.start
           }))
         } else {
-          console.log("region does NOT exist")
           promises.push(LabelService.create(
               {
                 start: e.start,
@@ -278,7 +285,6 @@ export default {
                       return entry[0] == e.id
                     }
                 )
-                console.log("&matching_wavesurfer_region", matching_wavesurfer_region)
 
                 //matching_wavesurfer_region.id = res.data.id
                 if (matching_wavesurfer_region) {
@@ -289,14 +295,12 @@ export default {
                   start: e.start,
                   end: e.end,
                 })
-                console.log("after setting id: ", this.player.regions.list)
               }
           ))
 
         }
 
         Promise.all(promises).then(() => {
-          console.log("&&Setting up remove")
           this.setupRemoveListeners()
           this.$emit('input', this.annotated_regions)
         })
@@ -306,14 +310,10 @@ export default {
     setupRemoveListeners() {
       Object.entries(this.player.regions.list).forEach(
           (entry) => {
-            console.log("entry", entry)
             let region = entry[1]
-            console.log("&region", region)
-            region.on('dblclick', (e) => {
-              console.log("&removing!!!", e)
+            region.on('dblclick', () => {
               LabelService.delete(region.id).then(
-                  (res) => {
-                    console.log("&delte res", res)
+                  () => {
                     this.annotated_regions = this.annotated_regions.filter(r => r.id != region.id)
                     this.$emit('input', this.annotated_regions)
                     region.remove()
