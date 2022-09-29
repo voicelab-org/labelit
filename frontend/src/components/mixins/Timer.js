@@ -1,6 +1,8 @@
+
+import {mapGetters} from 'vuex'
+
 export default {
     name: "Timer",
-    props: {},
     data() {
         return {
             timer: '',
@@ -8,10 +10,13 @@ export default {
             t0: 0, // the start time of the current period of activity
             isInactive: false,
             inactivityTimeout: null,
-            has_timing_started: false
+            has_timing_started: false,
         }
     },
     computed: {
+        ...mapGetters({
+            is_playing: 'player/isPlaying',
+        }),
         inactivity_timeout_duration() {
             if (this.batch.project) {
                 return this.batch.project.timer_inactivity_threshold
@@ -24,27 +29,34 @@ export default {
             if (this.has_timing_started) return
             this.has_timing_started = true
             this.activateActivityTracker();
-            if(this.timer){
+            if (this.timer) {
                 clearInterval(this.timer)
             }
             this.time = 0
             this.initializeTimer()
         },
-        initializeTimer(){
+        initializeTimer() {
             this.t0 = this.getTime()
             this.timer = setInterval(this.updateTimer, 500)
             this.resetInactivityTimeout()
         },
-        resetInactivityTimeout: function (){
-            if (this.inactivityTimeout){
+        resetInactivityTimeout: function () {
+            if (this.inactivityTimeout) {
                 clearTimeout(this.inactivityTimeout);
             }
 
             this.inactivityTimeout = setTimeout(() => {
-                this.isInactive = true;
+                if (this.batch.project.does_audio_playing_count_as_activity) {
+                    if (!this.is_playing) {
+                        this.isInactive = true;
+                    }
+                    return
+                }
+                this.isInactive = true
+
             }, this.inactivity_timeout_duration);
         },
-        getTime(){
+        getTime() {
             return new Date().getTime() // milliseconds
         },
         updateTimer: function () {
@@ -67,6 +79,11 @@ export default {
                 this.resetInactivityTimeout();
                 this.initializeTimer()
             }
+        },
+    },
+    watch: {
+        is_playing(){
+            this.resetInactivityTimeout()
         },
     },
 }

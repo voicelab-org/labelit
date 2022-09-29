@@ -342,11 +342,12 @@ export default {
 
           this.player.addEventListener("play", () => {
             this.isPlaying = true;
-
+            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
           });
 
           this.player.addEventListener("pause", () => {
             this.isPlaying = false;
+            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
           });
 
           this.player.addEventListener("timeupdate", () => {
@@ -388,10 +389,12 @@ export default {
 
             this.player.on("play", () => {
               this.isPlaying = true;
+              this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
             });
 
             this.player.on("pause", () => {
               this.isPlaying = false;
+              this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
             });
 
             this.player.on("finish", () => {

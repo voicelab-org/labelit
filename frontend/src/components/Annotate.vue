@@ -18,17 +18,18 @@
         <div id="annotation-forms-t" v-if="annotations">
             <div v-if="tasksLoaded">
                 <div v-for="(annotation, i) in annotations" :key="annotation.id" :class="getAnnotationClasses(annotation, i == focus_index)">
-                    <component :is="getFormForTask(getTaskForAnnotation(annotation))"
-                     :annotation="annotation"
-                     :time="time"
-                     :task="getTaskForAnnotation(annotation)"
-                     :submitting="submitting"
-                     @submitted="numTasksSubmitted++"
-                     @submiterror="handleSubmitError()"
-                     :review-mode="reviewMode"
-                     :document="document"
-                     :focused="i == focus_index"
-                               @focus="focus_index = i"
+                    <component
+                      :is="getFormForTask(getTaskForAnnotation(annotation))"
+                      :annotation="annotation"
+                      :time="time"
+                      :task="getTaskForAnnotation(annotation)"
+                      :submitting="submitting"
+                      @submitted="numTasksSubmitted++"
+                      @submiterror="handleSubmitError()"
+                      :review-mode="reviewMode"
+                      :document="document"
+                      :focused="i == focus_index"
+                      @focus="focus_index = i"
                     />
                     <div v-if="annotation.qa_invalidation_comment">
                         {{annotation.qa_invalidation_comment}}
@@ -46,6 +47,9 @@
     </div>
     <div v-else>
         No more to annotate.
+    </div>
+    <div>
+      batch.project.does_audio_playing_count_as_activity: {{batch.project.does_audio_playing_count_as_activity}}
     </div>
   </div>
 </template>
@@ -90,7 +94,6 @@ export default {
         isUndoing: false,
         isFirstAnnotation: true,
         focus_index: 0,
-        do_display_time: true,
     }
   },
   created(){
