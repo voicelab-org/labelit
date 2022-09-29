@@ -17,6 +17,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'tasks',
             'timer_inactivity_threshold',
             'archived',
+            'do_display_timer_time',
+            'does_audio_playing_count_as_activity',
         ]
 
 
@@ -43,6 +45,8 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
             'target_num_documents',
             'target_deadline',
             'description',
+            'do_display_timer_time',
+            'does_audio_playing_count_as_activity',
         ]
         
     def get_num_documents(self, obj):

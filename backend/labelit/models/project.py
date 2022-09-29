@@ -29,6 +29,20 @@ class Project(models.Model):
         """,
         default=60000,
     )
+    do_display_timer_time = models.BooleanField(
+        """
+        If true, the time recorded by the timer (with inactivity pausing) will be displayed to the annotator.
+        Useful for QA also.
+        """,
+        default=False,
+    )
+    does_audio_playing_count_as_activity = models.BooleanField(
+        """
+        If true, the timer will not pause while audio playing, even if no user interactions (mouse clicks, typing)
+        occur.
+        """,
+        default=False,
+    )
     tasks = models.ManyToManyField(
         'labelit.Task',
         related_name='projects',
