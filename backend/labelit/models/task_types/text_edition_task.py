@@ -29,7 +29,7 @@ class TextEditionTask(Task):
             labels,
             is_final,
     ):
-        resolve(self.validator)().validate(labels[0].transcript)
+        resolve(self.validator)().validate(labels[0].edited_text)
 
     def get_agreement_stats(self, batch):
         return {}

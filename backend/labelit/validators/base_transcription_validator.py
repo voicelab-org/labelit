@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 class BaseTranscriptionValidator:
 
     case1_error = "Unacceptable char"
-    valid_chars = "…()/'aA-àÀ?âÂ,bB.cC;çÇ:dD!eEéÉèÈêÊëfFgGhHiIîÎïjJkKlLmMnNoOôÔpPqQrRsStTuUùûvVwWxXyYzZœŒ<>0123456789 "
+    valid_chars = "…()[]/'aA-àÀ?âÂ,bB.cC;çÇ:dD!eEéÉèÈêÊëfFgGhHiIîÎïjJkKlLmMnNoOôÔpPqQrRsStTuUùûvVwWxXyYzZœŒ<>0123456789 "
 
     def validate(
             self,
