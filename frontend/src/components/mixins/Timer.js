@@ -1,4 +1,3 @@
-
 import {mapGetters} from 'vuex'
 
 export default {
@@ -11,6 +10,7 @@ export default {
             isInactive: false,
             inactivityTimeout: null,
             has_timing_started: false,
+            debounceTimeout: null,
         }
     },
     computed: {
@@ -69,7 +69,23 @@ export default {
         activateActivityTracker: function () {
             ["mousemove", "scroll", "keydown", "resize", "click"].forEach(
                 (evt) => {
-                    window.addEventListener(evt, this.respondToUserActivity);
+                    window.addEventListener(
+                        evt,
+                        () => {
+                            // this.respondToUserActivity
+                            // If there's a timer, cancel it
+                            if (this.debounceTimeout) {
+                                window.cancelAnimationFrame(this.debounceTimeout);
+                            }
+
+                            // Setup the new requestAnimationFrame()
+                            this.debounceTimeout = window.requestAnimationFrame( () => {
+                                // Run our scroll functions
+                                this.respondToUserActivity()
+                            });
+                        },
+                        false
+                    );
                 }
             )
         },
@@ -82,7 +98,7 @@ export default {
         },
     },
     watch: {
-        is_playing(){
+        is_playing() {
             this.resetInactivityTimeout()
         },
     },
