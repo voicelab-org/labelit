@@ -10,7 +10,10 @@
             <v-btn class="primary" @click="undo">UNDO</v-btn>
         </div>
         <div id="doc-container" v-if="document && batch">
-            <Document :document="document" :project="batch.project" @loaded="startTimer"/>
+            <Document :document="document" :project="batch.project" @loaded="startTiming"/>
+        </div>
+        <div v-if="do_display_time">
+          Time: {{time_display}}
         </div>
         <div id="annotation-forms-t" v-if="annotations">
             <div v-if="tasksLoaded">
@@ -37,7 +40,7 @@
             <v-btn @click="submit()" color="primary">SUBMIT</v-btn>
             <hotkey-guide />
         </div>
-        <div id="inactive" v-if="isInactive">
+        <div id="inactive" v-if="isInactive && !do_display_time">
             <v-icon>mdi-pause</v-icon>
         </div>
     </div>
@@ -87,6 +90,7 @@ export default {
         isUndoing: false,
         isFirstAnnotation: true,
         focus_index: 0,
+        do_display_time: true,
     }
   },
   created(){
@@ -192,6 +196,9 @@ export default {
     },
   },
   computed: {
+    time_display(){
+      return Math.round(this.time / 1000, 2)
+    },
     tasksLoaded(){
         var vm = this
         if (vm.annotations == null) return false

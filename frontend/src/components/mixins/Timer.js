@@ -4,15 +4,15 @@ export default {
     data() {
         return {
             timer: '',
-            time: 0,
+            time: 0, // total time spent annotating, excluding periods of inactivity
+            t0: 0, // the start time of the current period of activity
             isInactive: false,
-            throttlerTimeout: null,
             inactivityTimeout: null,
-            THROTTLER_TIMEOUT_DURATION: 2000,
+            has_timing_started: false
         }
     },
     computed: {
-        INACTIVITY_TIMEOUT_DURATION() {
+        inactivity_timeout_duration() {
             if (this.batch.project) {
                 return this.batch.project.timer_inactivity_threshold
             }
@@ -20,15 +20,38 @@ export default {
         },
     },
     methods: {
-        startTimer: function () {
+        startTiming: function () {
+            if (this.has_timing_started) return
+            this.has_timing_started = true
             this.activateActivityTracker();
-            clearInterval(this.timer)
+            if(this.timer){
+                clearInterval(this.timer)
+            }
             this.time = 0
-            this.timer = setInterval(this.updateTimer, 1000)
+            this.initializeTimer()
+        },
+        initializeTimer(){
+            this.t0 = this.getTime()
+            this.timer = setInterval(this.updateTimer, 500)
+            this.resetInactivityTimeout()
+        },
+        resetInactivityTimeout: function (){
+            if (this.inactivityTimeout){
+                clearTimeout(this.inactivityTimeout);
+            }
+
+            this.inactivityTimeout = setTimeout(() => {
+                this.isInactive = true;
+            }, this.inactivity_timeout_duration);
+        },
+        getTime(){
+            return new Date().getTime() // milliseconds
         },
         updateTimer: function () {
             if (!this.isInactive) {
-                this.time += 1000
+                let now = this.getTime()
+                this.time += now - this.t0
+                this.t0 = now
             }
         },
         activateActivityTracker: function () {
@@ -41,26 +64,9 @@ export default {
         respondToUserActivity: function () {
             if (this.isInactive) {
                 this.isInactive = false;
+                this.resetInactivityTimeout();
+                this.initializeTimer()
             }
-
-            if (!this.throttlerTimeout) {
-                this.throttlerTimeout = setTimeout(() => {
-                    this.resetInactivityTimeout();
-                    clearTimeout(this.throttlerTimeout);
-                    this.throttlerTimeout = null;
-                }, this.THROTTLER_TIMEOUT_DURATION);
-            }
-        },
-        resetInactivityTimeout: function () {
-            clearTimeout(this.inactivityTimeout);
-
-            this.inactivityTimeout = setTimeout(() => {
-                this.respondToUserActivity();
-                this.isInactive = true;
-                this.time = 0
-                clearInterval(this.timer)
-                this.timer = setInterval(this.updateTimer, 1000)
-            }, this.INACTIVITY_TIMEOUT_DURATION);
         },
     },
 }

@@ -88,10 +88,10 @@ export default {
       }
     },
     loaded() {
+      this.$emit('loaded')
       if (this.project.is_audio_annotated) {
         return this.audio_loaded
       }
-      this.$emit('loaded')
       return true
     }
   },
