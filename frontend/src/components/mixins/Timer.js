@@ -24,9 +24,12 @@ export default {
             return 10000
         },
     },
+    created(){
+        this.startTiming()
+    },
     methods: {
         startTiming: function () {
-            if (this.has_timing_started) return
+            //if (this.has_timing_started) return
             this.has_timing_started = true
             this.activateActivityTracker();
             if (this.timer) {
@@ -100,6 +103,12 @@ export default {
     watch: {
         is_playing() {
             this.resetInactivityTimeout()
+        },
+        numTasksSubmitted: {
+            deep: true,
+            handler(){
+                this.startTiming()
+            },
         },
     },
 }

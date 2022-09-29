@@ -218,6 +218,11 @@ export default {
                   })
               )
             }
+            console.log("creating player")
+            if (vm.player){
+              vm.player.destroy()
+              delete vm.player
+            }
             vm.player = WaveSurfer.create({
               container: "#stream-audio-raw",
               waveColor: "#a0dcf8",

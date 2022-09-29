@@ -45,10 +45,10 @@ export default {
       });
       y.domain([-max_val, max_val]);
       var bar_width = width / data.length;
-      d3.select(div)
+      let selection = d3.select(div)
         .selectAll("div")
         .data(data)
-        .enter()
+      selection.enter()
         .append("div")
         .attr("class", "bar")
         .style("width", bar_width + "px")
@@ -63,6 +63,7 @@ export default {
           var left = x(i) * width;
           return left + "px";
         });
+      selection.exit().remove()
     },
     waveFormClicked(e) {
       var left = parseInt(e.target.style.left, 10);
