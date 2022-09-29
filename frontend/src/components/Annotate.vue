@@ -48,9 +48,6 @@
     <div v-else>
         No more to annotate.
     </div>
-    <div>
-      batch.project.does_audio_playing_count_as_activity: {{batch.project.does_audio_playing_count_as_activity}}
-    </div>
   </div>
 </template>
 
