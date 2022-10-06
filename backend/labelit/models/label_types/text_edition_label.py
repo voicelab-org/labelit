@@ -13,4 +13,4 @@ class TextEditionLabel(Label):
         app_label = 'labelit'
 
     def __str__(self):
-        return "<TextEditionLabel ({}): {}>".format(self.pk, self.transcript)
+        return "<TextEditionLabel ({}): {}>".format(self.pk, self.edited_text)
