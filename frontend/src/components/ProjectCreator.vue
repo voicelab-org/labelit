@@ -22,9 +22,9 @@
         <v-card-text>
           <v-container>
             <v-form v-model="valid">
-              <v-jsf v-model="model" :schema="schema"/>
+              <v-jsf v-model="model" :schema="schema" :options="form_options"/>
             </v-form>
-            <p>valid=</p>
+            <p>valid={{valid}}</p>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -52,9 +52,12 @@
 <script>
 import VJsf from '@koumoul/vjsf/lib/VJsf.js'
 import '@koumoul/vjsf/lib/VJsf.css'
+//import axios from 'axios'
+
+import ApiService from "../services/api.service";
 
 export default {
-  name: "BatchCreate",
+  name: "ProjectCreator",
   props: {},
   components: {
     VJsf
@@ -65,10 +68,18 @@ export default {
       //VJSF
       valid: false,
       model: {},
+      form_options: {
+        httpLib: ApiService
+      },
       schema: {
         type: 'object',
+        required: [
+            'name'
+        ],
         properties: {
-          name: {type: 'string',}, // default: "yo"
+          name: {
+            type: 'string',
+          }, // default: "yo"
           is_audio_annotated: {type: 'boolean', default: true,},
           is_text_annotated: {type: 'boolean', default: true},
           // are_sequences_annotated
@@ -88,8 +99,8 @@ export default {
           tasks: {
             type: 'array',
             title: 'All tasks in this project',
-            'x-fromUrl': '/data-fair/api/v1/datasets?status=finalized&select=title,schema&owner={context.owner.type}:{context.owner.id}',
-            'x-itemsProp': 'tasks',
+            'x-fromUrl': '/tasks/',
+            //'x-itemsProp': 'name',
             'x-itemTitle': 'name',
             'x-itemKey': 'id',
             items: {
@@ -98,8 +109,8 @@ export default {
                 id: {
                   type: 'integer'
                 },
-                title: {
-                  name: 'string'
+                name: {
+                  type: 'string'
                 }
               }
             }
