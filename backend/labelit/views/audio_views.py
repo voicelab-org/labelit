@@ -178,6 +178,40 @@ class AudioViewSet(viewsets.ViewSet):
 
         return gzip_middleware.process_response(request, response)
 
+    @action(methods=["GET"], detail=True)
+    def serve_url(self, request, pk, format=None):
+        """ Obtains the waveform for the audio, used for visualization. """
+
+        print("serve_url  ")
+        audio_document = self.get_object(pk)
+
+        print("got doc", audio_document)
+
+        # Checking which audio format we will be using
+        use_hls = self._use_hls(audio_document)
+        audio_filename = audio_document.audio_filename
+        url = storage.connection.meta.client.generate_presigned_url(
+                "get_object",
+                Params={"Bucket": storage.bucket_name, "Key": audio_filename},
+                ExpiresIn=settings.SEGMENT_EXPIRATION_TIME_IN_SECONDS,
+            )
+        try:
+            waveform = storage.connection.meta.client.get_object(Bucket=storage.bucket_name,
+                                                         Key=audio_filename.split('.')[-2]+'_waveform.json')
+            data = json.loads(waveform["Body"].read().decode("utf-8"))
+        except:
+            data = {'duration':0 , 'waveform':None}
+
+        if os.environ['AWS_S3_OPTIONS'] == "local":
+            url = url.replace("minio", "localhost")
+        
+        data['url'] = url
+        response = JsonResponse(data)
+        # One week cache
+        response["Cache-Control"] = f"private, max-age={settings.SEGMENT_EXPIRATION_TIME_IN_SECONDS}, immutable"
+        gzip_middleware = GZipMiddleware()
+        return gzip_middleware.process_response(request, response)
+
 
     @action(methods=["GET"],
             detail=True,

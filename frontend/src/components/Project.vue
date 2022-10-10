@@ -11,21 +11,21 @@
         v-if="project_with_stats"
         class="d-flex flex-row justify-space-between"
     >
-      <div># documents annotated: {{project_with_stats.num_done_documents}}</div>
-      <div>Target (# documents to annotate): {{project_with_stats.target_num_documents}} </div>
-      <div>Target date: {{project_with_stats.target_deadline}} </div>
-    </div>
-    <v-progress-linear
-        v-if="project_with_stats.target_num_documents && project_with_stats.num_done_documents"
-        :value="Math.round(
+          <div># documents annotated: {{project_with_stats.num_done_documents}}</div>
+          <div>Target (# documents to annotate): {{project_with_stats.target_num_documents}} </div>
+          <div>Target date: {{project_with_stats.target_deadline}} </div>
+          <v-progress-linear
+          v-if="project_with_stats.target_num_documents && project_with_stats.num_done_documents"
+          :value="Math.round(
             100 * project_with_stats.num_done_documents / project_with_stats.target_num_documents
-        )"
-        height="25"
-    ></v-progress-linear>
-    <p v-if="project_with_stats.description">
-      <b>Description: </b><br>
-      <span style="white-space: pre;">{{project_with_stats.description}}</span>
-    </p>
+            )"
+            height="25"
+        ></v-progress-linear>
+        <p v-if="project_with_stats.description">
+          <b>Description: </b><br>
+          <span style="white-space: pre;">{{project_with_stats.description}}</span>
+        </p>
+      </div>
 
 
     <v-tabs>

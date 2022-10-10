@@ -11,10 +11,10 @@
         </div>
         <div id="doc-container" v-if="document && batch">
             <Document :document="document" :project="batch.project" @loaded="startTiming"/>
-        </div>
-        <div v-if="batch.project.do_display_timer_time">
-          Time: {{time_display}}
-        </div>
+            <div v-if="batch.project.do_display_timer_time">
+              Time: {{time_display}}
+            </div>
+          </div>
         <div id="annotation-forms-t" v-if="annotations">
             <div v-if="tasksLoaded">
                 <div v-for="(annotation, i) in annotations" :key="annotation.id" :class="getAnnotationClasses(annotation, i == focus_index)">
@@ -41,7 +41,7 @@
             <v-btn @click="submit()" color="primary">SUBMIT</v-btn>
             <hotkey-guide />
         </div>
-        <div id="inactive" v-if="isInactive && !batch.project.do_display_timer_time">
+        <div id="inactive" v-if="isInactive && batch && !batch.project.do_display_timer_time">
             <v-icon>mdi-pause</v-icon>
         </div>
     </div>

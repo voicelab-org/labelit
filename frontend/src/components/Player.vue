@@ -124,12 +124,12 @@ export default {
     }
   },
   mounted() {
+    this.$store.commit('player/SET_PLAYBACK_TIME', 0)
     this.fetchAudio()
   },
   methods: {
     updateRegions() {
-
-      if (!this.annotated_regions.length) {
+      if (!this.annotated_regions.length && this.player) {
         Object.entries(this.player.regions.list).forEach(
             (r) => {
               r[1].remove()
@@ -218,12 +218,12 @@ export default {
                   })
               )
             }
-            console.log("creating player")
             if (vm.player){
               vm.player.destroy()
               delete vm.player
             }
             vm.player = WaveSurfer.create({
+              backend: 'MediaElement',
               container: "#stream-audio-raw",
               waveColor: "#a0dcf8",
               progressColor: "#03a9f4",
@@ -383,9 +383,10 @@ export default {
     fetchAudioRaw() {
       let vm = this
       this.audioLoading = true;
-      DocumentService.getDocumentAudioById(vm.document.id)
-          .then((res) => {
-            vm.player.loadBlob(res.data);
+      DocumentService.getAudioUrl(vm.document.id).then((res) => {
+          var data = res.data
+          var waveform = data.waveform 
+            vm.player.load(data.url , waveform , null);
 
             this.player.on("ready", () => {
               this.duration = vm.player.getDuration();
@@ -405,11 +406,15 @@ export default {
             this.player.on("finish", () => {
               this.player.currentTime = 0;
             });
-          })
 
-      setInterval(() => {
-        vm.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
-      }, 500);
+            this.player.on("audioprocess", () => {
+              this.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
+            });
+          })
+        
+      // setInterval(() => {
+      //   this.$store.commit('player/SET_PLAYBACK_TIME', this.player.getCurrentTime())
+      // }, 500);
     },
     skipForward() {
       this.player.skipForward(1);
