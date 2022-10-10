@@ -74,7 +74,7 @@ export default {
     getProjects(){
       this.loading = true
       ProjectService.getProjectList()
-          .then( (response) => {
+          .then(function (response) {
             this.projects = response.data
           })
           .catch(error => console.log(error))
