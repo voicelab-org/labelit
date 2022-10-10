@@ -12,6 +12,6 @@ module.exports = {
   },
 
   transpileDependencies: [
-    'vuetify'
+    'vuetify', "@koumoul/vjsf"
   ]
 }
