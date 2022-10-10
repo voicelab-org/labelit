@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@koumoul/vjsf": "^2.21.0",
     "@textcomplete/core": "^0.1.9",
     "@textcomplete/textarea": "^0.1.9",
     "axios": "^0.21.1",

@@ -187,9 +187,15 @@ tr {
   margin-bottom: 20px;
 }
 
+
+// TODO: check use of the commented lines below
+/*
 .container {
   width: 1000px !important;
 }
+*/
+
+//
 
 
 .stats-table {
