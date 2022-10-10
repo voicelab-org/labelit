@@ -39,6 +39,7 @@
           <v-btn
               color="blue darken-1"
               text
+              :disabled="!valid"
               @click="create"
           >
             Create
@@ -58,9 +59,21 @@ import ApiService from "../services/api.service";
 
 export default {
   name: "ProjectCreator",
-  props: {},
+  props: {
+    project: {
+      type: Object,
+    },
+  },
   components: {
     VJsf
+  },
+  created(){
+    if (this.project){
+      this.model = this.project
+      console.log("&MDL", this.model)
+    } else{
+      console.log("project prop not provided, creating anew")
+    }
   },
   data() {
     return {
@@ -74,12 +87,14 @@ export default {
       schema: {
         type: 'object',
         required: [
-            'name'
+            'name',
+            'target_deadline',
+            'target_num_documents'
         ],
         properties: {
           name: {
             type: 'string',
-          }, // default: "yo"
+          },
           is_audio_annotated: {type: 'boolean', default: true,},
           is_text_annotated: {type: 'boolean', default: true},
           // are_sequences_annotated
@@ -100,7 +115,6 @@ export default {
             type: 'array',
             title: 'All tasks in this project',
             'x-fromUrl': '/tasks/',
-            //'x-itemsProp': 'name',
             'x-itemTitle': 'name',
             'x-itemKey': 'id',
             items: {
