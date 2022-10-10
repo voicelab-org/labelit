@@ -1,17 +1,6 @@
 <template>
-  <div>
-
-    <div id="task-list-actions">
-      <v-btn
-          color="primary"
-          dark
-        >
-          Add Task
-        </v-btn>
-    </div>
-
-    <div id="tasks">
-
+  <div id="tasks">
+    
     <v-tabs>
       <v-tab @click="show_archived=false">
         Live
@@ -20,7 +9,7 @@
         Archived
       </v-tab>
     </v-tabs>
-
+    
     <v-simple-table>
       <thead>
         <tr>
@@ -43,8 +32,6 @@
         </tr>
       </tbody>
     </v-simple-table>
-  </div>
-
   </div>
 </template>
 
