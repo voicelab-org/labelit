@@ -19,8 +19,28 @@ class ProjectSerializer(serializers.ModelSerializer):
             'archived',
             'do_display_timer_time',
             'does_audio_playing_count_as_activity',
+            'target_deadline',
+            'target_num_documents'
         ]
 
+
+class FlatProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = [
+            'id',
+            'name',
+            'is_audio_annotated',
+            'is_text_annotated',
+            'are_sequences_annotated',
+            'tasks',
+            'timer_inactivity_threshold',
+            'archived',
+            'do_display_timer_time',
+            'does_audio_playing_count_as_activity',
+            'target_deadline',
+            'target_num_documents'
+        ]
 
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
     tasks = TaskPolymorphicSerializer(many=True, required=False)

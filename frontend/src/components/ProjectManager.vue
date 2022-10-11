@@ -46,6 +46,10 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <div>
+        Project mdl: <br>
+        {{model}}
+      </div>
     </v-dialog>
   </div>
 </template>
@@ -53,34 +57,34 @@
 <script>
 import VJsf from '@koumoul/vjsf/lib/VJsf.js'
 import '@koumoul/vjsf/lib/VJsf.css'
+import ProjectService from "../services/project.service";
 //import axios from 'axios'
 
 import ApiService from "../services/api.service";
 
 export default {
-  name: "ProjectCreator",
+  name: "ProjectManager",
   props: {
     project: {
       type: Object,
+      default(){
+        return {}
+      },
     },
   },
   components: {
     VJsf
   },
   created(){
-    if (this.project){
-      this.model = this.project
-      console.log("&MDL", this.model)
-    } else{
-      console.log("project prop not provided, creating anew")
-    }
+    this.create_mode = this.model == {}
   },
   data() {
     return {
       dialog: false,
+      create_mode: false,
       //VJSF
       valid: false,
-      model: {},
+      model: this.project,
       form_options: {
         httpLib: ApiService
       },
@@ -136,6 +140,15 @@ export default {
   },
   methods: {
     create() {
+      let p = {...this.model}
+      p.tasks = p.tasks.map(t => t.id)
+      ProjectService.create(p).then(
+          ()=>{
+            this.dialog = false
+            this.model = {}
+            this.$emit('created')
+          }
+      )
     },
   },
   watch: {}

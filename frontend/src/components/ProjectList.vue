@@ -3,14 +3,7 @@
     <div class="header">
       <h2 class="headline">Projects </h2>
       <div class="header-right">
-        <!--Creator: <project-creator v-if="isAdmin"/>
-        <br>-->
-        <div v-if="projects.length">
-
-        Editor: <project-creator :project="projects[0]" v-if="isAdmin"/>
-        <br>
-          {{projects[0]}}
-        </div>
+        <project-manager :project="projects[0]" v-if="isAdmin" @created="getProjects"/>
       </div>
     </div>
     <div id="projects">
@@ -57,7 +50,7 @@
 <script>
 import ProjectService from '@/services/project.service'
 import ProjectMenu from '@/components/ProjectMenu'
-import ProjectCreator from "./ProjectCreator";
+import ProjectManager from "./ProjectManager";
 import {mapGetters} from 'vuex'
 
 
@@ -65,7 +58,7 @@ export default {
   name: 'project-list',
   components: {
     ProjectMenu,
-    ProjectCreator,
+    ProjectManager,
   },
   data() {
     return {
