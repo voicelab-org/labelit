@@ -65,6 +65,8 @@ class Project(models.Model):
         blank=True,
     )
 
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
     class Meta:
         app_label = 'labelit'
 

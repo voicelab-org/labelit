@@ -47,7 +47,8 @@
               :disabled="!valid"
               @click="submit"
           >
-            Create
+            <span v-if="create_mode">Create</span>
+            <span v-else>Update</span>
           </v-btn>
         </v-card-actions>
       </v-card>

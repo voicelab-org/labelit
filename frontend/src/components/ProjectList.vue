@@ -4,7 +4,7 @@
       <h2 class="headline">Projects </h2>
       <div class="header-right">
         <project-manager v-if="isAdmin" @changed="getProjects"/>
-        <project-manager @changed="getProjects" :project="edited_project" v-model="show_edit_project" />
+        <project-manager @changed="projectEdited" :project="edited_project" v-model="show_edit_project" />
       </div>
     </div>
     <div id="projects">
@@ -74,6 +74,10 @@ export default {
     this.getProjects()
   },
   methods: {
+    projectEdited(){
+      this.edited_project = {some: 'project'}
+      this.getProjects()
+    },
     showEdit(project){
       this.edited_project = project
       this.show_edit_project = true
@@ -103,10 +107,11 @@ export default {
     }),
     shown_projects() {
       if (this.show_archived) {
-        return this.projects.filter(p => p.archived)
+        var projects = this.projects.filter(p => p.archived)
       } else {
-        return this.projects.filter(p => !p.archived)
+        projects = this.projects.filter(p => !p.archived)
       }
+      return projects.sort((a, b) => (a.created_at < b.created_at) ? 1 : -1)
     },
   },
 }
