@@ -94,7 +94,6 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
             'do_display_timer_time',
             'does_audio_playing_count_as_activity',
             'description',
-            'created_at'
         ]
         
     def get_num_documents(self, obj):
