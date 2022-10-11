@@ -7,6 +7,8 @@ from .batch_document import BatchDocument
 from .annotation import Annotation
 from django.db.models import Avg, F, ExpressionWrapper, FloatField, Count
 from django.db.models.functions import Cast
+from django.conf import settings
+
 
 class Project(models.Model):
     name = models.CharField(max_length=500)
@@ -66,6 +68,8 @@ class Project(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         app_label = 'labelit'

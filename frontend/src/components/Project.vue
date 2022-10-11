@@ -7,6 +7,15 @@
         <batch-create v-if="isAdmin" :projectId="projectId" @batchCreated="updateListToggle=!updateListToggle"/>
       </div>
     </div>
+
+    <div
+        v-if="project"
+        class="d-flex flex-row justify-space-between"
+    >
+      <div>Created on: {{project.created_at}}</div>
+      <div>By: {{project.created_by.first_name}} {{project.created_by.last_name}} </div>
+      <div>Last modified: {{project.updated_at}} </div>
+    </div>
     <div
         v-if="project_with_stats"
         class="d-flex flex-row justify-space-between"

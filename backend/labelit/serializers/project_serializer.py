@@ -3,8 +3,21 @@ from labelit.models import Project
 from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
 
 
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+#TODO: DRY vs. ./user_serializer.py
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "first_name", "last_name",]
+
 class ProjectSerializer(serializers.ModelSerializer):
     tasks = TaskPolymorphicSerializer(many=True, required=False)
+    created_by = UserSerializer(many=False, required=False)
+    created_at = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
 
     class Meta:
         model = Project
@@ -22,11 +35,15 @@ class ProjectSerializer(serializers.ModelSerializer):
             'target_deadline',
             'target_num_documents',
             'description',
-            'created_at'
+            'created_at',
+            'updated_at',
+            'created_by'
         ]
 
 
 class FlatProjectSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = Project
         fields = [
@@ -43,8 +60,13 @@ class FlatProjectSerializer(serializers.ModelSerializer):
             'target_deadline',
             'target_num_documents',
             'description',
-            'created_at'
+            'created_at',
+            'updated_at',
+            'created_by'
         ]
+
+        extra_kwargs = {'created_by': {'default': serializers.CurrentUserDefault()}}
+
 
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
     tasks = TaskPolymorphicSerializer(many=True, required=False)
@@ -83,4 +105,3 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
     
     def get_num_done_batches(self, obj):
         return obj.get_num_done_batches()
-
