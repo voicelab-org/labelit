@@ -4,7 +4,7 @@
       <h2 class="headline">Projects </h2>
       <div class="header-right">
         <project-manager v-if="isAdmin" @changed="getProjects"/>
-        <project-manager :project="edited_project" v-model="show_edit_project" />
+        <project-manager @changed="getProjects" :project="edited_project" v-model="show_edit_project" />
       </div>
     </div>
     <div id="projects">

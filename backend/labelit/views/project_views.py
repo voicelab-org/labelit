@@ -15,6 +15,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_action_classes = {
         "create": FlatProjectSerializer,
+        "update": FlatProjectSerializer,
+        "partial_update": FlatProjectSerializer,
         "list": ProjectSerializer,
         "detail": ProjectSerializer,
     }

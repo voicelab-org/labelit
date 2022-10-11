@@ -20,7 +20,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'do_display_timer_time',
             'does_audio_playing_count_as_activity',
             'target_deadline',
-            'target_num_documents'
+            'target_num_documents',
+            'description',
         ]
 
 
@@ -39,7 +40,8 @@ class FlatProjectSerializer(serializers.ModelSerializer):
             'do_display_timer_time',
             'does_audio_playing_count_as_activity',
             'target_deadline',
-            'target_num_documents'
+            'target_num_documents',
+            'description',
         ]
 
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
@@ -67,6 +69,7 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
             'description',
             'do_display_timer_time',
             'does_audio_playing_count_as_activity',
+            'description',
         ]
         
     def get_num_documents(self, obj):

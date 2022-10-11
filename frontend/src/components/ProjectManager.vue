@@ -11,6 +11,7 @@
     </template>
     <v-dialog
         v-model="show_dialog"
+        @input="dialogInputEvent"
         max-width="800px"
         persistent
     >
@@ -154,6 +155,9 @@ export default {
     }
   },
   methods: {
+    dialogInputEvent(){
+      console.log("dialogInputEvent")
+    },
     submit() {
       if (this.create_mode) {
         this.create()
@@ -175,7 +179,8 @@ export default {
     edit() {
       let p = {...this.model}
       p.tasks = p.tasks.map(t => t.id)
-      ProjectService.updateProject(p).then(
+      console.log("p", JSON.parse(JSON.stringify(p)))
+      ProjectService.updateProject(this.project.id, p).then(
           () => {
             this.show_dialog = false
             this.model = {}
@@ -186,10 +191,15 @@ export default {
   },
   watch: {
     show_dialog(){
+      console.log("show_dialog changed", this.show_dialog)
       this.$emit('input', this.show_dialog)
     },
     value(){
+      console.log("value changed !", this.value)
       this.show_dialog = this.value
+    },
+    project(){
+      this.model = this.project
     },
   }
 }
