@@ -3,7 +3,8 @@
     <div class="header">
       <h2 class="headline">Projects </h2>
       <div class="header-right">
-        <project-manager :project="projects[0]" v-if="isAdmin" @created="getProjects"/>
+        <project-manager v-if="isAdmin" @changed="getProjects"/>
+        <project-manager :project="edited_project" v-model="show_edit_project" />
       </div>
     </div>
     <div id="projects">
@@ -35,7 +36,7 @@
           <td>{{ project.name }}</td>
           <td>{{ printProjectTasks(project.tasks) }}</td>
           <td>
-            <ProjectMenu v-model="shown_projects[i]" />
+            <ProjectMenu v-model="shown_projects[i]" @changed="getProjects()" @edit="showEdit"/>
           </td>
         </tr>
         </tbody>
@@ -65,12 +66,18 @@ export default {
       projects: [],
       show_archived: false,
       loading: true,
+      edited_project: {some: 'project'},
+      show_edit_project: false,
     }
   },
   created() {
     this.getProjects()
   },
   methods: {
+    showEdit(project){
+      this.edited_project = project
+      this.show_edit_project = true
+    },
     getProjects(){
       this.loading = true
       ProjectService.getProjectList()

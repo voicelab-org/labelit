@@ -1,30 +1,34 @@
 <template>
   <div>
+    <template v-if="create_mode">
+      <v-btn
+          color="primary"
+          dark
+          @click.stop="show_dialog=true"
+      >
+        Add Project
+      </v-btn>
+    </template>
     <v-dialog
-        v-model="dialog"
-        persistent
+        v-model="show_dialog"
         max-width="800px"
+        persistent
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-        >
-          Add Project
-        </v-btn>
-      </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Create Project</span>
+          <span class="headline">
+            {{ dialog_title }}
+          </span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-form v-model="valid">
-              <v-jsf v-model="model" :schema="schema" :options="form_options"/>
+              <v-jsf
+                  v-model="model"
+                  :schema="schema"
+                  :options="form_options"
+              />
             </v-form>
-            <p>valid={{valid}}</p>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -32,7 +36,7 @@
           <v-btn
               color="blue darken-1"
               text
-              @click="dialog = false"
+              @click="show_dialog=false"
           >
             Close
           </v-btn>
@@ -40,26 +44,25 @@
               color="blue darken-1"
               text
               :disabled="!valid"
-              @click="create"
+              @click="submit"
           >
             Create
           </v-btn>
         </v-card-actions>
       </v-card>
-      <div>
+      <!--<div>
         Project mdl: <br>
         {{model}}
-      </div>
+      </div>-->
     </v-dialog>
   </div>
 </template>
 
 <script>
+
 import VJsf from '@koumoul/vjsf/lib/VJsf.js'
 import '@koumoul/vjsf/lib/VJsf.css'
 import ProjectService from "../services/project.service";
-//import axios from 'axios'
-
 import ApiService from "../services/api.service";
 
 export default {
@@ -67,20 +70,32 @@ export default {
   props: {
     project: {
       type: Object,
-      default(){
+      default() {
         return {}
       },
     },
+    value: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     VJsf
   },
-  created(){
-    this.create_mode = this.model == {}
+  computed: {
+    dialog_title() {
+      if (this.create_mode) {
+        return "Create a project"
+      }
+      return "Edit project " + this.model.name
+    }
+  },
+  created() {
+    this.create_mode = Object.keys(this.model).length == 0
   },
   data() {
     return {
-      dialog: false,
+      show_dialog: this.show,
       create_mode: false,
       //VJSF
       valid: false,
@@ -91,9 +106,9 @@ export default {
       schema: {
         type: 'object',
         required: [
-            'name',
-            'target_deadline',
-            'target_num_documents'
+          'name',
+          'target_deadline',
+          'target_num_documents'
         ],
         properties: {
           name: {
@@ -139,18 +154,43 @@ export default {
     }
   },
   methods: {
+    submit() {
+      if (this.create_mode) {
+        this.create()
+      } else {
+        this.edit()
+      }
+    },
     create() {
       let p = {...this.model}
       p.tasks = p.tasks.map(t => t.id)
       ProjectService.create(p).then(
-          ()=>{
-            this.dialog = false
+          () => {
+            this.show_dialog = false
             this.model = {}
-            this.$emit('created')
+            this.$emit('changed')
+          }
+      )
+    },
+    edit() {
+      let p = {...this.model}
+      p.tasks = p.tasks.map(t => t.id)
+      ProjectService.updateProject(p).then(
+          () => {
+            this.show_dialog = false
+            this.model = {}
+            this.$emit('changed')
           }
       )
     },
   },
-  watch: {}
+  watch: {
+    show_dialog(){
+      this.$emit('input', this.show_dialog)
+    },
+    value(){
+      this.show_dialog = this.value
+    },
+  }
 }
 </script>

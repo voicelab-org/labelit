@@ -4,20 +4,23 @@
         open-on-hover
         offset-y
         :close-on-content-click="false"
-        :close-on-click="false"
     >
-      <template v-slot:activator="{ attrs, on: menu }">
-        <span v-bind="attrs" v-on="menu">
-            <v-icon>mdi-dots-vertical</v-icon>
-        </span>
+      <template v-slot:activator="{ on }">
+            <span v-on="on" @click.stop>
+                <v-icon>mdi-dots-vertical</v-icon>
+            </span>
       </template>
       <v-card>
         <v-list>
           <v-list-item>
             <a @click="toggleArchived"> {{ archiveAction }} </a>
           </v-list-item>
-          <v-list-item @click="$emit('edit', project)">
-            Edit
+          <v-list-item>
+            <project-manager
+                @changed="$emit('changed')"
+                :project="project"
+                @click.stop
+            />
           </v-list-item>
         </v-list>
       </v-card>
@@ -27,10 +30,14 @@
 
 <script>
 
+import ProjectManager from "./ProjectManager";
 import ProjectService from "@/services/project.service";
 
 export default {
   name: "ProjectMenu",
+  components: {
+    ProjectManager,
+  },
   props: {
     value: {
       type: Object,
