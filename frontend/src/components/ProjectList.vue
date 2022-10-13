@@ -3,7 +3,8 @@
     <div class="header">
       <h2 class="headline">Projects </h2>
       <div class="header-right">
-        <project-creator v-if="isAdmin" @batchCreated="getProjects"/>
+        <project-manager v-if="isAdmin" @changed="getProjects"/>
+        <project-manager @changed="projectEdited" :project="edited_project" v-model="show_edit_project" />
       </div>
     </div>
     <div id="projects">
@@ -35,7 +36,10 @@
           <td>{{ project.name }}</td>
           <td>{{ printProjectTasks(project.tasks) }}</td>
           <td>
-            <ProjectMenu v-model="shown_projects[i]" />
+            <ProjectMenu
+                v-model="shown_projects[i]"
+                @edit="showEdit"
+            />
           </td>
         </tr>
         </tbody>
@@ -50,7 +54,7 @@
 <script>
 import ProjectService from '@/services/project.service'
 import ProjectMenu from '@/components/ProjectMenu'
-import ProjectCreator from "./ProjectCreator";
+import ProjectManager from "./ProjectManager";
 import {mapGetters} from 'vuex'
 
 
@@ -58,19 +62,29 @@ export default {
   name: 'project-list',
   components: {
     ProjectMenu,
-    ProjectCreator,
+    ProjectManager,
   },
   data() {
     return {
       projects: [],
       show_archived: false,
       loading: true,
+      edited_project: {some: 'project'},
+      show_edit_project: false,
     }
   },
   created() {
     this.getProjects()
   },
   methods: {
+    projectEdited(){
+      this.edited_project = {some: 'project'}
+      this.getProjects()
+    },
+    showEdit(project){
+      this.edited_project = project
+      this.show_edit_project = true
+    },
     getProjects(){
       this.loading = true
       ProjectService.getProjectList()
@@ -96,10 +110,11 @@ export default {
     }),
     shown_projects() {
       if (this.show_archived) {
-        return this.projects.filter(p => p.archived)
+        var projects = this.projects.filter(p => p.archived)
       } else {
-        return this.projects.filter(p => !p.archived)
+        projects = this.projects.filter(p => !p.archived)
       }
+      return projects.sort((a, b) => (a.created_at < b.created_at) ? 1 : -1)
     },
   },
 }

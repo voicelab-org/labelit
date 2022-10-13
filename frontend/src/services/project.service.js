@@ -9,7 +9,7 @@ class ProjectService {
         return this.request.get('/projects/', {params})
     }
 
-    createProject(data) {
+    create(data) {
         return this.request.post('/projects/', data)
     }
 

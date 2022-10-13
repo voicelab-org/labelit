@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from rest_framework import permissions
-from labelit.serializers import TaskPolymorphicSerializer
+from labelit.serializers import (
+    TaskPolymorphicSerializer,
+    CreateOrUpdateTaskPolymorphicSerializer
+)
 from labelit.models import Task, Batch, Project
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,8 +11,21 @@ from rest_framework.response import Response
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
+    serializer_action_classes = {
+        "create": CreateOrUpdateTaskPolymorphicSerializer,
+        "update": CreateOrUpdateTaskPolymorphicSerializer,
+        "partial_update": CreateOrUpdateTaskPolymorphicSerializer,
+        "list": TaskPolymorphicSerializer,
+        "detail": TaskPolymorphicSerializer,
+    }
     serializer_class = TaskPolymorphicSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        try:
+            return self.serializer_action_classes[self.action]
+        except (KeyError, AttributeError):
+            return super().get_serializer_class()
 
     @action(detail=True, name='Get agreement metrics over batch')
     def get_agreement_stats_for_batch(self, request, pk=None):
