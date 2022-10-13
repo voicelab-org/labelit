@@ -1,45 +1,48 @@
 <template>
   <div>
-    <v-tabs>
-      <v-tab @click="show_archived=false">
-        Live
-      </v-tab>
-      <v-tab @click="show_archived=true">
-        Archived
-      </v-tab>
-    </v-tabs>
-    
-    <v-simple-table v-if="shown_batches.length && !loading">
-      <thead>
-      <tr>
-        <th class="text-left">
-          Name
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr
-          v-for="(batch, i) in shown_batches"
-          :key="batch.id"
-          @click="goTo(batch)"
-      >
-        <td>{{ batch.name }}</td>
-        <td>
-          <BatchMenu v-model="shown_batches[i]" />
-        </td>
-      </tr>
-      </tbody>
-    </v-simple-table>
+    <template v-if="show_batch_list">
+      <v-tabs>
+        <v-tab @click="show_archived=false">
+          Live
+        </v-tab>
+        <v-tab @click="show_archived=true">
+          Archived
+        </v-tab>
+      </v-tabs>
 
-    <div v-if="!loading && !shown_batches.length">
-      No batches.
-    </div>
-    <div v-if="loading" class="loading">
-      <v-progress-circular
-          color="blue-grey"
-          indeterminate
-      ></v-progress-circular>
-    </div>
+      <v-simple-table v-if="shown_batches.length && !loading">
+        <thead>
+        <tr>
+          <th class="text-left">
+            Name
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+            v-for="(batch, i) in shown_batches"
+            :key="batch.id"
+            @click="goTo(batch)"
+        >
+          <td>{{ batch.name }}</td>
+          <td>
+            <BatchMenu v-model="shown_batches[i]"/>
+          </td>
+        </tr>
+        </tbody>
+      </v-simple-table>
+
+      <div v-if="!loading && !shown_batches.length">
+        No batches.
+      </div>
+      <div v-if="loading" class="loading">
+        <v-progress-circular
+            color="blue-grey"
+            indeterminate
+        ></v-progress-circular>
+      </div>
+
+    </template>
   </div>
 </template>
 
@@ -69,14 +72,15 @@ export default {
       batches: [],
       loading: true,
       show_archived: false,
+      show_batch_list: true,
     }
   },
   computed: {
     ...mapGetters({
       isAdmin: 'auth/isAdmin',
     }),
-    shown_batches(){
-      
+    shown_batches() {
+
       if (this.show_archived) {
         return this.batches.filter(b => b.archived)
       } else {
@@ -98,10 +102,10 @@ export default {
       )*/
     },
     getLink(batch) {
-      return "/projects/"+this.project.id+"/batch/" + batch.id
+      return "/projects/" + this.project.id + "/batch/" + batch.id
     },
     goTo(batch) {
-      let path = '/projects/'+this.project.id+'/batch/'+batch.id
+      let path = '/projects/' + this.project.id + '/batch/' + batch.id
       console.log("&path", path)
       this.$router.push(path)
     },
@@ -120,9 +124,17 @@ export default {
   },
 
   watch: {
-    update(){
+    update() {
       this.getBatchList()
     },
+    "$route"(){
+      console.log("&&&&route chged", this.$route)
+      if (this.$route.path.includes("batch")){
+        this.show_batch_list = false
+      } else {
+        this.show_batch_list = true
+      }
+    }
   },
 }
 </script>

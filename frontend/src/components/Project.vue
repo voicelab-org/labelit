@@ -2,6 +2,9 @@
   <div>
 
     <Breadcrumbs/>
+    <div>
+      Show proj info: {{show_project_info}}
+    </div>
     <div v-if="show_project_info">
     <div class="header">
       <h2 class="headline" v-if="project">Project: {{ project.name }} </h2>
