@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Breadcrumbs/>
     <div class="header">
       <h2 class="headline" v-if="project">Project: {{ project.name }} </h2>
       <div class="header-right">
@@ -7,6 +8,7 @@
         <batch-create v-if="isAdmin" :projectId="projectId" @batchCreated="updateListToggle=!updateListToggle"/>
       </div>
     </div>
+
 
     <div
         v-if="project"
@@ -64,10 +66,11 @@ import Stats from '@/components/Stats'
 import {mapGetters} from 'vuex'
 
 import BatchList from '@/components/BatchList'
+import Breadcrumbs from "@/components/Breadcrumbs"
 
 export default {
   name: 'project',
-  components: {BatchCreate, BatchList, Stats},
+  components: {BatchCreate, BatchList, Stats, Breadcrumbs},
   props: {
     projectId: {
       type: String,

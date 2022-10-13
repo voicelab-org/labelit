@@ -101,8 +101,9 @@ export default {
       return "/batch/" + batch.id
     },
     goTo(batch) {
-      this.$router.push('/batch/' + batch.id)
-
+      let path = '/project/'+this.project.id+'/batch/'+batch.id
+      console.log("&path", path)
+      this.$router.push(path)
     },
     getBatchList() {
       let vm = this

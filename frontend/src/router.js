@@ -82,51 +82,53 @@ let router = new VueRouter({
                 import(/* webpackChunkName: "DatasetList" */ "./components/DatasetList.vue")
         },
         {
-            path: '/project/:id',
+            path: '/project/:project_id',
             component: () =>
                 import(/* webpackChunkName: "Project" */ "./components/Project.vue"),
-            props: route => ({projectId: route.params.id}),
-        },
-        {
-            path: '/batch/:id',
-            component: () =>
-                import(/* webpackChunkName: "Batch" */ "./components/Batch.vue"),
-            props: route => ({batchId: route.params.id}),
+            props: route => ({projectId: route.params.project_id}),
             children: [
 
                 {
-                    path: '',
-                    component: Batch,
-                    beforeEnter: (to, from, next) => {
-                        const user = store.getters['auth/user'];
-                        if (user.is_staff) {
-                            next(`/batch/${to.params.id}/qa`)
-                        } else {
-                            next(`/batch/${to.params.id}/annotate`)
-                        }
-                    },
+                    path: 'batch/:id',
+                    component: () =>
+                        import(/* webpackChunkName: "Batch" */ "./components/Batch.vue"),
                     props: route => ({batchId: route.params.id}),
-                },
-                {
-                    path: 'annotate',
-                    component: Annotate,
-                    props: route => ({batchId: route.params.id}),
-                },
-                {
-                    path: 'stats',
-                    component: Stats,
-                    props: route => ({batchId: route.params.id}),
-                },
-                {
-                    path: 'qa',
-                    component: QA,
-                    props: route => ({batchId: route.params.id}),
-                },
+                    children: [
+                        {
+                            path: '',
+                            component: Batch,
+                            beforeEnter: (to, from, next) => {
+                                const user = store.getters['auth/user'];
+                                if (user.is_staff) {
+                                    next(`/project/${to.params.project_id}/batch/${to.params.id}/qa`)
+                                } else {
+                                    next(`/project/${to.params.project_id}/batch/${to.params.id}/annotate`)
+                                }
+                            },
+                            props: route => ({batchId: route.params.id}),
+                        },
+                        {
+                            path: 'annotate',
+                            component: Annotate,
+                            props: route => ({batchId: route.params.id}),
+                        },
+                        {
+                            path: 'stats',
+                            component: Stats,
+                            props: route => ({batchId: route.params.id}),
+                        },
+                        {
+                            path: 'qa',
+                            component: QA,
+                            props: route => ({batchId: route.params.id}),
+                        },
 
-                {
-                    path: 'review',
-                    component: Review,
-                    props: route => ({batchId: route.params.id}),
+                        {
+                            path: 'review',
+                            component: Review,
+                            props: route => ({batchId: route.params.id}),
+                        },
+                    ]
                 },
             ]
         },
