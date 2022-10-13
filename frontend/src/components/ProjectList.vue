@@ -36,7 +36,10 @@
           <td>{{ project.name }}</td>
           <td>{{ printProjectTasks(project.tasks) }}</td>
           <td>
-            <ProjectMenu v-model="shown_projects[i]" @changed="getProjects()" @edit="showEdit"/>
+            <ProjectMenu
+                v-model="shown_projects[i]"
+                @edit="showEdit"
+            />
           </td>
         </tr>
         </tbody>

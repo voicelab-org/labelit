@@ -3,6 +3,8 @@
     <v-menu
         open-on-hover
         offset-y
+        :close-on-content-click="false"
+        :close-on-click="false"
     >
       <template v-slot:activator="{ on }">
             <span v-on="on" @click.stop>
@@ -13,6 +15,9 @@
         <v-list>
           <v-list-item>
             <a @click="toggleArchived"> {{archiveAction}} </a>
+          </v-list-item>
+          <v-list-item @click="$emit('edit', task)">
+            Edit
           </v-list-item>
         </v-list>
       </v-card>
@@ -52,6 +57,12 @@ export default {
         this.$emit('input', this.task)
       },
     },
+    value: {
+      deep: true,
+      handler(){
+        this.task = this.value
+      }
+    }
   },
   methods: {
     toggleArchived(){
@@ -62,7 +73,6 @@ export default {
             resourcetype: this.task.resourcetype,
           }
       ).then(()=>{
-
         this.task.archived = !this.task.archived
       })
     },

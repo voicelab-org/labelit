@@ -5,6 +5,12 @@
         <h2 class="headline">Tasks </h2>
         <div class="header-right">
           <task-manager v-if="isAdmin" @changed="getTasks"/>
+          <task-manager
+              v-if="isAdmin"
+              @changed="getTasks"
+              v-model="show_edit_task"
+              :task="edited_task"
+          />
         </div>
       </div>
       <v-tabs>
@@ -30,9 +36,12 @@
             :key="task.id"
             @click="goTo(task)"
         >
-          <td>{{ task.name }}</td>
+          <td>{{ task.name }} ({{task.resourcetype}})</td>
           <td>
-            <TaskMenu v-model="shown_tasks[i]"/>
+            <TaskMenu 
+                v-model="shown_tasks[i]"
+                @edit="showEdit"
+            />
           </td>
         </tr>
         </tbody>
@@ -58,6 +67,8 @@ export default {
     return {
       tasks: [],
       show_archived: false,
+      edited_task: {some: 'task'},
+      show_edit_task: false,
     }
   },
   computed: {
@@ -67,10 +78,11 @@ export default {
     shown_tasks() {
 
       if (this.show_archived) {
-        return this.tasks.filter(t => t.archived)
+        var tasks = this.tasks.filter(t => t.archived)
       } else {
-        return this.tasks.filter(t => !t.archived)
+        tasks = this.tasks.filter(t => !t.archived)
       }
+      return tasks.sort((a, b) => (a.created_at < b.created_at) ? 1 : -1)
     },
 
   },
@@ -78,10 +90,22 @@ export default {
     this.getTasks()
   },
   methods: {
+    showEdit(task){
+      console.log("showEdit for task", {...task})
+      this.edited_task = task
+      this.show_edit_task = true
+    },
     getTasks(){
       TaskService.getTaskList()
-        .then(function (response) {
+        .then((response) => {
           this.tasks = response.data
+          console.log("this.tasks after getting list", JSON.parse(JSON.stringify(this.tasks)))
+          this.$nextTick(
+              ()=>{
+                console.log("this.shown_tasks", JSON.parse(JSON.stringify(this.shown_tasks)))
+              }
+          )
+          this.edited_task = {some: 'task'}
         })
         .catch(error => console.log(error))
         .finally(() => this.loading = false)
@@ -121,5 +145,14 @@ export default {
 
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header-right {
+    display: flex;
+  }
+}
 
 </style>

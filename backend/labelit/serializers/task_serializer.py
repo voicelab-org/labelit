@@ -13,8 +13,101 @@ from labelit.models import (
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
 
+# TODO: DRY the code
 
-# TODO: make this file DRYer
+
+class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'labels',
+            'archived',
+        ]
+
+
+class CreateOrUpdateCategoricalTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoricalTask
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'labels',
+            'archived',
+        ]
+
+
+class CreateOrUpdateAudioRegionTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AudioRegionTask
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'color',
+            'archived',
+        ]
+
+
+class CreateOrUpdateTextEditionTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextEditionTask
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'archived',
+        ]
+
+
+class CreateOrUpdateTranscriptionTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TranscriptionTask
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'archived',
+        ]
+
+
+class CreateOrUpdateOrdinalTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrdinalTask
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'labels',
+            'archived',
+        ]
+        
+        
+class CreateOrUpdateEntityTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntityTask
+        fields = [
+            'id',
+            'name',
+            'can_documents_be_invalidated',
+            'labels',
+            'archived',
+        ]
+
+
+class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Task: CreateOrUpdateTaskSerializer,
+        AudioRegionTask: CreateOrUpdateAudioRegionTaskSerializer,
+        CategoricalTask: CreateOrUpdateCategoricalTaskSerializer,
+        OrdinalTask: CreateOrUpdateOrdinalTaskSerializer,
+        EntityTask: CreateOrUpdateEntityTaskSerializer,
+        TextEditionTask: CreateOrUpdateTextEditionTaskSerializer,
+        TranscriptionTask: CreateOrUpdateTranscriptionTaskSerializer,
+    }
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -34,6 +127,8 @@ class TaskSerializer(serializers.ModelSerializer):
             'labels',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -55,6 +150,8 @@ class CategoricalTaskSerializer(serializers.ModelSerializer):
             'labels',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -76,6 +173,8 @@ class OrdinalTaskSerializer(serializers.ModelSerializer):
             'image',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -104,6 +203,8 @@ class AudioRegionTaskSerializer(serializers.ModelSerializer):
             'html_guidelines',
             'archived',
             'color',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -131,6 +232,8 @@ class EntityTaskSerializer(serializers.ModelSerializer):
             'image',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -158,6 +261,8 @@ class NestedCategoricalTaskSerializer(serializers.ModelSerializer):
             'image',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 class TranscriptionTaskSerializer(serializers.ModelSerializer):
@@ -178,6 +283,8 @@ class TranscriptionTaskSerializer(serializers.ModelSerializer):
             'image',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -199,6 +306,8 @@ class TextEditionTaskSerializer(serializers.ModelSerializer):
             'image',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -221,6 +330,8 @@ class LiveCorrectTaskSerializer(serializers.ModelSerializer):
             'image',
             'html_guidelines',
             'archived',
+            'created_at',
+            'updated_at',
         ]
 
 
@@ -234,4 +345,5 @@ class TaskPolymorphicSerializer(PolymorphicSerializer):
         EntityTask: EntityTaskSerializer,
         TextEditionTask: TextEditionTaskSerializer,
         NestedCategoricalTask: NestedCategoricalTaskSerializer,
+        AudioRegionTask: AudioRegionTaskSerializer,
     }
