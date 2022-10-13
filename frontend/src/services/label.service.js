@@ -1,6 +1,6 @@
 import ApiService from '@/services/api.service'
 
-class BatchService {
+class LabelService {
   constructor() {
     this.request = ApiService
   }
@@ -22,4 +22,4 @@ class BatchService {
   }
 }
 
-export default new BatchService()
+export default new LabelService()

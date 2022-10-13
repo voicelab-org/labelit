@@ -127,6 +127,8 @@ export default {
         let vm = this
         this.focus_index = 0
         this.$store.commit('entities/CLEAR_ANNOTATED_ENTITIES')
+        this.$store.commit('regions/CLEAR_ANNOTATED_REGIONS')
+        this.$store.commit('player/SET_PLAYBACK_TIME', 0)
         vm.annotations = null
         vm.tasks = null
         vm.submitting = false
@@ -134,8 +136,8 @@ export default {
         let getNext = (vm.reviewMode) ? 'getNextDocumentToReview' : 'getBatchNextDocument'
         BatchService[getNext](vm.batchId)
             .then(function(response){
-                vm.annotations = response.data.annotations
-                vm.document = response.data.document
+              vm.annotations = response.data.annotations
+              vm.document = response.data.document
                 vm.getTasks()
             })
             .catch(function(error){

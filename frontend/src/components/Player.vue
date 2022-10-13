@@ -45,6 +45,7 @@
             <v-icon>mdi-skip-forward</v-icon>
           </v-btn>
         </div>
+        {{currentPlayBackTime}}
         <div class="duration-container">
           <span class="duration">
             <timer-display
@@ -119,6 +120,8 @@ export default {
     },
   },
   created() {
+      this.$store.commit('player/SET_PLAYBACK_TIME', 0)
+      //console.log('created' , this.$store.state.player.playbackTime)
     if (this.regionTasks.length > 1) {
       alert("Multiple Region tasks are currently not supported in the same project")
     }
@@ -183,6 +186,9 @@ export default {
       }
     },
     fetchAudio() {
+      this.$store.commit('player/SET_PLAYBACK_TIME', 0)
+      //console.log('fetchAudio' , this.$store.state.player.playbackTime)
+
       if (this.player) {
         this.player.pause()
       }
@@ -231,6 +237,7 @@ export default {
               barWidth: '0',
               minPxPerSec: '1000',
               height: 100,
+              closeAudioContext:true,
               cursorColor: "#03a9f4",
               plugins: plugins
             });
@@ -356,6 +363,7 @@ export default {
           });
 
           this.player.addEventListener("timeupdate", () => {
+            //console.log('timeupdate')
             this.$store.commit('player/SET_PLAYBACK_TIME', this.player.currentTime);
           });
 
@@ -384,15 +392,18 @@ export default {
       let vm = this
       this.audioLoading = true;
       DocumentService.getAudioUrl(vm.document.id).then((res) => {
-          var data = res.data
-          var waveform = data.waveform 
-            vm.player.load(data.url , waveform , null);
-
-            this.player.on("ready", () => {
-              this.duration = vm.player.getDuration();
-              vm.audioLoading = false;
-            });
-
+        var data = res.data
+        var waveform = data.waveform 
+        vm.player.load(data.url , waveform , null);
+        
+        this.player.setPlayEnd(0) 
+        vm.player.getCurrentTime()
+        //console.log(vm.player.getCurrentTime())
+        this.player.on("ready", () => {
+          this.duration = vm.player.getDuration();
+          vm.audioLoading = false;
+        });
+        
             this.player.on("play", () => {
               this.isPlaying = true;
               this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
@@ -408,6 +419,7 @@ export default {
             });
 
             this.player.on("audioprocess", () => {
+              // console.log('audioprocess',vm.player.getCurrentTime())
               this.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
             });
           })
@@ -472,6 +484,7 @@ export default {
   },
   computed: {
     currentPlayBackTime() {
+      //console.log('CurrentPlaybackTime' , this.$store.state.player.playbackTime)
       return this.$store.state.player.playbackTime;
     },
   }
