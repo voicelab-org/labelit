@@ -1,7 +1,5 @@
 <template>
   <div>
-
-    <Breadcrumbs/>
     <div class="header">
       <h2 class="headline">Projects </h2>
       <div class="header-right">
@@ -58,7 +56,6 @@ import ProjectService from '@/services/project.service'
 import ProjectMenu from '@/components/ProjectMenu'
 import ProjectManager from "./ProjectManager";
 import {mapGetters} from 'vuex'
-import Breadcrumbs from "@/components/Breadcrumbs"
 
 
 export default {
@@ -66,7 +63,6 @@ export default {
   components: {
     ProjectMenu,
     ProjectManager,
-    Breadcrumbs
   },
   data() {
     return {
@@ -99,13 +95,13 @@ export default {
           .finally(() => this.loading = false)
     },
     getLink(project) {
-      return "/project/" + project.id
+      return "/projects/" + project.id
     },
     printProjectTasks(tasks) {
       return tasks.map(t => t.name).join(", ")
     },
     goTo(project) {
-      this.$router.push('/project/' + project.id)
+      this.$router.push('/projects/' + project.id)
     },
   },
   computed: {

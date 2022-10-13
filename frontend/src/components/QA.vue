@@ -51,6 +51,7 @@ import DoneAnnotationService from '@/services/done_annotation.service'
 import QAForm from './QAForm.vue'
 import Document from './Document'
 import QA from './mixins/QA.js';
+import Breadcrumbs from "./Breadcrumbs";
 
 export default {
   name: 'QA',
@@ -60,6 +61,7 @@ export default {
   components: {
     QAForm,
     Document,
+    Breadcrumbs,
   },
   props: {
     batchId: {

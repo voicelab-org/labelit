@@ -98,10 +98,10 @@ export default {
       )*/
     },
     getLink(batch) {
-      return "/batch/" + batch.id
+      return "/projects/"+this.project.id+"/batch/" + batch.id
     },
     goTo(batch) {
-      let path = '/project/'+this.project.id+'/batch/'+batch.id
+      let path = '/projects/'+this.project.id+'/batch/'+batch.id
       console.log("&path", path)
       this.$router.push(path)
     },

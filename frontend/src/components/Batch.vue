@@ -37,6 +37,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'batch',
   props: {
+    projectId: {
+        type: String,
+        required: true
+    },
     batchId: {
         type: String,
         required: true
@@ -47,7 +51,7 @@ export default {
       user : 'auth/user',
     }),
     basePath(){
-        return "/batch/"+this.batchId+"/"
+        return "/projects/"+this.projectId+"/batch/"+this.batchId+"/"
     },
     links(){
         var vm = this

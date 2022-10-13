@@ -1,6 +1,8 @@
 <template>
   <div>
+
     <Breadcrumbs/>
+    <div v-if="show_project_info">
     <div class="header">
       <h2 class="headline" v-if="project">Project: {{ project.name }} </h2>
       <div class="header-right">
@@ -47,6 +49,7 @@
         Stats
       </v-tab>
     </v-tabs>
+    </div>
     <router-view />
 
     <template v-if="project && show_batch_list">
@@ -86,6 +89,7 @@ export default {
       show_batch_list: true,
       updateListToggle: true,
       project_with_stats: null,
+      show_project_info: true,
     }
   },
   computed: {
@@ -124,6 +128,16 @@ export default {
       return "/batch/" + batch.id
     },
   },
+  watch: {
+    "$route"(){
+      console.log("route chged", this.$route)
+      if (this.$route.path.includes("batch")){
+        this.show_project_info = false
+      } else {
+        this.show_project_info = true
+      }
+    }
+  }
 }
 </script>
 

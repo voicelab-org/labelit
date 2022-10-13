@@ -82,17 +82,32 @@ let router = new VueRouter({
                 import(/* webpackChunkName: "DatasetList" */ "./components/DatasetList.vue")
         },
         {
-            path: '/project/:project_id',
+            name: "Project",
+            path: '/projects/:project_id',
             component: () =>
                 import(/* webpackChunkName: "Project" */ "./components/Project.vue"),
             props: route => ({projectId: route.params.project_id}),
+            meta: {
+                breadCrumb(route) {
+                    return [
+                        {
+                            text: 'Projects',
+                            to: {name: 'projects'}
+                        },
+                        {
+                            text: "Project " + route.params.project_id,
+                        }
+                    ]
+                }
+            },
             children: [
 
                 {
+                    name: "batch",
                     path: 'batch/:id',
                     component: () =>
                         import(/* webpackChunkName: "Batch" */ "./components/Batch.vue"),
-                    props: route => ({batchId: route.params.id}),
+                    props: route => ({projectId: route.params.project_id, batchId: route.params.id}),
                     children: [
                         {
                             path: '',
@@ -100,9 +115,9 @@ let router = new VueRouter({
                             beforeEnter: (to, from, next) => {
                                 const user = store.getters['auth/user'];
                                 if (user.is_staff) {
-                                    next(`/project/${to.params.project_id}/batch/${to.params.id}/qa`)
+                                    next(`/projects/${to.params.project_id}/batch/${to.params.id}/qa`)
                                 } else {
-                                    next(`/project/${to.params.project_id}/batch/${to.params.id}/annotate`)
+                                    next(`/projects/${to.params.project_id}/batch/${to.params.id}/annotate`)
                                 }
                             },
                             props: route => ({batchId: route.params.id}),
@@ -111,22 +126,103 @@ let router = new VueRouter({
                             path: 'annotate',
                             component: Annotate,
                             props: route => ({batchId: route.params.id}),
+                            meta: {
+                                breadCrumb(route) {
+                                    return [
+                                        {
+                                            text: 'Projects',
+                                            to: {name: 'projects'}
+                                        },
+                                        {
+                                            text: "Project " + route.params.project_id,
+                                            to: {name: 'Project', params: {project_id: route.params.project_id}}
+                                        },
+                                        {
+                                            text: 'Batch ' + route.params.id,
+                                        },
+                                        {
+                                            text: 'annotate',
+                                        },
+                                    ]
+                                }
+                            },
                         },
                         {
                             path: 'stats',
                             component: Stats,
                             props: route => ({batchId: route.params.id}),
+                            meta: {
+                                breadCrumb(route) {
+                                    return [
+                                        {
+                                            text: 'Projects',
+                                            to: {name: 'projects'}
+                                        },
+                                        {
+                                            text: "Project " + route.params.project_id,
+                                            to: {name: 'Project', params: {project_id: route.params.project_id}}
+                                        },
+                                        {
+                                            text: 'Batch ' + route.params.id,
+                                        },
+                                        {
+                                            text: 'Stats',
+                                        },
+                                    ]
+                                }
+                            },
                         },
                         {
                             path: 'qa',
                             component: QA,
                             props: route => ({batchId: route.params.id}),
+
+                            meta: {
+                                breadCrumb(route) {
+                                    return [
+                                        {
+                                            text: 'Projects',
+                                            to: {name: 'projects'}
+                                        },
+                                        {
+                                            text: "Project " + route.params.project_id,
+                                            to: {name: 'Project', params: {project_id: route.params.project_id}}
+                                        },
+                                        {
+                                            text: 'Batch ' + route.params.id,
+                                        },
+                                        {
+                                            text: 'QA',
+                                        },
+                                    ]
+                                }
+                            },
                         },
 
                         {
                             path: 'review',
                             component: Review,
                             props: route => ({batchId: route.params.id}),
+                            meta: {
+                                breadCrumb(route) {
+                                    return [
+                                        {
+                                            text: 'Projects',
+                                            to: {name: 'projects'}
+                                        },
+                                        {
+                                            text: "Project " + route.params.project_id,
+                                            to: {name: 'Project', params: {project_id: route.params.project_id}}
+                                        },
+                                        {
+                                            text: 'Batch ' + route.params.id,
+                                        },
+                                        {
+                                            text: 'Review',
+                                        },
+                                    ]
+                                }
+                            },
                         },
                     ]
                 },

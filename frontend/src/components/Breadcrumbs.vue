@@ -1,24 +1,29 @@
 <template>
- <div class="bg-blue-800 p-4">
-   YOYO {{$route.matched}}
-        <span v-for="(matched, idx) in $route.matched"
-        :key="idx">
-        <a
-        :href="matched.path">
-        {{ matched.name }}
-        </a>
-        <span v-if="idx != Object.keys($route.matched).length - 1"> / </span>
-        </span>
-
-  </div>
+  <v-breadcrumbs :items="breadCrumbs">
+    <template v-slot:item="{ item }">
+      <v-breadcrumbs-item
+        :to="item.to"
+        class="text-subtitle-2 crumb-item"
+        :disabled="item.disabled"
+        exact
+      >
+        {{ item.text }}
+      </v-breadcrumbs-item>
+    </template>
+  </v-breadcrumbs>
 </template>
 
 <script>
 export default {
-  name: "Breadcrumbs"
-}
+  computed: {
+    breadCrumbs() {
+      if (typeof this.$route.meta.breadCrumb === "function") {
+        return this.$route.meta.breadCrumb.call(this, this.$route);
+      }
+      return this.$route.meta.breadCrumb;
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style>
