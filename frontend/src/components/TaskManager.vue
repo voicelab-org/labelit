@@ -6,12 +6,11 @@
           dark
           @click.stop="show_dialog=true"
       >
-        Add Project
+        Add Task
       </v-btn>
     </template>
     <v-dialog
         v-model="show_dialog"
-        @input="dialogInputEvent"
         max-width="800px"
         persistent
     >
@@ -53,7 +52,7 @@
         </v-card-actions>
       </v-card>
       <!--<div>
-        Project mdl: <br>
+        Task mdl: <br>
         {{model}}
       </div>-->
     </v-dialog>
@@ -64,13 +63,13 @@
 
 import VJsf from '@koumoul/vjsf/lib/VJsf.js'
 import '@koumoul/vjsf/lib/VJsf.css'
-import ProjectService from "../services/project.service";
+import TaskService from "../services/task.service";
 import ApiService from "../services/api.service";
 
 export default {
-  name: "ProjectManager",
+  name: "TaskManager",
   props: {
-    project: {
+    task: {
       type: Object,
       default() {
         return {}
@@ -87,9 +86,9 @@ export default {
   computed: {
     dialog_title() {
       if (this.create_mode) {
-        return "Create a project"
+        return "Create a task"
       }
-      return "Edit project " + this.model.name
+      return "Edit task " + this.model.name
     }
   },
   created() {
@@ -101,7 +100,7 @@ export default {
       create_mode: false,
       //VJSF
       valid: false,
-      model: this.project,
+      model: this.task,
       form_options: {
         httpLib: ApiService
       },
@@ -109,54 +108,32 @@ export default {
         type: 'object',
         required: [
           'name',
-          'target_deadline',
-          'target_num_documents'
         ],
         properties: {
           name: {
             type: 'string',
           },
-          is_audio_annotated: {type: 'boolean', default: true,},
-          is_text_annotated: {type: 'boolean', default: true},
-          // are_sequences_annotated
-          timer_inactivity_threshold: {type: 'integer', default: 60000},
-          do_display_timer_time: {type: 'boolean', default: false},
-          does_audio_playing_count_as_activity: {type: 'boolean', default: true},
-          target_num_documents: {type: 'integer', default: 100},
-          target_deadline: {
+          can_documents_be_invalidated: {type: 'boolean', default: true,},
+          taskType: {
             type: 'string',
-            title: 'Target date',
-            format: 'date',
-          },
-          description: {
-            type: 'string',
-            'x-display': 'textarea'
-          },
-          tasks: {
-            type: 'array',
-            title: 'All tasks in this project',
-            'x-fromUrl': '/tasks/',
-            'x-itemTitle': 'name',
-            'x-itemKey': 'id',
-            items: {
-              type: 'object',
-              properties: {
-                id: {
-                  type: 'integer'
-                },
-                name: {
-                  type: 'string'
-                }
+            title: "Task type",
+            oneOf: [
+              {
+                const: 'CategoricalTask',
+                title: 'Categorical task',
+              },
+              {
+                const: 'EntityTask',
+                title: 'Entity task',
               }
-            }
-          },
+            ]
+          }
         }
       },
       //END VJSF'
     }
   },
   methods: {
-    dialogInputEvent(){},
     submit() {
       if (this.create_mode) {
         this.create()
@@ -167,7 +144,7 @@ export default {
     create() {
       let p = {...this.model}
       p.tasks = p.tasks.map(t => t.id)
-      ProjectService.create(p).then(
+      TaskService.create(p).then(
           () => {
             this.show_dialog = false
             this.model = {}
@@ -178,7 +155,7 @@ export default {
     edit() {
       let p = {...this.model}
       p.tasks = p.tasks.map(t => t.id)
-      ProjectService.updateProject(this.project.id, p).then(
+      TaskService.updateTask(this.task.id, p).then(
           () => {
             this.show_dialog = false
             this.model = {}
@@ -194,8 +171,8 @@ export default {
     value(){
       this.show_dialog = this.value
     },
-    project(){
-      this.model = this.project
+    task(){
+      this.model = this.task
     },
   }
 }

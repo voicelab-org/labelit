@@ -1,96 +1,96 @@
 <template>
   <div>
-
-    <div id="task-list-actions">
-      <v-btn
-          color="primary"
-          dark
-        >
-          Add Task
-        </v-btn>
-    </div>
-
     <div id="tasks">
+      <div class="header">
+        <h2 class="headline">Tasks </h2>
+        <div class="header-right">
+          <task-manager v-if="isAdmin" @changed="getTasks"/>
+        </div>
+      </div>
+      <v-tabs>
+        <v-tab @click="show_archived=false">
+          Live
+        </v-tab>
+        <v-tab @click="show_archived=true">
+          Archived
+        </v-tab>
+      </v-tabs>
 
-    <v-tabs>
-      <v-tab @click="show_archived=false">
-        Live
-      </v-tab>
-      <v-tab @click="show_archived=true">
-        Archived
-      </v-tab>
-    </v-tabs>
-
-    <v-simple-table>
-      <thead>
+      <v-simple-table>
+        <thead>
         <tr>
           <th class="text-left">
             Name
           </th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         <tr
-          v-for="(task, i) in shown_tasks"
-          :key="task.id"
-          @click="goTo(task)"
+            v-for="(task, i) in shown_tasks"
+            :key="task.id"
+            @click="goTo(task)"
         >
           <td>{{ task.name }}</td>
-
           <td>
-            <TaskMenu v-model="shown_tasks[i]" />
+            <TaskMenu v-model="shown_tasks[i]"/>
           </td>
         </tr>
-      </tbody>
-    </v-simple-table>
-  </div>
+        </tbody>
+      </v-simple-table>
+    </div>
 
   </div>
 </template>
 
 <script>
 import TaskService from '@/services/task.service'
-
+import {mapGetters} from 'vuex'
 import TaskMenu from '@/components/TaskMenu'
+import TaskManager from "./TaskManager";
 
 export default {
   name: 'task-list',
   components: {
     TaskMenu,
+    TaskManager,
   },
-  data(){
+  data() {
     return {
-        tasks: [],
-        show_archived: false,
+      tasks: [],
+      show_archived: false,
     }
   },
   computed: {
-    
-    shown_tasks(){
-      
+    ...mapGetters({
+      isAdmin: 'auth/isAdmin',
+    }),
+    shown_tasks() {
+
       if (this.show_archived) {
         return this.tasks.filter(t => t.archived)
       } else {
         return this.tasks.filter(t => !t.archived)
       }
     },
-    
+
   },
-  created(){
-    let vm = this;
-    TaskService.getTaskList()
-          .then(function(response){
-               vm.tasks=response.data
-           })
-          .catch(error => console.log(error))
-          .finally(() => vm.loading = false)
+  created() {
+    this.getTasks()
   },
   methods: {
-    getLink(task){
-        return "/task/"+task.id
+    getTasks(){
+      TaskService.getTaskList()
+        .then(function (response) {
+          this.tasks = response.data
+        })
+        .catch(error => console.log(error))
+        .finally(() => this.loading = false)
     },
-    goTo(task){
-        this.$router.push('/task/'+task.id)
+    getLink(task) {
+      return "/task/" + task.id
+    },
+    goTo(task) {
+      this.$router.push('/task/' + task.id)
     },
   },
 }
@@ -99,20 +99,25 @@ export default {
 <style scoped lang="scss">
 
 #tasks {
-    .task {
-        border: 1px solid lightgrey;
-        border-bottom: none;
-        padding: 15px 10px;
-        cursor: pointer;
-        &:hover{
-            background: lightgrey;
-            a {color: white !important;}
-        }
+  .task {
+    border: 1px solid lightgrey;
+    border-bottom: none;
+    padding: 15px 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: lightgrey;
+
+      a {
+        color: white !important;
+      }
     }
-    a {
+  }
+
+  a {
     color: rgb(4, 144, 174) !important;
     text-decoration: none;
-    }
+  }
 
 }
 
