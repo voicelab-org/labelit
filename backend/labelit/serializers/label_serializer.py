@@ -80,7 +80,7 @@ class OrdinalLabelSerializer(serializers.ModelSerializer):
                 index=validated_data.get('index')
             )
             raise serializers.ValidationError(
-                "Validation error: duplicate. A label with matching (label, task) already exists"
+                "Validation error: duplicate. A label with matching (task, index) already exists"
             )
         except ObjectDoesNotExist:
             pattern = OrdinalLabel(**validated_data)

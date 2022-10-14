@@ -2,14 +2,32 @@ from rest_framework import viewsets, permissions, exceptions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from labelit.serializers import ProjectSerializer, ProjectWithStatsSerializer, ExportedProjectSerializer
+from labelit.serializers import (
+    ProjectSerializer,
+    ProjectWithStatsSerializer,
+    ExportedProjectSerializer,
+    FlatProjectSerializer
+)
 from labelit.models import Project, Dataset, Document, Batch, SequenceBatch
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
+    serializer_action_classes = {
+        "create": FlatProjectSerializer,
+        "update": FlatProjectSerializer,
+        "partial_update": FlatProjectSerializer,
+        "list": ProjectSerializer,
+        "detail": ProjectSerializer,
+    }
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        try:
+            return self.serializer_action_classes[self.action]
+        except (KeyError, AttributeError):
+            return super().get_serializer_class()
 
     @action(detail=True, name='Get progress stats for the batch')
     def get_remaining_units_in_dataset(self, request, pk=None):

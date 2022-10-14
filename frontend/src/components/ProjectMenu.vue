@@ -3,16 +3,21 @@
     <v-menu
         open-on-hover
         offset-y
+        :close-on-content-click="false"
+        :close-on-click="false"
     >
-      <template v-slot:activator="{ on }">
-            <span v-on="on" @click.stop>
-                <v-icon>mdi-dots-vertical</v-icon>
-            </span>
+      <template v-slot:activator="{ attrs, on: menu }">
+        <span v-bind="attrs" v-on="menu">
+            <v-icon>mdi-dots-vertical</v-icon>
+        </span>
       </template>
       <v-card>
         <v-list>
           <v-list-item>
-            <a @click="toggleArchived"> {{archiveAction}} </a>
+            <a @click="toggleArchived"> {{ archiveAction }} </a>
+          </v-list-item>
+          <v-list-item @click="$emit('edit', project)">
+            Edit
           </v-list-item>
         </v-list>
       </v-card>
@@ -38,7 +43,7 @@ export default {
     }
   },
   computed: {
-    archiveAction(){
+    archiveAction() {
       if (this.project.archived) {
         return "Unarchive"
       }
@@ -54,14 +59,13 @@ export default {
     },
   },
   methods: {
-    toggleArchived(){
+    toggleArchived() {
       ProjectService.updateProject(
           this.project.id,
           {
             archived: !this.project.archived
           }
-      ).then(()=>{
-
+      ).then(() => {
         this.project.archived = !this.project.archived
       })
     },

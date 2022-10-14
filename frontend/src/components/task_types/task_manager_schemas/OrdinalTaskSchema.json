@@ -1,0 +1,40 @@
+{
+  "labels": {
+    "title": "Labels",
+    "type": "array",
+    "x-itemTitle": "name",
+    "items": {
+      "type": "object",
+      "required": [
+        "name",
+        "color",
+        "index"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "Label id (leave this field untouched)"
+        },
+        "name": {
+          "type": "string",
+          "title": "Label name"
+        },
+        "index": {
+          "type": "integer",
+          "title": "Label index"
+        },
+        "color": {
+          "type": "string",
+          "title": "Label color",
+          "format": "hexcolor",
+          "x-props": {
+            "showSwatches": true,
+            "hideCanvas": true,
+            "hideInputs": true,
+            "hideModeSwitch": true
+          }
+        }
+      }
+    }
+  }
+}

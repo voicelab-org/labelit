@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
+from rest_framework.schemas import get_schema_view
 
 router = routers.DefaultRouter()
 router.register(r'tasks', views.TaskViewSet)
@@ -15,7 +16,6 @@ router.register(r'lexicons', views.LexiconViewSet)
 router.register(r'lexicon_entries', views.LexiconEntryViewSet)
 router.register(r'timed_transcripts', views.TimedTranscriptViewSet)
 router.register(r'audio', views.AudioViewSet)
-
 router.register(r'export_project', views.ProjectExportViewSet, basename='export')
 
 urlpatterns = [
