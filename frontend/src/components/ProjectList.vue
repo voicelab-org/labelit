@@ -64,6 +64,15 @@ export default {
         .finally(() => vm.loading = false)
   },
   methods: {
+    getProjects(){
+      this.loading = true
+      ProjectService.getProjectList()
+          .then( (response) => {
+            this.projects = response.data
+          })
+          .catch(error => console.log(error))
+          .finally(() => this.loading = false)
+    },
     getLink(project) {
       return "/project/" + project.id
     },
