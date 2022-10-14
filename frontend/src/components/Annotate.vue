@@ -11,10 +11,10 @@
         </div>
         <div id="doc-container" v-if="document && batch">
             <Document :document="document" :project="batch.project" @loaded="startTiming"/>
-        </div>
-        <div v-if="batch.project.do_display_timer_time">
-          Time: {{time_display}}
-        </div>
+            <div v-if="batch.project.do_display_timer_time">
+              Time: {{time_display}}
+            </div>
+          </div>
         <div id="annotation-forms-t" v-if="annotations">
             <div v-if="tasksLoaded">
                 <div v-for="(annotation, i) in annotations" :key="annotation.id" :class="getAnnotationClasses(annotation, i == focus_index)">
@@ -41,7 +41,7 @@
             <v-btn @click="submit()" color="primary">SUBMIT</v-btn>
             <hotkey-guide />
         </div>
-        <div id="inactive" v-if="isInactive && !batch.project.do_display_timer_time">
+        <div id="inactive" v-if="isInactive && batch && !batch.project.do_display_timer_time">
             <v-icon>mdi-pause</v-icon>
         </div>
     </div>
@@ -127,6 +127,8 @@ export default {
         let vm = this
         this.focus_index = 0
         this.$store.commit('entities/CLEAR_ANNOTATED_ENTITIES')
+        this.$store.commit('regions/CLEAR_ANNOTATED_REGIONS')
+        this.$store.commit('player/SET_PLAYBACK_TIME', 0)
         vm.annotations = null
         vm.tasks = null
         vm.submitting = false
@@ -134,8 +136,8 @@ export default {
         let getNext = (vm.reviewMode) ? 'getNextDocumentToReview' : 'getBatchNextDocument'
         BatchService[getNext](vm.batchId)
             .then(function(response){
-                vm.annotations = response.data.annotations
-                vm.document = response.data.document
+              vm.annotations = response.data.annotations
+              vm.document = response.data.document
                 vm.getTasks()
             })
             .catch(function(error){

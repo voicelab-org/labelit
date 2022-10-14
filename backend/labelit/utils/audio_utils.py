@@ -126,6 +126,25 @@ def convert_and_upload_single_file(audio_file_name, hls_file_name, hls_file_key,
     else:
         logger.warning(f"File {hls_file_key} already in bucket. Skipping...")
 
+def generate_waveform_for_dataset(dataset_name):
+    """ Converts all the files in the dataset to HLS (ignores them if they have been already converted in the past)"""
+    from labelit.models import Document
+    audio_files_queryset = Document.objects.filter(dataset__name=dataset_name)
+    audio_files = {file for file in audio_files_queryset.values_list("audio_filename", flat=True)}
+
+    progress_bar = tqdm(audio_files)
+    for audio_file_name in progress_bar:
+        progress_bar.set_description(f"Uploading {audio_file_name}...")
+        waveform_audio_file_name = os.path.splitext(audio_file_name)[0]+'_waveform.json'
+        if not check_file_exists(waveform_audio_file_name): # checkwaveform 
+            storage.bucket.download_file(audio_file_name, audio_file_name)
+            generate_waveform_from_audio(input_file=audio_file_name,
+                                        output_file=waveform_audio_file_name,
+                                        create_folder=False)
+            
+            storage.bucket.upload_file(waveform_audio_file_name,waveform_audio_file_name)
+
+
 
 def file_key_to_hls_file_key(file_key):
     """ Given a key, obtains the expected playlist."""

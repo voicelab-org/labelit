@@ -18,8 +18,10 @@ export default {
             is_playing: 'player/isPlaying',
         }),
         inactivity_timeout_duration() {
-            if (this.batch.project) {
-                return this.batch.project.timer_inactivity_threshold
+            if(this.batch){
+                if (this.batch.project) {
+                    return this.batch.project.timer_inactivity_threshold
+                }
             }
             return 10000
         },

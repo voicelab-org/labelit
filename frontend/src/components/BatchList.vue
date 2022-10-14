@@ -101,7 +101,7 @@ export default {
       return "/batch/" + batch.id
     },
     goTo(batch) {
-      this.$router.push('/batch/' + batch.id)
+      this.$router.push('/batch/' + batch.id, () => {})
 
     },
     getBatchList() {

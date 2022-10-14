@@ -200,7 +200,7 @@ S3_DIRECT_SERVE = strtobool(os.getenv("S3_DIRECT_SERVE", "true")) # Set to True 
 # print("& settings S3_DIRECT_SERVE bool", S3_DIRECT_SERVE)
 
 ### HACK ALERT !!
-# S3_DIRECT_SERVE = False
+S3_DIRECT_SERVE = False
 ### END HACK
 
 SEGMENT_EXPIRATION_TIME_IN_SECONDS = int(os.getenv("SEGMENT_EXPIRATION_TIME_IN_SECONDS", 3600))
