@@ -45,7 +45,6 @@
             <v-icon>mdi-skip-forward</v-icon>
           </v-btn>
         </div>
-        {{currentPlayBackTime}}
         <div class="duration-container">
           <span class="duration">
             <timer-display
