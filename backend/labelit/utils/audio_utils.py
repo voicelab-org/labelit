@@ -126,6 +126,11 @@ def convert_and_upload_single_file(audio_file_name, hls_file_name, hls_file_key,
 
         upload_folder_to_s3_bucket_folder(source_path=os.path.dirname(hls_file_name),
                                           dest_prefix=os.path.dirname(hls_file_key))
+        
+        try:
+            os.remove(audio_file_key)
+        except:
+            pass
     else:
         logger.warning(f"File {hls_file_key} already in bucket. Skipping...")
 
@@ -146,8 +151,11 @@ def generate_waveform_for_dataset(dataset_name):
                                         create_folder=False)
             
             storage.bucket.upload_file(waveform_audio_file_name,waveform_audio_file_name)
-
-
+            try:
+                os.remove(audio_file_name)
+                os.remove(waveform_audio_file_name)
+            except:
+                pass
 
 def file_key_to_hls_file_key(file_key):
     """ Given a key, obtains the expected playlist."""
