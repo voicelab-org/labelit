@@ -25,7 +25,6 @@ iniconfig==1.1.1
 jmespath==0.10.0
 joblib==1.0.1
 librosa==0.6.0
-audiofile==1.1.0
 llvmlite==0.31.0
 m3u8==1.0.0
 Markdown==3.3.3
@@ -67,4 +66,6 @@ urllib3==1.26.4
 whitenoise==5.2.0
 zipp==3.4.0
 zope.dottedname==4.3
-
+sox==1.4.1
+audeer==1.18.0
+audiofile==1.1.0
