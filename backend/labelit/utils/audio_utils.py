@@ -8,6 +8,7 @@ import librosa
 import numpy as np
 import json
 import m3u8
+import audiofile
 
 from django.conf import settings
 from labelit.storages import audio_storage as storage
@@ -50,15 +51,17 @@ def generate_waveform_from_audio(input_file, output_file, create_folder=False):
     if create_folder:
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    duration = get_audio_duration_in_seconds(input_file)
-
+    signal, sr = audiofile.read(input_file)
+    signal =  np.average(signal, axis=0)
+    duration = len(signal)/sr
     num_chunks = int(math.ceil(duration/120.))
     chunk_size = duration/num_chunks
     points_per_chunk = round(float(settings.NUM_ELEMENTS_IN_WAVEFORM)/num_chunks)
     waveform_intermediate = []
     for idx_chunk in range(num_chunks):
-        signal, _ = librosa.load(input_file, sr=None, offset=idx_chunk*chunk_size, duration=chunk_size)
-        waveform_intermediate += [resampled_val for resampled_val in signal[[round(index) for index in np.linspace(0, len(signal)-1, points_per_chunk)]]]
+        signal_chunk = signal[int(idx_chunk*chunk_size)*sr:int((idx_chunk*chunk_size)+chunk_size)*sr]
+        waveform_intermediate += [resampled_val for resampled_val in signal_chunk[[round(index) for index in np.linspace(0, len(signal_chunk)-1, points_per_chunk)]]]
+    
     np_waveform_intermediate = np.array(waveform_intermediate)
     waveform = [float(resampled_val) for resampled_val in np_waveform_intermediate[[round(index) for index in np.linspace(0, len(np_waveform_intermediate)-1, int(settings.NUM_ELEMENTS_IN_WAVEFORM))]]]
 
