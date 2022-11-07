@@ -73,6 +73,31 @@ def generate_waveform_from_audio(input_file, output_file, create_folder=False):
     with open(output_file, "w") as f:
         json.dump(waveform_info, f)
 
+def generate_dynamic_waveform_from_audio(input_file, output_file, create_folder=False):
+    """ Given an audio file, it generates its waveform and stores it into a .json file """
+
+    if create_folder:
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    output_waveform = os.path.splitext(input_file)[0]+'_waveform.json'
+    subprocess.call(['audiowaveform', '-i', input_file , '-o', output_waveform , '--pixels-per-second', '100' ,'-b', '8', '-q' ])
+
+    with open(output_waveform) as json_file:
+        json_waveform = json.load(json_file)
+
+
+    a = np.array(json_waveform['data'])
+    #datascale = np.array(json_waveform['data'])/126
+    
+    datascale = np.where(a > 0, a/(max(a)+1),a/(abs(min(a))+1) )
+    json_waveform['waveform'] =datascale.tolist()
+    del json_waveform['data']
+
+    with open(output_waveform, 'w') as outfile:
+        json.dump(json_waveform, outfile)
+
+
+    print('data  length', max(json_waveform['waveform']) , min(json_waveform['waveform']))
 
 
 def generate_hls_from_audio(input_file, output_file, create_folder=False, generate_waveform=True):
@@ -146,7 +171,7 @@ def generate_waveform_for_dataset(dataset_name):
         waveform_audio_file_name = os.path.splitext(audio_file_name)[0]+'_waveform.json'
         if not check_file_exists(waveform_audio_file_name): # checkwaveform 
             storage.bucket.download_file(audio_file_name, audio_file_name)
-            generate_waveform_from_audio(input_file=audio_file_name,
+            generate_dynamic_waveform_from_audio(input_file=audio_file_name,
                                         output_file=waveform_audio_file_name,
                                         create_folder=False)
             

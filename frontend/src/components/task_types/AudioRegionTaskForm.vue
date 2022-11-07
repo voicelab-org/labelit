@@ -156,6 +156,8 @@ export default {
                 console.log(JSON.stringify(error))
               })
         })
+        this.showAnnotatedRegions = true
+
       }
     },
     submitting: function () {

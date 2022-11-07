@@ -18,6 +18,9 @@ class Project(models.Model):
     is_text_annotated = models.BooleanField(
         default=True
     )
+    enable_region_annotation = models.BooleanField(
+        default=False
+    )
     are_sequences_annotated = models.BooleanField(  # TODO: rename
         """
         If True: documents are presented as entire sequences with order preserved.

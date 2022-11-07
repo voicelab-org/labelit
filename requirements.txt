@@ -17,7 +17,7 @@ django-polymorphic==3.0.0
 django-rest-polymorphic==0.1.9
 django-storages==1.11.1
 djangorestframework==3.12.2
-djangorestframework-simplejwt==4.4.0
+djangorestframework-simplejwt==4.5.0
 et-xmlfile==1.0.1
 idna==2.10
 importlib-metadata==3.4.0
