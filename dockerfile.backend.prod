@@ -50,7 +50,6 @@ RUN apt-get update \
     libpq-dev \
     g++ \
     ffmpeg \
-    tk \
  && apt-get clean
 
 # libmad, libsndfile, libid3tag, gd and boost are req for audiowaveform
