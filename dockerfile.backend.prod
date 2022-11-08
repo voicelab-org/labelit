@@ -1,5 +1,5 @@
-ARG PYTHON_VERSION="3.8.5"
-FROM python:${PYTHON_VERSION}-buster  AS BUILD
+ARG PYTHON_VERSION="3.8.11"
+FROM python:${PYTHON_VERSION}-bullseye  AS BUILD
 ENV PYTHONUNBUFFERED=1
 ENV PACKAGE="audiowaveform"
 ENV PACKAGE_VERSION="1.6.0"
@@ -43,7 +43,7 @@ RUN audiowaveform --version
 #####################################################3
 
 
-FROM python:${PYTHON_VERSION}-buster
+FROM python:${PYTHON_VERSION}-slim-bullseye 
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
