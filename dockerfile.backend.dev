@@ -1,5 +1,5 @@
-ARG PYTHON_VERSION="3.8.5"
-FROM python:${PYTHON_VERSION}-buster  AS BUILD
+ARG PYTHON_VERSION="3.8.11"
+FROM python:${PYTHON_VERSION}-bullseye  AS BUILD
 ENV PYTHONUNBUFFERED=1
 ENV PACKAGE="audiowaveform"
 ENV PACKAGE_VERSION="1.6.0"
@@ -16,7 +16,7 @@ RUN apt-get update \
  
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev\
+    libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev zlib1g-dev\
  && apt-get clean
 
 RUN git clone $PACKAGE_SOURCE \
@@ -43,20 +43,19 @@ RUN audiowaveform --version
 #####################################################3
 
 
-FROM python:${PYTHON_VERSION}-buster
+FROM python:${PYTHON_VERSION}-slim-bullseye 
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     libpq-dev \
     g++ \
     ffmpeg \
-    tk \
  && apt-get clean
 
 # libmad, libsndfile, libid3tag, gd and boost are req for audiowaveform
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev  \
+    libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev zlib1g-dev\
  && apt-get clean
  
 COPY --from=build /usr/local/bin/audiowaveform /usr/local/bin/
