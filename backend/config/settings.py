@@ -24,7 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
+def compute_django_debug_from_env_var():
+    debug = os.environ.get('DJANGO_DEBUG')
+    if debug and debug.lower() == 'true':
+        return True
+    return False
+
+DEBUG = compute_django_debug_from_env_var()
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
