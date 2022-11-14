@@ -17,7 +17,7 @@ django-polymorphic==3.0.0
 django-rest-polymorphic==0.1.9
 django-storages==1.11.1
 djangorestframework==3.12.2
-djangorestframework-simplejwt==4.4.0
+djangorestframework-simplejwt==4.5.0
 et-xmlfile==1.0.1
 idna==2.10
 importlib-metadata==3.4.0
@@ -66,5 +66,8 @@ urllib3==1.26.4
 whitenoise==5.2.0
 zipp==3.4.0
 zope.dottedname==4.3
+sox==1.4.1
+audeer==1.18.0
+audiofile==1.1.0
 coloredlogs==15.0.1
 JSON-log-formatter==0.5.1

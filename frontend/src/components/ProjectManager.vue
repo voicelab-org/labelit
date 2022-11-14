@@ -117,6 +117,7 @@ export default {
             type: 'string',
           },
           is_audio_annotated: {type: 'boolean', default: true,},
+          enable_region_annotation: {type: 'boolean', default: false,},
           is_text_annotated: {type: 'boolean', default: true},
           // are_sequences_annotated
           timer_inactivity_threshold: {type: 'integer', default: 60000},

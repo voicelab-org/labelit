@@ -12,7 +12,7 @@
       <div v-if="project.is_audio_annotated">
         <player
             :document="document"
-            :enable-regions="true"
+            :enable-regions="project.enable_region_annotation"
             @loaded="audio_loaded=true"
             v-model="annotated_regions"
             :region-tasks="region_tasks"

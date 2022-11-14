@@ -8,6 +8,7 @@ import librosa
 import numpy as np
 import json
 import m3u8
+import audiofile
 
 from django.conf import settings
 from labelit.storages import audio_storage as storage
@@ -50,15 +51,17 @@ def generate_waveform_from_audio(input_file, output_file, create_folder=False):
     if create_folder:
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    duration = get_audio_duration_in_seconds(input_file)
-
+    signal, sr = audiofile.read(input_file)
+    signal =  np.average(signal, axis=0)
+    duration = len(signal)/sr
     num_chunks = int(math.ceil(duration/120.))
     chunk_size = duration/num_chunks
     points_per_chunk = round(float(settings.NUM_ELEMENTS_IN_WAVEFORM)/num_chunks)
     waveform_intermediate = []
     for idx_chunk in range(num_chunks):
-        signal, _ = librosa.load(input_file, sr=None, offset=idx_chunk*chunk_size, duration=chunk_size)
-        waveform_intermediate += [resampled_val for resampled_val in signal[[round(index) for index in np.linspace(0, len(signal)-1, points_per_chunk)]]]
+        signal_chunk = signal[int(idx_chunk*chunk_size)*sr:int((idx_chunk*chunk_size)+chunk_size)*sr]
+        waveform_intermediate += [resampled_val for resampled_val in signal_chunk[[round(index) for index in np.linspace(0, len(signal_chunk)-1, points_per_chunk)]]]
+    
     np_waveform_intermediate = np.array(waveform_intermediate)
     waveform = [float(resampled_val) for resampled_val in np_waveform_intermediate[[round(index) for index in np.linspace(0, len(np_waveform_intermediate)-1, int(settings.NUM_ELEMENTS_IN_WAVEFORM))]]]
 
@@ -70,6 +73,31 @@ def generate_waveform_from_audio(input_file, output_file, create_folder=False):
     with open(output_file, "w") as f:
         json.dump(waveform_info, f)
 
+def generate_dynamic_waveform_from_audio(input_file, output_file, create_folder=False):
+    """ Given an audio file, it generates its waveform and stores it into a .json file """
+
+    if create_folder:
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    output_waveform = os.path.splitext(input_file)[0]+'_waveform.json'
+    subprocess.call(['audiowaveform', '-i', input_file , '-o', output_waveform , '--pixels-per-second', '100' ,'-b', '8', '-q' ])
+
+    with open(output_waveform) as json_file:
+        json_waveform = json.load(json_file)
+
+
+    a = np.array(json_waveform['data'])
+    #datascale = np.array(json_waveform['data'])/126
+    
+    datascale = np.where(a > 0, a/(max(a)+1),a/(abs(min(a))+1) )
+    json_waveform['waveform'] =datascale.tolist()
+    del json_waveform['data']
+
+    with open(output_waveform, 'w') as outfile:
+        json.dump(json_waveform, outfile)
+
+
+    print('data  length', max(json_waveform['waveform']) , min(json_waveform['waveform']))
 
 
 def generate_hls_from_audio(input_file, output_file, create_folder=False, generate_waveform=True):
@@ -123,6 +151,11 @@ def convert_and_upload_single_file(audio_file_name, hls_file_name, hls_file_key,
 
         upload_folder_to_s3_bucket_folder(source_path=os.path.dirname(hls_file_name),
                                           dest_prefix=os.path.dirname(hls_file_key))
+        
+        try:
+            os.remove(audio_file_key)
+        except:
+            pass
     else:
         logger.warning(f"File {hls_file_key} already in bucket. Skipping...")
 
@@ -138,13 +171,16 @@ def generate_waveform_for_dataset(dataset_name):
         waveform_audio_file_name = os.path.splitext(audio_file_name)[0]+'_waveform.json'
         if not check_file_exists(waveform_audio_file_name): # checkwaveform 
             storage.bucket.download_file(audio_file_name, audio_file_name)
-            generate_waveform_from_audio(input_file=audio_file_name,
+            generate_dynamic_waveform_from_audio(input_file=audio_file_name,
                                         output_file=waveform_audio_file_name,
                                         create_folder=False)
             
             storage.bucket.upload_file(waveform_audio_file_name,waveform_audio_file_name)
-
-
+            try:
+                os.remove(audio_file_name)
+                os.remove(waveform_audio_file_name)
+            except:
+                pass
 
 def file_key_to_hls_file_key(file_key):
     """ Given a key, obtains the expected playlist."""

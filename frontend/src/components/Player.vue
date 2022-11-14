@@ -4,6 +4,7 @@
     <span v-shortkey="['ctrl', 'arrowleft',]" @shortkey="skipBackward"></span>
     <span v-shortkey="['ctrl', 'arrowright',]" @shortkey="skipForward"></span>
 
+    <div id="wave-timeline"></div>
     <audio v-if="uses_hls" id="stream-audio-hls" ref="streamAudio"></audio>
     <div v-else id="stream-audio-raw"></div>
 
@@ -21,16 +22,34 @@
     <div class="controls-wrapper">
       <template v-if="!audioLoading">
         <div class="slider-container">
-          <v-slider
+          <div>
+            <v-slider
               v-model="playbackSpeed"
               prepend-icon="mdi-speedometer"
               :label="playbackSpeed + '%'"
               hide-details
               :max="300"
               :min="50"
+              inverse-label
+
               track-color="#a0dcf8"
           ></v-slider>
+          </div>
+          <div>
+            <v-slider v-if="enableRegions"
+              v-model="zoomingValue"
+              prepend-icon="mdi-magnify-plus"
+              :label="'   '+ zoomingValue"
+              hide-details
+              :max="100"
+              :min="0"
+              inverse-label
+              track-color="#a0dcf8"
+          ></v-slider>
+          </div>
+
         </div>
+        
         <div class="player-controls">
           <v-btn rounded color="primary" @click="skipBackward()">
             <v-icon>mdi-skip-backward</v-icon>
@@ -75,9 +94,12 @@ import Hls from "hls.js";
 import StreamWaveForms from '@/components/StreamWaveForms'
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js"
+import Minimap from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js"
+import Timeline from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js"
 import DocumentService from "@/services/document.service"
 import LabelService from "../services/label.service";
 import TimerDisplay from "./TimerDisplay"
+import {mapGetters} from 'vuex'
 
 
 export default {
@@ -88,12 +110,12 @@ export default {
   data() {
     return {
       playbackSpeed: 100,
+      zoomingValue:0,
       duration: 0,
       hls: null,
       uses_hls: false,
       player: null,
       audioLoading: true,
-      speedRate: 100,
       audioInfo: null,
       isPlaying: false,
       annotated_regions: this.value,
@@ -174,14 +196,20 @@ export default {
                     id: r.id,
                     start: r.start,
                     end: r.end,
+                    resize: this.isAdmin ? false : true,
+                    drag: this.isAdmin ? false : true,
                   }
               )
-
-              this.setupRemoveListeners()
-              //this.setupRegionEventListeners()
+              if(!this.isAdmin && this.enableRegions ){
+                this.setupRemoveListeners()
+                //this.setupRegionEventListeners()
+              }
             }
         )
         this.are_initial_regions_loaded = true
+      }
+      if(this.isAdmin && this.enableRegions){
+        this.player.disableDragSelection()
       }
     },
     fetchAudio() {
@@ -214,14 +242,40 @@ export default {
 
             let plugins = []
             if (this.enableRegions) {
+              
+              if (!this.isAdmin){
+                plugins.push(
+                    RegionsPlugin.create({
+                      regionsMinLength: 0.1,
+                      dragSelection: {
+                        slop: 5
+                      },
+                    })
+                )
+              }
+              else{
+                plugins.push(
+                    RegionsPlugin.create({
+                      regionsMinLength: 0.1,
+
+                    })
+                )
+              }
               plugins.push(
-                  RegionsPlugin.create({
-                    regionsMinLength: 0.1,
-                    dragSelection: {
-                      slop: 5
-                    },
-                  })
+                Minimap.create({
+                height: 30,
+                waveColor: '#f5cc89',
+                progressColor: '#faa316',
+                cursorColor: '#999'
+                })
               )
+
+              plugins.push(
+              Timeline.create({
+                container: '#wave-timeline'
+                })
+              )
+
             }
             if (vm.player){
               vm.player.destroy()
@@ -235,13 +289,16 @@ export default {
               hideScrollbar: 'true',
               barWidth: '0',
               minPxPerSec: '1000',
-              height: 100,
+              height: 75,
               closeAudioContext:true,
               cursorColor: "#03a9f4",
               plugins: plugins
             });
-            if (this.enableRegions) {
+            if (this.enableRegions && !this.isAdmin ) {
               this.setupRegionEventListeners()
+            }
+            if (this.enableRegions && this.isAdmin){
+              this.player.disableDragSelection()
             }
             // vm.player.enableDragSelection()
             vm.fetchAudioRaw()
@@ -391,23 +448,24 @@ export default {
       let vm = this
       this.audioLoading = true;
       DocumentService.getAudioUrl(vm.document.id).then((res) => {
-        var data = res.data
-        var waveform = data.waveform 
-        vm.player.load(data.url , waveform , null);
-        
-        this.player.setPlayEnd(0) 
-        vm.player.getCurrentTime()
-        //console.log(vm.player.getCurrentTime())
-        this.player.on("ready", () => {
-          this.duration = vm.player.getDuration();
-          vm.audioLoading = false;
-        });
+            var data = res.data
+            var waveform = data.waveform 
+            this.player.load(data.url , waveform , null);
+            this.player.setPlayEnd(0)
+            this.player.zoom(this.zoomingValue)
+            this.player.setPlaybackRate(this.playbackSpeed.toFixed(2) / 100.0);
+            this.player.getCurrentTime()
+            //console.log(vm.player.getCurrentTime())
+            this.player.on("ready", () => {
+              this.duration = this.player.getDuration();
+              this.audioLoading = false;
+            });
         
             this.player.on("play", () => {
               this.isPlaying = true;
               this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
             });
-
+            
             this.player.on("pause", () => {
               this.isPlaying = false;
               this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
@@ -416,18 +474,35 @@ export default {
             this.player.on("finish", () => {
               this.player.currentTime = 0;
             });
-
+            
             this.player.on("audioprocess", () => {
               // console.log('audioprocess',vm.player.getCurrentTime())
               this.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
             });
+            
+            this.player.on('region-click', function(region, e) {
+              e.stopPropagation();
+              // Play on click, loop on shift click
+              e.shiftKey ? region.playLoop() : region.play();
+            });
+            
+            this.player.on("region-out", () => {
+              this.player.pause()
+            });
+            this.player.on("region-in", () => {
+              this.player.play()
+            });
+            
+            this.player.disableDragSelection()
+            
+
           })
-        
-      // setInterval(() => {
-      //   this.$store.commit('player/SET_PLAYBACK_TIME', this.player.getCurrentTime())
-      // }, 500);
-    },
-    skipForward() {
+          
+          // setInterval(() => {
+            //   this.$store.commit('player/SET_PLAYBACK_TIME', this.player.getCurrentTime())
+            // }, 500);
+          },
+          skipForward() {
       this.player.skipForward(1);
     },
     skipBackward() {
@@ -447,6 +522,9 @@ export default {
   watch: {
     playbackSpeed(newVal) {
       this.player.setPlaybackRate(newVal.toFixed(2) / 100.0);
+    },
+    zoomingValue(newVal){
+      this.player.zoom(newVal);
     },
     document: {
       deep: true,
@@ -482,6 +560,9 @@ export default {
     }*/
   },
   computed: {
+    ...mapGetters({
+      isAdmin: 'auth/isAdmin',
+    }),
     currentPlayBackTime() {
       //console.log('CurrentPlaybackTime' , this.$store.state.player.playbackTime)
       return this.$store.state.player.playbackTime;
@@ -498,6 +579,7 @@ export default {
 
 .controls-wrapper {
   margin-top: 10px;
+  padding-bottom: 20px;
   position: relative;
 
   .slider-container {
