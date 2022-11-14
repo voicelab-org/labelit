@@ -69,3 +69,5 @@ zope.dottedname==4.3
 sox==1.4.1
 audeer==1.18.0
 audiofile==1.1.0
+coloredlogs==15.0.1
+JSON-log-formatter==0.5.1

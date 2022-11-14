@@ -44,7 +44,8 @@ services:
       dockerfile: dockerfile.backend.dev
     volumes:
       - ./backend:/code
-    environment: 
+    environment:
+      DJANGO_DEBUG: true
       DB_HOST: postgres
       DB_NAME: labelit_db
       DB_USER: postgres
@@ -86,4 +87,3 @@ volumes:
   labelit_data:
   pga4volume:
   labelit_s3data:
-
