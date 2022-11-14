@@ -66,4 +66,5 @@ urllib3==1.26.4
 whitenoise==5.2.0
 zipp==3.4.0
 zope.dottedname==4.3
-
+coloredlogs==15.0.1
+JSON-log-formatter==0.5.1
