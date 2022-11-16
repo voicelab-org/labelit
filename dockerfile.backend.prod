@@ -70,6 +70,4 @@ RUN pip install uwsgi
 
 WORKDIR /code/
 
-CMD uwsgi --http "0.0.0.0:8000" --module config.wsgi --master --processes 2 --threads 2
-
-
+CMD uwsgi --http "0.0.0.0:8000" --module config.wsgi --master --processes 2 --threads 2 --disable-logging
