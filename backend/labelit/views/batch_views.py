@@ -110,7 +110,6 @@ class BatchViewSet(viewsets.ModelViewSet):
         else:
             only_non_reviewed_annotations = True
 
-        print("&&only_non_reviewed_annotations", only_non_reviewed_annotations, request.GET)
         batch = Batch.objects.get(pk=pk)
         skip_doc_ids = []
         try:

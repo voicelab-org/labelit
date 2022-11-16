@@ -46,8 +46,6 @@ class StatsView(APIView):
 
             max_date += timedelta(days=1)
 
-            print("MAX DATE", max_date)
-
             done_annotations = Annotation.objects.filter(
                 is_done=True,
                 updated_at__gte=min_date,
