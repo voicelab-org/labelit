@@ -82,5 +82,3 @@ class DatasetUploadAPI(APIView):
                         dataset=dataset,
                         audio_duration=doc["duration"]
                     )
-                else:
-                    print('docs already exist')

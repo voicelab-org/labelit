@@ -14,7 +14,6 @@ class BaseTranscriptionValidator:
         valid_chars_set = set(self.valid_chars)
         for pos, c in enumerate(transcript):
             if c not in valid_chars_set and not c == "\n":  # allowing new lines as well as valid characters
-                print("invalid char", c)
                 errors.append((pos, self.case1_error))
                 break
         if len(errors):
