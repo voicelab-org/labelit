@@ -7,6 +7,7 @@ Labelit is an extensible web-based annotation tool currently supporting:
 * Transcription
 * Named entity annotation (highlighting and labeling)
 * Text edition (correction, punctuation, etc.)
+* Audio region segmentation
 
 The tool comes with utilities for distributing work across multiple annotators,
 monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA)
@@ -17,8 +18,6 @@ in a single project
 
 Labelit is designed for extensibility: new annotation tasks / schemas
 can be created by contributors, while retaining generic features.
-
-The code uses Django for the backend, and VueJS for the frontend.
 
 ### Demo
 
@@ -59,7 +58,4 @@ audio, text or both to be annotated
 
 ![Two-task setup](./screenshots/qa_multi_task_ordinal_annotation.png)
 
-## How to deploy
-
-Information on how to deploy LabelIt is available at [docs/how_to_deploy.md](docs/how_to_deploy.md).
 

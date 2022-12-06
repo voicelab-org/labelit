@@ -2,6 +2,7 @@ from django.db import models
 from labelit.models.task import Task
 from django.core.exceptions import ValidationError
 from labelit.models.annotation import Annotation
+from django.http import Http404
 
 
 class NestedCategoricalTask(Task):
@@ -84,4 +85,5 @@ class NestedCategoricalTask(Task):
         return self._get_stats(done_annotations)
 
     def get_agreement_stats(self, batch):
-        raise NotImplementedError
+        # raise NotImplementedError
+        raise Http404

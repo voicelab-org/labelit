@@ -6,6 +6,7 @@ from django.http import Http404
 from statsmodels.stats.inter_rater import fleiss_kappa
 import math
 from django.db.models import F
+from django.http import Http404
 
 
 class AudioRegionTask(Task):
@@ -29,10 +30,13 @@ class AudioRegionTask(Task):
         pass
 
     def _get_stats(self, done_annotations, annotators):
-        raise NotImplementedError
+        # raise NotImplementedError
+        raise Http404
 
     def get_batch_stats(self, batch):
-        raise NotImplementedError
+        # raise NotImplementedError
+        raise Http404
 
     def get_agreement_stats(self, batch):
-        raise NotImplementedError
+        # raise NotImplementedError
+        raise Http404
