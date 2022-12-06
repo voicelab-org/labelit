@@ -25,6 +25,7 @@ class EntityTask(Task):
     def _get_stats(self, done_annotations, annotators):
         stats = {}
 
+
         stats['annotation_distribution'] = done_annotations.values(
             'labels__name',
             'labels__color'
@@ -48,6 +49,20 @@ class EntityTask(Task):
                 )
 
         return stats
+
+    def get_project_stats(self, project):
+        done_annotations = Annotation.objects.filter(
+            project=project,
+            task=self,
+            is_done=True,
+        )
+        annotators = []
+        for batch in project.batches.all():
+            for a in batch.annotators.all():
+                annotators.append(a)
+        annotators = list(set(annotators))
+
+        return self._get_stats(done_annotations, annotators)
 
     def get_batch_stats(self, batch):
 
@@ -86,4 +101,5 @@ class EntityTask(Task):
         return self._get_stats(done_annotations, annotators)
 
     def get_agreement_stats(self, batch):
-        raise NotImplementedError
+        #  raise NotImplementedError
+        raise Http404

@@ -100,12 +100,13 @@ class CategoricalTask(Task):
 
     def get_agreement_stats(self, batch):
         if not self.are_categories_exclusive:
-            raise NotImplementedError(
-                """
-                `are_categories_exclusive` is set to false:
-                agreement stats not implemented.
-                """
-            )
+            raise Http404
+            # raise NotImplementedError(
+            #    """
+            #     `are_categories_exclusive` is set to false:
+            #    agreement stats not implemented.
+            #    """
+            # )
         all_doc_stats = batch.annotations.filter(
             is_done=True,
             task=self,

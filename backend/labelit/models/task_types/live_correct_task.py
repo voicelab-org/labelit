@@ -1,6 +1,7 @@
 from django.db import models
 from labelit.models.task import Task
 from zope.dottedname.resolve import resolve
+from django.http import Http404
 
 
 class LiveCorrectTask(Task):
@@ -31,4 +32,5 @@ class LiveCorrectTask(Task):
         return stats
 
     def get_agreement_stats(self, batch):
-        raise NotImplementedError
+        # raise NotImplementedError
+        raise Http404
