@@ -7,4 +7,4 @@ class labelitConfig(AppConfig):
     def ready(self):
         # import labelit.signals.validators.annotation_labels_changed
         import labelit.signals.denormalizers.annotation_saved
-
+        import labelit.signals.validators.document_created_or_updated
