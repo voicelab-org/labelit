@@ -14,7 +14,7 @@ class Command(BaseCommand):
             type=str,
             required=True,
             dest="json_file",
-            help="JSON file contains dataset info",
+            help="JSON file contains dataset info: e.g. {audio_filename_or_other_identifier: 'the document text'}",
         )
 
         parser.add_argument(
@@ -23,15 +23,6 @@ class Command(BaseCommand):
             required=True,
             dest="dataset_name",
             help="Dataset name to be created",
-        )
-
-        parser.add_argument(
-            "--is-streamed",
-            type=str,
-            required=False,
-            default=False,
-            dest="is_streamed",
-            help="Will the files be streamed to the users?",
         )
 
     def handle(self, *args, **options):
@@ -53,5 +44,5 @@ class Command(BaseCommand):
             )
 
         # Should trigger the signal
-        dataset.is_streamed = strtobool(options["is_streamed"])
+        # dataset.is_streamed = strtobool(options["is_streamed"])
         dataset.save()
