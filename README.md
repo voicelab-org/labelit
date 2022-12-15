@@ -29,9 +29,32 @@ QA account: username: qa@qa.com, password: demo
 ### Documentation
 
 We use `mkdocs` to maintain our documentation.
-The documentation will soon be hosted on [readthedocs.org](readthedocs.orgs)
+The documentation (currently, only boilerplate) is hosted on [readthedocs.org](https://labelit.readthedocs.io/en/latest/)
 
+#### Documentation editing
 
+To edit the documentation, first install the same `mkdocs` version that readthedocs will use
+during automatic building.
+
+`pip install -r requirements-local.txt`
+
+Then:
+
+`mkdocs serve`
+
+The documentation will be available locally at `127.0.0.1:8000` with live reloading as you edit the documentation.
+
+#### Documentation building
+
+The build is handled by ReadTheDocs. 
+
+Building must be triggered manually from readthedocs (Projects > Labelit) by clicking the "Build version" button
+in the overview tab.
+
+You *must* be added as a maintainer on readthedocs in order to view the project
+and launch the build and publication.
+
+By default, the latest version of the master branch is used as a starting point for building.
 
 ### Overview
 
