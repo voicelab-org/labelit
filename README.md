@@ -25,6 +25,14 @@ https://labelit.demo.hosting.call.watch
 annotator account: username: demo@demo.com, password: dem0#nnotator
 QA account: username: qa@qa.com, password: demo
 
+
+### Documentation
+
+We use `mkdocs` to maintain our documentation.
+The documentation will soon be hosted on [readthedocs.org](readthedocs.orgs)
+
+
+
 ### Overview
 
 Entity annotation (WIP) in labelit in QA mode. Annotations can be validated or sent for review:
