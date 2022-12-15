@@ -1,3 +1,0 @@
-# My doc
-
-Some markdown stuff [hello](google.com)
