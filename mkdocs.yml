@@ -1,2 +1,49 @@
 site_name: Labelit documentation
-extra_css: [extra.css]
+
+# Documentation and theme
+theme:
+  name: 'material'
+  logo: 'assets/logo_le_voice_lab.png'
+  features:
+    - toc.integrate
+
+# Options
+extra:
+  palette:
+    primary: '#AC00A9'
+    accent: '#AC00A9'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+
+extra_css: [ extra.css ]
+
+plugins:
+  - i18n:
+      languages:
+        fr: "Français"
+        en: "English"
+      default_language: "en"
+      no_translation:
+        fr: "Cette page n'est pas encore traduite en français."
+        en: "This page isn't translated to English"
+      translate_nav:
+        fr:
+          Introduction: "Introduction"
+          Feature overview: "Aperçu des fonctionnalités"
+          Getting started: "Guide de prise en main"
+        en:
+          Introduction: "Introduction"
+          Feature overview: "Feature overview"
+          Getting started: "Getting started"
+
+nav:
+  - index.md
+  - index.fr.md
+  - Feature overview:
+    - features/features.md
+    - features/features.fr.md
+  - Getting started:
+    - getting_started/getting_started.md
+    - getting_started/getting_started.fr.md
