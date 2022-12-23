@@ -1,4 +1,5 @@
 import imp
+import os
 from rest_framework import viewsets
 from rest_framework import permissions
 from labelit.serializers import DatasetSerializer
@@ -11,7 +12,11 @@ import distutils
 from rest_framework.parsers import MultiPartParser
 from rest_framework.exceptions import ParseError, ValidationError
 from rest_framework import status
+import tempfile
+from django.http.response import Http404
+import zipfile
 
+from labelit.services.dataset_importer import DatasetImporter
 
 class DatasetViewSet(viewsets.ModelViewSet):
     queryset = Dataset.objects.all()
@@ -27,8 +32,43 @@ class DatasetViewSet(viewsets.ModelViewSet):
     )
     def upload_dataset(self, request, pk=None):
         print("&in upload_dataset() view")
-        batch = Batch.objects.get(pk=pk)
-        return Response(batch.get_stats())
+        print('& request.FILES', request.FILES['file'])
+
+        file = request.FILES['file']
+
+        def _extract_in_temp_dir():
+            temp_dir_path = tempfile.mkdtemp()
+            print("&temp_dir_path", temp_dir_path)
+            zip_name = str(file)
+            temp_zip_path = os.path.join(
+                temp_dir_path,
+                zip_name,
+            )
+            with open(temp_zip_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+
+            unzipped_path = os.path.join(
+                temp_dir_path,
+                '.'.join(zip_name.split('.')[:-1]),
+            )
+
+            with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
+                zip_ref.extractall(unzipped_path)
+            return unzipped_path, temp_dir_path
+
+        unzipped_path, dir_path = _extract_in_temp_dir()
+
+        importer = DatasetImporter(
+            path_to_uploaded_directory=unzipped_path,
+        )
+
+        importer.import_dataset()
+
+        print(f"contents of {dir_path}", os.listdir(dir_path))
+
+        # raise Http404
+        return Response()
 
 
 class DatasetUploadAPI(APIView):
