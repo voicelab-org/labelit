@@ -4,22 +4,25 @@
         <router-link :to="getLink(dataset)">{{dataset.name}}</router-link>
     </div>
     -->
+    <div class="actions">
+      <DatasetUploader />
+</div>
     <v-simple-table>
       <thead>
-        <tr>
-          <th class="text-left">
-            Name
-          </th>
-        </tr>
+      <tr>
+        <th class="text-left">
+          Name
+        </th>
+      </tr>
       </thead>
       <tbody>
-        <tr
+      <tr
           v-for="dataset in datasets"
           :key="dataset.id"
           class="no-click"
-        >
-          <td>{{ dataset.name }}</td>
-        </tr>
+      >
+        <td>{{ dataset.name }}</td>
+      </tr>
       </tbody>
     </v-simple-table>
   </div>
@@ -28,31 +31,36 @@
 <script>
 import DatasetService from '@/services/dataset.service'
 
+import DatasetUploader from "./DatasetUploader";
+
 export default {
   name: 'dataset-list',
-  data(){
+  components: {
+    DatasetUploader,
+  },
+  data() {
     return {
-        datasets: []
+      datasets: [],
     }
   },
-  created(){
+  created() {
     var vm = this;
     DatasetService.getDatasetList()
-          .then(function(response){
-               vm.datasets=response.data
-           })
-          .catch(error => console.log(error))
-          .finally(() => this.loading = false)
+        .then(function (response) {
+          vm.datasets = response.data
+        })
+        .catch(error => console.log(error))
+        .finally(() => this.loading = false)
   },
   methods: {
-    getLink(dataset){
-        return "/dataset/"+dataset.id
+    getLink(dataset) {
+      return "/dataset/" + dataset.id
     },
-    printDatasetTasks(tasks){
-        return tasks.map(t => t.name).join(", ")
+    printDatasetTasks(tasks) {
+      return tasks.map(t => t.name).join(", ")
     },
-    goTo(dataset){
-        this.$router.push('/dataset/'+dataset.id)
+    goTo(dataset) {
+      this.$router.push('/dataset/' + dataset.id)
     },
   },
 }
@@ -61,20 +69,25 @@ export default {
 <style scoped lang="scss">
 
 #datasets {
-    .dataset {
-        border: 1px solid lightgrey;
-        border-bottom: none;
-        padding: 15px 10px;
-        cursor: pointer;
-        &:hover{
-            background: lightgrey;
-            a {color: white !important;}
-        }
+  .dataset {
+    border: 1px solid lightgrey;
+    border-bottom: none;
+    padding: 15px 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: lightgrey;
+
+      a {
+        color: white !important;
+      }
     }
-    a {
+  }
+
+  a {
     color: rgb(4, 144, 174) !important;
     text-decoration: none;
-    }
+  }
 
 }
 

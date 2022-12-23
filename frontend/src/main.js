@@ -9,6 +9,10 @@ import '@koumoul/vjsf/dist/main.css'
 // you can also load them separately based on your needs
 // import '@koumoul/vjsf/dist/third-party.js'
 
+
+const VueUploadComponent = require('vue-upload-component')
+Vue.component('file-upload', VueUploadComponent)
+
 Vue.component('VJsf', VJsf)
 
 import interceptorsSetup from '@/services/interceptors'

@@ -16,7 +16,19 @@ from rest_framework import status
 class DatasetViewSet(viewsets.ModelViewSet):
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [
+        # permissions.IsAuthenticated, permissions.IsAdminUser  # TEMP TODO uncomment
+    ]
+
+    @action(
+        detail=False,
+        name='Import a dataset from an uploaded zipped folder',
+        methods=['post']
+    )
+    def upload_dataset(self, request, pk=None):
+        print("&in upload_dataset() view")
+        batch = Batch.objects.get(pk=pk)
+        return Response(batch.get_stats())
 
 
 class DatasetUploadAPI(APIView):

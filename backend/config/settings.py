@@ -34,8 +34,13 @@ DEBUG = compute_django_debug_from_env_var()
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
+    "127.0.0.1",
     os.environ['ALLOWED_HOST']
 ]
+
+# & TEMP
+# APPEND_SLASH = False
+# & end TEMP
 
 # Application definition
 
