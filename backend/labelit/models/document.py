@@ -4,6 +4,7 @@ import os
 from django.db.models import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
 
+
 class Document(models.Model):
     text = models.TextField(
         "The text content of this document",
