@@ -67,7 +67,13 @@ class DatasetImporter:
                     "documents",
                     audio_name
                 )
-                audio_storage.open(audio_path, "wb").obj.upload_file(audio_name)
+                # print(f"&type of audio_storage.open(audio_path, 'wb').obj: {type(audio_storage.open(audio_path, 'wb').obj)}")
+                # audio_storage.open(audio_path, "rb").obj.upload_file(f"{audio_name}/")
+                with open(audio_path, 'rb') as file_reader:
+
+                    writer = audio_storage.open(audio_name, 'w')
+                    writer.write(file_reader.read())
+                    writer.close()
 
         _upload_audio_to_storage()
 

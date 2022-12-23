@@ -1,10 +1,10 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-
+import json
 from labelit.utils.agreement_metrics.ordinal_alpha import OrdinalAlphaMetric
 from labelit.models import Dataset, Document
 from users.models import User
-
+import os
 
 from labelit.storages import audio_storage
 from labelit.services.dataset_importer import DatasetImporter
@@ -32,20 +32,20 @@ class DatasetImporterTests(TestCase):
         # dataset has all the metadata
         expected_metadata = json.load(open(os.path.join(self.source_dir_path, 'meta.json')))
         self.assertEqual(
-            ds.meta,
+            ds.metadata,
             expected_metadata,
         )
 
         # document objects exist
         docs = Document.objects.filter(dataset=ds)
         self.assertEqual(
-            docs.counts(),
+            docs.count(),
             2,
         )
 
         # audios are stored in the storage backend
         self.assertEqual(
-            set(list(docs.values_list('audio_filename'))),
+            set(list(docs.values_list('audio_filename', flat=True))),
             set(['file1.wav', 'file2.wav'])
         )
         for doc in docs:
