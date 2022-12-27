@@ -1,12 +1,10 @@
 <template>
   <div id="datasets">
-    <!--<div v-for="dataset in datasets" :key="dataset.id" class="dataset">
-        <router-link :to="getLink(dataset)">{{dataset.name}}</router-link>
-    </div>
-    -->
     <div class="actions">
-      <DatasetUploader />
-</div>
+      <DatasetUploader
+        @imported="getDatasets()"
+      />
+    </div>
     <v-simple-table>
       <thead>
       <tr>
@@ -44,15 +42,17 @@ export default {
     }
   },
   created() {
-    var vm = this;
-    DatasetService.getDatasetList()
-        .then(function (response) {
-          vm.datasets = response.data
-        })
-        .catch(error => console.log(error))
-        .finally(() => this.loading = false)
+    this.getDatasets()
   },
   methods: {
+    getDatasets() {
+      DatasetService.getDatasetList()
+          .then((response) => {
+            this.datasets = response.data
+          })
+          .catch(error => console.log(error))
+          .finally(() => this.loading = false)
+    },
     getLink(dataset) {
       return "/dataset/" + dataset.id
     },

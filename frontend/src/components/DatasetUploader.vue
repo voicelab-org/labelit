@@ -1,44 +1,48 @@
 <template>
   <div>
-    <ul>
+    <!--<ul>
       <li v-for="file in files" :key="file.name">{{ file.name }} - Error: {{ file.error }}, Success: {{ file.success }}</li>
-    </ul>
-    <file-upload
-        ref="upload"
-        v-model="files"
-        accept="application/zip"
-        :post-action="base_url + 'datasets/upload_dataset/'"
-        :headers="headers"
-        @input-file="inputFile"
-        @input-filter="inputFilter"
-    ><!-- TODO: un-hardcode URLs; issue with forwarding to url froù :8081 to :8080 if url root not specified-->
-      <!--ost-action="http://127.0.0.1:8000/api/datasets/upload_dataset/"-->
-      <v-btn>
-        Select file
-      </v-btn>
-    </file-upload>
-
+    </ul>-->
+    <div v-if="dataset_uploaded"></div>
     <v-btn
-        color="primary"
-        v-show="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true"
-        :style="{position: 'relative', top: '-17px'}"
+        v-if="!import_in_progress"
+        @click="import_in_progress=true"
     >
-      Start Upload
+      Import a dataset
     </v-btn>
-    <button v-show="$refs.upload && $refs.upload.active" @click.prevent="$refs.upload.active = false" type="button">Stop
-      <v-btn>
-        Upload
-      </v-btn>
-    </button>
+    <div v-else>
+      <div v-if="dataset_uploaded">
+        Import successful.
+      </div>
+      <div v-else>
+        <file-upload
+            ref="upload"
+            v-model="files"
+            accept="application/zip"
+            :post-action="base_url + 'datasets/upload_dataset/'"
+            :headers="headers"
+            @input-file="inputFile"
+            @input-filter="inputFilter"
+        >
+          <v-btn>
+            1. Select file
+          </v-btn>
+        </file-upload>
+
+        <v-btn
+            v-show="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true"
+            :style="{position: 'relative', top: '-17px'}"
+        >
+          2. Upload
+        </v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 
-import { baseURL } from '@/app.config';
-
-
-
+import {baseURL} from '@/app.config';
 import LocalStorageService from '@/services/local.storage.service'
 
 
@@ -49,14 +53,17 @@ export default {
       files: [],
       access_token: null,
       base_url: baseURL,
+      import_in_progress: false,
+      import_complete: false,
+      dataset_uploaded: false,
     }
   },
-  created(){
+  created() {
 
     this.access_token = LocalStorageService.getAccessToken()
   },
-  computed:{
-    headers(){
+  computed: {
+    headers() {
       return {
         "Authorization": `Bearer ${this.access_token}`,
       }
@@ -77,6 +84,10 @@ export default {
         if (newFile.xhr) {
           //  Get the response status code
           console.log('status', newFile.xhr.status)
+          if (200 == newFile.xhr.status) {
+            this.dataset_uploaded = true
+            this.$emit('imported')
+          }
         }
       }
     },
@@ -102,6 +113,11 @@ export default {
         newFile.blob = URL.createObjectURL(newFile.file)
       }
     }
+  },
+  watch: {
+    dataset_uploaded() {
+      console.log("&change")
+    },
   },
 }
 </script>
