@@ -23,7 +23,7 @@ class DatasetViewSet(viewsets.ModelViewSet):
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
     permission_classes = [
-        # permissions.IsAuthenticated, permissions.IsAdminUser  # TEMP TODO uncomment
+        permissions.IsAuthenticated, permissions.IsAdminUser
     ]
 
     @action(

@@ -8,6 +8,7 @@
         v-model="files"
         accept="application/zip"
         post-action="http://127.0.0.1:8000/api/datasets/upload_dataset/"
+        :headers="headers"
         @input-file="inputFile"
           @input-filter="inputFilter"
     ><!-- TODO: un-hardcode URLs; issue with forwarding to url froù :8081 to :8080 if url root not specified-->
@@ -37,12 +38,28 @@
 </template>
 
 <script>
+
+import LocalStorageService from '@/services/local.storage.service'
+
+
 export default {
   name: "DatasetUploader",
   data() {
     return {
       files: [],
+      access_token: null,
     }
+  },
+  created(){
+
+    this.access_token = LocalStorageService.getAccessToken()
+  },
+  computed:{
+    headers(){
+      return {
+        "Authorization": `Bearer ${this.access_token}`,
+      }
+    },
   },
   methods: {
     /**
