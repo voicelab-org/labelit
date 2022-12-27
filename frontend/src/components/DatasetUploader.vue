@@ -7,28 +7,24 @@
         ref="upload"
         v-model="files"
         accept="application/zip"
-        post-action="http://127.0.0.1:8000/api/datasets/upload_dataset/"
+        :post-action="base_url + 'datasets/upload_dataset/'"
         :headers="headers"
         @input-file="inputFile"
-          @input-filter="inputFilter"
+        @input-filter="inputFilter"
     ><!-- TODO: un-hardcode URLs; issue with forwarding to url froù :8081 to :8080 if url root not specified-->
-
-      <!--put-action="http://127.0.0.1:8000/api/datasets/upload_dataset/"
-
-          @input-file="inputFile"
-          @input-filter="inputFilter"-->
-      <v-btn
-          color="primary"
-          dark
-      >
-        Upload
+      <!--ost-action="http://127.0.0.1:8000/api/datasets/upload_dataset/"-->
+      <v-btn>
+        Select file
       </v-btn>
     </file-upload>
-    <button v-show="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true" type="button">
-      <v-btn>
-        Start Upload
-      </v-btn>
-    </button>
+
+    <v-btn
+        color="primary"
+        v-show="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true"
+        :style="{position: 'relative', top: '-17px'}"
+    >
+      Start Upload
+    </v-btn>
     <button v-show="$refs.upload && $refs.upload.active" @click.prevent="$refs.upload.active = false" type="button">Stop
       <v-btn>
         Upload
@@ -39,6 +35,10 @@
 
 <script>
 
+import { baseURL } from '@/app.config';
+
+
+
 import LocalStorageService from '@/services/local.storage.service'
 
 
@@ -48,6 +48,7 @@ export default {
     return {
       files: [],
       access_token: null,
+      base_url: baseURL,
     }
   },
   created(){
