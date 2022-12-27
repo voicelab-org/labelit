@@ -3,6 +3,7 @@ import router from "./router";
 import store from "./store/index.js";
 import App from './App.vue'
 
+import i18n from '@/plugins/i18n'
 import VJsf from '@koumoul/vjsf'
 import '@koumoul/vjsf/dist/main.css'
 // load third-party dependencies (markdown-it, vuedraggable)
@@ -74,6 +75,7 @@ requireComponent.keys().forEach(fileName => {
 Vue.config.productionTip = false
 
 new Vue({
+      i18n,
       vuetify,
       store,
       router,
