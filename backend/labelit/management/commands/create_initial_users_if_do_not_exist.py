@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+# make_password(password, salt=None, hasher='default')[source]¶
 
 
 class Command(BaseCommand):
@@ -20,12 +22,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         User = get_user_model()
         
-        if User.objects.all().count() > 0:
+        if User.objects.filter(email="admin@labelit.com").count() > 0:
+            print("Initial users exist, skipping.")
             return
-        
+
+        print("Creating initial users: supseruser, QA user and two annotator users...")
+
         User.objects.create_superuser(
             'admin',
-            'admin@labelit',
+            'admin@labelit.com',
             'adminpassword'
         )
         
@@ -35,8 +40,9 @@ class Command(BaseCommand):
             last_name="Gautier",
             is_staff=True,
             email="qa@qa.com",
-            password="QApassword",
+            password=make_password("QApassword"),
         )
+
         
         User.objects.create(
             username="Annotator1",
@@ -44,7 +50,7 @@ class Command(BaseCommand):
             last_name="Smith",
             is_staff=False,
             email="a1@annotator.com",
-            password="a1password",
+            password=make_password("a1password"),
         )
 
         User.objects.create(
@@ -53,8 +59,9 @@ class Command(BaseCommand):
             last_name="Kim",
             is_staff=False,
             email="a2@annotator.com",
-            password="a2password",
+            password=make_password("a2password"),
         )
+        print("Done creating users.")
         
         
         
