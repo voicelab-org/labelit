@@ -15,8 +15,8 @@ from datetime import timedelta
 from distutils.util import strtobool
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -34,8 +34,13 @@ DEBUG = compute_django_debug_from_env_var()
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
+    "127.0.0.1",
     os.environ['ALLOWED_HOST']
 ]
+
+# & TEMP
+# APPEND_SLASH = False
+# & end TEMP
 
 # Application definition
 
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
     "polymorphic",
     "rest_framework",
     "corsheaders",
+
     "django_extensions",
     "rest_framework_simplejwt.token_blacklist",
     "users",
@@ -70,10 +76,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "config.urls"
 
+print("&template dirs", os.path.join(BASE_DIR, "templates"))
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

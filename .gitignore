@@ -8,3 +8,4 @@ __pycache__/
 docker-compose-dev.yml
 package-lock.json
 export.json
+temp/

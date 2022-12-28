@@ -1,18 +1,20 @@
-# Welcome to the Labelit documentation !
+# Introduction
 
-This is the boilerplate for the Labelit documentation,
-using mkdocs for doc edition and readthedocs for hosting.
+Labelit is an extensible web-based annotation tool currently supporting:
 
-## Commands
+* Text and audio annotation (summative)
+* Categorical, ordinal classification
+* Transcription
+* Named entity annotation (highlighting and labeling)
+* Text edition (correction, punctuation, etc.)
+* Audio region segmentation
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+The tool comes with utilities for distributing work across multiple annotators,
+monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA)
+ and managing datasets.
 
-## Project layout
+Multiple annotation tasks (e.g. classification + transcription) can be combined
+in a single project. (Tasks cannot yet be *nested*, but it's in the roadmap)
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Labelit is designed for extensibility: new annotation tasks / schemas
+can be created by contributors, while retaining generic features.

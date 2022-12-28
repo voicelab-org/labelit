@@ -1,0 +1,19 @@
+{% extends 'admin/base.html' %}
+
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Labelit Admin</a></h1>
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+
+#header{
+    background: #AC00A9 !important;
+}
+
+#branding h1 #site-name a:link,#branding h1 #site-name a:visited, #branding h1 #site-name a {
+    color: rgba(172, 0, 169, 0.99) !important;
+}
+</style>
+{% endblock %}

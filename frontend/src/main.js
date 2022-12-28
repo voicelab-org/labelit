@@ -3,11 +3,16 @@ import router from "./router";
 import store from "./store/index.js";
 import App from './App.vue'
 
+import i18n from '@/plugins/i18n'
 import VJsf from '@koumoul/vjsf'
 import '@koumoul/vjsf/dist/main.css'
 // load third-party dependencies (markdown-it, vuedraggable)
 // you can also load them separately based on your needs
 // import '@koumoul/vjsf/dist/third-party.js'
+
+
+const VueUploadComponent = require('vue-upload-component')
+Vue.component('file-upload', VueUploadComponent)
 
 Vue.component('VJsf', VJsf)
 
@@ -70,6 +75,7 @@ requireComponent.keys().forEach(fileName => {
 Vue.config.productionTip = false
 
 new Vue({
+      i18n,
       vuetify,
       store,
       router,
