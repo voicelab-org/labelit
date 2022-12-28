@@ -1,5 +1,0 @@
-# Aperçu des fonctionnalités
-
-TODO
-
-

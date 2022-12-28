@@ -1,4 +1,0 @@
-# Prise en main
-
-TODO
-

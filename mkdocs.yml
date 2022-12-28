@@ -55,24 +55,19 @@ plugins:
 nav:
   - index.md
   - index.fr.md
-  - Feature overview:
-      - features/01.authentication_and_authorization.md
-      - features/01.authentication_and_authorization.fr.md
-      - features/02.dataset_management.md
-      - features/02.dataset_management.fr.md
-      - features/03.lexicons.md
-      - features/03.lexicons.fr.md
-      - features/04.QA.md
-      - features/04.QA.fr.md
-      - features/05.project_management.md
-      - features/05.project_management.fr.md
-      - features/06.task_management.md
-      - features/06.task_management.fr.md
-      - features/07.workload_management.md
-      - features/07.workload_management.fr.md
-      - features/08.extensibility.md
-      - features/08.extensibility.fr.md
-
   - Getting started:
-      - getting_started/getting_started.md
-      - getting_started/getting_started.fr.md
+      - getting_started/01.local_installation.md
+      - getting_started/01.local_installation.fr.md
+      - getting_started/02.register_users.md
+      - getting_started/02.register_users.fr.md
+      - getting_started/03.first_dataset.md
+      - getting_started/03.first_dataset.fr.md
+      - getting_started/04.first_task.md
+      - getting_started/04.first_task.fr.md
+      - getting_started/05.first_project.md
+      - getting_started/05.first_project.fr.md
+      - getting_started/06.assign_work.md
+      - getting_started/06.assign_work.fr.md
+      - getting_started/07.annotate.md
+      - getting_started/07.annotate.fr.md
+
