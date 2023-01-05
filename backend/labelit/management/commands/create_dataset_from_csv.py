@@ -60,11 +60,11 @@ class Command(BaseCommand):
             document_sequence, created = DocumentSequence.objects.get_or_create(
                 name=doc_seq_name, dataset=dataset
             )
-            docs = sorted(docs_seq[doc_seq_name],
-                          key=lambda k: k["document_index"])
+            docs = sorted(docs_seq[doc_seq_name], key=lambda k: k["document_index"])
             for i, doc in enumerate(docs):
                 _doc = Document.objects.filter(
-                    audio_filename=doc["audio_filename"], dataset=dataset)
+                    audio_filename=doc["audio_filename"], dataset=dataset
+                )
                 if not _doc.count():
                     Document.objects.create(
                         text=doc["text"],
@@ -72,10 +72,10 @@ class Command(BaseCommand):
                         sequence_index=i,
                         document_sequence=document_sequence,
                         dataset=dataset,
-                        audio_duration=doc["duration"]
+                        audio_duration=doc["duration"],
                     )
 
         # Should trigger the signal
-        #dataset.is_streamed = strtobool(options["is_streamed"])
+        # dataset.is_streamed = strtobool(options["is_streamed"])
         dataset.save()
-        #dataset, dataset_created = Dataset.objects.filter(id=dataset.id).update(is_streamed=True)
+        # dataset, dataset_created = Dataset.objects.filter(id=dataset.id).update(is_streamed=True)

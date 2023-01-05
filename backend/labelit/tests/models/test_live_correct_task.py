@@ -13,8 +13,9 @@ from labelit.models import (
 from django.core.exceptions import ValidationError
 from users.models import User
 
+
 class LiveCorrectTaskModelTests(TestCase):
-    fixtures = ['test_data']
+    fixtures = ["test_data"]
 
     def setUp(self):
         self.project = Project.objects.get(pk=6)
@@ -29,8 +30,16 @@ class LiveCorrectTaskModelTests(TestCase):
             project=self.project,
             num_annotators_per_document=1,
         )
-        self.batch.annotators.set([self.u1,])
-        self.batch.documents.set([self.doc1,])
+        self.batch.annotators.set(
+            [
+                self.u1,
+            ]
+        )
+        self.batch.documents.set(
+            [
+                self.doc1,
+            ]
+        )
         self.timed_transcript = TimedTranscript.objects.create()
         self.timed_transcript_segment_1 = TimedTranscriptSegment.objects.create(
             timed_transcript=self.timed_transcript,

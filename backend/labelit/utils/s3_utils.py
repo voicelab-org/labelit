@@ -3,6 +3,7 @@ import os
 from botocore.exceptions import ClientError
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,7 +21,9 @@ def check_file_exists(key, current_storage=storage):
     return True
 
 
-def upload_folder_to_s3_bucket_folder(source_path, dest_prefix, current_storage=storage):
+def upload_folder_to_s3_bucket_folder(
+    source_path, dest_prefix, current_storage=storage
+):
     for root, dirs, files in os.walk(source_path):
         for file in files:
             relative_path = ""

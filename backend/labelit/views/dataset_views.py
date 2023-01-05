@@ -22,17 +22,15 @@ from labelit.services.dataset_importer import DatasetImporter
 class DatasetViewSet(viewsets.ModelViewSet):
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
-    permission_classes = [
-        permissions.IsAuthenticated, permissions.IsAdminUser
-    ]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     @action(
         detail=False,
-        name='Import a dataset from an uploaded zipped folder',
-        methods=['post']
+        name="Import a dataset from an uploaded zipped folder",
+        methods=["post"],
     )
     def upload_dataset(self, request, pk=None):
-        file = request.FILES['file']
+        file = request.FILES["file"]
 
         def _extract_in_temp_dir():
             temp_dir_path = tempfile.mkdtemp()
@@ -41,16 +39,16 @@ class DatasetViewSet(viewsets.ModelViewSet):
                 temp_dir_path,
                 zip_name,
             )
-            with open(temp_zip_path, 'wb+') as destination:
+            with open(temp_zip_path, "wb+") as destination:
                 for chunk in file.chunks():
                     destination.write(chunk)
 
             unzipped_path = os.path.join(
                 temp_dir_path,
-                '.'.join(zip_name.split('.')[:-1]),
+                ".".join(zip_name.split(".")[:-1]),
             )
 
-            with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
+            with zipfile.ZipFile(temp_zip_path, "r") as zip_ref:
                 zip_ref.extractall(temp_dir_path)
             return unzipped_path, temp_dir_path
 
@@ -62,7 +60,6 @@ class DatasetViewSet(viewsets.ModelViewSet):
 
         importer.import_dataset()
 
-
         # raise Http404
         return Response()
 
@@ -72,26 +69,29 @@ class DatasetUploadAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def post(self, request):
-        if 'file' not in request.data:
-            raise ParseError('Empty content')
+        if "file" not in request.data:
+            raise ParseError("Empty content")
 
         self.create_dataset(
-            file=request.data['file'],
-            dataset_name=request.data['dataset_name'],
-            is_streamed=distutils.util.strtobool(request.data['is_streamed']),
+            file=request.data["file"],
+            dataset_name=request.data["dataset_name"],
+            is_streamed=distutils.util.strtobool(request.data["is_streamed"]),
         )
 
-        return Response({'status': 'created'}, status=status.HTTP_201_CREATED)
+        return Response({"status": "created"}, status=status.HTTP_201_CREATED)
 
     @classmethod
-    def create_dataset(cls, file, dataset_name ,is_streamed):
+    def create_dataset(cls, file, dataset_name, is_streamed):
         data = pd.read_csv(file)
-        if not all(c in data.columns for c in ['text', 'basename', 'duration', 'seq_index', 'audio_filename']):
+        if not all(
+            c in data.columns
+            for c in ["text", "basename", "duration", "seq_index", "audio_filename"]
+        ):
             raise ValidationError(
-                'file must be in csv format and contains those columns (text,basename,duration,seq_index,audio_filename)')
+                "file must be in csv format and contains those columns (text,basename,duration,seq_index,audio_filename)"
+            )
 
-        dataset, dataset_created = Dataset.objects.get_or_create(
-            name=dataset_name)
+        dataset, dataset_created = Dataset.objects.get_or_create(name=dataset_name)
         cls.create_docs(data, dataset)
         Dataset.objects.filter(id=dataset).update(is_streamed=is_streamed)
 
@@ -116,11 +116,11 @@ class DatasetUploadAPI(APIView):
             document_sequence, created = DocumentSequence.objects.get_or_create(
                 name=doc_seq_name, dataset=dataset
             )
-            docs = sorted(docs_seq[doc_seq_name],
-                          key=lambda k: k["document_index"])
+            docs = sorted(docs_seq[doc_seq_name], key=lambda k: k["document_index"])
             for i, doc in enumerate(docs):
                 _doc = Document.objects.filter(
-                    audio_filename=doc["audio_filename"], dataset=dataset)
+                    audio_filename=doc["audio_filename"], dataset=dataset
+                )
                 if not _doc.count():
                     Document.objects.create(
                         text=doc["text"],
@@ -128,5 +128,5 @@ class DatasetUploadAPI(APIView):
                         sequence_index=i,
                         document_sequence=document_sequence,
                         dataset=dataset,
-                        audio_duration=doc["duration"]
+                        audio_duration=doc["duration"],
                     )

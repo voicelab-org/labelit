@@ -9,4 +9,4 @@ class LexiconFilter(django_filters.FilterSet):
 
     class Meta:
         model = Lexicon
-        fields = ('name', 'projects')
+        fields = ("name", "projects")

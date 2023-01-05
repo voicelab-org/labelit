@@ -4,9 +4,9 @@ from django.db import models
 class TimedTranscriptSegment(models.Model):
 
     timed_transcript = models.ForeignKey(
-        'labelit.TimedTranscript',
+        "labelit.TimedTranscript",
         on_delete=models.CASCADE,
-        related_name='segments',
+        related_name="segments",
     )
 
     transcript = models.TextField(
@@ -16,12 +16,11 @@ class TimedTranscriptSegment(models.Model):
     )
 
     start_time = models.FloatField(
-        'The start time relative to beginning of audio',
+        "The start time relative to beginning of audio",
     )
 
-
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<TimedTranscriptSegment ({})>".format(

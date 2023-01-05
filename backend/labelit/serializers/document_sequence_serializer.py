@@ -5,7 +5,4 @@ from labelit.models import DocumentSequence
 class DocumentSequenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentSequence
-        fields = [
-            'dataset',
-            'num_documents'
-        ]
+        fields = ["dataset", "num_documents"]

@@ -6,9 +6,8 @@ from django.http import Http404
 
 
 class NestedCategoricalTask(Task):
-
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<NestedCategoricalTask ({}): {}>".format(self.pk, self.name)
@@ -20,11 +19,7 @@ class NestedCategoricalTask(Task):
         default=True,
     )
 
-    def validate_labels(
-            self,
-            labels,
-            is_final
-    ):
+    def validate_labels(self, labels, is_final):
         if len(list(filter(lambda l: l.parent_label == None, labels))) > 0:
             raise ValidationError(
                 """
@@ -47,21 +42,23 @@ class NestedCategoricalTask(Task):
                     """
                 )
 
-    def _get_stats(self, done_annotations,):
+    def _get_stats(
+        self,
+        done_annotations,
+    ):
         stats = {}
-        stats['children_label_distribution'] = done_annotations.values(
-            'labels__name', 'labels__color'
-        ).order_by(
-            'labels__name'
-        ).annotate(
-            count=models.Count('id')
+        stats["children_label_distribution"] = (
+            done_annotations.values("labels__name", "labels__color")
+            .order_by("labels__name")
+            .annotate(count=models.Count("id"))
         )
-        stats['parent_label_distribution'] = done_annotations.values(
-            'labels__nestedcategoricallabel__parent_label__name', 'labels__nestedcategoricallabel__parent_label__color'
-        ).order_by(
-            'labels__nestedcategoricallabel__parent_label__name'
-        ).annotate(
-            count=models.Count('id')
+        stats["parent_label_distribution"] = (
+            done_annotations.values(
+                "labels__nestedcategoricallabel__parent_label__name",
+                "labels__nestedcategoricallabel__parent_label__color",
+            )
+            .order_by("labels__nestedcategoricallabel__parent_label__name")
+            .annotate(count=models.Count("id"))
         )
 
         return stats

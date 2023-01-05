@@ -7,29 +7,63 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0017_auto_20210826_1134'),
+        ("labelit", "0017_auto_20210826_1134"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EntityLabel',
+            name="EntityLabel",
             fields=[
-                ('label_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='labelit.label')),
-                ('start_offset', models.IntegerField(verbose_name='start offset of the entity in the document text')),
-                ('end_offset', models.IntegerField(verbose_name='end offset of the entity in the document text')),
+                (
+                    "label_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="labelit.label",
+                    ),
+                ),
+                (
+                    "start_offset",
+                    models.IntegerField(
+                        verbose_name="start offset of the entity in the document text"
+                    ),
+                ),
+                (
+                    "end_offset",
+                    models.IntegerField(
+                        verbose_name="end offset of the entity in the document text"
+                    ),
+                ),
             ],
-            bases=('labelit.label',),
+            bases=("labelit.label",),
         ),
         migrations.CreateModel(
-            name='EntityTask',
+            name="EntityTask",
             fields=[
-                ('task_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='labelit.task')),
+                (
+                    "task_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="labelit.task",
+                    ),
+                ),
             ],
-            bases=('labelit.task',),
+            bases=("labelit.task",),
         ),
         migrations.AlterField(
-            model_name='annotation',
-            name='document',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='annotations', to='labelit.document'),
+            model_name="annotation",
+            name="document",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="annotations",
+                to="labelit.document",
+            ),
         ),
     ]

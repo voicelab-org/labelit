@@ -7,27 +7,36 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0013_auto_20210714_2102'),
+        ("labelit", "0013_auto_20210714_2102"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='task',
-            name='project',
+            model_name="task",
+            name="project",
         ),
         migrations.AddField(
-            model_name='project',
-            name='tasks',
-            field=models.ManyToManyField(related_name='projects', to='labelit.Task'),
+            model_name="project",
+            name="tasks",
+            field=models.ManyToManyField(related_name="projects", to="labelit.Task"),
         ),
         migrations.AlterField(
-            model_name='document',
-            name='timed_transcript',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='labelit.timedtranscript'),
+            model_name="document",
+            name="timed_transcript",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="labelit.timedtranscript",
+            ),
         ),
         migrations.AlterField(
-            model_name='livecorrectlabel',
-            name='transcript',
-            field=models.TextField(blank=True, default='', verbose_name='the correction of the segment transcript'),
+            model_name="livecorrectlabel",
+            name="transcript",
+            field=models.TextField(
+                blank=True,
+                default="",
+                verbose_name="the correction of the segment transcript",
+            ),
         ),
     ]

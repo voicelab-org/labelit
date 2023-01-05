@@ -15,20 +15,21 @@ from labelit.serializers import (
     FlatBatchSerializer,
     TaskPolymorphicSerializer,
     SimpleBatchSerializer,
-    AnnotationWithLabelsSerializer
+    AnnotationWithLabelsSerializer,
 )
 from labelit.models import Batch, Annotation
 
+
 class AnnotationsExporterPagination(PageNumberPagination):
     page_size = 250
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
 
 
 class BatchViewSet(viewsets.ModelViewSet):
     queryset = Batch.objects.all()
     serializer_action_classes = {
         "create": FlatBatchSerializer,
-        "list": SimpleBatchSerializer
+        "list": SimpleBatchSerializer,
     }
     serializer_class = BatchPolymorphicSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -38,42 +39,38 @@ class BatchViewSet(viewsets.ModelViewSet):
             queryset = Batch.objects.all()
         else:
             queryset = Batch.objects.filter(annotators__id=self.request.user.id)
-        project_id = self.request.query_params.get('project_id', None)
+        project_id = self.request.query_params.get("project_id", None)
         if project_id is not None:
             queryset = queryset.filter(project_id=project_id)
         return queryset
-    
+
     def get_serializer_class(self):
         try:
             return self.serializer_action_classes[self.action]
         except (KeyError, AttributeError):
             return super().get_serializer_class()
 
-    @action(detail=True, name='Get progress stats for the batch')
+    @action(detail=True, name="Get progress stats for the batch")
     def get_progress(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         data = {
-            'num_done_units': batch.get_num_done_units(),
-            'total': batch.get_total_units()
+            "num_done_units": batch.get_num_done_units(),
+            "total": batch.get_total_units(),
         }
         return Response(data)
 
-    @action(detail=True, name='Get number of documents to review')
+    @action(detail=True, name="Get number of documents to review")
     def get_num_to_review(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         to_review_annotations = Annotation.objects.filter(
             annotator=request.user,
             batch=batch,
             has_qa_invalidated=True,
-            is_resubmitted=False
+            is_resubmitted=False,
         )
-        return Response(
-            {
-                'count': to_review_annotations.count()
-            }
-        )
+        return Response({"count": to_review_annotations.count()})
 
-    @action(detail=True, name='Get next document to review')
+    @action(detail=True, name="Get next document to review")
     def get_next_document_to_review(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         document = batch.get_next_document_to_review(request.user)
@@ -95,17 +92,14 @@ class BatchViewSet(viewsets.ModelViewSet):
                 raise Http404
 
         data = {
-            'document': DocumentSerializer(instance=document).data,
-            'annotations': [
-                AnnotationSerializer(instance=a).data
-                for a in annotations
-            ]
+            "document": DocumentSerializer(instance=document).data,
+            "annotations": [AnnotationSerializer(instance=a).data for a in annotations],
         }
         return Response(data)
 
-    @action(detail=True, name='Get next document to QA')
+    @action(detail=True, name="Get next document to QA")
     def get_next_document_to_qa(self, request, pk=None):
-        if request.GET['only_non_reviewed_annotations'] == "false":
+        if request.GET["only_non_reviewed_annotations"] == "false":
             only_non_reviewed_annotations = False
         else:
             only_non_reviewed_annotations = True
@@ -114,19 +108,17 @@ class BatchViewSet(viewsets.ModelViewSet):
         skip_doc_ids = []
         try:
             skip_doc_ids = [
-                int(i) for i in request.GET['skipped_document_ids'].split(',')
+                int(i) for i in request.GET["skipped_document_ids"].split(",")
             ]
         except:
             pass
 
         if only_non_reviewed_annotations:
-            document = batch.get_next_document_to_qa(
-                skipped_document_ids=skip_doc_ids
-            )
+            document = batch.get_next_document_to_qa(skipped_document_ids=skip_doc_ids)
             if document is None:
                 raise Http404
         else:
-            document = batch.get_next_done_document(index=request.GET['index'])
+            document = batch.get_next_done_document(index=request.GET["index"])
             if document is None:
                 raise Http404
 
@@ -141,19 +133,18 @@ class BatchViewSet(viewsets.ModelViewSet):
             )
 
         data = {
-            'document': DocumentSerializer(instance=document).data,
-            'annotations': [
-                AnnotationWithUserSerializer(instance=a).data
-                for a in annotations
+            "document": DocumentSerializer(instance=document).data,
+            "annotations": [
+                AnnotationWithUserSerializer(instance=a).data for a in annotations
             ],
-            'tasks': [
+            "tasks": [
                 TaskPolymorphicSerializer(instance=t).data
                 for t in batch.project.tasks.all()
-            ]
+            ],
         }
         return Response(data)
 
-    @action(detail=True, name='Get next document to annotate for user')
+    @action(detail=True, name="Get next document to annotate for user")
     def get_next_document_to_annotate(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         document = batch.get_next_document_to_annotate(request.user)
@@ -180,27 +171,24 @@ class BatchViewSet(viewsets.ModelViewSet):
                         batch=batch,
                         document=document,
                         project=batch.project,
-                        document_sequence=document.document_sequence
+                        document_sequence=document.document_sequence,
                     )
                 )
 
         data = {
-            'document': DocumentSerializer(instance=document).data,
-            'annotations': [
-                AnnotationSerializer(instance=a).data
-                for a in annotations
-            ]
+            "document": DocumentSerializer(instance=document).data,
+            "annotations": [AnnotationSerializer(instance=a).data for a in annotations],
         }
         return Response(data)
 
-    @action(detail=True, name='Get last annotated document to undo annotations')
+    @action(detail=True, name="Get last annotated document to undo annotations")
     def get_document_to_undo(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         document = batch.get_document_to_undo(request.user)
         if document is None:
             raise Http404
 
-        annotations =[]
+        annotations = []
         for task in batch.project.tasks.all():
             annotations.append(
                 Annotation.objects.get(
@@ -211,29 +199,26 @@ class BatchViewSet(viewsets.ModelViewSet):
                 )
             )
         data = {
-            'document': DocumentSerializer(instance=document).data,
-            'annotations': [
-                AnnotationSerializer(instance=a).data
-                for a in annotations
-            ]
+            "document": DocumentSerializer(instance=document).data,
+            "annotations": [AnnotationSerializer(instance=a).data for a in annotations],
         }
         return Response(data)
 
-    @action(detail=True, name='Get number of done annotations for user')
+    @action(detail=True, name="Get number of done annotations for user")
     def get_num_done_annotations(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         num_done = batch.get_num_done_annotations_for_user(request.user)
         data = {
-            'num_done': num_done,
+            "num_done": num_done,
         }
         return Response(data)
 
-    @action(detail=True, name='Get annotation stats for this batch')
+    @action(detail=True, name="Get annotation stats for this batch")
     def get_stats(self, request, pk=None):
         batch = Batch.objects.get(pk=pk)
         return Response(batch.get_stats())
 
-    @action(detail=True, name='Exports the annotations related to an specific batch')
+    @action(detail=True, name="Exports the annotations related to an specific batch")
     def export_annotations(self, request, *args, **kwargs):
         self.pagination_class = AnnotationsExporterPagination
 

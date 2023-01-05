@@ -17,24 +17,20 @@ from .timed_transcript_serializer import TimedTranscriptSerializer
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = [
-            'id',
-            'name',
-            'task',
-            'color'
-        ]
+        fields = ["id", "name", "task", "color"]
+
 
 class EntityLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntityLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'color',
-            'start_offset',
-            'end_offset',
-            'source_label'
+            "id",
+            "name",
+            "task",
+            "color",
+            "start_offset",
+            "end_offset",
+            "source_label",
         ]
 
 
@@ -42,11 +38,11 @@ class AudioRegionLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = AudioRegionLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'start',
-            'end',
+            "id",
+            "name",
+            "task",
+            "start",
+            "end",
         ]
 
 
@@ -54,11 +50,11 @@ class NestedCategoricalLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = NestedCategoricalLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'parent_label',
-            'single_child_select',
+            "id",
+            "name",
+            "task",
+            "parent_label",
+            "single_child_select",
         ]
 
 
@@ -66,18 +62,17 @@ class OrdinalLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrdinalLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'color',
-            'index',
+            "id",
+            "name",
+            "task",
+            "color",
+            "index",
         ]
 
     def create(self, validated_data):
         try:
             OrdinalLabel.objects.get(
-                task=validated_data.get('task'),
-                index=validated_data.get('index')
+                task=validated_data.get("task"), index=validated_data.get("index")
             )
             raise serializers.ValidationError(
                 "Validation error: duplicate. A label with matching (task, index) already exists"
@@ -92,11 +87,11 @@ class TranscriptionLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = TranscriptionLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'color',
-            'transcript',
+            "id",
+            "name",
+            "task",
+            "color",
+            "transcript",
         ]
 
 
@@ -104,38 +99,39 @@ class TextEditionLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = TextEditionLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'color',
-            'edited_text',
+            "id",
+            "name",
+            "task",
+            "color",
+            "edited_text",
         ]
 
 
 class LiveCorrectLabelSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = LiveCorrectLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'color',
-            'timed_transcript',
+            "id",
+            "name",
+            "task",
+            "color",
+            "timed_transcript",
         ]
 
 
 class LiveCorrectLabelReadSerializer(serializers.ModelSerializer):
-    timed_transcript = TimedTranscriptSerializer(read_only=True,)
+    timed_transcript = TimedTranscriptSerializer(
+        read_only=True,
+    )
 
     class Meta:
         model = LiveCorrectLabel
         fields = [
-            'id',
-            'name',
-            'task',
-            'color',
-            'timed_transcript',
+            "id",
+            "name",
+            "task",
+            "color",
+            "timed_transcript",
         ]
 
 

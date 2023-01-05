@@ -1,43 +1,39 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from labelit.models import Annotation, Project, Dataset, \
-    Document, Batch, OrdinalTask, OrdinalLabel
+from labelit.models import (
+    Annotation,
+    Project,
+    Dataset,
+    Document,
+    Batch,
+    OrdinalTask,
+    OrdinalLabel,
+)
 from labelit.serializers import AnnotationSerializer
 
 
 class AnnotationSerializerTests(TestCase):
-
     def setUp(self):
         self.dataset = Dataset.objects.create(
             name="IMDB reviews",
         )
         self.docs = []
 
-        for text in ['some text', 'other text', 'lorem ipsum', 'doloris']:
-            self.docs.append(
-                Document.objects.create(
-                    text=text,
-                    dataset=self.dataset
-                )
-            )
-        self.project = Project.objects.create(
-            name="Sentiment"
-        )
+        for text in ["some text", "other text", "lorem ipsum", "doloris"]:
+            self.docs.append(Document.objects.create(text=text, dataset=self.dataset))
+        self.project = Project.objects.create(name="Sentiment")
 
         self.users = []
 
         for u in [
-            ('jane', 'doe','janedoe@labelit'),
-            ('john', 'doe', 'johndoe@labelit'),
-            ('bat', 'man', 'batman@labelit'),
+            ("jane", "doe", "janedoe@labelit"),
+            ("john", "doe", "johndoe@labelit"),
+            ("bat", "man", "batman@labelit"),
         ]:
             self.users.append(
                 get_user_model().objects.create(
-                    first_name=u[0],
-                    last_name=u[1],
-                    username=u[0]+u[1],
-                    email=u[2]
+                    first_name=u[0], last_name=u[1], username=u[0] + u[1], email=u[2]
                 )
             )
 
@@ -57,7 +53,7 @@ class AnnotationSerializerTests(TestCase):
 
         self.labels = []
 
-        for index in range(0,3):
+        for index in range(0, 3):
             self.labels.append(
                 OrdinalLabel.objects.create(
                     index=index,
@@ -70,33 +66,31 @@ class AnnotationSerializerTests(TestCase):
             batch=self.batch,
             document=self.docs[0],
             task=self.task,
-            project=self.project
+            project=self.project,
         )
         self.annotation.labels.set([self.labels[1]])
 
-        self.serializer1 = AnnotationSerializer(
-            instance=self.annotation
-        )
+        self.serializer1 = AnnotationSerializer(instance=self.annotation)
 
     def test_contains_expected_fields_and_specific_fields_and_resourcetype(self):
         self.assertEqual(
             set(self.serializer1.data.keys()),
             set(
                 [
-                    'annotator',
-                    'batch',
-                    'labels',
-                    'document',
-                    'task',
-                    'project',
-                    'document_sequence',
-                    'is_done',
-                    'id',
-                    'has_qa_validated',
-                    'has_qa_invalidated',
-                    'is_resubmitted',
-                    'qa_invalidation_comment',
-                    'time',
+                    "annotator",
+                    "batch",
+                    "labels",
+                    "document",
+                    "task",
+                    "project",
+                    "document_sequence",
+                    "is_done",
+                    "id",
+                    "has_qa_validated",
+                    "has_qa_invalidated",
+                    "is_resubmitted",
+                    "qa_invalidation_comment",
+                    "time",
                 ]
-            )
+            ),
         )

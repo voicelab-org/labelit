@@ -12,15 +12,15 @@ class TranscriptionTask(Task):
     )
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<TranscriptionTask ({}): {}>".format(self.pk, self.name)
 
     def validate_labels(
-            self,
-            labels,
-            is_final,
+        self,
+        labels,
+        is_final,
     ):
         resolve(self.validator)().validate(labels[0].transcript)
 

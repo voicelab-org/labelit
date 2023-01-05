@@ -3,11 +3,10 @@ from labelit.models import LexiconEntry
 
 
 class LexiconEntrySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = LexiconEntry
         fields = [
-            'id',
-            'entry',
-            'lexicon',
+            "id",
+            "entry",
+            "lexicon",
         ]

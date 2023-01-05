@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0023_auto_20220121_2353'),
+        ("labelit", "0023_auto_20220121_2353"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='dataset',
-            name='is_streamed',
+            model_name="dataset",
+            name="is_streamed",
             field=models.BooleanField(default=False),
         ),
     ]

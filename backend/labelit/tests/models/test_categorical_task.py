@@ -1,14 +1,21 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from labelit.models import CategoricalTask, Project, \
-    Dataset, Document, Batch, Label, Annotation
+from labelit.models import (
+    CategoricalTask,
+    Project,
+    Dataset,
+    Document,
+    Batch,
+    Label,
+    Annotation,
+)
 from django.http import Http404
 from labelit.tests import TestSetup
 from users.models import User
 
 
 class CategoricalTaskModelTests(TestSetup, TestCase):
-    fixtures = ['test_data']
+    fixtures = ["test_data"]
 
     def setUp(self):
         self.project = Project.objects.get(pk=6)
@@ -22,7 +29,7 @@ class CategoricalTaskModelTests(TestSetup, TestCase):
             dataset=self.dataset,
             name="Batch 1",
             project=self.project,
-            num_annotators_per_document=2
+            num_annotators_per_document=2,
         )
         self.batch.annotators.set([self.u1, self.u2])
         self.batch.documents.set([self.doc1, self.doc2])
@@ -32,14 +39,8 @@ class CategoricalTaskModelTests(TestSetup, TestCase):
             are_categories_exclusive=True,
         )
         self.project.tasks.add(self.task)
-        self.label1 = Label.objects.create(
-            name="anger",
-            task=self.task
-        )
-        self.label2 = Label.objects.create(
-            name="not-anger",
-            task=self.task
-        )
+        self.label1 = Label.objects.create(name="anger", task=self.task)
+        self.label2 = Label.objects.create(name="not-anger", task=self.task)
 
     def test_agreement_stats(self):
         self.a1 = Annotation.objects.create(
@@ -95,12 +96,5 @@ class CategoricalTaskModelTests(TestSetup, TestCase):
         self.a4.save()
 
         agreement_stats = self.task.get_agreement_stats(self.batch)
-        self.assertTrue(
-            agreement_stats["value"] <= 1.0
-        )
-        self.assertTrue(
-            agreement_stats["value"] >= -1.0
-        )
-
-
-
+        self.assertTrue(agreement_stats["value"] <= 1.0)
+        self.assertTrue(agreement_stats["value"] >= -1.0)

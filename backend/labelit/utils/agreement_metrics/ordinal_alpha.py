@@ -2,14 +2,10 @@ from nltk.metrics.agreement import AnnotationTask
 
 
 class OrdinalAlphaMetric:
-
     def __init__(self, num_labels=None):
         self.num_labels = num_labels
 
-    def format_annotations_queryset(
-            self,
-            annotations
-    ):
+    def format_annotations_queryset(self, annotations):
         """
         Returns a list of tuples (annotator_id, document_id, label value).
         All annotations must be completed (is_done=True), and there must be an
@@ -22,9 +18,9 @@ class OrdinalAlphaMetric:
             formatted_annotations ([()]): list of tuples (annotator_id, document_id, label value)
         """
         return annotations.values_list(
-            'annotator_id',
-            'document_id',
-            'labels',
+            "annotator_id",
+            "document_id",
+            "labels",
         )
 
     def ordinal_distance(self, l1, l2):
@@ -41,12 +37,7 @@ class OrdinalAlphaMetric:
         return abs(l2 - l1) / (self.num_labels - 1)
 
     def ordinal_krippendorff_alpha(
-            self,
-            data=[
-                ('c1', '1', 1),
-                ('c2', '1', 1),
-                ('c3', '1', 2)
-            ]
+        self, data=[("c1", "1", 1), ("c2", "1", 1), ("c3", "1", 2)]
     ):
         """
         Returns Krippendorff's alpha for the annotated set
@@ -59,7 +50,4 @@ class OrdinalAlphaMetric:
         Returns:
                 krippendorff_alpha (float): Krippendorff's alpha
         """
-        return AnnotationTask(
-            data=data,
-            distance=self.ordinal_distance
-        ).alpha()
+        return AnnotationTask(data=data, distance=self.ordinal_distance).alpha()

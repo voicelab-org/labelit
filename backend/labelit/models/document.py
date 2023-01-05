@@ -12,34 +12,26 @@ class Document(models.Model):
         null=True,
     )
     audio_filename = models.CharField(
-        'The audio file name',
-        max_length=3000,
-        default=None,
-        blank=True,
-        null=True
+        "The audio file name", max_length=3000, default=None, blank=True, null=True
     )
     audio_duration = models.IntegerField(
-        'Length (ms) of audio if exists',
+        "Length (ms) of audio if exists",
         default=0,
     )
     dataset = models.ForeignKey(
-        'labelit.Dataset',
-        on_delete=models.CASCADE,
-        related_name="documents"
+        "labelit.Dataset", on_delete=models.CASCADE, related_name="documents"
     )
     document_sequence = models.ForeignKey(
-        'labelit.DocumentSequence',
+        "labelit.DocumentSequence",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
     )
     sequence_index = models.IntegerField(
-        'Index (order) of document in sequence',
-        null=True,
-        blank=True
+        "Index (order) of document in sequence", null=True, blank=True
     )
     timed_transcript = models.ForeignKey(
-        'labelit.TimedTranscript',
+        "labelit.TimedTranscript",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -51,7 +43,7 @@ class Document(models.Model):
         return file_key_to_hls_file_key(os.path.splitext(self.audio_filename)[0])
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<Document: {} {}>".format(self.pk, self.audio_filename)

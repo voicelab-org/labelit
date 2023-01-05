@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0039_auto_20220929_0952'),
+        ("labelit", "0039_auto_20220929_0952"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='created_at',
+            model_name="project",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True, null=True),
         ),
     ]

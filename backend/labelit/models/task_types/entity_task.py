@@ -10,41 +10,35 @@ from django.db.models import F
 
 class EntityTask(Task):
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<EntityTask ({}): {}>".format(self.pk, self.name)
 
-    def validate_labels(
-            self,
-            labels,
-            is_final
-    ):
+    def validate_labels(self, labels, is_final):
         pass
 
     def _get_stats(self, done_annotations, annotators):
         stats = {}
 
-
-        stats['annotation_distribution'] = done_annotations.values(
-            'labels__name',
-            'labels__color'
-        ).order_by('labels__name').annotate(
-            count=models.Count('id')
+        stats["annotation_distribution"] = (
+            done_annotations.values("labels__name", "labels__color")
+            .order_by("labels__name")
+            .annotate(count=models.Count("id"))
         )
 
-        stats['per_annotator_distributions'] = []
+        stats["per_annotator_distributions"] = []
 
         for annotator in annotators:
             if done_annotations.filter(annotator=annotator).count():
-                stats['per_annotator_distributions'].append(
-                    done_annotations.filter(annotator=annotator).values(
-                        'labels__name',
-                        'labels__color'
-                    ).order_by('labels__name').annotate(
-                        count=models.Count('id'),
-                        annotator_first_name=F('annotator__first_name'),
-                        annotator_last_name=F('annotator__last_name'),
+                stats["per_annotator_distributions"].append(
+                    done_annotations.filter(annotator=annotator)
+                    .values("labels__name", "labels__color")
+                    .order_by("labels__name")
+                    .annotate(
+                        count=models.Count("id"),
+                        annotator_first_name=F("annotator__first_name"),
+                        annotator_last_name=F("annotator__last_name"),
                     )
                 )
 

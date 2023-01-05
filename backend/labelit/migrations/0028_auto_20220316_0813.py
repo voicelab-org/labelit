@@ -7,18 +7,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0027_merge_20220311_0718'),
+        ("labelit", "0027_merge_20220311_0718"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='dataset',
-            name='metadata',
-            field=models.JSONField(blank=True, encoder=django.core.serializers.json.DjangoJSONEncoder, null=True),
+            model_name="dataset",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                encoder=django.core.serializers.json.DjangoJSONEncoder,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='document',
-            name='metadata',
-            field=models.JSONField(blank=True, encoder=django.core.serializers.json.DjangoJSONEncoder, null=True),
+            model_name="document",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                encoder=django.core.serializers.json.DjangoJSONEncoder,
+                null=True,
+            ),
         ),
     ]

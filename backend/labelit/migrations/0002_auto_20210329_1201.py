@@ -10,80 +10,119 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('labelit', '0001_initial'),
-        ('contenttypes', '0002_remove_content_type_name'),
+        ("labelit", "0001_initial"),
+        ("contenttypes", "0002_remove_content_type_name"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='batch',
-            name='annotators',
+            model_name="batch",
+            name="annotators",
             field=models.ManyToManyField(to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='batch',
-            name='dataset',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.dataset'),
+            model_name="batch",
+            name="dataset",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="labelit.dataset"
+            ),
         ),
         migrations.AddField(
-            model_name='batch',
-            name='documents',
-            field=models.ManyToManyField(related_name='batches', through='labelit.BatchDocument', to='labelit.Document'),
+            model_name="batch",
+            name="documents",
+            field=models.ManyToManyField(
+                related_name="batches",
+                through="labelit.BatchDocument",
+                to="labelit.Document",
+            ),
         ),
         migrations.AddField(
-            model_name='batch',
-            name='polymorphic_ctype',
-            field=models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='polymorphic_labelit.batch_set+', to='contenttypes.contenttype'),
+            model_name="batch",
+            name="polymorphic_ctype",
+            field=models.ForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="polymorphic_labelit.batch_set+",
+                to="contenttypes.contenttype",
+            ),
         ),
         migrations.AddField(
-            model_name='batch',
-            name='project',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='batches', to='labelit.project'),
+            model_name="batch",
+            name="project",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="batches",
+                to="labelit.project",
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='annotator',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="annotation",
+            name="annotator",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='batch',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='annotations', to='labelit.batch'),
+            model_name="annotation",
+            name="batch",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="annotations",
+                to="labelit.batch",
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='document',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.document'),
+            model_name="annotation",
+            name="document",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="labelit.document"
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='document_sequence',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='labelit.documentsequence'),
+            model_name="annotation",
+            name="document_sequence",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="labelit.documentsequence",
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='labels',
-            field=models.ManyToManyField(related_name='annotations', to='labelit.Label'),
+            model_name="annotation",
+            name="labels",
+            field=models.ManyToManyField(
+                related_name="annotations", to="labelit.Label"
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='project',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.project'),
+            model_name="annotation",
+            name="project",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="labelit.project"
+            ),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='task',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.task'),
+            model_name="annotation",
+            name="task",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="labelit.task"
+            ),
         ),
         migrations.AddField(
-            model_name='sequencebatch',
-            name='sequences',
-            field=models.ManyToManyField(through='labelit.BatchDocumentSequence', to='labelit.DocumentSequence'),
+            model_name="sequencebatch",
+            name="sequences",
+            field=models.ManyToManyField(
+                through="labelit.BatchDocumentSequence", to="labelit.DocumentSequence"
+            ),
         ),
         migrations.AddField(
-            model_name='batchdocumentsequence',
-            name='batch',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.sequencebatch'),
+            model_name="batchdocumentsequence",
+            name="batch",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="labelit.sequencebatch"
+            ),
         ),
     ]

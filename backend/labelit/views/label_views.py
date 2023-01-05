@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from rest_framework import permissions
-from labelit.serializers import LabelPolymorphicSerializer, LabelPolymorphicReadSerializer
+from labelit.serializers import (
+    LabelPolymorphicSerializer,
+    LabelPolymorphicReadSerializer,
+)
 from labelit.models import Label
 
 

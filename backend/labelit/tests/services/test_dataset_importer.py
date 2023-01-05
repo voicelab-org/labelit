@@ -16,7 +16,7 @@ class DatasetImporterTests(TestCase):
     def setUp(self):
         # self.u1 = User.objects.all().first()
         # self.u2 = User.objects.all()[1]
-        self.source_dir_path = 'labelit/tests/data/example_dataset'
+        self.source_dir_path = "labelit/tests/data/example_dataset"
 
     def test_dataset_is_correctly_imported(self):
         dataset_importer = DatasetImporter(self.source_dir_path)
@@ -30,7 +30,9 @@ class DatasetImporterTests(TestCase):
             self.assertTrue(False)
 
         # dataset has all the metadata
-        expected_metadata = json.load(open(os.path.join(self.source_dir_path, 'meta.json')))
+        expected_metadata = json.load(
+            open(os.path.join(self.source_dir_path, "meta.json"))
+        )
         self.assertEqual(
             ds.metadata,
             expected_metadata,
@@ -45,14 +47,8 @@ class DatasetImporterTests(TestCase):
 
         # audios are stored in the storage backend
         self.assertEqual(
-            set(list(docs.values_list('audio_filename', flat=True))),
-            set(['file1.wav', 'file2.wav'])
+            set(list(docs.values_list("audio_filename", flat=True))),
+            set(["file1.wav", "file2.wav"]),
         )
         for doc in docs:
-            self.assertTrue(
-                audio_storage.exists(doc.audio_filename)
-            )
-
-
-
-
+            self.assertTrue(audio_storage.exists(doc.audio_filename))

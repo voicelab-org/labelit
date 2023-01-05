@@ -7,22 +7,48 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0009_project_timer_inactivity_threshold'),
+        ("labelit", "0009_project_timer_inactivity_threshold"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TimedTranscript',
+            name="TimedTranscript",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TimedTranscriptSegment',
+            name="TimedTranscriptSegment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('transcript', models.TextField(verbose_name='The transcript to correct')),
-                ('timed_transcript', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='segments', to='labelit.timedtranscript')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "transcript",
+                    models.TextField(verbose_name="The transcript to correct"),
+                ),
+                (
+                    "timed_transcript",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="segments",
+                        to="labelit.timedtranscript",
+                    ),
+                ),
             ],
         ),
     ]

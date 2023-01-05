@@ -6,10 +6,7 @@ class Lexicon(models.Model):
         max_length=300,
     )
 
-    tasks = models.ManyToManyField(
-        'labelit.Task',
-        related_name='lexicons'
-    )
+    tasks = models.ManyToManyField("labelit.Task", related_name="lexicons")
 
     """
     projects = models.ManyToManyField(
@@ -18,7 +15,7 @@ class Lexicon(models.Model):
     """
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<Lexicon-{}: {}>".format(self.pk, self.name)

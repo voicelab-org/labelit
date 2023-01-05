@@ -22,24 +22,24 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 import os
-SECRET_KEY = os.environ['SECRET_KEY']
+
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 import logging
+
 logger = logging.getLogger(__name__)
 
+
 def compute_django_debug_from_env_var():
-    debug = os.environ.get('DJANGO_DEBUG')
-    if debug and debug.lower() == 'true':
+    debug = os.environ.get("DJANGO_DEBUG")
+    if debug and debug.lower() == "true":
         return True
     return False
 
+
 DEBUG = compute_django_debug_from_env_var()
 
-ALLOWED_HOSTS = [
-    "0.0.0.0",
-    "127.0.0.1",
-    os.environ['ALLOWED_HOST']
-]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", os.environ["ALLOWED_HOST"]]
 
 # & TEMP
 # APPEND_SLASH = False
@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "polymorphic",
     "rest_framework",
     "corsheaders",
-
     "django_extensions",
     "rest_framework_simplejwt.token_blacklist",
     "users",
@@ -150,11 +149,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Django REST Framework (DRF)
 
@@ -209,13 +208,17 @@ AWS_S3_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
 AWS_DEFAULT_ACL = None
 
 # HLS related params
-S3_DIRECT_SERVE = strtobool(os.getenv("S3_DIRECT_SERVE", "true")) # Set to True when in the cloud, False locally.
+S3_DIRECT_SERVE = strtobool(
+    os.getenv("S3_DIRECT_SERVE", "true")
+)  # Set to True when in the cloud, False locally.
 
 ### HACK ALERT !!
 S3_DIRECT_SERVE = False
 ### END HACK
 
-SEGMENT_EXPIRATION_TIME_IN_SECONDS = int(os.getenv("SEGMENT_EXPIRATION_TIME_IN_SECONDS", 3600))
+SEGMENT_EXPIRATION_TIME_IN_SECONDS = int(
+    os.getenv("SEGMENT_EXPIRATION_TIME_IN_SECONDS", 3600)
+)
 NUM_ELEMENTS_IN_WAVEFORM = 1024
 
 LOGGING = {

@@ -13,20 +13,16 @@ class AudioRegionTask(Task):
     color = models.CharField(
         "Color for this task",
         max_length=500,
-        default='blue',
+        default="blue",
     )
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<AudioRegionTask ({}): {}>".format(self.pk, self.name)
 
-    def validate_labels(
-            self,
-            labels,
-            is_final
-    ):
+    def validate_labels(self, labels, is_final):
         pass
 
     def _get_stats(self, done_annotations, annotators):
