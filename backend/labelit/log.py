@@ -6,9 +6,9 @@ import json_log_formatter
 # Configure logger to capture exceptions
 def uncaught_exception_handler(type, value, tb):
     extra_info = {
-        'uncaught_exception_exc_info': traceback.format_exc(),
+        'uncaught_exception_exc_info': ''.join(traceback.format_tb(tb)),
     }
-    logger.critical("Uncaught exception: {0}".format(str(value)), extra=extra_info)
+    logger.critical(f"Uncaught exception: {type} {value}", extra=extra_info)
 
 # Install exception handler
 logger = logging.getLogger(__name__)

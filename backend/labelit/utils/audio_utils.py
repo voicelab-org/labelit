@@ -96,10 +96,6 @@ def generate_dynamic_waveform_from_audio(input_file, output_file, create_folder=
     with open(output_waveform, 'w') as outfile:
         json.dump(json_waveform, outfile)
 
-
-    print('data  length', max(json_waveform['waveform']) , min(json_waveform['waveform']))
-
-
 def generate_hls_from_audio(input_file, output_file, create_folder=False, generate_waveform=True):
     """ Given an audio file, it generates and HLS playlist """
 
@@ -259,4 +255,3 @@ def convert_files_in_dataset_to_hls(dataset_name):
         convert_raw_to_hls(audio_files[file_key])
 
     logger.info(f"Nothing left to update. Total files updated: {len(pending_files)}.")
-

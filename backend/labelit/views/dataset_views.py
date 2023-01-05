@@ -32,14 +32,10 @@ class DatasetViewSet(viewsets.ModelViewSet):
         methods=['post']
     )
     def upload_dataset(self, request, pk=None):
-        # print("&in upload_dataset() view")
-        # print('& request.FILES', request.FILES['file'])
-
         file = request.FILES['file']
 
         def _extract_in_temp_dir():
             temp_dir_path = tempfile.mkdtemp()
-            # print("&temp_dir_path", temp_dir_path)
             zip_name = str(file)
             temp_zip_path = os.path.join(
                 temp_dir_path,
@@ -59,10 +55,6 @@ class DatasetViewSet(viewsets.ModelViewSet):
             return unzipped_path, temp_dir_path
 
         unzipped_path, dir_path = _extract_in_temp_dir()
-        
-
-        # print(f"&contents of dir_path: {dir_path}", os.listdir(dir_path))
-        # print(f"&contents of unzipped_path: {unzipped_path}", os.listdir(unzipped_path))
 
         importer = DatasetImporter(
             path_to_uploaded_directory=unzipped_path,

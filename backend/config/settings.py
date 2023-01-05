@@ -24,6 +24,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 import os
 SECRET_KEY = os.environ['SECRET_KEY']
 
+import logging
+logger = logging.getLogger(__name__)
+
 def compute_django_debug_from_env_var():
     debug = os.environ.get('DJANGO_DEBUG')
     if debug and debug.lower() == 'true':
@@ -75,8 +78,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
-
-print("&template dirs", os.path.join(BASE_DIR, "templates"))
 
 TEMPLATES = [
     {
@@ -208,9 +209,7 @@ AWS_S3_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
 AWS_DEFAULT_ACL = None
 
 # HLS related params
-# print('&os.getenv("S3_DIRECT_SERVE", "true")', os.getenv("S3_DIRECT_SERVE", "true"))
 S3_DIRECT_SERVE = strtobool(os.getenv("S3_DIRECT_SERVE", "true")) # Set to True when in the cloud, False locally.
-# print("& settings S3_DIRECT_SERVE bool", S3_DIRECT_SERVE)
 
 ### HACK ALERT !!
 S3_DIRECT_SERVE = False

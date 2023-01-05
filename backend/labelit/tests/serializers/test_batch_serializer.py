@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from labelit.models import Batch, Project, Dataset, \
     Document, BatchDocument
 from labelit.serializers import BatchSerializer, FlatBatchSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BatchSerializerTests(TestCase):
@@ -83,7 +86,7 @@ class BatchSerializerTests(TestCase):
         if serializer.is_valid():
             instance = serializer.save()
         else:
-            print(serializer.errors)
+            logger.error(serializer.errors)
             self.assertTrue(serializer.is_valid())
         
         self.assertEqual(

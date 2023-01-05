@@ -24,4 +24,3 @@ class Command(BaseCommand):
                 bu.num_done_annotators = 0
                 bu.num_annotators = 0
                 bu.save()
-        print("Cleared.")

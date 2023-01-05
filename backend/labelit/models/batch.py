@@ -194,7 +194,6 @@ class Batch(PolymorphicModel):
             batch=self,
             num_done_annotators=self.num_annotators_per_document,
         ).order_by('id')
-        print("completed_batch_docs", completed_batch_docs)
         try:
             document = Document.objects.get(
                 id=completed_batch_docs[int(index)].document_id

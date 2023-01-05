@@ -2,7 +2,9 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 # make_password(password, salt=None, hasher='default')[source]¶
+import logging
 
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = 'Creates initial users for a local installation'
@@ -23,10 +25,11 @@ class Command(BaseCommand):
         User = get_user_model()
         
         if User.objects.filter(email="admin@labelit.com").count() > 0:
-            print("Initial users exist, skipping.")
+            logger.info("Initial users exist, skipping.")
             return
 
-        print("Creating initial users: supseruser, QA user and two annotator users...")
+
+        logger.info("Creating initial users: supseruser, QA user and two annotator users...")
 
         User.objects.create_superuser(
             'admin',
@@ -61,7 +64,7 @@ class Command(BaseCommand):
             email="a2@annotator.com",
             password=make_password("a2password"),
         )
-        print("Done creating users.")
+        logger.info("Done creating users.")
         
         
         

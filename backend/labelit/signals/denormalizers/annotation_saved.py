@@ -8,6 +8,9 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Annotation)
 def annotation_saved(sender, **kwargs):
@@ -42,5 +45,4 @@ def annotation_saved(sender, **kwargs):
                         annotation_time=instance.time
                     )
                 except IntegrityError:
-                    print("CompletedDocumentAnnotatorPair already exists, skipping creation")
-
+                    logger.info("CompletedDocumentAnnotatorPair already exists, skipping creation")

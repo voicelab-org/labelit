@@ -67,7 +67,7 @@ class DatasetImporter:
                     "documents",
                     audio_name
                 )
-                # print(f"&type of audio_storage.open(audio_path, 'wb').obj: {type(audio_storage.open(audio_path, 'wb').obj)}")
+                # logger.debug(f"&type of audio_storage.open(audio_path, 'wb').obj: {type(audio_storage.open(audio_path, 'wb').obj)}")
                 # audio_storage.open(audio_path, "rb").obj.upload_file(f"{audio_name}/")
                 with open(audio_path, 'rb') as file_reader:
 
