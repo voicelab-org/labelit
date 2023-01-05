@@ -3,7 +3,7 @@ from labelit.models import Annotation, BatchDocument, BatchDocumentSequence
 
 
 class Command(BaseCommand):
-    help = 'Creates an agent user'
+    help = "Creates an agent user"
 
     def add_arguments(self, parser):
         """
@@ -24,4 +24,3 @@ class Command(BaseCommand):
                 bu.num_done_annotators = 0
                 bu.num_annotators = 0
                 bu.save()
-        print("Cleared.")

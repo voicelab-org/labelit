@@ -13,8 +13,9 @@ from labelit.models import (
 from django.core.exceptions import ValidationError
 from users.models import User
 
+
 class TranscriptionTaskModelTests(TestCase):
-    fixtures = ['test_data']
+    fixtures = ["test_data"]
 
     def setUp(self):
         self.project = Project.objects.get(pk=6)
@@ -29,7 +30,11 @@ class TranscriptionTaskModelTests(TestCase):
             project=self.project,
             num_annotators_per_document=1,
         )
-        self.batch.annotators.set([self.u1,])
+        self.batch.annotators.set(
+            [
+                self.u1,
+            ]
+        )
         self.batch.documents.set([self.doc1, self.doc2])
 
         self.task = TranscriptionTask.objects.create(
@@ -38,8 +43,7 @@ class TranscriptionTaskModelTests(TestCase):
         self.project.tasks.add(self.task)
 
         self.label1 = TranscriptionLabel.objects.create(
-            task=self.task,
-            transcript="some forbidden characters #"
+            task=self.task, transcript="some forbidden characters #"
         )
 
     def test_validate(self):

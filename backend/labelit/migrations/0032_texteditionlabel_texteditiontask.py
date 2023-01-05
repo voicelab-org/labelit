@@ -7,23 +7,48 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0031_auto_20220316_1537'),
+        ("labelit", "0031_auto_20220316_1537"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TextEditionLabel',
+            name="TextEditionLabel",
             fields=[
-                ('label_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='labelit.label')),
-                ('edited_text', models.TextField(blank=True, default='', verbose_name='the edited document text')),
+                (
+                    "label_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="labelit.label",
+                    ),
+                ),
+                (
+                    "edited_text",
+                    models.TextField(
+                        blank=True, default="", verbose_name="the edited document text"
+                    ),
+                ),
             ],
-            bases=('labelit.label',),
+            bases=("labelit.label",),
         ),
         migrations.CreateModel(
-            name='TextEditionTask',
+            name="TextEditionTask",
             fields=[
-                ('task_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='labelit.task')),
+                (
+                    "task_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="labelit.task",
+                    ),
+                ),
             ],
-            bases=('labelit.task',),
+            bases=("labelit.task",),
         ),
     ]

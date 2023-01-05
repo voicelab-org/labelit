@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0016_auto_20210801_2106'),
+        ("labelit", "0016_auto_20210801_2106"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='document',
-            name='text',
-            field=models.TextField(blank=True, null=True, verbose_name='The text content of this document'),
+            model_name="document",
+            name="text",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="The text content of this document"
+            ),
         ),
     ]

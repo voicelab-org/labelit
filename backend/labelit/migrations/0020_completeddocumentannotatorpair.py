@@ -9,21 +9,58 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('labelit', '0019_auto_20220106_1359'),
+        ("labelit", "0019_auto_20220106_1359"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CompletedDocumentAnnotatorPair',
+            name="CompletedDocumentAnnotatorPair",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('annotation_time', models.IntegerField(verbose_name='Time it took to annotate the document (ms)')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('annotator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('batch', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='completed_document_annotator_pairs', to='labelit.batch')),
-                ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.task')),
-                ('project', models.ManyToManyField(related_name='completed_document_annotator_pairs', to='labelit.Project')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "annotation_time",
+                    models.IntegerField(
+                        verbose_name="Time it took to annotate the document (ms)"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "annotator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "batch",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="completed_document_annotator_pairs",
+                        to="labelit.batch",
+                    ),
+                ),
+                (
+                    "document",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="labelit.task"
+                    ),
+                ),
+                (
+                    "project",
+                    models.ManyToManyField(
+                        related_name="completed_document_annotator_pairs",
+                        to="labelit.Project",
+                    ),
+                ),
             ],
         ),
     ]

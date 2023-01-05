@@ -8,12 +8,12 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('labelit', '0022_auto_20220121_2340'),
+        ("labelit", "0022_auto_20220121_2340"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='completeddocumentannotatorpair',
-            unique_together={('annotator', 'document', 'batch')},
+            name="completeddocumentannotatorpair",
+            unique_together={("annotator", "document", "batch")},
         ),
     ]

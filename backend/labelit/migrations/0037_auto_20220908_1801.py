@@ -7,30 +7,59 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0036_project_description'),
+        ("labelit", "0036_project_description"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AudioRegionLabel',
+            name="AudioRegionLabel",
             fields=[
-                ('label_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='labelit.label')),
-                ('start', models.FloatField(verbose_name='start time in seconds')),
-                ('end', models.IntegerField(verbose_name='end time in seconds')),
+                (
+                    "label_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="labelit.label",
+                    ),
+                ),
+                ("start", models.FloatField(verbose_name="start time in seconds")),
+                ("end", models.IntegerField(verbose_name="end time in seconds")),
             ],
-            bases=('labelit.label',),
+            bases=("labelit.label",),
         ),
         migrations.CreateModel(
-            name='AudioRegionTask',
+            name="AudioRegionTask",
             fields=[
-                ('task_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='labelit.task')),
-                ('color', models.CharField(default='blue', max_length=500, verbose_name='Color for this task')),
+                (
+                    "task_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="labelit.task",
+                    ),
+                ),
+                (
+                    "color",
+                    models.CharField(
+                        default="blue",
+                        max_length=500,
+                        verbose_name="Color for this task",
+                    ),
+                ),
             ],
-            bases=('labelit.task',),
+            bases=("labelit.task",),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='description',
-            field=models.TextField(blank=True, null=True, verbose_name='Description of the project'),
+            model_name="project",
+            name="description",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Description of the project"
+            ),
         ),
     ]

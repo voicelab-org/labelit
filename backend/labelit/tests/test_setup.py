@@ -6,13 +6,14 @@ from labelit.models import (
     Batch,
     Document,
     Dataset,
-    Annotation
+    Annotation,
 )
 
 from users.models import User
 
-class TestSetup():
-    fixtures = ['test_data']
+
+class TestSetup:
+    fixtures = ["test_data"]
 
     def setUp(self):
         self.dataset = Dataset.objects.get(pk=3)

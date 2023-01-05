@@ -103,7 +103,7 @@ admin.site.register(NestedCategoricalTask)
 
 class NestedCategoricalLabelInline(admin.TabularInline):
     model = NestedCategoricalLabel
-    fk_name = 'parent_label'
+    fk_name = "parent_label"
 
 
 class NestedCategoricalLabelAdmin(admin.ModelAdmin):

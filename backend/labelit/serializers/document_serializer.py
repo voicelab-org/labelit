@@ -15,13 +15,13 @@ class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = [
-            'id',
-            'text',
-            'audio_filename',
-            'dataset',
-            'document_sequence',
-            'sequence_index',
-            'timed_transcript',
+            "id",
+            "text",
+            "audio_filename",
+            "dataset",
+            "document_sequence",
+            "sequence_index",
+            "timed_transcript",
         ]
 
 
@@ -29,6 +29,6 @@ class MinimalDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = [
-            'id',
-            'audio_filename',
+            "id",
+            "audio_filename",
         ]

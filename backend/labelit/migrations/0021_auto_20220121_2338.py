@@ -7,13 +7,15 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0020_completeddocumentannotatorpair'),
+        ("labelit", "0020_completeddocumentannotatorpair"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='completeddocumentannotatorpair',
-            name='document',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelit.document'),
+            model_name="completeddocumentannotatorpair",
+            name="document",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="labelit.document"
+            ),
         ),
     ]

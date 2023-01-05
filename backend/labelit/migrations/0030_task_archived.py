@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0029_auto_20220316_0817'),
+        ("labelit", "0029_auto_20220316_0817"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='task',
-            name='archived',
+            model_name="task",
+            name="archived",
             field=models.BooleanField(default=False),
         ),
     ]

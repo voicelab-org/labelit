@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0037_auto_20220908_1801'),
+        ("labelit", "0037_auto_20220908_1801"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='audioregionlabel',
-            name='end',
-            field=models.FloatField(verbose_name='end time in seconds'),
+            model_name="audioregionlabel",
+            name="end",
+            field=models.FloatField(verbose_name="end time in seconds"),
         ),
     ]

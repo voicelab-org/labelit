@@ -1,11 +1,9 @@
 from django.test import TestCase
-from labelit.models import Task, CategoricalTask, OrdinalTask, \
-    Project
+from labelit.models import Task, CategoricalTask, OrdinalTask, Project
 
 
 class PolymorphicTaskModelTests(TestCase):
-    fixtures = ['test_data']
-
+    fixtures = ["test_data"]
 
     def setUp(self):
         self.project = Project.objects.create(
@@ -21,14 +19,6 @@ class PolymorphicTaskModelTests(TestCase):
 
     def test_query_polymorphic_task_retrieves_specific_task_models(self):
         all_tasks = Task.objects.filter(projects=self.project)
-        self.assertEqual(
-            all_tasks.count(),
-            2
-        )
+        self.assertEqual(all_tasks.count(), 2)
         for cls in [CategoricalTask, OrdinalTask]:
-            self.assertTrue(
-                cls in [
-                    o.__class__
-                    for o in all_tasks
-                ]
-            )
+            self.assertTrue(cls in [o.__class__ for o in all_tasks])

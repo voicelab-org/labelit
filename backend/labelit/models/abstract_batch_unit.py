@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 # the Unit can be a document or a document sequence
 class BatchUnit(models.Model):
     batch = models.ForeignKey(
-        'labelit.Batch',
+        "labelit.Batch",
         on_delete=models.CASCADE,
     )
     # BEGIN denormalized fields
@@ -17,19 +17,19 @@ class BatchUnit(models.Model):
         For a Batch, the unit is the document itself.
         For a SequenBatch, the unit is the document sequence.
         """,
-        default=0
+        default=0,
     )
     num_annotators = models.IntegerField(
         """
         Number of annotators who have annotated or are currently annotating
         the unit
         """,
-        default=0
+        default=0,
     )
     # END denormalized fields
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
         abstract = True
 
     def __str__(self):

@@ -3,7 +3,7 @@ from django.db import models
 
 class LexiconEntry(models.Model):
     lexicon = models.ForeignKey(
-        'labelit.Lexicon',
+        "labelit.Lexicon",
         related_name="entries",
         on_delete=models.CASCADE,
     )
@@ -12,7 +12,7 @@ class LexiconEntry(models.Model):
     )
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<LexiconEntry {}: {}>".format(self.pk, self.entry)

@@ -1,6 +1,14 @@
 from django.test import TestCase
-from labelit.models import Project, CategoricalTask, OrdinalTask, \
- OrdinalLabel, Dataset, Batch, Document, Annotation
+from labelit.models import (
+    Project,
+    CategoricalTask,
+    OrdinalTask,
+    OrdinalLabel,
+    Dataset,
+    Batch,
+    Document,
+    Annotation,
+)
 
 import os
 from labelit.storages import audio_storage
@@ -16,19 +24,18 @@ with tempfile.TemporaryDirectory() as tmp_dirname:
     FileSystemStorage(location=tmp_dirname)
 
 
-@patch('labelit.storages.audio_storage', fs_storage)
+@patch("labelit.storages.audio_storage", fs_storage)
 class DatasetModelTests(TestCase):
-
     def setUp(self):
         self.dataset = Dataset.objects.create(name="IMDB")
 
-        audio_storage.bucket.upload_file(os.path.join(os.path.dirname(__file__), "..", "data", "sample_data.mp3"),
-                                         "sample_data.mp3")
+        audio_storage.bucket.upload_file(
+            os.path.join(os.path.dirname(__file__), "..", "data", "sample_data.mp3"),
+            "sample_data.mp3",
+        )
 
         self.document = Document.objects.create(
-            text="lovediit",
-            audio_filename='sample_data.mp3',
-            dataset=self.dataset
+            text="lovediit", audio_filename="sample_data.mp3", dataset=self.dataset
         )
 
     def test_hls_signal(self):

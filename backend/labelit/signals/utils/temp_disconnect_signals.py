@@ -1,5 +1,6 @@
-class temp_disconnect_signal():
-    """ Temporarily disconnect a model from a signal """
+class temp_disconnect_signal:
+    """Temporarily disconnect a model from a signal"""
+
     def __init__(self, signal, receiver, sender, dispatch_uid=None):
         self.signal = signal
         self.receiver = receiver
@@ -19,5 +20,5 @@ class temp_disconnect_signal():
             receiver=self.receiver,
             sender=self.sender,
             dispatch_uid=self.dispatch_uid,
-            weak=False
+            weak=False,
         )

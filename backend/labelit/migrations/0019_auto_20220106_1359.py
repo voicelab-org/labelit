@@ -7,13 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0018_auto_20220106_1231'),
+        ("labelit", "0018_auto_20220106_1231"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='label',
-            name='task',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='labels', to='labelit.task'),
+            model_name="label",
+            name="task",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="labels",
+                to="labelit.task",
+            ),
         ),
     ]

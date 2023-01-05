@@ -6,18 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0005_auto_20210710_2158'),
+        ("labelit", "0005_auto_20210710_2158"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='task',
-            name='html_guidelines',
-            field=models.TextField(default='\n            <div>\n                <h2>Customize guidelines</h2>\n            </div>\n        '),
+            model_name="task",
+            name="html_guidelines",
+            field=models.TextField(
+                default="\n            <div>\n                <h2>Customize guidelines</h2>\n            </div>\n        "
+            ),
         ),
         migrations.AlterField(
-            model_name='task',
-            name='can_documents_be_invalidated',
-            field=models.BooleanField(default=True, verbose_name="\n        If true, annotators can tag a document as 'invalid'\n        and skip annotation.\n        "),
+            model_name="task",
+            name="can_documents_be_invalidated",
+            field=models.BooleanField(
+                default=True,
+                verbose_name="\n        If true, annotators can tag a document as 'invalid'\n        and skip annotation.\n        ",
+            ),
         ),
     ]

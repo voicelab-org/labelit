@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0007_auto_20210712_0953'),
+        ("labelit", "0007_auto_20210712_0953"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='document',
-            name='audio_duration',
-            field=models.IntegerField(default=0, verbose_name='Length (ms) of audio if exists'),
+            model_name="document",
+            name="audio_duration",
+            field=models.IntegerField(
+                default=0, verbose_name="Length (ms) of audio if exists"
+            ),
         ),
     ]

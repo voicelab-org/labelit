@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0030_task_archived'),
+        ("labelit", "0030_task_archived"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='lexicon',
-            name='projects',
+            model_name="lexicon",
+            name="projects",
         ),
         migrations.AddField(
-            model_name='lexicon',
-            name='tasks',
-            field=models.ManyToManyField(related_name='lexicons', to='labelit.Task'),
+            model_name="lexicon",
+            name="tasks",
+            field=models.ManyToManyField(related_name="lexicons", to="labelit.Task"),
         ),
     ]

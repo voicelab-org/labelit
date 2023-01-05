@@ -7,15 +7,15 @@ from labelit.models import Annotation, Task
 
 class OrdinalTask(Task):
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<OrdinalTask ({}): {}>".format(self.pk, self.name)
 
     def validate_labels(
-            self,
-            labels,
-            is_final,
+        self,
+        labels,
+        is_final,
     ):
         if is_final:
             if len(labels) == 0:
@@ -34,20 +34,27 @@ class OrdinalTask(Task):
     def _get_stats(self, done_annotations, annotators):
         stats = {}
 
-        stats['annotation_distribution'] = done_annotations.values(
-            'labels__name', 'labels__color',
-        ).order_by('labels__name').annotate(count=models.Count('id'))
+        stats["annotation_distribution"] = (
+            done_annotations.values(
+                "labels__name",
+                "labels__color",
+            )
+            .order_by("labels__name")
+            .annotate(count=models.Count("id"))
+        )
 
-        stats['per_annotator_distributions'] = []
+        stats["per_annotator_distributions"] = []
 
         for annotator in annotators:
             if done_annotations.filter(annotator=annotator).count():
-                stats['per_annotator_distributions'].append(
-                    done_annotations.filter(annotator=annotator).values('labels__name', 'labels__color').order_by(
-                        'labels__name').annotate(
-                        count=models.Count('id'),
-                        annotator_first_name=models.F('annotator__first_name'),
-                        annotator_last_name=models.F('annotator__last_name'),
+                stats["per_annotator_distributions"].append(
+                    done_annotations.filter(annotator=annotator)
+                    .values("labels__name", "labels__color")
+                    .order_by("labels__name")
+                    .annotate(
+                        count=models.Count("id"),
+                        annotator_first_name=models.F("annotator__first_name"),
+                        annotator_last_name=models.F("annotator__last_name"),
                     )
                 )
         return stats
@@ -77,9 +84,9 @@ class OrdinalTask(Task):
         stats = self._get_stats(done_annotations, batch.annotators.all())
 
         try:
-            stats['agreement'] = self.get_agreement_stats(batch)
+            stats["agreement"] = self.get_agreement_stats(batch)
         except Http404:
-            stats['agreement'] = None
+            stats["agreement"] = None
 
         """
         stats['annotation_distribution'] = done_annotations.values('labels__name', 'labels__color',).order_by('labels__name').annotate(count=models.Count('id'))
@@ -101,13 +108,16 @@ class OrdinalTask(Task):
 
     def get_agreement_stats(self, batch):
         # TODO: make DRY, replicated code with CategoricalTask
-        all_complete_annotations = batch.annotations.filter(
-            is_done=True,
-            task=self,
-        ).values('document_id').annotate(
-            num_annotations_in_doc=models.Count('id')
-        ).filter(
-            num_annotations_in_doc=batch.num_annotators_per_document,
+        all_complete_annotations = (
+            batch.annotations.filter(
+                is_done=True,
+                task=self,
+            )
+            .values("document_id")
+            .annotate(num_annotations_in_doc=models.Count("id"))
+            .filter(
+                num_annotations_in_doc=batch.num_annotators_per_document,
+            )
         )
 
         if all_complete_annotations.count() == 0:
@@ -121,7 +131,7 @@ class OrdinalTask(Task):
         alpha = metric.ordinal_krippendorff_alpha(
             metric.format_annotations_queryset(
                 Annotation.objects.filter(
-                    document_id__in=all_complete_annotations.values('document_id'),
+                    document_id__in=all_complete_annotations.values("document_id"),
                     task=self,
                     batch=batch,
                 )
@@ -132,4 +142,3 @@ class OrdinalTask(Task):
             "metric": "Weighted Krippendorff's alpha",
             "value": alpha,
         }
-

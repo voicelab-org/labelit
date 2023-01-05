@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0012_livecorrectlabel_livecorrecttask'),
+        ("labelit", "0012_livecorrectlabel_livecorrecttask"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='categoricaltask',
-            name='are_categories_exclusive',
-            field=models.BooleanField(default=True, verbose_name='\n        If true, the annotator cannot select more than one category.\n        '),
+            model_name="categoricaltask",
+            name="are_categories_exclusive",
+            field=models.BooleanField(
+                default=True,
+                verbose_name="\n        If true, the annotator cannot select more than one category.\n        ",
+            ),
         ),
     ]

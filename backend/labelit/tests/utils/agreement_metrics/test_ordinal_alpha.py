@@ -2,12 +2,20 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from labelit.utils.agreement_metrics.ordinal_alpha import OrdinalAlphaMetric
-from labelit.models import Project, Dataset, Document, Batch, OrdinalTask, \
-    OrdinalLabel, Annotation
+from labelit.models import (
+    Project,
+    Dataset,
+    Document,
+    Batch,
+    OrdinalTask,
+    OrdinalLabel,
+    Annotation,
+)
 from users.models import User
 
+
 class OrdinalAlphaTests(TestCase):
-    fixtures = ['test_data']
+    fixtures = ["test_data"]
 
     def setUp(self):
         self.project = Project.objects.get(pk=6)
@@ -22,7 +30,7 @@ class OrdinalAlphaTests(TestCase):
             dataset=self.dataset,
             name="Batch 1",
             project=self.project,
-            num_annotators_per_document=2
+            num_annotators_per_document=2,
         )
         self.batch.annotators.set([self.u1, self.u2])
         self.batch.documents.set([self.doc1, self.doc2, self.doc3])
@@ -31,18 +39,9 @@ class OrdinalAlphaTests(TestCase):
             name="Arousa",
         )
         self.project.tasks.add(self.task)
-        self.label1 = OrdinalLabel.objects.create(
-            index=0,
-            task=self.task
-        )
-        self.label2 = OrdinalLabel.objects.create(
-            index=1,
-            task=self.task
-        )
-        self.label3 = OrdinalLabel.objects.create(
-            index=2,
-            task=self.task
-        )
+        self.label1 = OrdinalLabel.objects.create(index=0, task=self.task)
+        self.label2 = OrdinalLabel.objects.create(index=1, task=self.task)
+        self.label3 = OrdinalLabel.objects.create(index=2, task=self.task)
         self.a1 = Annotation.objects.create(
             is_done=True,
             annotator=self.u1,
@@ -89,51 +88,36 @@ class OrdinalAlphaTests(TestCase):
         self.metric = OrdinalAlphaMetric(num_labels=3)
 
     def test_format_labelit_ordinal_annotations(self):
-        formatted = self.metric.format_annotations_queryset(
-            Annotation.objects.all()
-        )
+        formatted = self.metric.format_annotations_queryset(Annotation.objects.all())
         self.assertEqual(
             set(formatted),
             {
-                (4, 6, self.label1.pk), (1, 7, self.label1.pk), (1, 6, self.label1.pk), (4, 7, self.label2.pk)
-            }
+                (4, 6, self.label1.pk),
+                (1, 7, self.label1.pk),
+                (1, 6, self.label1.pk),
+                (4, 7, self.label2.pk),
+            },
         )
 
     def test_ordinal_distance(self):
         num_labels = 3
-        self.assertEqual(
-            self.metric.ordinal_distance(0, 2),
-            1.0
-        )
-        self.assertEqual(
-            self.metric.ordinal_distance(0, 1),
-            .5
-        )
+        self.assertEqual(self.metric.ordinal_distance(0, 2), 1.0)
+        self.assertEqual(self.metric.ordinal_distance(0, 1), 0.5)
 
     def test_ordinal_krippendorff_alpha(self):
-
         def _alpha():
             return self.metric.ordinal_krippendorff_alpha(
-                data=self.metric.format_annotations_queryset(
-                    Annotation.objects.all()
-                ),
+                data=self.metric.format_annotations_queryset(Annotation.objects.all()),
             )
+
         alpha = _alpha()
-        self.assertTrue(
-            alpha <= 1.0
-        )
-        self.assertEqual(
-            alpha,
-            0.0
-        )
+        self.assertTrue(alpha <= 1.0)
+        self.assertEqual(alpha, 0.0)
 
         self.a4.labels.set([self.label1])
         alpha = _alpha()
 
-        self.assertEqual(
-            alpha,
-            1.0
-        )
+        self.assertEqual(alpha, 1.0)
 
         a5 = Annotation.objects.create(
             is_done=True,
@@ -141,7 +125,7 @@ class OrdinalAlphaTests(TestCase):
             annotator=self.u1,
             project=self.project,
             batch=self.batch,
-            task=self.task
+            task=self.task,
         )
         a5.labels.set([self.label3])
         a5.save()
@@ -152,27 +136,18 @@ class OrdinalAlphaTests(TestCase):
             annotator=self.u2,
             project=self.project,
             batch=self.batch,
-            task=self.task
+            task=self.task,
         )
         a6.labels.set([self.label3])
         a6.save()
 
-        self.assertEqual(
-            _alpha(),
-            1.0
-        )
+        self.assertEqual(_alpha(), 1.0)
 
         a6.labels.set([self.label2])
         a6.save()
 
-        self.assertEqual(
-            round(_alpha(), 3),
-            .615
-        )
+        self.assertEqual(round(_alpha(), 3), 0.615)
 
         a6.labels.set([self.label1])
         a6.save()
-        self.assertEqual(
-            _alpha(),
-            .0
-        )
+        self.assertEqual(_alpha(), 0.0)

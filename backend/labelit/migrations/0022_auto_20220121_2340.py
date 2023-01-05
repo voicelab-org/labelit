@@ -7,17 +7,22 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0021_auto_20220121_2338'),
+        ("labelit", "0021_auto_20220121_2338"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='completeddocumentannotatorpair',
-            name='project',
+            model_name="completeddocumentannotatorpair",
+            name="project",
         ),
         migrations.AddField(
-            model_name='completeddocumentannotatorpair',
-            name='project',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='completed_document_annotator_pairs', to='labelit.project'),
+            model_name="completeddocumentannotatorpair",
+            name="project",
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="completed_document_annotator_pairs",
+                to="labelit.project",
+            ),
         ),
     ]

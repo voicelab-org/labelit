@@ -6,18 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0038_auto_20220908_1933'),
+        ("labelit", "0038_auto_20220908_1933"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='do_display_timer_time',
-            field=models.BooleanField(default=False, verbose_name='\n        If true, the time recorded by the timer (with inactivity pausing) will be displayed to the annotator.\n        Useful for QA also.\n        '),
+            model_name="project",
+            name="do_display_timer_time",
+            field=models.BooleanField(
+                default=False,
+                verbose_name="\n        If true, the time recorded by the timer (with inactivity pausing) will be displayed to the annotator.\n        Useful for QA also.\n        ",
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='does_audio_playing_count_as_activity',
-            field=models.BooleanField(default=False, verbose_name='\n        If true, the timer will not pause while audio playing, even if no user interactions (mouse clicks, typing)\n        occur.\n        '),
+            model_name="project",
+            name="does_audio_playing_count_as_activity",
+            field=models.BooleanField(
+                default=False,
+                verbose_name="\n        If true, the timer will not pause while audio playing, even if no user interactions (mouse clicks, typing)\n        occur.\n        ",
+            ),
         ),
     ]

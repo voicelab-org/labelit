@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('labelit', '0024_dataset_is_streamed'),
-        ('labelit', '0026_auto_20220228_1016'),
+        ("labelit", "0024_dataset_is_streamed"),
+        ("labelit", "0026_auto_20220228_1016"),
     ]
 
-    operations = [
-    ]
+    operations = []

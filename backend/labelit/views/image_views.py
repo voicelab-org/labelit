@@ -9,14 +9,13 @@ class ImageUpload(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        file_obj = request.FILES.get('image', '')
+        file_obj = request.FILES.get("image", "")
         # TODO: validate file
 
-        file_directory_within_bucket = ''
+        file_directory_within_bucket = ""
 
         file_path_within_bucket = os.path.join(
-            file_directory_within_bucket,
-            file_obj.name
+            file_directory_within_bucket, file_obj.name
         )
 
         image_storage.save(file_path_within_bucket, file_obj)
@@ -25,10 +24,12 @@ class ImageUpload(APIView):
         # HACK
         # file_url = "http://0.0.0.0:8000" + file_url
 
-        return JsonResponse({
-            'message': 'OK',
-            'url': file_url,
-        })
+        return JsonResponse(
+            {
+                "message": "OK",
+                "url": file_url,
+            }
+        )
 
         """
         if not image_storage.exists(file_path_within_bucket):  # avoid overwriting existing file
@@ -59,7 +60,9 @@ class ImageDownload(APIView):
     def get(self, request, filename):
 
         if image_storage.exists(filename):
-            file = image_storage.open(filename, 'rb')
-            response = HttpResponse(file.read(), content_type="image/"+filename.split('.')[1])
-            response['Content-Disposition'] = 'inline; filename=' + filename
+            file = image_storage.open(filename, "rb")
+            response = HttpResponse(
+                file.read(), content_type="image/" + filename.split(".")[1]
+            )
+            response["Content-Disposition"] = "inline; filename=" + filename
             return response

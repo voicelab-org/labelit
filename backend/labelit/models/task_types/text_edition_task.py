@@ -19,18 +19,17 @@ class TextEditionTask(Task):
     )
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<TextEditionTask ({}): {}>".format(self.pk, self.name)
 
     def validate_labels(
-            self,
-            labels,
-            is_final,
+        self,
+        labels,
+        is_final,
     ):
         resolve(self.validator)().validate(labels[0].edited_text)
 
     def get_agreement_stats(self, batch):
         return {}
-

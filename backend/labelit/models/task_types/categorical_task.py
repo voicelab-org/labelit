@@ -18,16 +18,12 @@ class CategoricalTask(Task):
     )
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<CategoricalTask ({}): {}>".format(self.pk, self.name)
 
-    def validate_labels(
-            self,
-            labels,
-            is_final
-    ):
+    def validate_labels(self, labels, is_final):
         if is_final:
             if len(labels) == 0:
                 raise ValidationError(
@@ -47,21 +43,24 @@ class CategoricalTask(Task):
     def _get_stats(self, done_annotations, annotators):
         stats = {}
 
-        stats['annotation_distribution'] = done_annotations.values('labels__name', 'labels__color').order_by(
-            'labels__name').annotate(
-            count=models.Count('id')
+        stats["annotation_distribution"] = (
+            done_annotations.values("labels__name", "labels__color")
+            .order_by("labels__name")
+            .annotate(count=models.Count("id"))
         )
 
-        stats['per_annotator_distributions'] = []
+        stats["per_annotator_distributions"] = []
 
         for annotator in annotators:
             if done_annotations.filter(annotator=annotator).count():
-                stats['per_annotator_distributions'].append(
-                    done_annotations.filter(annotator=annotator).values('labels__name', 'labels__color').order_by(
-                        'labels__name').annotate(
-                        count=models.Count('id'),
-                        annotator_first_name=F('annotator__first_name'),
-                        annotator_last_name=F('annotator__last_name'),
+                stats["per_annotator_distributions"].append(
+                    done_annotations.filter(annotator=annotator)
+                    .values("labels__name", "labels__color")
+                    .order_by("labels__name")
+                    .annotate(
+                        count=models.Count("id"),
+                        annotator_first_name=F("annotator__first_name"),
+                        annotator_last_name=F("annotator__last_name"),
                     )
                 )
 
@@ -92,9 +91,9 @@ class CategoricalTask(Task):
         annotators = batch.annotators.all()
         stats = self._get_stats(done_annotations, annotators)
         try:
-            stats['agreement'] = self.get_agreement_stats(batch)
+            stats["agreement"] = self.get_agreement_stats(batch)
         except Http404:
-            stats['agreement'] = None
+            stats["agreement"] = None
 
         return stats
 
@@ -107,13 +106,16 @@ class CategoricalTask(Task):
             #    agreement stats not implemented.
             #    """
             # )
-        all_doc_stats = batch.annotations.filter(
-            is_done=True,
-            task=self,
-        ).values('document_id').annotate(
-            num_annotations_in_doc=models.Count('id')
-        ).filter(
-            num_annotations_in_doc=batch.num_annotators_per_document,
+        all_doc_stats = (
+            batch.annotations.filter(
+                is_done=True,
+                task=self,
+            )
+            .values("document_id")
+            .annotate(num_annotations_in_doc=models.Count("id"))
+            .filter(
+                num_annotations_in_doc=batch.num_annotators_per_document,
+            )
         )
 
         if all_doc_stats.count() == 0:
@@ -122,31 +124,26 @@ class CategoricalTask(Task):
         for label in self.labels.all():
             all_doc_stats = all_doc_stats.annotate(
                 **{
-                    'num_with_label_{}'.format(label.pk): models.Count(
-                        'labels',
-                        filter=models.Q(
-                            **{
-                                'labels__in': [label]
-                            }
-                        )
+                    "num_with_label_{}".format(label.pk): models.Count(
+                        "labels", filter=models.Q(**{"labels__in": [label]})
                     )
                 }
             )
 
         M = []
-        categories = [k for k in all_doc_stats[0].keys() if 'num_with_label' in k]
+        categories = [k for k in all_doc_stats[0].keys() if "num_with_label" in k]
         categories.sort()
         for doc_stats in all_doc_stats:
             row = []
             for category in categories:
-                row.append(
-                    doc_stats[category]
-                )
+                row.append(doc_stats[category])
             M.append(row)
 
-        kappa = fleiss_kappa(M, method='fleiss')
+        kappa = fleiss_kappa(M, method="fleiss")
 
-        if math.isnan(kappa):  # can happen e.g. when a single doc has been annotated so far
+        if math.isnan(
+            kappa
+        ):  # can happen e.g. when a single doc has been annotated so far
             raise Http404
 
         return {

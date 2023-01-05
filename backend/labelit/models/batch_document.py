@@ -6,12 +6,12 @@ import math
 
 class BatchDocument(BatchUnit):
     document = models.ForeignKey(
-        'labelit.Document',
+        "labelit.Document",
         on_delete=models.CASCADE,
     )
 
     class Meta:
-        app_label = 'labelit'
+        app_label = "labelit"
 
     def __str__(self):
         return "<BatchDocument: {}%{}>".format(self.batch, self.document)
@@ -29,13 +29,11 @@ class BatchDocument(BatchUnit):
             document=self.document,
             batch=self.batch,
         )
-        done_annotations_on_doc = annotations.filter(
-            is_done=True
-        )
+        done_annotations_on_doc = annotations.filter(is_done=True)
 
         num_tasks = self.batch.project.tasks.all().count()
         self.num_done_annotators = math.floor(
             done_annotations_on_doc.count() / num_tasks
         )
-        self.num_annotators = annotations.values('annotator_id').distinct().count()
+        self.num_annotators = annotations.values("annotator_id").distinct().count()
         self.save()
