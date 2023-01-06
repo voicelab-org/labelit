@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labelit-backend
+  labels:
+    app: labelit
+    type: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: labelit
+      type: backend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 50%
+  template:
+    metadata:
+      labels:
+        app: labelit
+        type: backend
+    spec:
+      containers:
+        - name: labelit-backend
+          image: {{ .Values.backend.docker.image }}:{{ .Values.backend.docker.tag }}
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            {{- range $k, $v := .Values.backend.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote -}}
+            {{ end }}
+          imagePullPolicy: IfNotPresent
+          {{- with .Values.backend.resources }}
+          resources:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /probes/readiness
+              port: 8000
+            initialDelaySeconds: 0
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /probes/liveness
+              port: 8000
+            initialDelaySeconds: 0
+            periodSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /probes/startup
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      restartPolicy: Always
+      {{- with .Values.backend.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.backend.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+      {{- end }}

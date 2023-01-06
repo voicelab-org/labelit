@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labelit-frontend
+  labels:
+    app: labelit
+    type: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: labelit
+      type: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 50%
+  template:
+    metadata:
+      labels:
+        app: labelit
+        type: frontend
+    spec:
+      containers:
+        - name: labelit-frontend
+          image: {{ .Values.frontend.docker.image }}:{{ .Values.frontend.docker.tag }}
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            {{- range $k, $v := .Values.frontend.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote -}}
+            {{ end }}
+            - name: VUE_APP_BACKEND_API
+              value: https://{{ .Values.ingress.host }}/api
+          {{- with .Values.frontend.resources }}
+          resources:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      {{- with .Values.frontend.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.frontend.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
