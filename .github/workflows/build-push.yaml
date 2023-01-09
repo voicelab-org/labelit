@@ -107,7 +107,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          file: Dockerfile.backend.dev
+          file: Dockerfile.backend.prod
           push: true
           tags: ${{ needs.init.outputs.DOCKER_TAGS }}
 
@@ -128,7 +128,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          file: Dockerfile.frontend.dev
+          file: Dockerfile.frontend.prod
           push: true
           tags: ${{ needs.init.outputs.DOCKER_TAGS }}
 
