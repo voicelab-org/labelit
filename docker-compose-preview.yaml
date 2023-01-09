@@ -1,6 +1,5 @@
 version: "3.7"
 
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -12,7 +11,6 @@ services:
       - POSTGRES_DB=labelit_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
 
   pgadmin:
     image: dpage/pgadmin4
@@ -34,14 +32,12 @@ services:
     volumes:
       - labelit_s3data:/export
     environment:
-      MINIO_ACCESS_KEY: EXAMPLEKEYID
-      MINIO_SECRET_KEY: EXAMPLEKEYCONTENT
+      MINIO_ROOT_USER: EXAMPLEKEYID
+      MINIO_ROOT_PASSWORD: EXAMPLEKEYCONTENT
     command: server /export
 
   backend:
     image: levoicelab/labelit-backend:latest
-    volumes:
-      - ./backend:/code
     environment:
       DJANGO_DEBUG: true
       DB_HOST: postgres
@@ -72,11 +68,10 @@ services:
 
   frontend:
     image: levoicelab/labelit-frontend:latest
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    environment:
+      VUE_APP_BACKEND_API: https://localhost:8000/api
     ports:
-      - 8081:8080
+      - 8080:80
     depends_on:
       - backend
 
