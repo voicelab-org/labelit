@@ -1,0 +1,49 @@
+backend:
+  docker:
+    image: 367353094751.dkr.ecr.eu-west-1.amazonaws.com/batvoice-labelit-backend
+    tag: 37648c90
+  # You can add as much env variables as you want
+  env:
+    
+  nodeSelector:
+    role: worker
+  tolerations:
+    - key: instancetype
+      value: worker
+      effect: NoSchedule
+  resources:
+    requests:
+      cpu: "400m"
+      memory: "1Gi"
+    limits:
+      cpu: "500m"
+      memory: "1.5Gi"
+
+frontend:
+  docker:
+    image: 367353094751.dkr.ecr.eu-west-1.amazonaws.com/batvoice-labelit-frontend
+    tag: a90f2f8a
+  nodeSelector:
+    role: worker
+  tolerations:
+    - key: instancetype
+      value: worker
+      effect: NoSchedule
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "50Mi"
+    limits:
+      cpu: "100m"
+      memory: "100Mi"
+  env:
+    # You can add as much env variables as you want
+    # VUE_APP_BACKEND_API is automatically computed using ingress.host value
+
+ingress:
+  # Without https and slashes
+  host: labelit.batvoice.ai
+  annotations:
+  # As many ingress annotations as you want
+  # Example:
+  #   cert-manager.io/cluster-issuer: letsencrypt-dns01-gandi
