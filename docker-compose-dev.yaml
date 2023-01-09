@@ -34,8 +34,8 @@ services:
     volumes:
       - labelit_s3data:/export
     environment:
-      MINIO_ACCESS_KEY: EXAMPLEKEYID
-      MINIO_SECRET_KEY: EXAMPLEKEYCONTENT
+      MINIO_ROOT_USER: EXAMPLEKEYID
+      MINIO_ROOT_PASSWORD: EXAMPLEKEYCONTENT
     command: server /export
 
   backend:

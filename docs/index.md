@@ -1,5 +1,7 @@
 # Introduction
 
+## What is Labelit ?
+
 Labelit is an extensible web-based annotation tool currently supporting:
 
 * Text and audio annotation (summative)
@@ -9,12 +11,16 @@ Labelit is an extensible web-based annotation tool currently supporting:
 * Text edition (correction, punctuation, etc.)
 * Audio region segmentation
 
-The tool comes with utilities for distributing work across multiple annotators,
-monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA)
- and managing datasets.
+The tool comes with utilities for distributing work across multiple annotators, monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA) and managing datasets.
 
-Multiple annotation tasks (e.g. classification + transcription) can be combined
-in a single project. (Tasks cannot yet be *nested*, but it's in the roadmap)
+Multiple annotation tasks (e.g. classification + transcription) can be combined in a single project. (Tasks cannot yet be *nested*, but it's in the roadmap)
 
-Labelit is designed for extensibility: new annotation tasks / schemas
-can be created by contributors, while retaining generic features.
+Labelit is designed for extensibility: new annotation tasks / schemas can be created by contributors, while retaining generic features.
+
+## Supported installation types
+
+Labelit supports several ways of installation:
+
+- __Saas__: _soon_
+- __Local__: Launch Labelit directly on your computer.
+- __Self-hosted__: Self host labelit in a Kubernetes cluster thanks to the custom helm chart.
