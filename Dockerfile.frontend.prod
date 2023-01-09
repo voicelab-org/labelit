@@ -1,0 +1,28 @@
+FROM node:15-alpine3.13 as build-stage
+
+WORKDIR /app
+
+COPY ./frontend /app/
+
+RUN npm install
+
+RUN npm run build
+
+# étape de production
+FROM nginx:stable-alpine as production-stage
+
+COPY ./frontend/nginx.conf /etc/nginx/nginx.conf
+
+WORKDIR /usr/share/nginx/html
+
+RUN rm -rf ./*
+
+COPY --from=build-stage /app/dist .
+
+COPY ./frontend/prod.entrypoint.sh /entrypoint.sh
+
+EXPOSE 80
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
