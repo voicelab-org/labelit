@@ -110,7 +110,7 @@ jobs:
           DOCKER_TAG_PREFIX: "levoicelab/labelit-backend:"
         run: |
           DOCKER_TAGS=$(echo "${{ needs.init.outputs.DOCKER_TAGS }}" \
-            | sed 's/,/,${{ env.DOCKER_TAG_PREFIX }}/g') 
+            | sed 's!,!,${{ env.DOCKER_TAG_PREFIX }}!g') 
           DOCKER_TAGS=${{ env.DOCKER_TAG_PREFIX }}$DOCKER_TAGS
       - name: Build and push
         uses: docker/build-push-action@v3
@@ -139,7 +139,7 @@ jobs:
           DOCKER_TAG_PREFIX: "levoicelab/labelit-frontend:"
         run: |
           DOCKER_TAGS=$(echo "${{ needs.init.outputs.DOCKER_TAGS }}" \
-            | sed 's/,/,${{ env.DOCKER_TAG_PREFIX }}/g') 
+            | sed 's!,!,${{ env.DOCKER_TAG_PREFIX }}!g') 
           DOCKER_TAGS=${{ env.DOCKER_TAG_PREFIX }}$DOCKER_TAGS
       - name: Build and push
         uses: docker/build-push-action@v3
