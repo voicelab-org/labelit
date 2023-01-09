@@ -64,13 +64,13 @@ jobs:
           GIT_TAG=""
 
           if ${{ steps.event-type.outputs.MERGE_FROM_ANY_BRANCH_TO_MASTER == 'true' }}; then
-            DOCKER_TAG=${{ steps.next-version-merge-from-any-branch-to-master.outputs.next-version }}
-            GIT_TAG=$DOCKER_TAG
+            DOCKER_TAGS=${{ steps.next-version-merge-from-any-branch-to-master.outputs.next-version }}
+            GIT_TAG=$DOCKER_TAGS
             DOCKER_TAGS=$DOCKER_TAGS,latest
             SHOULD_TAG_MASTER_BRANCH=true
           elif ${{ steps.event-type.outputs.MERGE_FROM_DEVELOP_TO_MASTER == 'true' }}; then
             DOCKER_TAGS=${{ steps.next-version-merge-from-develop-to-master.outputs.next-version }}
-            GIT_TAG=$DOCKER_TAG
+            GIT_TAG=$DOCKER_TAGS
             SHOULD_TAG_MASTER_BRANCH=true
             DOCKER_TAGS=$DOCKER_TAGS,latest
           elif ${{ steps.event-type.outputs.MERGE_FROM_ANY_BRANCH_TO_DEVELOP == 'true' }}; then
