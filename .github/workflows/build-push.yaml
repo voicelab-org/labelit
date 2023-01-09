@@ -91,7 +91,7 @@ jobs:
           echo "SHOULD_TAG_MASTER_BRANCH=$SHOULD_TAG_MASTER_BRANCH" >> $GITHUB_OUTPUT
 
   build-push-backend:
-    name: Build docker image
+    name: Build backend docker image
     runs-on: ubuntu-latest
     needs: [init]
     steps:
@@ -110,7 +110,7 @@ jobs:
           tags: ${{ needs.init.outputs.DOCKER_TAGS }}
 
   build-push-frontend:
-    name: Build docker image
+    name: Build frontend docker image
     runs-on: ubuntu-latest
     needs: [init]
     steps:
