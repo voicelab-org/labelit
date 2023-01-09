@@ -153,3 +153,21 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+
+  merge-master-to-develop:
+    name: Merge master branch to develop
+    if: ${{ needs.init.outputs.SHOULD_TAG_MASTER_BRANCH == 'true' }}
+    runs-on: ubuntu-latest
+    needs: [
+      init,
+      build-push-backend,
+      build-push-frontend,
+    ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Merge master -> develop
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: master
+          target_branch: develop
