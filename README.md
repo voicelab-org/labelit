@@ -2,12 +2,12 @@
 
 Labelit is an extensible web-based annotation tool currently supporting:
 
-* Text and audio annotation (summative)
-* Categorical, ordinal classification
-* Transcription
-* Named entity annotation (highlighting and labeling)
-* Text edition (correction, punctuation, etc.)
-* Audio region segmentation
+- Text and audio annotation (summative)
+- Categorical, ordinal classification
+- Transcription
+- Named entity annotation (highlighting and labeling)
+- Text edition (correction, punctuation, etc.)
+- Audio region segmentation
 
 The tool comes with utilities for distributing work across multiple annotators,
 monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA)
@@ -88,5 +88,3 @@ types of tasks (ex. transcription + categorization) can also be combined. For ea
 audio, text or both to be annotated
 
 ![Two-task setup](./screenshots/qa_multi_task_ordinal_annotation.png)
-
-
