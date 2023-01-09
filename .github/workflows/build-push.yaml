@@ -112,6 +112,7 @@ jobs:
           DOCKER_TAGS=$(echo "${{ needs.init.outputs.DOCKER_TAGS }}" \
             | sed 's!,!,${{ env.DOCKER_TAG_PREFIX }}!g') 
           DOCKER_TAGS=${{ env.DOCKER_TAG_PREFIX }}$DOCKER_TAGS
+          echo "DOCKER_TAGS=$DOCKER_TAGS" >> $GITHUB_OUTPUT
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
@@ -141,6 +142,7 @@ jobs:
           DOCKER_TAGS=$(echo "${{ needs.init.outputs.DOCKER_TAGS }}" \
             | sed 's!,!,${{ env.DOCKER_TAG_PREFIX }}!g') 
           DOCKER_TAGS=${{ env.DOCKER_TAG_PREFIX }}$DOCKER_TAGS
+          echo "DOCKER_TAGS=$DOCKER_TAGS" >> $GITHUB_OUTPUT
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
