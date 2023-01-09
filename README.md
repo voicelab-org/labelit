@@ -9,22 +9,17 @@ Labelit is an extensible web-based annotation tool currently supporting:
 - Text edition (correction, punctuation, etc.)
 - Audio region segmentation
 
-The tool comes with utilities for distributing work across multiple annotators,
-monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA)
- and managing datasets.
+The tool comes with utilities for distributing work across multiple annotators, monitoring progress and (where applicable) annotator agreement, Quality Assurance (QA) and managing datasets.
 
-Multiple annotation tasks (e.g. classification + transcription) can be combined
-in a single project
+Multiple annotation tasks (e.g. classification + transcription) can be combined in a single project.
 
-Labelit is designed for extensibility: new annotation tasks / schemas
-can be created by contributors, while retaining generic features.
+Labelit is designed for extensibility: new annotation tasks / schemas can be created by contributors, while retaining generic features.
 
 ### Demo
 
 https://labelit.demo.hosting.call.watch
 annotator account: username: demo@demo.com, password: dem0#nnotator
 QA account: username: qa@qa.com, password: demo
-
 
 ### Documentation
 
@@ -48,11 +43,9 @@ The documentation will be available locally at `127.0.0.1:8000` with live reload
 
 The build is handled by ReadTheDocs. 
 
-Building must be triggered manually from readthedocs (Projects > Labelit) by clicking the "Build version" button
-in the overview tab.
+Building must be triggered manually from readthedocs (Projects > Labelit) by clicking the "Build version" button in the overview tab.
 
-You *must* be added as a maintainer on readthedocs in order to view the project
-and launch the build and publication.
+You *must* be added as a maintainer on readthedocs in order to view the project and launch the build and publication.
 
 By default, the latest version of the master branch is used as a starting point for building.
 
@@ -62,11 +55,7 @@ Entity annotation (WIP) in labelit in QA mode. Annotations can be validated or s
 
 ![Entity annotation](./screenshots/entities_qa.png)
 
-Annotation on labelit is divided into projects. Each project defines a set of annotation tasks and is further 
-divided into batches. The following screenshot shows the creation of a batch. Labelit
-enables annotation managers to configure for each batch: which data to annotate and how much, the number of participants,
-the number of annotators per document and how the documents are distributed among annotators (even or possibly varying
-number of documents across annotators)
+Annotation on labelit is divided into projects. Each project defines a set of annotation tasks and is further divided into batches. The following screenshot shows the creation of a batch. Labelit enables annotation managers to configure for each batch: which data to annotate and how much, the number of participants, the number of annotators per document and how the documents are distributed among annotators (even or possibly varying number of documents across annotators)
 
 ![Batch creation](./screenshots/batch_creation.png)
 
