@@ -104,12 +104,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Compute full docker tags
+        id: full-docker-tags
+        env:
+          DOCKER_TAG_PREFIX: "levoicelab/labelit-backend:"
+        run: |
+          DOCKER_TAGS=$(echo "${{ needs.init.output.DOCKER_TAGS }}" \
+            | sed 's/,/,${{ env.DOCKER_TAG_PREFIX }}/g') 
+          DOCKER_TAGS=${{ env.DOCKER_TAG_PREFIX }}$DOCKER_TAGS
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.backend.prod
           push: true
-          tags: ${{ needs.init.outputs.DOCKER_TAGS }}
+          tags: ${{ steps.full-docker-tags.outputs.DOCKER_TAGS }}
 
   build-push-frontend:
     name: Build & push frontend docker image
@@ -125,13 +133,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Compute full docker tags
+        id: full-docker-tags
+        env:
+          DOCKER_TAG_PREFIX: "levoicelab/labelit-frontend:"
+        run: |
+          DOCKER_TAGS=$(echo "${{ needs.init.output.DOCKER_TAGS }}" \
+            | sed 's/,/,${{ env.DOCKER_TAG_PREFIX }}/g') 
+          DOCKER_TAGS=${{ env.DOCKER_TAG_PREFIX }}$DOCKER_TAGS
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.frontend.prod
           push: true
-          tags: ${{ needs.init.outputs.DOCKER_TAGS }}
-
+          tags: ${{ steps.full-docker-tags.outputs.DOCKER_TAGS }}
   tag-master-branch:
     name: Tag git repository
     if: ${{ needs.init.outputs.SHOULD_TAG_MASTER_BRANCH == 'true' }}
