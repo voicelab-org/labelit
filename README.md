@@ -1,4 +1,9 @@
-## Labelit
+# Labelit
+
+[![](https://img.shields.io/github/v/release/voicelab-org/labelit)](https://github.com/voicelab-org/labelit/releases)
+[![Build](https://github.com/voicelab-org/labelit/actions/workflows/build-push.yaml/badge.svg)](https://github.com/voicelab-org/labelit/actions/workflows/build-push.yaml)
+
+## Introduction
 
 Labelit is an extensible web-based annotation tool currently supporting:
 
@@ -15,7 +20,7 @@ Multiple annotation tasks (e.g. classification + transcription) can be combined 
 
 Labelit is designed for extensibility: new annotation tasks / schemas can be created by contributors, while retaining generic features.
 
-### Demo
+## Demo
 
 A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https://labelit.demo.batvoice.ai)
 - Annotator account: 
@@ -25,12 +30,12 @@ A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https:
   - Username: `qa@qa.com`
   - Password: `demo`
 
-### Documentation
+## Documentation
 
 We use `mkdocs` to maintain our documentation.
 The documentation (currently, only boilerplate) is hosted on [readthedocs.org](https://labelit.readthedocs.io/en/latest/)
 
-#### Documentation editing
+### Documentation editing
 
 To edit the documentation, first install the same `mkdocs` version that readthedocs will use
 during automatic building.
@@ -43,9 +48,9 @@ Then:
 
 The documentation will be available locally at `127.0.0.1:8000` with live reloading as you edit the documentation.
 
-#### Documentation building
+### Documentation building
 
-The build is handled by ReadTheDocs. 
+The build is handled by [ReadTheDocs](https://readthedocs.org/). 
 
 Building must be triggered manually from readthedocs (Projects > Labelit) by clicking the "Build version" button in the overview tab.
 
@@ -53,7 +58,7 @@ You *must* be added as a maintainer on readthedocs in order to view the project 
 
 By default, the latest version of the master branch is used as a starting point for building.
 
-### Overview
+### Key features
 
 Entity annotation (WIP) in labelit in QA mode. Annotations can be validated or sent for review:
 

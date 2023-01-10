@@ -17,6 +17,16 @@ Multiple annotation tasks (e.g. classification + transcription) can be combined 
 
 Labelit is designed for extensibility: new annotation tasks / schemas can be created by contributors, while retaining generic features.
 
+## Demo application
+
+A demo version of `LabelIt` is hosted at [https://labelit.demo.batvoice.ai](https://labelit.demo.batvoice.ai)
+- Annotator account: 
+  - Username: `demo@demo.com`
+  - Password: `dem0#nnotator`
+- QA account:
+  - Username: `qa@qa.com`
+  - Password: `demo`
+
 ## Supported installation types
 
 Labelit supports several ways of installation:
