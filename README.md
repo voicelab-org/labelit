@@ -17,9 +17,13 @@ Labelit is designed for extensibility: new annotation tasks / schemas can be cre
 
 ### Demo
 
-https://labelit.demo.hosting.call.watch
-annotator account: username: demo@demo.com, password: dem0#nnotator
-QA account: username: qa@qa.com, password: demo
+A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https://labelit.demo.batvoice.ai)
+- Annotator account: 
+  - Username: `demo@demo.com`
+  - Password: `dem0#nnotator`
+- QA account:
+  - Username: `qa@qa.com`
+  - Password: `demo`
 
 ### Documentation
 
