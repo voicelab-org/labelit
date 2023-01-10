@@ -80,7 +80,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     ports:
-      - 8081:8080
+      - 8080:8080
     depends_on:
       - backend
 
