@@ -1,7 +1,7 @@
 backend:
   docker:
-    image: 367353094751.dkr.ecr.eu-west-1.amazonaws.com/batvoice-labelit-backend
-    tag: 37648c90
+    image: levoicelab/labelit-backend
+    tag: latest
   # You can add as much env variables as you want
   env:
     
@@ -21,8 +21,8 @@ backend:
 
 frontend:
   docker:
-    image: 367353094751.dkr.ecr.eu-west-1.amazonaws.com/batvoice-labelit-frontend
-    tag: a90f2f8a
+    image: levoicelab/labelit-frontend
+    tag: latest
   nodeSelector:
     role: worker
   tolerations:
