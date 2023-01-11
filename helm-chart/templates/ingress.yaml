@@ -10,7 +10,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - {{ .Values.ingress.host }}
+        - {{ required "Value `.ingress.host` must be set" .Values.ingress.host }}
       secretName: labelit-tls
   rules:
     - host: {{ .Values.ingress.host }}

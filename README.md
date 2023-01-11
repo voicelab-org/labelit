@@ -1,7 +1,8 @@
 # Labelit
 
-[![](https://img.shields.io/github/v/release/voicelab-org/labelit)](https://github.com/voicelab-org/labelit/releases)
 [![Build](https://github.com/voicelab-org/labelit/actions/workflows/build-push.yaml/badge.svg)](https://github.com/voicelab-org/labelit/actions/workflows/build-push.yaml)
+[![](https://img.shields.io/github/v/release/voicelab-org/labelit)](https://github.com/voicelab-org/labelit/releases)
+[![Documentation Status](https://readthedocs.org/projects/labelit/badge/?version=latest)](https://labelit.readthedocs.io/en/latest/?badge=latest)
 
 ## Introduction
 
@@ -33,7 +34,7 @@ A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https:
 ## Documentation
 
 We use `mkdocs` to maintain our documentation.
-The documentation (currently, only boilerplate) is hosted on [readthedocs.org](https://labelit.readthedocs.io/en/latest/)
+You can read the documentation on [https://labelit.readthedocs.io/en/latest/](https://labelit.readthedocs.io/en/latest/)
 
 ### Documentation editing
 
@@ -68,8 +69,7 @@ Annotation on labelit is divided into projects. Each project defines a set of an
 
 ![Batch creation](./screenshots/batch_creation.png)
 
-Generic and task-specific information and statistics are provided for each batch.
-For some tasks, agreement and other quality metrics are automatically computed.
+Generic and task-specific information and statistics are provided for each batch. For some tasks, agreement and other quality metrics are automatically computed.
 
 ![Batch stats](./screenshots/batch_stats.png)
 
@@ -81,8 +81,6 @@ HTML instructions can be edited by annotation managers and enriched with images 
 
 ![Guidelines](./screenshots/annotation_task_guidelines.png)
 
-You are free to choose which tasks to combine in a project. Here, two ordinal tasks are combined, but different
-types of tasks (ex. transcription + categorization) can also be combined. For each project you can specify if you want
-audio, text or both to be annotated
+You are free to choose which tasks to combine in a project. Here, two ordinal tasks are combined, but different types of tasks (ex. transcription + categorization) can also be combined. For each project you can specify if you want audio, text or both to be annotated
 
-![Two-task setup](./screenshots/qa_multi_task_ordinal_annotation.png)
+![Two-task setup](./screenshots/qa_multi_task_categorical_annotation.png)

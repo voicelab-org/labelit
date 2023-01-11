@@ -30,43 +30,24 @@ plugins:
         en: "This page isn't translated to English"
       translate_nav:
         fr:
-          Feature overview: "Aperçu des fonctionnalités"
-          Authentication and authorization: "Authentification et autorisation"
-          Dataset management: "Gestion des données"
-          Lexicons for test-based annotations: "Gestion des lexiques pour l'annotation textuelle"
-          Quality monitoring and annotator training: "Assurance qualité et formation des annotateurs"
-          Project management: "Gestion de projet"
-          Task management: "Gestion des tâches d'annotation"
-          Workload management: "Gestion de la charge de travail"
-          Extensibility with plugins: "Etendre labelit avec des plugins"
           Getting started: "Guide de prise en main"
-        en:
-          Feature overview: "Feature overview"
-          Authentication and authorization: "Authentication and authorization"
-          Dataset management: "Dataset management"
-          Lexicons for test-based annotations: "Lexicons for test-based annotations"
-          Quality monitoring and annotator training: "Quality monitoring and annotator training"
-          Project management: "Project management"
-          Task management: "Task management"
-          Workload management: "Workload management"
-          Extensibility with plugins: "Extensibility with plugins"
-          Getting started: "Getting started"
+          How to deploy ?: "Comment deployer ?"
 
 nav:
   - index.md
-  - index.fr.md
+  # TODO
+  # - index.fr.md
   - Getting started:
     - getting_started/01.local_installation.md
-    - getting_started/01.local_installation.fr.md
+    # TODO
+    # - getting_started/01.local_installation.fr.md
     - getting_started/02.register_users.md
-    - getting_started/02.register_users.fr.md
     - getting_started/03.first_dataset.md
-    - getting_started/03.first_dataset.fr.md
     - getting_started/04.first_task.md
-    - getting_started/04.first_task.fr.md
     - getting_started/05.first_project.md
-    - getting_started/05.first_project.fr.md
     - getting_started/06.assign_work.md
-    - getting_started/06.assign_work.fr.md
     - getting_started/07.annotate.md
-    - getting_started/07.annotate.fr.md
+  - How to deploy ?:
+    - how_to_deploy/01.requirements.md
+    - how_to_deploy/02.helm_chart.md
+    - how_to_deploy/03.environment_variables.md
