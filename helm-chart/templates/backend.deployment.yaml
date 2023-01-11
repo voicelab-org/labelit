@@ -33,6 +33,8 @@ spec:
             - name: {{ $k }}
               value: {{ $v | quote -}}
             {{ end }}
+            - name: ALLOWED_HOST
+              value: {{ .Values.ingress.host }}
           imagePullPolicy: IfNotPresent
           {{- with .Values.backend.resources }}
           resources:
