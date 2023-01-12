@@ -26,7 +26,7 @@ spec:
         - name: labelit-frontend
           image: {{ .Values.frontend.docker.image }}:{{ .Values.frontend.docker.tag }}
           ports:
-            - containerPort: 8000
+            - containerPort: 80
               protocol: TCP
           env:
             {{- range $k, $v := .Values.frontend.env }}
