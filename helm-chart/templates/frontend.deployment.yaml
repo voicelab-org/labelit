@@ -34,7 +34,7 @@ spec:
               value: {{ $v | quote -}}
             {{ end }}
             - name: VUE_APP_BACKEND_API
-              value: https://{{ .Values.ingress.host }}/api
+              value: https://{{ .Values.ingress.host }}/api/
           {{- with .Values.frontend.resources }}
           resources:
 {{ toYaml . | indent 12 }}
