@@ -3,6 +3,7 @@ import logging
 import traceback
 import json_log_formatter
 
+
 # Configure logger to capture exceptions
 def uncaught_exception_handler(type, value, tb):
     extra_info = {

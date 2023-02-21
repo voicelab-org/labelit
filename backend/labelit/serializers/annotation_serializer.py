@@ -5,7 +5,6 @@ from .label_serializer import LabelPolymorphicReadSerializer
 
 
 class AnnotationWithLabelsSerializer(serializers.ModelSerializer):
-
     labels = LabelPolymorphicReadSerializer(many=True)
     text = serializers.CharField(source="document.text")
 

@@ -94,7 +94,6 @@ class Detector:
 
         # We need to study more cautiously only frames with a minimum level of energy
         for window_index in np.where(np.invert(self.low_energy_prefilter))[0]:
-
             # Speech prediction can be triggered by pitch, flatness and energy
             speech_detected = (
                 (
@@ -141,7 +140,6 @@ class Detector:
 
         # Rather compute huge matrices only for portions of audio
         for window_start in range(0, self.num_windows, self.max_windows):
-
             # Extact frames for portion
             window_end = min(self.num_windows, window_start + self.max_windows)
             frames = np.array(

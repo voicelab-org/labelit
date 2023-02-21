@@ -58,7 +58,9 @@ class FlatBatchSerializer(serializers.ModelSerializer):
         batch = Batch(**validated_data)
         batch.save()
         batch.annotators.set(annotators)
-        free_documents = Document.objects.filter(dataset=batch.dataset,).exclude(
+        free_documents = Document.objects.filter(
+            dataset=batch.dataset,
+        ).exclude(
             id__in=BatchDocument.objects.filter(
                 batch__in=batch.project.batches.all()
             ).values("document_id")

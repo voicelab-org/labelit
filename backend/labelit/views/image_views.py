@@ -58,7 +58,6 @@ class ImageDownload(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, filename):
-
         if image_storage.exists(filename):
             file = image_storage.open(filename, "rb")
             response = HttpResponse(

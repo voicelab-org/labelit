@@ -3,6 +3,7 @@ from labelit.views import csrf
 from django.test.client import RequestFactory
 import json
 
+
 ###
 # csrf views no longer needed, TODO: remove
 ###

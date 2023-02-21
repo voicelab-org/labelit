@@ -87,7 +87,6 @@ class ProjectExportViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, name="Get export file (.json)")
     def download(self, request, pk=None):
-
         # with open('./dummy.txt', 'w') as f:
         #    f.write('TOY')
 

@@ -3,7 +3,6 @@ from labelit.models.label import Label
 
 
 class NestedCategoricalLabel(Label):
-
     parent_label = models.ForeignKey(
         "labelit.NestedCategoricalLabel",
         on_delete=models.CASCADE,

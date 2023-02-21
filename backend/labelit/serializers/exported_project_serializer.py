@@ -8,7 +8,6 @@ from django.db.models import Case, When, Value, IntegerField, F
 
 
 class ExportedProjectSerializer(serializers.ModelSerializer):
-
     tasks = TaskPolymorphicSerializer(many=True, required=False)
     num_documents = serializers.SerializerMethodField()
     num_done_documents = serializers.SerializerMethodField()

@@ -9,7 +9,6 @@ from django.db.models import F
 
 
 class CategoricalTask(Task):
-
     are_categories_exclusive = models.BooleanField(
         """
         If true, the annotator cannot select more than one category.
@@ -81,7 +80,6 @@ class CategoricalTask(Task):
         return self._get_stats(done_annotations, annotators)
 
     def get_batch_stats(self, batch):
-
         done_annotations = Annotation.objects.filter(
             batch=batch,
             task=self,

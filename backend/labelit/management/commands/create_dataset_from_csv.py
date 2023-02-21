@@ -8,7 +8,6 @@ class Command(BaseCommand):
     help = "Creates a dataset from CSV file"
 
     def add_arguments(self, parser):
-
         parser.add_argument(
             "--csv-path",
             type=str,
@@ -35,7 +34,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-
         data = pd.read_csv(options["csv_file"])
 
         dataset, dataset_created = Dataset.objects.get_or_create(

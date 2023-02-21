@@ -8,7 +8,6 @@ class Command(BaseCommand):
     help = "Load data from AWS S3 bucket into the database."
 
     def add_arguments(self, parser):
-
         parser.add_argument(
             "--name",
             type=str,

@@ -1,8 +1,15 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from labelit.models import (Annotation, Batch, Dataset, Document, OrdinalLabel,
-                            OrdinalTask, Project)
+from labelit.models import (
+    Annotation,
+    Batch,
+    Dataset,
+    Document,
+    OrdinalLabel,
+    OrdinalTask,
+    Project,
+)
 from labelit.serializers import AnnotationWithUserSerializer
 
 

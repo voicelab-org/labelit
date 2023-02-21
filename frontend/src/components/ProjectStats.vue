@@ -1,7 +1,5 @@
 <template>
-<div>
-  PROJECT STATS
-</div>
+  <div>PROJECT STATS</div>
 </template>
 
 <script>
@@ -11,11 +9,9 @@ export default {
     project: {
       type: Object,
       required: true,
-    }
+    },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,7 +1,6 @@
-import Vue from 'vue'
-import VueI18n from 'vue-i18n'
-import { fallbackLocale } from '@/app.config';
-
+import Vue from "vue";
+import VueI18n from "vue-i18n";
+import { fallbackLocale } from "@/app.config";
 
 function loadLocaleMessages() {
   const locales = require.context(
@@ -21,36 +20,35 @@ function loadLocaleMessages() {
 }
 
 function checkDefaultLanguage() {
-  let matched = null
-  let languages = Object.getOwnPropertyNames(loadLocaleMessages())
-  languages.forEach(lang => {
+  let matched = null;
+  let languages = Object.getOwnPropertyNames(loadLocaleMessages());
+  languages.forEach((lang) => {
     if (lang === navigator.language) {
-      matched = lang
+      matched = lang;
     }
-  })
+  });
   if (!matched) {
-    languages.forEach(lang => {
-      let languagePartials = navigator.language.split('-')[0]
+    languages.forEach((lang) => {
+      let languagePartials = navigator.language.split("-")[0];
       if (lang === languagePartials) {
-        matched = lang
+        matched = lang;
       }
-    })
+    });
   }
   if (!matched) {
-    languages.forEach(lang => {
-      let languagePartials = navigator.language.split('-')[0]
-      if (lang.split('-')[0] === languagePartials) {
-        matched = lang
+    languages.forEach((lang) => {
+      let languagePartials = navigator.language.split("-")[0];
+      if (lang.split("-")[0] === languagePartials) {
+        matched = lang;
       }
-    })
+    });
   }
-  return matched
+  return matched;
 }
 
-export const selectedLocale =
-  checkDefaultLanguage() || fallbackLocale
+export const selectedLocale = checkDefaultLanguage() || fallbackLocale;
 
-export const languages = Object.getOwnPropertyNames(loadLocaleMessages())
+export const languages = Object.getOwnPropertyNames(loadLocaleMessages());
 
 Vue.use(VueI18n);
 
@@ -58,7 +56,5 @@ export default new VueI18n({
   locale: selectedLocale,
   fallbackLocale: fallbackLocale,
   messages: loadLocaleMessages(),
-  silentTranslationWarn: false
-})
-
-
+  silentTranslationWarn: false,
+});

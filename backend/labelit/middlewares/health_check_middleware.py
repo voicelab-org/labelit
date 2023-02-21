@@ -42,6 +42,7 @@ class HealthCheckMiddleware(MiddlewareMixin):
         # being present.
         try:
             from django.db import connections
+
             for name in connections:
                 cursor = connections[name].cursor()
                 cursor.execute("SELECT 1;")

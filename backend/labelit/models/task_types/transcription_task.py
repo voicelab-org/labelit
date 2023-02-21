@@ -4,7 +4,6 @@ from zope.dottedname.resolve import resolve
 
 
 class TranscriptionTask(Task):
-
     validator = models.CharField(
         "Dotted path to the validator class",
         max_length=500,

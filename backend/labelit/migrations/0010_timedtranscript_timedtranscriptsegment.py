@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("labelit", "0009_project_timer_inactivity_threshold"),
     ]

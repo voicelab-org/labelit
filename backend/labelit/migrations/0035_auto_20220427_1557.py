@@ -6,7 +6,6 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("labelit", "0034_nestedcategoricallabel_nestedcategoricaltask"),
     ]

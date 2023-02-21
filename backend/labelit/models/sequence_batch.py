@@ -39,7 +39,6 @@ class SequenceBatch(Batch):
         return math.inf
 
     def get_next_document_to_annotate(self, user):
-
         in_progress_annotations = Annotation.objects.filter(
             batch=self, annotator=user, is_done=False
         )

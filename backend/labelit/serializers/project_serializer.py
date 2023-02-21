@@ -6,6 +6,7 @@ from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
+
 # TODO: DRY vs. ./user_serializer.py
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

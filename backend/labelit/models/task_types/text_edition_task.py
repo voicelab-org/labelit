@@ -11,7 +11,6 @@ from zope.dottedname.resolve import resolve
 
 
 class TextEditionTask(Task):
-
     validator = models.CharField(
         "Dotted path to the validator class",
         max_length=500,

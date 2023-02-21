@@ -6,7 +6,6 @@ import math
 
 
 class BatchDocumentSequence(BatchUnit):
-
     batch = models.ForeignKey("labelit.SequenceBatch", on_delete=models.CASCADE)
 
     document_sequence = models.ForeignKey(

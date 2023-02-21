@@ -4,7 +4,6 @@ from .timed_transcript_segment_serializer import TimedTranscriptSegmentSerialize
 
 
 class TimedTranscriptSerializer(serializers.ModelSerializer):
-
     segments = TimedTranscriptSegmentSerializer(
         many=True,
     )

@@ -8,7 +8,6 @@ class Command(BaseCommand):
     help = "Creates a dataset from JSON file for transcript annotation"
 
     def add_arguments(self, parser):
-
         parser.add_argument(
             "--json-path",
             type=str,
@@ -35,7 +34,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-
         dataset, dataset_created = Dataset.objects.get_or_create(
             name=options["dataset_name"]
         )

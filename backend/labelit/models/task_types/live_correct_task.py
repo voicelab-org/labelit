@@ -5,7 +5,6 @@ from django.http import Http404
 
 
 class LiveCorrectTask(Task):
-
     validator = models.CharField(
         "Dotted path to the validator class",
         max_length=500,

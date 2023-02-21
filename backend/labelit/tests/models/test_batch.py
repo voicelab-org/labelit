@@ -3,8 +3,16 @@ import math
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from labelit.models import (Annotation, Batch, CategoricalTask, Dataset,
-                            Document, OrdinalTask, Project, Task)
+from labelit.models import (
+    Annotation,
+    Batch,
+    CategoricalTask,
+    Dataset,
+    Document,
+    OrdinalTask,
+    Project,
+    Task,
+)
 from labelit.tests import TestSetup
 
 

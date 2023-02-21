@@ -6,7 +6,6 @@ import labelit.utils.color_generator
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

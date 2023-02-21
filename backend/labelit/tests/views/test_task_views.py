@@ -93,7 +93,6 @@ class TaskViewSetTests(TestCase):
         self.assertEqual(response.data["labels"][0]["resourcetype"], "Label")
 
     def test_get_agreement_stats_for_batch(self):
-
         a1 = Annotation.objects.create(
             annotator=self.u1,
             document=self.doc1,

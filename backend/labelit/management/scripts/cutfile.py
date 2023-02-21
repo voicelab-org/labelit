@@ -29,7 +29,6 @@ def force_complete_blank(blk_starts, blk_ends, filelength, max_len):
     current_time = 0.0
 
     for start, end in zip(blk_starts, blk_ends):
-
         add_intermediate_blanks_if_needed(
             current_time, start, final_blk_starts, final_blk_ends, max_len
         )
@@ -75,7 +74,6 @@ def get_cutpoints(
 
 
 def get_segs(ifile, suppl_args):
-
     signal, sample_rate = librosa.load(ifile, sr=None)
     filelength = float(len(signal) + 1) / sample_rate
 
@@ -116,7 +114,6 @@ def get_segs(ifile, suppl_args):
 
     # Refine cutpoints
     if suppl_args["music_model"] is not None:
-
         import pickle
         from sklearn import svm
 

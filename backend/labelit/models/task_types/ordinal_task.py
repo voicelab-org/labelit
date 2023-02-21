@@ -74,7 +74,6 @@ class OrdinalTask(Task):
         return self._get_stats(done_annotations, annotators)
 
     def get_batch_stats(self, batch):
-
         done_annotations = Annotation.objects.filter(
             batch=batch,
             task=self,
