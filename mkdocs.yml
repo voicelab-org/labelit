@@ -51,3 +51,4 @@ nav:
     - how_to_deploy/01.requirements.md
     - how_to_deploy/02.helm_chart.md
     - how_to_deploy/03.environment_variables.md
+    - how_to_deploy/03.cloud_formation.md
