@@ -47,8 +47,14 @@ nav:
     - getting_started/05.first_project.md
     - getting_started/06.assign_work.md
     - getting_started/07.annotate.md
+  - Update documentation:
+    - update_documentation/01.update_documentation.md
   - How to deploy ?:
     - how_to_deploy/01.requirements.md
     - how_to_deploy/02.helm_chart.md
     - how_to_deploy/03.environment_variables.md
-    - how_to_deploy/03.cloud_formation.md
+    - how_to_deploy/04.cloud_formation.md
+  - Development:
+    - development/01.requirements.md
+    - development/02.backend.md
+    - development/03.frontend.md

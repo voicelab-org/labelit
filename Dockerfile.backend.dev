@@ -1,5 +1,6 @@
-ARG PYTHON_VERSION="3.8.11"
-FROM python:${PYTHON_VERSION}-bullseye  AS BUILD
+ARG PYTHON_VERSION="3.8"
+FROM python:${PYTHON_VERSION}-bullseye  AS build-stage
+
 ENV PYTHONUNBUFFERED=1
 ENV PACKAGE="audiowaveform"
 ENV PACKAGE_VERSION="1.6.0"
@@ -56,13 +57,13 @@ RUN apt-get update \
     libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev zlib1g-dev\
  && apt-get clean
  
-COPY --from=build /usr/local/bin/audiowaveform /usr/local/bin/
+COPY --from=build-stage /usr/local/bin/audiowaveform /usr/local/bin/
 
 WORKDIR /code
-COPY requirements.txt /code/
+COPY ./backend/requirements-all.txt /code/
 RUN pip install -r requirements.txt
 
-COPY ./backend /code/
+COPY ./backend/src /code/
 
 CMD python manage.py runserver 0.0.0.0:8000
 
