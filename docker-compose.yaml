@@ -43,7 +43,7 @@ services:
     volumes:
       - ./backend/src:/code
     environment:
-      DJANGO_DEBUG: true
+      DJANGO_DEBUG: "true"
       DB_HOST: postgres
       DB_NAME: labelit_db
       DB_USER: postgres
