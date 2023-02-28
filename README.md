@@ -3,6 +3,8 @@
 [![Build](https://github.com/voicelab-org/labelit/actions/workflows/build-push.yaml/badge.svg)](https://github.com/voicelab-org/labelit/actions/workflows/build-push.yaml)
 [![](https://img.shields.io/github/v/release/voicelab-org/labelit)](https://github.com/voicelab-org/labelit/releases)
 [![Documentation Status](https://readthedocs.org/projects/labelit/badge/?version=latest)](https://labelit.readthedocs.io/en/latest/?badge=latest)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Introduction
 
