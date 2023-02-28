@@ -4,8 +4,6 @@ media/
 notes/
 __pycache__/
 *.pyc
-docker-compose-dev.yml
-package-lock.json
 export.json
 temp/
 .vscode

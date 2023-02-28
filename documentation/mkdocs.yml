@@ -54,7 +54,3 @@ nav:
     - how_to_deploy/02.helm_chart.md
     - how_to_deploy/03.environment_variables.md
     - how_to_deploy/04.cloud_formation.md
-  - Development:
-    - development/01.requirements.md
-    - development/02.backend.md
-    - development/03.frontend.md
