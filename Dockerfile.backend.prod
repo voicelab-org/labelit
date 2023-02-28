@@ -59,10 +59,10 @@ RUN apt-get update \
 COPY --from=build /usr/local/bin/audiowaveform /usr/local/bin/
 
 WORKDIR /code
-COPY requirements.txt /code/
+COPY backend/requirements.txt /code/
 RUN pip install -r requirements.txt
 
-COPY ./backend /code/
+COPY ./backend/src /code/
 
 RUN pip install uwsgi
 

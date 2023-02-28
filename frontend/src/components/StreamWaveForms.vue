@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="stream-waveforms" @click="waveFormClicked" >
+    <div class="stream-waveforms" @click="waveFormClicked">
       <div class="stream-waveforms-cursor" ref="cursor"></div>
       <div class="stream-waveforms-bars"></div>
     </div>
@@ -19,17 +19,15 @@ export default {
     },
     waveformData: {
       type: Array,
-      required : true
+      required: true,
     },
-    duration : {
-      type : Number,
-      required : true
-    }
+    duration: {
+      type: Number,
+      required: true,
+    },
   },
-  mounted(){
-
+  mounted() {
     this.drawWaveform(this.waveformData, ".stream-waveforms-bars");
-
   },
   methods: {
     drawWaveform(data, div) {
@@ -45,10 +43,9 @@ export default {
       });
       y.domain([-max_val, max_val]);
       var bar_width = width / data.length;
-      let selection = d3.select(div)
-        .selectAll("div")
-        .data(data)
-      selection.enter()
+      let selection = d3.select(div).selectAll("div").data(data);
+      selection
+        .enter()
         .append("div")
         .attr("class", "bar")
         .style("width", bar_width + "px")
@@ -63,7 +60,7 @@ export default {
           var left = x(i) * width;
           return left + "px";
         });
-      selection.exit().remove()
+      selection.exit().remove();
     },
     waveFormClicked(e) {
       var left = parseInt(e.target.style.left, 10);
@@ -135,7 +132,7 @@ export default {
   position: absolute;
 }
 .bar.active {
-  background-color: #03a9f4!important;
+  background-color: #03a9f4 !important;
   position: absolute;
 }
 
@@ -147,5 +144,4 @@ export default {
 .axis g path.domain {
   display: none;
 }
-
 </style>

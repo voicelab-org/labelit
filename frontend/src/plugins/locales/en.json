@@ -327,7 +327,7 @@
     "draft": "draft",
     "publish": "Publish",
     "archive": "Archive",
-    "create_a_new_version":"Create a new version"
+    "create_a_new_version": "Create a new version"
   },
   "D3vis": {
     "Topics": "Topics",
@@ -339,7 +339,7 @@
     "Brands": "Brands"
   },
   "report": {
-    "report":"Report",
+    "report": "Report",
     "downloadExcel": "Download Excel",
     "addDashboard": "Add dashboard",
     "createDashboard": "Create dashboard",
@@ -723,7 +723,7 @@
     "client__write": "Can edit on client module",
     "report__read": "Can access report module",
     "report__write": "Can edit on report module",
-    "actions__read":  "Can access actions module",
+    "actions__read": "Can access actions module",
     "actions__write": "Can edit on actions module",
     "qm__read": "Can access QM module",
     "qm__write": "Can edit on QM module",

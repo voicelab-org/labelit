@@ -327,9 +327,7 @@
     "draft": "brouillon",
     "publish": "Publier",
     "archive": "Archiver",
-    "create_a_new_version":"Créer une nouvelle version"
-
-
+    "create_a_new_version": "Créer une nouvelle version"
   },
   "D3vis": {
     "Topics": "Topics",
@@ -341,7 +339,7 @@
     "Brands": "Marques"
   },
   "report": {
-    "report":"Rapports",
+    "report": "Rapports",
     "downloadExcel": "Télécharger en Excel",
     "addDashboard": "Ajouter un tableau de board",
     "createDashboard": "Créer un tableau de bord",
@@ -727,7 +725,7 @@
     "client__write": "Peut éditer sur le module client",
     "report__read": "Peut accéder au module rapport",
     "report__write": "Peut modifier sur le module de rapport",
-    "actions__read":  "Peut accéder au module actions",
+    "actions__read": "Peut accéder au module actions",
     "actions__write": "Peut modifier sur le module d'action",
     "qm__read": "Peut accéder au module QM",
     "qm__write": "Peut modifier sur le module QM",

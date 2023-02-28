@@ -1,6 +1,5 @@
 <template>
   <v-layout text-center wrap>
-
     <span v-shortkey="['enter']" @shortkey="handleLogin"></span>
     <v-flex xs12>
       <v-img
@@ -45,7 +44,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 export default {
   name: "LoginPage",
   data() {
@@ -53,16 +52,16 @@ export default {
       user: { email: "", password: "" },
       loading: false,
       message: "",
-      showPassword: false
+      showPassword: false,
     };
   },
   computed: {
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn
+      return this.$store.state.auth.status.loggedIn;
     },
   },
   methods: {
-    ...mapActions('auth', ['authenticateUser']),
+    ...mapActions("auth", ["authenticateUser"]),
     handleLogin() {
       this.loading = true;
       if (this.user.email && this.user.password) {
@@ -70,7 +69,7 @@ export default {
           () => {
             this.$router.push("/projects");
           },
-          error => {
+          (error) => {
             this.loading = false;
             this.message =
               (error.response && error.response.data) ||
@@ -79,8 +78,8 @@ export default {
           }
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

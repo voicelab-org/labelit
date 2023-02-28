@@ -1,33 +1,34 @@
 <template>
   <span :class="[newline ? 'newline' : '']">
-    <span 
-        v-if="label"
-        :style="{ borderColor: color, cursor: 'pointer' }"
-        class="highlight bottom"
-        @click="$emit('click', $event)"
+    <span
+      v-if="label"
+      :style="{ borderColor: color, cursor: 'pointer' }"
+      class="highlight bottom"
+      @click="$emit('click', $event)"
     >
-      <span class="highlight__content">{{ content }}<v-icon class="delete"
-                @click.stop="remove"
-                v-show="enabled"
-        >mdi-close-circle
+      <span class="highlight__content"
+        >{{ content
+        }}<v-icon class="delete" @click.stop="remove" v-show="enabled"
+          >mdi-close-circle
         </v-icon>
       </span>
       <span
-          :data-label="label.name" :style="{ backgroundColor: color, color: textColor }" class="highlight__label"/>
-      </span>
-    <span v-else >{{ content }}</span>
+        :data-label="label.name"
+        :style="{ backgroundColor: color, color: textColor }"
+        class="highlight__label"
+      />
+    </span>
+    <span v-else>{{ content }}</span>
   </span>
-
 </template>
 
 <script>
-
 export default {
   props: {
     content: {
       type: String,
-      default: '',
-      required: true
+      default: "",
+      required: true,
     },
     label: {
       type: Object,
@@ -35,15 +36,15 @@ export default {
     },
     color: {
       type: String,
-      default: '#64FFDA'
+      default: "#64FFDA",
     },
     labels: {
       type: Array,
       default: () => [],
-      required: true
+      required: true,
     },
     newline: {
-      type: Boolean
+      type: Boolean,
     },
     enabled: {
       type: Boolean,
@@ -52,32 +53,32 @@ export default {
   },
   data() {
     return {
-      showMenu: false
-    }
+      showMenu: false,
+    };
   },
   computed: {
     textColor() {
-      return this.idealColor(this.color)
-    }
+      return this.idealColor(this.color);
+    },
   },
   methods: {
     update(label) {
-      this.$emit('update', label)
-      this.showMenu = false
+      this.$emit("update", label);
+      this.showMenu = false;
     },
     remove() {
-      this.$emit('remove')
+      this.$emit("remove");
     },
     idealColor(hexString) {
       // W3c offers a formula for calculating ideal color:
       // https://www.w3.org/TR/AERT/#color-contrast
-      const r = parseInt(hexString.substr(1, 2), 16)
-      const g = parseInt(hexString.substr(3, 2), 16)
-      const b = parseInt(hexString.substr(5, 2), 16)
-      return ((((r * 299) + (g * 587) + (b * 114)) / 1000) < 128) ? '#ffffff' : '#000000'
+      const r = parseInt(hexString.substr(1, 2), 16);
+      const g = parseInt(hexString.substr(3, 2), 16);
+      const b = parseInt(hexString.substr(5, 2), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000 < 128 ? "#ffffff" : "#000000";
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -149,7 +150,7 @@ export default {
   display: block;
   font-size: 14px;
   -webkit-font-smoothing: subpixel-antialiased;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
 }
 
 .newline {

@@ -1,9 +1,13 @@
-FROM node:15-alpine3.13 as build-stage
+FROM node:18-alpine
 
 WORKDIR /app
 
+COPY ["frontend/package.json", "frontend/package-lock.json*", "./"]
+
+RUN npm install
+
 COPY ./frontend /app/
 
-RUN npm install && npm cache clean --force
+RUN npm install
 
 CMD npm run serve
