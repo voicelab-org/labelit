@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class ImageUploadService {
   constructor() {
@@ -6,7 +6,7 @@ class ImageUploadService {
   }
 
   upload(formData) {
-    return this.request.post("/upload_image/", formData);
+    return this.request.post('/upload_image/', formData);
   }
 }
 

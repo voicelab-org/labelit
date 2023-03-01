@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class BatchService {
   constructor() {
@@ -6,11 +6,11 @@ class BatchService {
   }
 
   getBatchList(params = {}) {
-    return this.request.get("/batches/", { params });
+    return this.request.get('/batches/', { params });
   }
 
   createBatch(data) {
-    return this.request.post("/batches/", data);
+    return this.request.post('/batches/', data);
   }
 
   updateBatch(batchId, payload) {
@@ -34,7 +34,7 @@ class BatchService {
   getNextDocumentToQA(batchId, skipped_document_ids = [], params = {}) {
     return this.request.get(`/batches/${batchId}/get_next_document_to_qa/`, {
       params: {
-        skipped_document_ids: skipped_document_ids.join(","),
+        skipped_document_ids: skipped_document_ids.join(','),
         ...params,
       },
     });

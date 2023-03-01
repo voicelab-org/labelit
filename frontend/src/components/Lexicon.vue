@@ -34,17 +34,17 @@
 </template>
 
 <script>
-import LexiconService from "@/services/lexicon.service";
-import LexiconEntryService from "@/services/lexiconentry.service";
+import LexiconService from '@/services/lexicon.service';
+import LexiconEntryService from '@/services/lexiconentry.service';
 
 export default {
-  name: "Lexicon",
-  props: ["id"],
+  name: 'Lexicon',
+  props: ['id'],
   data() {
     return {
       lexicon: null,
       adding: false,
-      addedName: "",
+      addedName: '',
     };
   },
   created() {
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     getLexicon() {
-      LexiconService.get(this.id).then((res) => {
+      LexiconService.get(this.id).then(res => {
         this.lexicon = res.data;
       });
     },
@@ -62,7 +62,7 @@ export default {
         lexicon: this.lexicon.id,
       }).then(() => {
         this.getLexicon();
-        this.addedName = "";
+        this.addedName = '';
         this.adding = false;
       });
     },

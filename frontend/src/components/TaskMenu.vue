@@ -6,7 +6,7 @@
       :close-on-content-click="false"
       :close-on-click="false"
     >
-      <template v-slot:activator="{ on }">
+      <template #activator="{ on }">
         <span v-on="on" @click.stop>
           <v-icon>mdi-dots-vertical</v-icon>
         </span>
@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import TaskService from "@/services/task.service";
+import TaskService from '@/services/task.service';
 
 export default {
-  name: "TaskMenu",
+  name: 'TaskMenu',
   props: {
     value: {
       type: Object,
@@ -42,16 +42,16 @@ export default {
   computed: {
     archiveAction() {
       if (this.task.archived) {
-        return "Unarchive";
+        return 'Unarchive';
       }
-      return "Archive";
+      return 'Archive';
     },
   },
   watch: {
     task: {
       deep: true,
       handler() {
-        this.$emit("input", this.task);
+        this.$emit('input', this.task);
       },
     },
     value: {

@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class AuthService {
   constructor() {
@@ -6,15 +6,15 @@ class AuthService {
   }
 
   postCredential(data) {
-    return this.request.post("auth/login/", data);
+    return this.request.post('auth/login/', data);
   }
 
   refreshToken(refreshBody) {
-    return this.request.post("auth/login/refresh/", refreshBody);
+    return this.request.post('auth/login/refresh/', refreshBody);
   }
 
   logout(refreshToken) {
-    return this.request.post("auth/logout/", refreshToken);
+    return this.request.post('auth/logout/', refreshToken);
   }
 }
 

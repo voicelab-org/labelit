@@ -6,7 +6,7 @@
       :close-on-content-click="false"
       :close-on-click="false"
     >
-      <template v-slot:activator="{ attrs, on: menu }">
+      <template #activator="{ attrs, on: menu }">
         <span v-bind="attrs" v-on="menu">
           <v-icon>mdi-dots-vertical</v-icon>
         </span>
@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import ProjectService from "@/services/project.service";
+import ProjectService from '@/services/project.service';
 
 export default {
-  name: "ProjectMenu",
+  name: 'ProjectMenu',
   props: {
     value: {
       type: Object,
@@ -42,16 +42,16 @@ export default {
   computed: {
     archiveAction() {
       if (this.project.archived) {
-        return "Unarchive";
+        return 'Unarchive';
       }
-      return "Archive";
+      return 'Archive';
     },
   },
   watch: {
     project: {
       deep: true,
       handler() {
-        this.$emit("input", this.project);
+        this.$emit('input', this.project);
       },
     },
   },

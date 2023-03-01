@@ -1,5 +1,5 @@
 export default {
-  name: "QA",
+  name: 'QA',
   mixins: [],
   methods: {
     getAnnotationClasses(a, is_focused) {
@@ -16,6 +16,6 @@ export default {
     /*
         send disable entities signal
         */
-    this.$store.commit("entities/DISABLE_ANNOTATION");
+    this.$store.commit('entities/DISABLE_ANNOTATION');
   },
 };

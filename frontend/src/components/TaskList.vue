@@ -7,9 +7,9 @@
           <task-manager v-if="isAdmin" @changed="getTasks" />
           <task-manager
             v-if="isAdmin"
-            @changed="getTasks"
             v-model="show_edit_task"
             :task="edited_task"
+            @changed="getTasks"
           />
         </div>
       </div>
@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import TaskService from "@/services/task.service";
-import { mapGetters } from "vuex";
-import TaskMenu from "@/components/TaskMenu";
-import TaskManager from "./TaskManager";
+import TaskService from '@/services/task.service.js';
+import { mapGetters } from 'vuex';
+import TaskMenu from '@/components/TaskMenu.vue';
+import TaskManager from './TaskManager.vue';
 
 export default {
-  name: "task-list",
+  name: 'TaskList',
   components: {
     TaskMenu,
     TaskManager,
@@ -57,19 +57,19 @@ export default {
     return {
       tasks: [],
       show_archived: false,
-      edited_task: { some: "task" },
+      edited_task: { some: 'task' },
       show_edit_task: false,
     };
   },
   computed: {
     ...mapGetters({
-      isAdmin: "auth/isAdmin",
+      isAdmin: 'auth/isAdmin',
     }),
     shown_tasks() {
       if (this.show_archived) {
-        var tasks = this.tasks.filter((t) => t.archived);
+        var tasks = this.tasks.filter(t => t.archived);
       } else {
-        tasks = this.tasks.filter((t) => !t.archived);
+        tasks = this.tasks.filter(t => !t.archived);
       }
       return tasks.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     },
@@ -79,34 +79,34 @@ export default {
   },
   methods: {
     showEdit(task) {
-      console.log("showEdit for task", { ...task });
+      console.log('showEdit for task', { ...task });
       this.edited_task = task;
       this.show_edit_task = true;
     },
     getTasks() {
       TaskService.getTaskList()
-        .then((response) => {
+        .then(response => {
           this.tasks = response.data;
           console.log(
-            "this.tasks after getting list",
+            'this.tasks after getting list',
             JSON.parse(JSON.stringify(this.tasks))
           );
           this.$nextTick(() => {
             console.log(
-              "this.shown_tasks",
+              'this.shown_tasks',
               JSON.parse(JSON.stringify(this.shown_tasks))
             );
           });
-          this.edited_task = { some: "task" };
+          this.edited_task = { some: 'task' };
         })
-        .catch((error) => console.log(error))
+        .catch(error => console.log(error))
         .finally(() => (this.loading = false));
     },
     getLink(task) {
-      return "/task/" + task.id;
+      return '/task/' + task.id;
     },
     goTo(task) {
-      this.$router.push("/task/" + task.id);
+      this.$router.push('/task/' + task.id);
     },
   },
 };

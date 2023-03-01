@@ -3,31 +3,31 @@
     <TaskFormHeader :task="task" :read-only="readOnly" />
     <LiveCorrect
       v-if="timed_transcript"
-      :playback-time="playbackTime"
       v-model="timed_transcript"
+      :playback-time="playbackTime"
       :read-only="readOnly"
     />
   </div>
 </template>
 <script>
-import Vue from "vue";
-import TaskForm from "@/components/mixins/TaskForm";
-import TaskFormHeader from "@/components/TaskFormHeader";
-import LiveCorrect from "@/components/LiveCorrect";
-import LabelService from "@/services/label.service.js";
-import TimedTranscriptService from "@/services/timed_transcript.service.js";
-import { mapGetters } from "vuex";
+import Vue from 'vue';
+import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskFormHeader from '@/components/TaskFormHeader.vue';
+import LiveCorrect from '@/components/LiveCorrect.vue';
+import LabelService from '@/services/label.service.js';
+import TimedTranscriptService from '@/services/timed_transcript.service.js';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "live-correct-task-form",
-  mixins: [TaskForm],
+  name: 'LiveCorrectTaskForm',
   components: {
     TaskFormHeader,
     LiveCorrect,
   },
+  mixins: [TaskForm],
   computed: {
     ...mapGetters({
-      playbackTime: "player/playbackTime",
+      playbackTime: 'player/playbackTime',
     }),
   },
   data() {
@@ -36,34 +36,6 @@ export default {
       timed_transcript: null,
       label: null,
     };
-  },
-  created() {
-    if (!this.selected_labels.length) {
-      let transcript = JSON.parse(
-        JSON.stringify(this.document.timed_transcript)
-      );
-      delete transcript.id;
-      transcript.segments.forEach((s) => {
-        delete s.id;
-        //delete s.timed_transcript
-      });
-      TimedTranscriptService.create(transcript).then((res) => {
-        var created_transcript = res.data;
-        LabelService.create({
-          resourcetype: "LiveCorrectLabel",
-          timed_transcript: created_transcript.id,
-          task: this.task.id,
-        }).then((res) => {
-          this.timed_transcript = created_transcript;
-          this.label = res.data;
-        });
-      });
-    } else {
-      LabelService.get(this.selected_labels[0].id).then((res) => {
-        this.label = res.data;
-        this.timed_transcript = this.label.timed_transcript;
-      });
-    }
   },
   watch: {
     timed_transcript: {
@@ -83,6 +55,34 @@ export default {
         }, 1000);
       },
     },
+  },
+  created() {
+    if (!this.selected_labels.length) {
+      let transcript = JSON.parse(
+        JSON.stringify(this.document.timed_transcript)
+      );
+      delete transcript.id;
+      transcript.segments.forEach(s => {
+        delete s.id;
+        //delete s.timed_transcript
+      });
+      TimedTranscriptService.create(transcript).then(res => {
+        var created_transcript = res.data;
+        LabelService.create({
+          resourcetype: 'LiveCorrectLabel',
+          timed_transcript: created_transcript.id,
+          task: this.task.id,
+        }).then(res => {
+          this.timed_transcript = created_transcript;
+          this.label = res.data;
+        });
+      });
+    } else {
+      LabelService.get(this.selected_labels[0].id).then(res => {
+        this.label = res.data;
+        this.timed_transcript = this.label.timed_transcript;
+      });
+    }
   },
 };
 </script>

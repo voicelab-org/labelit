@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class TaskService {
   constructor() {
@@ -6,11 +6,11 @@ class TaskService {
   }
 
   getTaskList(params = {}) {
-    return this.request.get("/tasks/", params);
+    return this.request.get('/tasks/', params);
   }
 
   createTask(data) {
-    return this.request.post("/tasks/", data);
+    return this.request.post('/tasks/', data);
   }
 
   updateTask(taskId, payload) {
@@ -18,11 +18,11 @@ class TaskService {
   }
 
   deleteTask(taskId) {
-    return this.request.delete(`/tasks/${taskId}` + "/");
+    return this.request.delete(`/tasks/${taskId}` + '/');
   }
 
   getTaskById(taskId) {
-    return this.request.get(`/tasks/${taskId}` + "/");
+    return this.request.get(`/tasks/${taskId}` + '/');
   }
 
   getTaskByIdAgreementStatsForBatch(taskId, params = {}) {

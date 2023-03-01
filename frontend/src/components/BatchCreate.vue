@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" persistent max-width="800px">
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on"> Add Batch </v-btn>
       </template>
       <v-card>
@@ -36,13 +36,11 @@
                 </v-col>
                 <v-col cols="12">
                   <v-autocomplete
-                    :disabled="!datasetRemainingUnits ? true : false"
                     v-model="selectedAnnotators"
+                    :disabled="!datasetRemainingUnits ? true : false"
                     :items="annotatorsList"
                     label="Annotators"
-                    :item-text="
-                      (item) => item.first_name + ' ' + item.last_name
-                    "
+                    :item-text="item => item.first_name + ' ' + item.last_name"
                     item-value="id"
                     multiple
                     :rules="rules.annotatorsRules"
@@ -76,8 +74,8 @@
                 </v-col>
                 <v-col cols="12">
                   <v-select
-                    :disabled="!datasetRemainingUnits ? true : false"
                     v-model="selectedAnnotationMode"
+                    :disabled="!datasetRemainingUnits ? true : false"
                     :items="annotationModeList"
                     label="Annotation mode"
                     item-text="description"
@@ -105,13 +103,13 @@
 </template>
 
 <script>
-import ProjectService from "@/services/project.service";
-import DatasetService from "@/services/dataset.service";
-import BatchService from "@/services/batch.service";
-import UserService from "@/services/user.service";
+import ProjectService from '@/services/project.service';
+import DatasetService from '@/services/dataset.service';
+import BatchService from '@/services/batch.service';
+import UserService from '@/services/user.service';
 
 export default {
-  name: "BatchCreate",
+  name: 'BatchCreate',
   props: {
     projectId: {
       type: String,
@@ -131,45 +129,57 @@ export default {
       numberOfAnnotatorsPerDocument: null,
       annotationModeList: [
         {
-          value: "all_you_can_annotate",
+          value: 'all_you_can_annotate',
           description:
-            "Annotators can annotate as much they want (up to optional limit) By the end of the batch, annotators may have done unequal amounts of work",
+            'Annotators can annotate as much they want (up to optional limit) By the end of the batch, annotators may have done unequal amounts of work',
         },
         {
-          value: "even",
+          value: 'even',
           description:
-            "By the end of the batch, every annotator will have annotated the same number of units",
+            'By the end of the batch, every annotator will have annotated the same number of units',
         },
       ],
       selectedAnnotationMode: null,
       rules: {
         batchNameRules: [
-          (v) => !!v || "The Batch Name is required",
-          (v) =>
+          v => !!v || 'The Batch Name is required',
+          v =>
             (v && v.length <= 60) ||
-            "The batch name must be less than 60 characters",
+            'The batch name must be less than 60 characters',
         ],
         numberOfDocumentsRules: [
-          (v) =>
+          v =>
             !!v ||
-            "The number of documents to include to the batch is required and must be a valid number",
-          (v) =>
+            'The number of documents to include to the batch is required and must be a valid number',
+          v =>
             (v && v >= 1 && v <= this.datasetRemainingUnits) ||
-            "The number of documents must not exceed the remaining dataset units",
+            'The number of documents must not exceed the remaining dataset units',
         ],
         numberOfAnnotatorsPerDocumentRules: [
-          (v) =>
+          v =>
             !!v ||
-            "The number of annotators per document is required and must be a valid number",
-          (v) =>
+            'The number of annotators per document is required and must be a valid number',
+          v =>
             (v && v >= 1 && v <= this.datasetRemainingUnits) ||
-            "The number of annotators per document must not exceed the number of annotators",
+            'The number of annotators per document must not exceed the number of annotators',
         ],
-        annotatorsRules: [(v) => !!v.length || "Select at least one annotator"],
-        datasetRules: [(v) => !!v || "Select a dataset"],
-        annotationModeRules: [(v) => !!v || "Select an annotation mode"],
+        annotatorsRules: [v => !!v.length || 'Select at least one annotator'],
+        datasetRules: [v => !!v || 'Select a dataset'],
+        annotationModeRules: [v => !!v || 'Select an annotation mode'],
       },
     };
+  },
+  watch: {
+    selectedDataset(dataset) {
+      let vm = this;
+      ProjectService.getRemainingUnitsInDatasetInProject(vm.projectId, {
+        dataset_id: dataset.id,
+      })
+        .then(function (response) {
+          vm.datasetRemainingUnits = response.data.count;
+        })
+        .catch(error => console.log(error));
+    },
   },
   mounted() {
     let vm = this;
@@ -177,13 +187,13 @@ export default {
       .then(function (response) {
         vm.datasetList = response.data;
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
 
     UserService.getUserList()
       .then(function (response) {
         vm.annotatorsList = response.data;
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   },
   methods: {
     createBatch() {
@@ -200,22 +210,10 @@ export default {
         })
           .then(function () {
             vm.dialog = false;
-            vm.$emit("batchCreated");
+            vm.$emit('batchCreated');
           })
-          .catch((error) => console.log(error));
+          .catch(error => console.log(error));
       }
-    },
-  },
-  watch: {
-    selectedDataset(dataset) {
-      let vm = this;
-      ProjectService.getRemainingUnitsInDatasetInProject(vm.projectId, {
-        dataset_id: dataset.id,
-      })
-        .then(function (response) {
-          vm.datasetRemainingUnits = response.data.count;
-        })
-        .catch((error) => console.log(error));
     },
   },
 };

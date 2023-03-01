@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class DashboardService {
   constructor() {
@@ -6,7 +6,7 @@ class DashboardService {
   }
 
   getStats(params = {}) {
-    return this.request.get("/dashboard/", { params });
+    return this.request.get('/dashboard/', { params });
   }
 }
 

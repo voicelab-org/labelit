@@ -42,7 +42,7 @@ export const entities = {
     },
     ADD_TASK(state, task) {
       if (
-        state.entity_tasks.find((t) => {
+        state.entity_tasks.find(t => {
           return t.id == task.id;
         })
       )

@@ -1,8 +1,8 @@
 <template>
   <div class="guidelines-container">
     <v-menu offset-x>
-      <template v-slot:activator="{ on, attrs }">
-        <v-icon v-on="on" v-bind="attrs"> mdi-information </v-icon>
+      <template #activator="{ on, attrs }">
+        <v-icon v-bind="attrs" v-on="on"> mdi-information </v-icon>
       </template>
       <div class="guidelines" v-html="task.html_guidelines"></div>
     </v-menu>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "Guidelines",
+  name: 'Guidelines',
   props: {
     task: {
       type: Object,

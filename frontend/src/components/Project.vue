@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="header">
-      <h2 class="headline" v-if="project">Project: {{ project.name }}</h2>
+      <h2 v-if="project" class="headline">Project: {{ project.name }}</h2>
       <div class="header-right">
         <v-btn @click="exportProject"> Export</v-btn>
         <batch-create
           v-if="isAdmin"
-          :projectId="projectId"
+          :project-id="projectId"
           @batchCreated="updateListToggle = !updateListToggle"
         />
       </div>
@@ -69,15 +69,15 @@
 </template>
 
 <script>
-import ProjectService from "@/services/project.service";
-import BatchCreate from "@/components/BatchCreate";
-import Stats from "@/components/Stats";
-import { mapGetters } from "vuex";
+import ProjectService from '@/services/project.service.js';
+import BatchCreate from '@/components/BatchCreate.vue';
+import Stats from '@/components/Stats.vue';
+import { mapGetters } from 'vuex';
 
-import BatchList from "@/components/BatchList";
+import BatchList from '@/components/BatchList.vue';
 
 export default {
-  name: "project",
+  name: 'Project',
   components: { BatchCreate, BatchList, Stats },
   props: {
     projectId: {
@@ -98,7 +98,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isAdmin: "auth/isAdmin",
+      isAdmin: 'auth/isAdmin',
     }),
   },
   created() {
@@ -109,13 +109,13 @@ export default {
         //vm.$store.commit('task/SET_TASK_LIST', response.data.tasks)
         vm.loading = false;
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
 
     ProjectService.getProjectWithStats(vm.projectId)
       .then(function (response) {
         vm.project_with_stats = response.data;
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   },
   methods: {
     exportProject() {
@@ -127,7 +127,7 @@ export default {
       )*/
     },
     getLink(batch) {
-      return "/batch/" + batch.id;
+      return '/batch/' + batch.id;
     },
   },
 };

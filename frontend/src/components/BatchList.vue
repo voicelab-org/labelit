@@ -36,15 +36,15 @@
 </template>
 
 <script>
-import BatchService from "@/services/batch.service";
-import ProjectService from "@/services/project.service";
+import BatchService from '@/services/batch.service.js';
+import ProjectService from '@/services/project.service.js';
 
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
-import BatchMenu from "@/components/BatchMenu";
+import BatchMenu from '@/components/BatchMenu.vue';
 
 export default {
-  name: "BatchList",
+  name: 'BatchList',
   components: { BatchMenu },
   props: {
     project: {
@@ -64,14 +64,20 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isAdmin: "auth/isAdmin",
+      isAdmin: 'auth/isAdmin',
     }),
     shown_batches() {
       if (this.show_archived) {
-        return this.batches.filter((b) => b.archived);
+        return this.batches.filter(b => b.archived);
       } else {
-        return this.batches.filter((b) => !b.archived);
+        return this.batches.filter(b => !b.archived);
       }
+    },
+  },
+
+  watch: {
+    update() {
+      this.getBatchList();
     },
   },
   created() {
@@ -87,10 +93,10 @@ export default {
       )*/
     },
     getLink(batch) {
-      return "/batch/" + batch.id;
+      return '/batch/' + batch.id;
     },
     goTo(batch) {
-      this.$router.push("/batch/" + batch.id, () => {});
+      this.$router.push('/batch/' + batch.id, () => {});
     },
     getBatchList() {
       let vm = this;
@@ -102,13 +108,7 @@ export default {
           vm.batches = response.data;
           vm.loading = false;
         })
-        .catch((error) => console.log(error));
-    },
-  },
-
-  watch: {
-    update() {
-      this.getBatchList();
+        .catch(error => console.log(error));
     },
   },
 };

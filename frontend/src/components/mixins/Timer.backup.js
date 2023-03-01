@@ -1,9 +1,9 @@
 export default {
-  name: "Timer",
+  name: 'Timer',
   props: {},
   data() {
     return {
-      timer: "",
+      timer: '',
       time: 0,
       isInactive: false,
       throttlerTimeout: null,
@@ -32,7 +32,7 @@ export default {
       }
     },
     activateActivityTracker: function () {
-      ["mousemove", "scroll", "keydown", "resize", "click"].forEach((evt) => {
+      ['mousemove', 'scroll', 'keydown', 'resize', 'click'].forEach(evt => {
         window.addEventListener(evt, this.respondToUserActivity);
       });
     },

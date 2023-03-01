@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class DatasetService {
   constructor() {
@@ -6,11 +6,11 @@ class DatasetService {
   }
 
   getDatasetList(params = {}) {
-    return this.request.get("/datasets/", params);
+    return this.request.get('/datasets/', params);
   }
 
   createDataset(data) {
-    return this.request.post("/datasets/", data);
+    return this.request.post('/datasets/', data);
   }
 
   updateDataset(datasetId, payload) {

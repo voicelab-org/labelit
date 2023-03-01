@@ -1,22 +1,22 @@
 <template>
   <div>
-    <div class="live-correct-container" id="live-correct-container">
+    <div id="live-correct-container" class="live-correct-container">
       <div
         v-for="(segment, idx) in sortedSegments"
         :key="segment.id"
-        :class="getSegmentClasses(segment)"
         :ref="segment.id"
+        :class="getSegmentClasses(segment)"
       >
-        <form v-on:submit.prevent="blurInput($event, 'input-' + segment.id)">
+        <form @submit.prevent="blurInput($event, 'input-' + segment.id)">
           <textarea
+            :ref="'input-' + segment.id"
+            v-model="sortedSegments[idx].transcript"
             rows="1"
             type="text"
-            v-model="sortedSegments[idx].transcript"
+            :disabled="readOnly"
             @input="textareaInputEvent($event, idx)"
             @focus="is_focused = true"
             @blur="is_focused = false"
-            :ref="'input-' + segment.id"
-            :disabled="readOnly"
           />
         </form>
       </div>
@@ -25,10 +25,10 @@
 </template>
 
 <script>
-var VueScrollTo = require("vue-scrollto");
+var VueScrollTo = require('vue-scrollto');
 
 export default {
-  name: "live-correct",
+  name: 'LiveCorrect',
   props: {
     readOnly: {
       type: Boolean,
@@ -45,7 +45,7 @@ export default {
           id: 12,
           segments: [
             {
-              transcript: "Oui bonjour je souhaite annuler ma réservation",
+              transcript: 'Oui bonjour je souhaite annuler ma réservation',
               id: 0,
               start_time: 0.0,
             },
@@ -55,25 +55,18 @@ export default {
               start_time: 3.0,
             },
             {
-              transcript: "je pense revenir cet été cependant",
+              transcript: 'je pense revenir cet été cependant',
               id: 2,
               start_time: 5.0,
             },
             {
-              transcript: "ça dépend de comment la situation évolue",
+              transcript: 'ça dépend de comment la situation évolue',
               id: 3,
               start_time: 7.0,
             },
           ],
         };
       },
-    },
-  },
-  computed: {
-    sortedSegments() {
-      return [...this.timed_transcript.segments].sort((a, b) => {
-        return a.start_time - b.start_time;
-      });
     },
   },
   data() {
@@ -83,16 +76,18 @@ export default {
       is_focused: false,
     };
   },
-  mounted() {
-    this.timed_transcript.segments.forEach((seg) => {
-      this.fitTextareaToText(this.$refs["input-" + seg.id][0]);
-    });
+  computed: {
+    sortedSegments() {
+      return [...this.timed_transcript.segments].sort((a, b) => {
+        return a.start_time - b.start_time;
+      });
+    },
   },
   watch: {
     timed_transcript: {
       deep: true,
       handler() {
-        this.$emit("input", this.timed_transcript);
+        this.$emit('input', this.timed_transcript);
       },
     },
     playbackTime() {
@@ -103,6 +98,11 @@ export default {
       this.scrollTo(this.cursor_segment_id);
     },
   },
+  mounted() {
+    this.timed_transcript.segments.forEach(seg => {
+      this.fitTextareaToText(this.$refs['input-' + seg.id][0]);
+    });
+  },
   methods: {
     textareaInputEvent($event, idx) {
       this.sortedSegments[idx].touched = true;
@@ -111,8 +111,8 @@ export default {
       });
     },
     fitTextareaToText(el) {
-      el.style.height = "";
-      el.style.height = el.scrollHeight + "px";
+      el.style.height = '';
+      el.style.height = el.scrollHeight + 'px';
     },
     blurInput($event, ref) {
       this.$refs[ref][0].blur();
@@ -120,7 +120,7 @@ export default {
     scrollTo(id) {
       if (this.is_focused) return;
       var options = {
-        container: "#live-correct-container",
+        container: '#live-correct-container',
         lazy: false,
         offset: -60,
         force: true,
@@ -158,7 +158,7 @@ export default {
     getSegmentClasses(segment) {
       return {
         segment: true,
-        "cursor-active": segment.id == this.cursor_segment_id,
+        'cursor-active': segment.id == this.cursor_segment_id,
       };
     },
   },

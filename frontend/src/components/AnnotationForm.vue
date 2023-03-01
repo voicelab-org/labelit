@@ -10,10 +10,10 @@
   </div>
 </template>
 <script>
-import TaskService from "@/services/task.service";
+import TaskService from '@/services/task.service';
 
 export default {
-  name: "annotation-form",
+  name: 'AnnotationForm',
   props: {
     annotation: {
       type: Object,
@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     annotationFormComponentName() {
-      return this.task.resourcetype + "Form";
+      return this.task.resourcetype + 'Form';
     },
   },
   created() {
@@ -36,7 +36,7 @@ export default {
       .then(function (response) {
         vm.task = response.data;
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   },
 };
 </script>

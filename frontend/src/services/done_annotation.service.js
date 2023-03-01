@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class DoneAnnotationService {
   constructor() {
@@ -8,7 +8,7 @@ class DoneAnnotationService {
 
   getNext(batch_id) {
     this.page++;
-    return this.request.get("/done_annotations/", {
+    return this.request.get('/done_annotations/', {
       batch: batch_id,
       page: this.page,
     });

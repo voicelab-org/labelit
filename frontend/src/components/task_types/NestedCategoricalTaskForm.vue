@@ -2,23 +2,23 @@
   <div class="task-form-container">
     <TaskFormHeader :task="task" :read-only="readOnly" />
     <NestedLabelSet
+      v-model="selected_labels"
       :focused="focused"
       :read-only="readOnly"
       :labels="task.labels"
-      v-model="selected_labels"
       :single-select="task.single_select"
     />
     <ValidationError :message="validationError" />
   </div>
 </template>
 <script>
-import NestedLabelSet from "@/components/NestedLabelSet";
-import TaskForm from "@/components/mixins/TaskForm";
-import ValidationError from "@/components/ValidationError";
-import TaskFormHeader from "@/components/TaskFormHeader";
+import NestedLabelSet from '@/components/NestedLabelSet.vue';
+import TaskForm from '@/components/mixins/TaskForm.vue';
+import ValidationError from '@/components/ValidationError.vue';
+import TaskFormHeader from '@/components/TaskFormHeader.vue';
 
 export default {
-  name: "categorical-task-form",
+  name: 'CategoricalTaskForm',
   components: {
     NestedLabelSet,
     ValidationError,

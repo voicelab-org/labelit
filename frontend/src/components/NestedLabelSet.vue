@@ -8,24 +8,24 @@
       ></span>
     </div>
 
-    <div class="dropdown-list" v-if="label_selections">
+    <div v-if="label_selections" class="dropdown-list">
       <div
-        :class="getParentLabelClasses(label, i)"
         v-for="(label, i) in parentLabels"
         :key="label.label.id"
+        :class="getParentLabelClasses(label, i)"
       >
         <div class="select">
           <div class="bolder">{{ label.label.name }}</div>
           <v-select
-            :items="label.children"
+            :ref="'dropdown-' + label.label.id"
             v-model="label_selections[i].selections"
+            :items="label.children"
             item-text="name"
             item-value="id"
             solo
             flat
             hide-details
             :multiple="label.label.single_child_select"
-            :ref="'dropdown-' + label.label.id"
             :placeholder="label.label.name"
             autofocus
             :disabled="readOnly"
@@ -39,7 +39,7 @@
 </template>
 <script>
 export default {
-  name: "nested-label-set",
+  name: 'NestedLabelSet',
   props: {
     labels: {
       type: Array,
@@ -56,11 +56,11 @@ export default {
     },
     valueField: {
       type: String,
-      default: "name",
+      default: 'name',
     },
     orderBy: {
       type: String,
-      default: "name",
+      default: 'name',
     },
     readOnly: {
       type: Boolean,
@@ -77,8 +77,18 @@ export default {
       label_selections: null,
     };
   },
-  created() {
-    this.setSelections();
+  computed: {
+    parentLabels() {
+      let parent_labels = this.labels.filter(l => l.parent_label == null);
+      let grouped = [];
+      parent_labels.forEach(p_label => {
+        grouped.push({
+          label: p_label,
+          children: this.labels.filter(l => l.parent_label == p_label.id),
+        });
+      });
+      return grouped;
+    },
   },
   watch: {
     label_selections: {
@@ -89,11 +99,11 @@ export default {
           return prev.concat(curr.selections);
         }, []);
 
-        selections = this.labels.filter((l) => {
+        selections = this.labels.filter(l => {
           return selections.includes(l.id);
         });
 
-        this.$emit("input", selections);
+        this.$emit('input', selections);
       },
     },
     cursor_index() {
@@ -105,10 +115,13 @@ export default {
       this.setDropdownFocus();
     },
   },
+  created() {
+    this.setSelections();
+  },
   methods: {
     setDropdownFocus() {
       for (const [index, label] of this.parentLabels.entries()) {
-        let ref = "dropdown-" + label.label.id;
+        let ref = 'dropdown-' + label.label.id;
         if (index == this.cursor_index) {
           this.$nextTick(() => {
             this.$refs[ref][0].focus();
@@ -122,12 +135,12 @@ export default {
     },
     setSelections() {
       let selected_labels = this.value;
-      this.parentLabels.forEach((p_label) => {
+      this.parentLabels.forEach(p_label => {
         let l = {
           parent_label: p_label,
           selections: selected_labels
-            .filter((l) => l.parent_label == p_label.label.id)
-            .map((l) => l.id),
+            .filter(l => l.parent_label == p_label.label.id)
+            .map(l => l.id),
         };
 
         if (!this.label_selections) {
@@ -140,18 +153,18 @@ export default {
     },
     getLabelPillStyle(label) {
       return {
-        "background-color": label.color,
+        'background-color': label.color,
       };
     },
     isLabelSelected(label) {
       return (
-        this.value.filter((l) => l[this.valueField] == label[this.valueField])
+        this.value.filter(l => l[this.valueField] == label[this.valueField])
           .length > 0
       );
     },
     isParentLabelSelected(label) {
       return (
-        this.value.filter((l) => l.parent_label == label.label.id).length > 0
+        this.value.filter(l => l.parent_label == label.label.id).length > 0
       );
     },
     getLabelClasses(label, i) {
@@ -160,7 +173,7 @@ export default {
         focused: i == this.cursor_index && this.focused,
       };
       if (this.isLabelSelected(label)) {
-        classes["selected"] = true;
+        classes['selected'] = true;
       }
       return classes;
     },
@@ -169,7 +182,7 @@ export default {
         focused: i == this.cursor_index && this.focused,
       };
       if (this.isParentLabelSelected(label)) {
-        classes["selected"] = true;
+        classes['selected'] = true;
       }
       return classes;
     },
@@ -177,23 +190,23 @@ export default {
       var newLabels = [];
       Object.assign(newLabels, this.value);
 
-      if (newLabels.find((l) => l.name == label.name)) {
-        newLabels = newLabels.filter((l) => l.name != label.name);
+      if (newLabels.find(l => l.name == label.name)) {
+        newLabels = newLabels.filter(l => l.name != label.name);
       } else {
         if (this.areLabelsExclusive) {
           newLabels = [];
         }
         newLabels.push(label);
       }
-      this.$emit("input", newLabels);
+      this.$emit('input', newLabels);
     },
     getLabelColor(label) {
       if (this.isLabelSelected(label)) {
-        return "primary";
+        return 'primary';
       }
     },
     browseLabels(direction) {
-      if (direction == "right") {
+      if (direction == 'right') {
         if (this.cursor_index == this.parentLabels.length - 1) {
           this.cursor_index = 0;
         } else {
@@ -201,26 +214,13 @@ export default {
         }
       }
 
-      if (direction == "left") {
+      if (direction == 'left') {
         if (this.cursor_index == 0) {
           this.cursor_index = this.parentLabels.length - 1;
         } else {
           this.cursor_index--;
         }
       }
-    },
-  },
-  computed: {
-    parentLabels() {
-      let parent_labels = this.labels.filter((l) => l.parent_label == null);
-      let grouped = [];
-      parent_labels.forEach((p_label) => {
-        grouped.push({
-          label: p_label,
-          children: this.labels.filter((l) => l.parent_label == p_label.id),
-        });
-      });
-      return grouped;
     },
   },
 };

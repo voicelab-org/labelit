@@ -1,14 +1,14 @@
 <template>
-  <v-icon color="primary" @click="exportExcel" :title="'Export data'">
+  <v-icon color="primary" :title="'Export data'" @click="exportExcel">
     mdi-download-box
   </v-icon>
 </template>
 
 <script>
-import { json2excel } from "js2excel";
+import { json2excel } from 'js2excel';
 
 export default {
-  name: "ExcelExport",
+  name: 'ExcelExport',
   props: {
     data: {
       type: Array,
@@ -27,11 +27,11 @@ export default {
       try {
         json2excel({
           data,
-          name: "export-" + name,
-          formateDate: "yyyy-mm-dd",
+          name: 'export-' + name,
+          formateDate: 'yyyy-mm-dd',
         });
       } catch (e) {
-        console.log("xport error", e);
+        console.log('xport error', e);
       }
     },
   },

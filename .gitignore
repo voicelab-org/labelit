@@ -8,3 +8,4 @@ export.json
 temp/
 .vscode
 **/*.egg-info
+**/.DS_Store

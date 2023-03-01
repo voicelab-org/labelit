@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-menu offset-x>
-      <template v-slot:activator="{ on, attrs }">
-        <a v-on="on" v-bind="attrs" @click.stop>Keyboard shortcuts</a>
+      <template #activator="{ on, attrs }">
+        <a v-bind="attrs" v-on="on" @click.stop>Keyboard shortcuts</a>
       </template>
       <div id="shortcut-guidelines">
         <ul>
@@ -53,7 +53,7 @@
 
 <script>
 export default {
-  name: "HotkeyGuide",
+  name: 'HotkeyGuide',
 };
 </script>
 

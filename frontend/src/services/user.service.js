@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class UserService {
   constructor() {
@@ -6,11 +6,11 @@ class UserService {
   }
 
   getUserList(params = {}) {
-    return this.request.get("/users/", params);
+    return this.request.get('/users/', params);
   }
 
   createUser(data) {
-    return this.request.post("/users/", data);
+    return this.request.post('/users/', data);
   }
 
   updateUser(usersId, payload) {

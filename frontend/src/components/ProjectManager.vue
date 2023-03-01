@@ -7,9 +7,9 @@
     </template>
     <v-dialog
       v-model="show_dialog"
-      @input="dialogInputEvent"
       max-width="800px"
       persistent
+      @input="dialogInputEvent"
     >
       <v-card>
         <v-card-title>
@@ -44,13 +44,16 @@
 </template>
 
 <script>
-import VJsf from "@koumoul/vjsf/lib/VJsf.js";
-import "@koumoul/vjsf/lib/VJsf.css";
-import ProjectService from "../services/project.service";
-import ApiService from "../services/api.service";
+import VJsf from '@koumoul/vjsf/lib/VJsf.js';
+import '@koumoul/vjsf/lib/VJsf.css';
+import ProjectService from '../services/project.service';
+import ApiService from '../services/api.service';
 
 export default {
-  name: "ProjectManager",
+  name: 'ProjectManager',
+  components: {
+    VJsf,
+  },
   props: {
     project: {
       type: Object,
@@ -63,20 +66,6 @@ export default {
       default: false,
     },
   },
-  components: {
-    VJsf,
-  },
-  computed: {
-    dialog_title() {
-      if (this.create_mode) {
-        return "Create a project";
-      }
-      return "Edit project " + this.model.name;
-    },
-  },
-  created() {
-    this.create_mode = Object.keys(this.model).length == 0;
-  },
   data() {
     return {
       show_dialog: this.show,
@@ -88,46 +77,46 @@ export default {
         httpLib: ApiService,
       },
       schema: {
-        type: "object",
-        required: ["name", "target_deadline", "target_num_documents"],
+        type: 'object',
+        required: ['name', 'target_deadline', 'target_num_documents'],
         properties: {
           name: {
-            type: "string",
+            type: 'string',
           },
-          is_audio_annotated: { type: "boolean", default: true },
-          enable_region_annotation: { type: "boolean", default: false },
-          is_text_annotated: { type: "boolean", default: true },
+          is_audio_annotated: { type: 'boolean', default: true },
+          enable_region_annotation: { type: 'boolean', default: false },
+          is_text_annotated: { type: 'boolean', default: true },
           // are_sequences_annotated
-          timer_inactivity_threshold: { type: "integer", default: 60000 },
-          do_display_timer_time: { type: "boolean", default: false },
+          timer_inactivity_threshold: { type: 'integer', default: 60000 },
+          do_display_timer_time: { type: 'boolean', default: false },
           does_audio_playing_count_as_activity: {
-            type: "boolean",
+            type: 'boolean',
             default: true,
           },
-          target_num_documents: { type: "integer", default: 100 },
+          target_num_documents: { type: 'integer', default: 100 },
           target_deadline: {
-            type: "string",
-            title: "Target date",
-            format: "date",
+            type: 'string',
+            title: 'Target date',
+            format: 'date',
           },
           description: {
-            type: "string",
-            "x-display": "textarea",
+            type: 'string',
+            'x-display': 'textarea',
           },
           tasks: {
-            type: "array",
-            title: "All tasks in this project",
-            "x-fromUrl": "/tasks/",
-            "x-itemTitle": "name",
-            "x-itemKey": "id",
+            type: 'array',
+            title: 'All tasks in this project',
+            'x-fromUrl': '/tasks/',
+            'x-itemTitle': 'name',
+            'x-itemKey': 'id',
             items: {
-              type: "object",
+              type: 'object',
               properties: {
                 id: {
-                  type: "integer",
+                  type: 'integer',
                 },
                 name: {
-                  type: "string",
+                  type: 'string',
                 },
               },
             },
@@ -136,6 +125,28 @@ export default {
       },
       //END VJSF'
     };
+  },
+  computed: {
+    dialog_title() {
+      if (this.create_mode) {
+        return 'Create a project';
+      }
+      return 'Edit project ' + this.model.name;
+    },
+  },
+  watch: {
+    show_dialog() {
+      this.$emit('input', this.show_dialog);
+    },
+    value() {
+      this.show_dialog = this.value;
+    },
+    project() {
+      this.model = this.project;
+    },
+  },
+  created() {
+    this.create_mode = Object.keys(this.model).length == 0;
   },
   methods: {
     dialogInputEvent() {},
@@ -148,32 +159,21 @@ export default {
     },
     create() {
       let p = { ...this.model };
-      p.tasks = p.tasks.map((t) => t.id);
+      p.tasks = p.tasks.map(t => t.id);
       ProjectService.create(p).then(() => {
         this.show_dialog = false;
         this.model = {};
-        this.$emit("changed");
+        this.$emit('changed');
       });
     },
     edit() {
       let p = { ...this.model };
-      p.tasks = p.tasks.map((t) => t.id);
+      p.tasks = p.tasks.map(t => t.id);
       ProjectService.updateProject(this.project.id, p).then(() => {
         this.show_dialog = false;
         this.model = {};
-        this.$emit("changed");
+        this.$emit('changed');
       });
-    },
-  },
-  watch: {
-    show_dialog() {
-      this.$emit("input", this.show_dialog);
-    },
-    value() {
-      this.show_dialog = this.value;
-    },
-    project() {
-      this.model = this.project;
     },
   },
 };

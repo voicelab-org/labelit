@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class TimedTranscriptService {
   constructor() {
@@ -6,7 +6,7 @@ class TimedTranscriptService {
   }
 
   create(data) {
-    return this.request.post("/timed_transcripts/", data);
+    return this.request.post('/timed_transcripts/', data);
   }
 
   update(timed_transcript_id, payload) {

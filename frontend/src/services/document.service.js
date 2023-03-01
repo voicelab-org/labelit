@@ -1,7 +1,5 @@
-import ApiService from "@/services/api.service";
-import { baseURL } from "@/app.config";
-
-const path = require("path");
+import ApiService from '@/services/api.service';
+import { baseURL } from '@/app.config';
 
 class DocumentService {
   constructor() {
@@ -12,15 +10,12 @@ class DocumentService {
     return this.request.get(`/audio/${documentId}/is_using_hls/`, config);
   }
 
-  getDocumentAudioById(documentId, config = { responseType: "blob" }) {
+  getDocumentAudioById(documentId, config = { responseType: 'blob' }) {
     return this.request.get(`/audio/${documentId}/`, config);
   }
 
   getDocumentAudioUrl(documentId) {
-    return new URL(
-      path.join("audio", documentId.toString()),
-      baseURL
-    ).toString();
+    return new URL(`audio/${documentId}`, baseURL).toString();
   }
 
   getAudioInfo(documentId, config = {}) {

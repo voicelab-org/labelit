@@ -2,7 +2,7 @@
   <div class="task-form-container">
     <TaskFormHeader :task="task" :read-only="readOnly" />
     <br />
-    <div id="region-info" v-if="!readOnly">
+    <div v-if="!readOnly" id="region-info">
       Highlight regions in the audio player displayed above. Double-click on a
       region to remove it.
     </div>
@@ -29,22 +29,22 @@
   </div>
 </template>
 <script>
-import TaskForm from "@/components/mixins/TaskForm";
-import TaskFormHeader from "@/components/TaskFormHeader";
-import { mapGetters } from "vuex";
-import AnnotationService from "@/services/annotation.service";
-import LabelService from "@/services/label.service";
+import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskFormHeader from '@/components/TaskFormHeader.vue';
+import { mapGetters } from 'vuex';
+import AnnotationService from '@/services/annotation.service.vue';
+import LabelService from '@/services/label.service.vue';
 
 export default {
-  name: "region-task-form",
+  name: 'RegionTaskForm',
   components: {
     TaskFormHeader,
   },
   mixins: [TaskForm],
   computed: {
     ...mapGetters({
-      region_tasks: "regions/region_tasks",
-      annotated_regions: "regions/annotated_regions",
+      region_tasks: 'regions/region_tasks',
+      annotated_regions: 'regions/annotated_regions',
     }),
     ordered_selected_labels() {
       let ordered = [...this.selected_labels];
@@ -62,49 +62,20 @@ export default {
       return grouped
     },*/
   },
-  created() {
-    this.$store.commit("regions/ADD_TASK", this.task);
-
-    // initial setup of initial state in DB
-    let selected_labels = [];
-    let promises = [];
-
-    this.annotation.labels.forEach((id) => {
-      promises.push(
-        LabelService.get(id).then((res) => selected_labels.push(res.data))
-      );
-    });
-    Promise.all(promises).then(() => {
-      this.selected_labels = selected_labels;
-      if (!this.readOnly) {
-        this.$store.commit(
-          "regions/ADD_ANNOTATED_REGIONS",
-          this.selected_labels
-        );
-      }
-    });
-  },
-  data() {
-    return {
-      labels_to_add: [],
-      showAnnotatedRegions: false,
-      isMixinWatcherActive: false,
-    };
-  },
   watch: {
     showAnnotatedRegions() {
       if (this.showAnnotatedRegions) {
         this.$store.commit(
-          "regions/SET_ANNOTATED_REGIONS",
+          'regions/SET_ANNOTATED_REGIONS',
           this.selected_labels
         );
       } else {
-        this.$store.commit("regions/SET_ANNOTATED_REGIONS", []);
+        this.$store.commit('regions/SET_ANNOTATED_REGIONS', []);
       }
     },
     annotated_regions() {
       if (this.readOnly) return;
-      this.selected_labels = this.annotated_regions.filter((e) => {
+      this.selected_labels = this.annotated_regions.filter(e => {
         return e.task == this.task.id;
       });
     },
@@ -136,12 +107,12 @@ export default {
             }
         )*/
         Promise.all(promises).then(() => {
-          editedAnnotation["labels"] = this.selected_labels.map((l) => l.id);
+          editedAnnotation['labels'] = this.selected_labels.map(l => l.id);
           AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
             .then(() => {
-              this.validationError = "";
+              this.validationError = '';
             })
-            .catch((error) => {
+            .catch(error => {
               console.log(JSON.stringify(error));
             });
         });
@@ -153,23 +124,52 @@ export default {
       if (vm.submitting) {
         var editedAnnotation = {};
         Object.assign(editedAnnotation, vm.annotation);
-        editedAnnotation["is_done"] = true;
-        editedAnnotation["labels"] = vm.selected_labels.map((l) => l.id);
-        editedAnnotation["time"] = vm.time;
+        editedAnnotation['is_done'] = true;
+        editedAnnotation['labels'] = vm.selected_labels.map(l => l.id);
+        editedAnnotation['time'] = vm.time;
         if (editedAnnotation.has_qa_invalidated) {
           editedAnnotation.is_resubmitted = true;
         }
         AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
           .then(() => {
-            this.validationError = "";
-            vm.$emit("submitted");
+            this.validationError = '';
+            vm.$emit('submitted');
           })
-          .catch((error) => {
+          .catch(error => {
             this.validationError = error.response.data.non_field_errors[0];
-            vm.$emit("submiterror");
+            vm.$emit('submiterror');
           });
       }
     },
+  },
+  created() {
+    this.$store.commit('regions/ADD_TASK', this.task);
+
+    // initial setup of initial state in DB
+    let selected_labels = [];
+    let promises = [];
+
+    this.annotation.labels.forEach(id => {
+      promises.push(
+        LabelService.get(id).then(res => selected_labels.push(res.data))
+      );
+    });
+    Promise.all(promises).then(() => {
+      this.selected_labels = selected_labels;
+      if (!this.readOnly) {
+        this.$store.commit(
+          'regions/ADD_ANNOTATED_REGIONS',
+          this.selected_labels
+        );
+      }
+    });
+  },
+  data() {
+    return {
+      labels_to_add: [],
+      showAnnotatedRegions: false,
+      isMixinWatcherActive: false,
+    };
   },
 };
 </script>
