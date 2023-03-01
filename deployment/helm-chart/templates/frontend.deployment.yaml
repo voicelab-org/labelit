@@ -35,6 +35,8 @@ spec:
             {{ end }}
             - name: VUE_APP_BACKEND_API
               value: https://{{ .Values.ingress.host }}/api/
+            - name: VUE_APP_VERSION
+              value: {{ $dockerTag }}
           {{- with .Values.frontend.resources }}
           resources:
 {{ toYaml . | indent 12 }}

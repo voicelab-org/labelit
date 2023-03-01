@@ -41,7 +41,7 @@ frontend:
   env:
     # You can add as much env variables as you want
     # VUE_APP_BACKEND_API is automatically computed using ingress.host value
-
+    VUE_APP_I18N_FALLBACK_LOCALE: en
 ingress:
   # Without https and slashes
   # host: labelit.my-domain-name.cool
