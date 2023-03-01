@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class LabelService {
   constructor() {
@@ -6,7 +6,7 @@ class LabelService {
   }
 
   create(data) {
-    return this.request.post("/labels/", data);
+    return this.request.post('/labels/', data);
   }
 
   get(id) {

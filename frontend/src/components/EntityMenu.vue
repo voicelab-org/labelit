@@ -2,11 +2,11 @@
   <div id="entity-menu">
     <v-menu :value="show" :position-x="x" :position-y="y" absolute offset-y>
       <v-list
+        :ref="'taskList'"
         dense
         min-width="150"
         max-height="400"
         class="overflow-y-auto"
-        :ref="'taskList'"
       >
         <span
           v-shortkey="['enter']"
@@ -32,8 +32,8 @@
               <v-list-item
                 v-for="(label, j) in task.labels"
                 :key="j"
-                @click="$emit('selected', label.id)"
                 :ref="'label-' + label.id"
+                @click="$emit('selected', label.id)"
               >
                 <v-list-item-content>
                   <span
@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: "EntityMenu",
+  name: 'EntityMenu',
   props: {
     show: {
       type: Boolean,
@@ -82,11 +82,11 @@ export default {
   },
   computed: {
     letter_dict() {
-      const alphabet = "abcdefghijklmnopqrstuvwxyz";
+      const alphabet = 'abcdefghijklmnopqrstuvwxyz';
       let idx = 0;
       let d = {};
-      this.tasks.forEach((t) => {
-        t.labels.forEach((l) => {
+      this.tasks.forEach(t => {
+        t.labels.forEach(l => {
           //d[l.name] = alphabet[idx % (alphabet.length - 1)]
           d[l.name] = alphabet[idx];
           idx++;
@@ -96,7 +96,7 @@ export default {
     },
     label_list() {
       return this.tasks
-        .map((t) => t.labels)
+        .map(t => t.labels)
         .reduce((prev, next) => prev.concat(next), []);
     },
     active_label() {
@@ -115,6 +115,14 @@ export default {
       return active_task;
     },
   },
+  watch: {
+    show() {
+      this.cursor_index = 0;
+    },
+    tasks() {
+      this.cursor_index = 0;
+    },
+  },
   methods: {
     selectLabel(name) {
       alert(name);
@@ -126,15 +134,15 @@ export default {
           }
       )*/
       this.$nextTick(() => {
-        this.$refs["task-" + this.active_task.id][0].$el.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "start",
+        this.$refs['task-' + this.active_task.id][0].$el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'start',
         });
 
-        let container = this.$refs["taskList"].$el;
+        let container = this.$refs['taskList'].$el;
         // let element = this.$refs['label-379'][0].$el
-        let element = this.$refs["label-" + this.active_label.id][0].$el;
+        let element = this.$refs['label-' + this.active_label.id][0].$el;
 
         const isVisible = function (ele, container) {
           const eleTop = ele.offsetTop;
@@ -155,10 +163,10 @@ export default {
         if (!isVisible(element, container)) {
           this.$nextTick(() => {
             //if (this.label_list[0] != this.active_label) {
-            this.$refs["label-" + this.active_label.id][0].$el.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-              inline: "start",
+            this.$refs['label-' + this.active_label.id][0].$el.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'start',
             });
 
             //}
@@ -167,14 +175,14 @@ export default {
       });
     },
     browseLabels(direction) {
-      if (direction == "up") {
+      if (direction == 'up') {
         if (this.cursor_index == 0) {
           this.cursor_index = this.label_list.length - 1;
         } else {
           this.cursor_index--;
         }
       }
-      if (direction == "down") {
+      if (direction == 'down') {
         if (this.cursor_index == this.label_list.length - 1) {
           this.cursor_index = 0;
         } else {
@@ -184,46 +192,38 @@ export default {
       this.scrollToActive();
     },
     browseTasks(direction) {
-      if (direction == "left") {
+      if (direction == 'left') {
         let current_label = this.label_list[this.cursor_index];
-        let current_task_idx = this.tasks.findIndex((t) => {
-          return t.labels.find((l) => l == current_label);
+        let current_task_idx = this.tasks.findIndex(t => {
+          return t.labels.find(l => l == current_label);
         });
         if (current_task_idx == 0) {
           let last_task = this.tasks[this.tasks.length - 1];
           this.cursor_index = this.label_list.length - last_task.labels.length;
         } else {
           let prev_task = this.tasks[current_task_idx - 1];
-          this.cursor_index = this.label_list.findIndex((l) => {
-            return prev_task.labels.find((tl) => tl == l);
+          this.cursor_index = this.label_list.findIndex(l => {
+            return prev_task.labels.find(tl => tl == l);
           });
         }
       }
 
-      if (direction == "right") {
+      if (direction == 'right') {
         let current_label = this.label_list[this.cursor_index];
-        let current_task_idx = this.tasks.findIndex((t) => {
-          return t.labels.find((l) => l == current_label);
+        let current_task_idx = this.tasks.findIndex(t => {
+          return t.labels.find(l => l == current_label);
         });
         if (current_task_idx == this.tasks.length - 1) {
           this.cursor_index = 0;
         } else {
           let next_task = this.tasks[current_task_idx + 1];
-          this.cursor_index = this.label_list.findIndex((l) => {
-            return next_task.labels.find((tl) => tl == l);
+          this.cursor_index = this.label_list.findIndex(l => {
+            return next_task.labels.find(tl => tl == l);
           });
         }
       }
 
       this.scrollToActive();
-    },
-  },
-  watch: {
-    show() {
-      this.cursor_index = 0;
-    },
-    tasks() {
-      this.cursor_index = 0;
     },
   },
 };

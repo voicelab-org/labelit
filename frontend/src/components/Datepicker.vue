@@ -10,17 +10,17 @@
       min-width="290px"
       right
     >
-      <template v-slot:activator="{ on }">
+      <template #activator="{ on }">
         <input type="text" :value="displayedDate" readonly v-on="on" />
       </template>
 
       <v-date-picker
         scrollable
         :value="value"
-        @input="dateChanged"
         :min="minDate"
         :max="maxDate"
         :disabled="is_disabled"
+        @input="dateChanged"
       >
       </v-date-picker>
     </v-menu>
@@ -28,12 +28,7 @@
 </template>
 <script>
 export default {
-  name: "Datepicker",
-  data() {
-    return {
-      open: false,
-    };
-  },
+  name: 'Datepicker',
   props: {
     value: {
       type: String,
@@ -48,15 +43,20 @@ export default {
       type: String,
     },
   },
+  data() {
+    return {
+      open: false,
+    };
+  },
   computed: {
     displayedDate: function () {
-      return new Date(this.value).toLocaleDateString("en");
+      return new Date(this.value).toLocaleDateString('en');
     },
   },
   methods: {
     dateChanged(newVal) {
-      this.$emit("input", newVal);
-      this.$emit("blur");
+      this.$emit('input', newVal);
+      this.$emit('blur');
     },
   },
 };

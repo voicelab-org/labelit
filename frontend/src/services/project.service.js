@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class ProjectService {
   constructor() {
@@ -6,11 +6,11 @@ class ProjectService {
   }
 
   getProjectList(params = {}) {
-    return this.request.get("/projects/", { params });
+    return this.request.get('/projects/', { params });
   }
 
   create(data) {
-    return this.request.post("/projects/", data);
+    return this.request.post('/projects/', data);
   }
 
   updateProject(projectId, payload) {
@@ -41,13 +41,13 @@ class ProjectService {
     //window.open(`/export_project/${id}/download`)
 
     return this.request
-      .get(`/export_project/${id}/download`, { responseType: "blob" })
-      .then((response) => {
+      .get(`/export_project/${id}/download`, { responseType: 'blob' })
+      .then(response => {
         console.log(response);
         const blob = new Blob([response.data], {
-          type: response.headers["content-type"],
+          type: response.headers['content-type'],
         });
-        const link = document.createElement("a");
+        const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         //link.download = label
         link.click();

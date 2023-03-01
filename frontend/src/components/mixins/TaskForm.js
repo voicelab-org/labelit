@@ -1,7 +1,7 @@
-import AnnotationService from "@/services/annotation.service";
+import AnnotationService from '@/services/annotation.service.js';
 
 export default {
-  name: "TaskForm",
+  name: 'TaskForm',
   mixins: [],
   props: {
     submitting: {
@@ -26,7 +26,7 @@ export default {
     },
     validationError: {
       type: String,
-      default: "",
+      default: '',
     },
     time: {
       type: Number,
@@ -51,7 +51,7 @@ export default {
     if (this.isMixinWatcherActive) {
       var vm = this;
       vm.selected_labels = vm.annotation.labels.map(function (id) {
-        return vm.task.labels.filter((label) => label.id == id)[0];
+        return vm.task.labels.filter(label => label.id == id)[0];
       });
     }
   },
@@ -71,13 +71,13 @@ export default {
         var editedAnnotation = {};
         Object.assign(editedAnnotation, vm.annotation);
 
-        editedAnnotation["labels"] = val.map((l) => l.id);
+        editedAnnotation['labels'] = val.map(l => l.id);
 
         AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
           .then(() => {
-            this.validationError = "";
+            this.validationError = '';
           })
-          .catch((error) => {
+          .catch(error => {
             this.validationError = error.response.data.non_field_errors[0];
             console.log(JSON.stringify(error));
           });
@@ -92,21 +92,21 @@ export default {
       if (vm.submitting) {
         var editedAnnotation = {};
         Object.assign(editedAnnotation, vm.annotation);
-        editedAnnotation["is_done"] = true;
-        editedAnnotation["labels"] = vm.selected_labels.map((l) => l.id);
+        editedAnnotation['is_done'] = true;
+        editedAnnotation['labels'] = vm.selected_labels.map(l => l.id);
 
-        editedAnnotation["time"] = vm.time;
+        editedAnnotation['time'] = vm.time;
         if (editedAnnotation.has_qa_invalidated) {
           editedAnnotation.is_resubmitted = true;
         }
         AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
           .then(() => {
-            this.validationError = "";
-            vm.$emit("submitted");
+            this.validationError = '';
+            vm.$emit('submitted');
           })
-          .catch((error) => {
+          .catch(error => {
             this.validationError = error.response.data.non_field_errors[0];
-            vm.$emit("submiterror");
+            vm.$emit('submiterror');
           });
       }
     },

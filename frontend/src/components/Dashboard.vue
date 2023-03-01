@@ -14,17 +14,17 @@
 
 <script>
 export default {
-  name: "dashboard",
+  name: 'Dashboard',
   data() {
     return {
       links: [
         {
-          name: "Stats",
-          dest: "/dashboard/stats/",
+          name: 'Stats',
+          dest: '/dashboard/stats/',
         },
         {
-          name: "Projects",
-          dest: "/dashboard/projects/",
+          name: 'Projects',
+          dest: '/dashboard/projects/',
         },
       ],
     };

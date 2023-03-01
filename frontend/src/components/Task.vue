@@ -5,7 +5,7 @@
       <div>Edit guidelines:</div>
       <vue-editor
         v-model="task.html_guidelines"
-        useCustomImageHandler
+        use-custom-image-handler
         @image-added="handleImageAdded"
       ></vue-editor>
     </div>
@@ -13,14 +13,14 @@
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
-import { baseURL } from "@/app.config";
+import { VueEditor } from 'vue2-editor';
+import { baseURL } from '@/app.config';
 
-import TaskService from "@/services/task.service.js";
-import ImageUploadService from "@/services/image_upload.service.js";
+import TaskService from '@/services/task.service.js';
+import ImageUploadService from '@/services/image_upload.service.js';
 
 export default {
-  name: "Task",
+  name: 'Task',
   components: {
     VueEditor,
   },
@@ -35,15 +35,15 @@ export default {
       task: null,
     };
   },
-  created() {
-    TaskService.getTaskById(this.taskId).then((res) => {
-      this.task = res.data;
-    });
-  },
   watch: {
-    "task.html_guidelines": function () {
+    'task.html_guidelines': function () {
       TaskService.updateTask(this.task.id, this.task);
     },
+  },
+  created() {
+    TaskService.getTaskById(this.taskId).then(res => {
+      this.task = res.data;
+    });
   },
   methods: {
     handleImageAdded: function (file, Editor, cursorLocation, resetUploader) {
@@ -52,18 +52,18 @@ export default {
       // formData.append('file', file)
 
       var formData = new FormData();
-      formData.append("image", file);
+      formData.append('image', file);
       ImageUploadService.upload(formData)
-        .then((res) => {
+        .then(res => {
           let url = res.data.url; // Get url from response
           Editor.insertEmbed(
             cursorLocation,
-            "image",
+            'image',
             baseURL.substring(0, baseURL.length - 1) + url
           );
           resetUploader();
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },

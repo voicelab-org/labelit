@@ -1,10 +1,10 @@
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "Timer",
+  name: 'Timer',
   data() {
     return {
-      timer: "",
+      timer: '',
       time: 0, // total time spent annotating, excluding periods of inactivity
       t0: 0, // the start time of the current period of activity
       isInactive: true,
@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      is_playing: "player/isPlaying",
+      is_playing: 'player/isPlaying',
     }),
     inactivity_timeout_duration() {
       if (this.batch) {
@@ -71,7 +71,7 @@ export default {
       }
     },
     activateActivityTracker: function () {
-      ["mousemove", "scroll", "keydown", "resize", "click"].forEach((evt) => {
+      ['mousemove', 'scroll', 'keydown', 'resize', 'click'].forEach(evt => {
         window.addEventListener(
           evt,
           () => {

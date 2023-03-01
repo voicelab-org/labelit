@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="general-stats"
       v-if="((numberOfAnnotations && batch) || project) && stats"
+      class="general-stats"
     >
       <h4>General stats</h4>
       <table class="stats-table">
@@ -127,11 +127,11 @@
 </template>
 
 <script>
-import BatchService from "@/services/batch.service";
-import ProjectService from "@/services/project.service";
+import BatchService from '@/services/batch.service';
+import ProjectService from '@/services/project.service';
 
 export default {
-  name: "Stats",
+  name: 'Stats',
   props: {
     batchId: {
       type: String,
@@ -139,6 +139,14 @@ export default {
     projectId: {
       type: Number,
     },
+  },
+  data() {
+    return {
+      numberOfAnnotations: [],
+      batch: null,
+      project: null,
+      stats: null,
+    };
   },
   computed: {
     average_time() {
@@ -156,14 +164,6 @@ export default {
       return null;
     },
   },
-  data() {
-    return {
-      numberOfAnnotations: [],
-      batch: null,
-      project: null,
-      stats: null,
-    };
-  },
   created() {
     let vm = this;
 
@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     getTaskStatsComponent(task) {
-      return task.resourcetype + "Stats";
+      return task.resourcetype + 'Stats';
     },
     getNumberOfAnnotations() {
       var vm = this;
@@ -186,29 +186,29 @@ export default {
         .then(function (res) {
           vm.numberOfAnnotations = res.data;
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
     getBatch() {
-      BatchService.getBatchById(this.batchId).then((res) => {
+      BatchService.getBatchById(this.batchId).then(res => {
         this.batch = res.data;
       });
     },
     getProject() {
-      ProjectService.getProjectById(this.projectId).then((res) => {
+      ProjectService.getProjectById(this.projectId).then(res => {
         this.project = res.data;
       });
     },
     getStats() {
       if (this.batchId) {
-        BatchService.getStats(this.batchId).then((res) => {
+        BatchService.getStats(this.batchId).then(res => {
           this.stats = res.data;
         });
       }
 
       if (this.projectId) {
-        ProjectService.getStats(this.projectId).then((res) => {
+        ProjectService.getStats(this.projectId).then(res => {
           this.stats = res.data;
         });
       }

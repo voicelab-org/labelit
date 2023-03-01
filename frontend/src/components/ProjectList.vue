@@ -5,9 +5,9 @@
       <div class="header-right">
         <project-manager v-if="isAdmin" @changed="getProjects" />
         <project-manager
-          @changed="projectEdited"
-          :project="edited_project"
           v-model="show_edit_project"
+          :project="edited_project"
+          @changed="projectEdited"
         />
       </div>
     </div>
@@ -43,13 +43,13 @@
 </template>
 
 <script>
-import ProjectService from "@/services/project.service";
-import ProjectMenu from "@/components/ProjectMenu";
-import ProjectManager from "./ProjectManager";
-import { mapGetters } from "vuex";
+import ProjectService from '@/services/project.service.js';
+import ProjectMenu from '@/components/ProjectMenu.vue';
+import ProjectManager from './ProjectManager.vue';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "project-list",
+  name: 'ProjectList',
   components: {
     ProjectMenu,
     ProjectManager,
@@ -59,7 +59,7 @@ export default {
       projects: [],
       show_archived: false,
       loading: true,
-      edited_project: { some: "project" },
+      edited_project: { some: 'project' },
       show_edit_project: false,
     };
   },
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     projectEdited() {
-      this.edited_project = { some: "project" };
+      this.edited_project = { some: 'project' };
       this.getProjects();
     },
     showEdit(project) {
@@ -78,31 +78,31 @@ export default {
     getProjects() {
       this.loading = true;
       ProjectService.getProjectList()
-        .then((response) => {
+        .then(response => {
           this.projects = response.data;
         })
-        .catch((error) => console.log(error))
+        .catch(error => console.log(error))
         .finally(() => (this.loading = false));
     },
     getLink(project) {
-      return "/project/" + project.id;
+      return '/project/' + project.id;
     },
     printProjectTasks(tasks) {
-      return tasks.map((t) => t.name).join(", ");
+      return tasks.map(t => t.name).join(', ');
     },
     goTo(project) {
-      this.$router.push("/project/" + project.id);
+      this.$router.push('/project/' + project.id);
     },
   },
   computed: {
     ...mapGetters({
-      isAdmin: "auth/isAdmin",
+      isAdmin: 'auth/isAdmin',
     }),
     shown_projects() {
       if (this.show_archived) {
-        var projects = this.projects.filter((p) => p.archived);
+        var projects = this.projects.filter(p => p.archived);
       } else {
-        projects = this.projects.filter((p) => !p.archived);
+        projects = this.projects.filter(p => !p.archived);
       }
       return projects.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     },

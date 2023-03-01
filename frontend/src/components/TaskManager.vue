@@ -35,26 +35,29 @@
 </template>
 
 <script>
-import VJsf from "@koumoul/vjsf/lib/VJsf.js";
-import "@koumoul/vjsf/lib/VJsf.css";
-import TaskService from "../services/task.service";
-import ApiService from "../services/api.service";
-import LabelService from "../services/label.service";
-import CategoricalTaskSchema from "@/components/task_types/task_manager_schemas/CategoricalTaskSchema.json";
-import TaskSchemas from "@/components/task_types/task_manager_schemas";
+import VJsf from '@koumoul/vjsf/lib/VJsf.js';
+import '@koumoul/vjsf/lib/VJsf.css';
+import TaskService from '@/services/task.service.js';
+import ApiService from '@/services/api.service.js';
+import LabelService from '@/services/label.service.js';
+import CategoricalTaskSchema from '@/components/task_types/task_manager_schemas/CategoricalTaskSchema.json';
+import TaskSchemas from '@/components/task_types/task_manager_schemas/index.js';
 
-console.log("schemas:", TaskSchemas);
+console.log('schemas:', TaskSchemas);
 
-let resourcetype_choices = Object.keys(TaskSchemas).map((schema_name) => {
+let resourcetype_choices = Object.keys(TaskSchemas).map(schema_name => {
   return {
-    const: schema_name.replace("Schema", ""),
-    title: schema_name.replace("Schema", "").split("Task")[0] + " task",
+    const: schema_name.replace('Schema', ''),
+    title: schema_name.replace('Schema', '').split('Task')[0] + ' task',
   };
 });
-console.log("resourcetype_choices", resourcetype_choices);
+console.log('resourcetype_choices', resourcetype_choices);
 
 export default {
-  name: "TaskManager",
+  name: 'TaskManager',
+  components: {
+    VJsf,
+  },
   props: {
     task: {
       type: Object,
@@ -66,21 +69,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  components: {
-    VJsf,
-  },
-  computed: {
-    dialog_title() {
-      if (this.create_mode) {
-        return "Create a task";
-      }
-      return "Edit task " + this.model.name;
-    },
-  },
-  created() {
-    this.create_mode = Object.keys(this.model).length == 0;
-    this.schema = { ...this.base_schema };
   },
   data() {
     return {
@@ -97,21 +85,21 @@ export default {
       },
       schema: null,
       base_schema: {
-        type: "object",
-        required: ["name"],
+        type: 'object',
+        required: ['name'],
         properties: {
           name: {
-            type: "string",
+            type: 'string',
           },
-          can_documents_be_invalidated: { type: "boolean", default: true },
+          can_documents_be_invalidated: { type: 'boolean', default: true },
           resourcetype: {
-            type: "string",
-            title: "Task type",
-            oneOf: Object.keys(TaskSchemas).map((schema_name) => {
+            type: 'string',
+            title: 'Task type',
+            oneOf: Object.keys(TaskSchemas).map(schema_name => {
               return {
-                const: schema_name.replace("Schema", ""),
+                const: schema_name.replace('Schema', ''),
                 title:
-                  schema_name.replace("Schema", "").split("Task")[0] + " task",
+                  schema_name.replace('Schema', '').split('Task')[0] + ' task',
               };
             }),
           },
@@ -119,6 +107,43 @@ export default {
       },
       //END VJSF'
     };
+  },
+  computed: {
+    dialog_title() {
+      if (this.create_mode) {
+        return 'Create a task';
+      }
+      return 'Edit task ' + this.model.name;
+    },
+  },
+  watch: {
+    show_dialog() {
+      this.$emit('input', this.show_dialog);
+    },
+    value() {
+      this.show_dialog = this.value;
+    },
+    task() {
+      console.log('task', JSON.parse(JSON.stringify(this.task)));
+      let schema = this.TaskSchemas[this.task.resourcetype + 'Schema'];
+      this.schema.properties = {
+        ...this.base_schema.properties,
+        ...schema,
+      };
+      this.model = this.task;
+    },
+    'model.resourcetype'() {
+      let schema = this.TaskSchemas[this.model.resourcetype + 'Schema'];
+
+      this.schema.properties = {
+        ...this.base_schema.properties,
+        ...schema,
+      };
+    },
+  },
+  created() {
+    this.create_mode = Object.keys(this.model).length == 0;
+    this.schema = { ...this.base_schema };
   },
   methods: {
     submit() {
@@ -130,22 +155,22 @@ export default {
     },
     editLabels(labels, task_type) {
       let promises = [];
-      labels.forEach((l) => {
-        let label_type = task_type.replace("Task", "Label");
+      labels.forEach(l => {
+        let label_type = task_type.replace('Task', 'Label');
         //hack
-        if (label_type == "CategoricalLabel") {
-          label_type = "Label";
+        if (label_type == 'CategoricalLabel') {
+          label_type = 'Label';
         }
         //end hack
         let label_payload = {
           resourcetype: label_type,
         };
-        let label_keys = Object.keys(l).filter((k) => k[0] != "_");
-        label_keys.forEach((k) => {
+        let label_keys = Object.keys(l).filter(k => k[0] != '_');
+        label_keys.forEach(k => {
           label_payload[k] = l[k];
         });
         promises.push(
-          LabelService.update(label_payload.id, label_payload).then((r) => {
+          LabelService.update(label_payload.id, label_payload).then(r => {
             return r.data.id;
           })
         );
@@ -154,22 +179,22 @@ export default {
     },
     createLabels(labels, task_type) {
       let promises = [];
-      labels.forEach((l) => {
-        let label_type = task_type.replace("Task", "Label");
+      labels.forEach(l => {
+        let label_type = task_type.replace('Task', 'Label');
         //hack
-        if (label_type == "CategoricalLabel") {
-          label_type = "Label";
+        if (label_type == 'CategoricalLabel') {
+          label_type = 'Label';
         }
         //end hack
         let label_payload = {
           resourcetype: label_type,
         };
-        let label_keys = Object.keys(l).filter((k) => k[0] != "_");
-        label_keys.forEach((k) => {
+        let label_keys = Object.keys(l).filter(k => k[0] != '_');
+        label_keys.forEach(k => {
           label_payload[k] = l[k];
         });
         promises.push(
-          LabelService.create(label_payload).then((r) => {
+          LabelService.create(label_payload).then(r => {
             return r.data.id;
           })
         );
@@ -179,29 +204,29 @@ export default {
     create() {
       let t = { ...this.model };
 
-      console.log("t.labels", t.labels);
-      let schema = TaskSchemas[t.resourcetype + "Schema"];
-      console.log("&schema keys", Object.keys(schema));
+      console.log('t.labels', t.labels);
+      let schema = TaskSchemas[t.resourcetype + 'Schema'];
+      console.log('&schema keys', Object.keys(schema));
       let promises = [];
-      if (Object.keys(this.schema.properties).includes("labels")) {
-        console.log("labels in schema");
+      if (Object.keys(this.schema.properties).includes('labels')) {
+        console.log('labels in schema');
         promises = this.createLabels(t.labels, t.resourcetype);
       } else {
-        console.log("labels not in schema");
+        console.log('labels not in schema');
       }
-      Promise.all(promises).then((ids) => {
-        console.log("label ids", ids);
+      Promise.all(promises).then(ids => {
+        console.log('label ids', ids);
         let task_payload = {
           resourcetype: t.resourcetype,
           //name: this.model.name,
           //can_documents_be_invalidated: this.model.can_documents_be_invalidated,
         };
-        Object.keys(this.schema.properties).forEach((schema_key) => {
-          console.log("schema_key", schema_key);
-          if (schema_key == "labels") return;
+        Object.keys(this.schema.properties).forEach(schema_key => {
+          console.log('schema_key', schema_key);
+          if (schema_key == 'labels') return;
           task_payload[schema_key] = this.model[schema_key];
         });
-        if (Object.keys(schema).includes("labels")) {
+        if (Object.keys(schema).includes('labels')) {
           task_payload = {
             labels: ids,
             ...task_payload,
@@ -211,7 +236,7 @@ export default {
         TaskService.createTask(task_payload).then(() => {
           this.show_dialog = false;
           this.model = {};
-          this.$emit("changed");
+          this.$emit('changed');
         });
       });
     },
@@ -220,12 +245,12 @@ export default {
 
       let create_labels_promises = [];
       let edit_labels_promises = [];
-      if (Object.keys(this.schema.properties).includes("labels")) {
-        let labels_to_create = t.labels.filter((l) => {
+      if (Object.keys(this.schema.properties).includes('labels')) {
+        let labels_to_create = t.labels.filter(l => {
           return l.id == null;
         });
 
-        let labels_to_keep = t.labels.filter((l) => l.id != null);
+        let labels_to_keep = t.labels.filter(l => l.id != null);
 
         create_labels_promises = this.createLabels(
           labels_to_create,
@@ -235,7 +260,7 @@ export default {
       }
 
       Promise.all(create_labels_promises.concat(edit_labels_promises)).then(
-        (label_ids) => {
+        label_ids => {
           /*
             let task_payload = {
               resourcetype: t.resourcetype,
@@ -261,49 +286,24 @@ export default {
             id: this.task.id,
             resourcetype: t.resourcetype,
           };
-          if (Object.keys(this.schema.properties).includes("labels")) {
+          if (Object.keys(this.schema.properties).includes('labels')) {
             task_payload = {
               labels: label_ids,
               ...task_payload,
             };
           }
-          Object.keys(this.schema.properties).forEach((schema_key) => {
-            console.log("schema_key", schema_key);
-            if (schema_key == "labels") return;
+          Object.keys(this.schema.properties).forEach(schema_key => {
+            console.log('schema_key', schema_key);
+            if (schema_key == 'labels') return;
             task_payload[schema_key] = this.model[schema_key];
           });
           TaskService.updateTask(this.task.id, task_payload).then(() => {
             this.show_dialog = false;
             this.model = {};
-            this.$emit("changed");
+            this.$emit('changed');
           });
         }
       );
-    },
-  },
-  watch: {
-    show_dialog() {
-      this.$emit("input", this.show_dialog);
-    },
-    value() {
-      this.show_dialog = this.value;
-    },
-    task() {
-      console.log("task", JSON.parse(JSON.stringify(this.task)));
-      let schema = this.TaskSchemas[this.task.resourcetype + "Schema"];
-      this.schema.properties = {
-        ...this.base_schema.properties,
-        ...schema,
-      };
-      this.model = this.task;
-    },
-    "model.resourcetype"() {
-      let schema = this.TaskSchemas[this.model.resourcetype + "Schema"];
-
-      this.schema.properties = {
-        ...this.base_schema.properties,
-        ...schema,
-      };
     },
   },
 };

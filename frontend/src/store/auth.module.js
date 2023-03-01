@@ -1,8 +1,8 @@
-import ApiService from "@/services/api.service";
-import AuthService from "@/services/auth.service";
-import LocalStorageService from "@/services/local.storage.service";
-import UserService from "@/services/user.service";
-import router from "@/router";
+import ApiService from '@/services/api.service';
+import AuthService from '@/services/auth.service';
+import LocalStorageService from '@/services/local.storage.service';
+import UserService from '@/services/user.service';
+import router from '@/router';
 
 const access_token = LocalStorageService.getAccessToken() || null;
 const refresh_token = LocalStorageService.getAccessToken() || null;
@@ -28,13 +28,13 @@ export const auth = {
   },
   actions: {
     authenticateUser({ commit }, authData) {
-      return AuthService.postCredential(authData).then((res) => {
-        commit("SET_ACCESS_TOKEN", res.data.access);
-        commit("SET_REFRESH_TOKEN", res.data.refresh);
+      return AuthService.postCredential(authData).then(res => {
+        commit('SET_ACCESS_TOKEN', res.data.access);
+        commit('SET_REFRESH_TOKEN', res.data.refresh);
         ApiService.setHeader(res.data.access);
         UserService.getCurrentUser()
           .then(function (response) {
-            commit("SET_USER", response.data);
+            commit('SET_USER', response.data);
           })
           .catch(function (error) {
             console.log(error);
@@ -43,13 +43,13 @@ export const auth = {
     },
     logout({ dispatch }) {
       ApiService.removeHeader();
-      dispatch("resetState");
-      router.push("login");
+      dispatch('resetState');
+      router.push('login');
     },
     resetState({ commit }) {
-      commit("CLEAR_ACCESS_TOKEN");
-      commit("CLEAR_REFRESH_TOKEN");
-      commit("CLEAR_USER");
+      commit('CLEAR_ACCESS_TOKEN');
+      commit('CLEAR_REFRESH_TOKEN');
+      commit('CLEAR_USER');
     },
   },
   mutations: {

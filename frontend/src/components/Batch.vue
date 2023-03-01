@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import BatchService from "@/services/batch.service";
-import ProjectService from "@/services/project.service";
-import { mapGetters } from "vuex";
+import BatchService from '@/services/batch.service';
+import ProjectService from '@/services/project.service';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "batch",
+  name: 'Batch',
   props: {
     batchId: {
       type: String,
@@ -43,37 +43,37 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: "auth/user",
+      user: 'auth/user',
     }),
     basePath() {
-      return "/batch/" + this.batchId + "/";
+      return '/batch/' + this.batchId + '/';
     },
     links() {
       var vm = this;
       if (this.user.is_staff) {
         var links = [
           {
-            name: "QA",
-            dest: vm.basePath + "qa",
+            name: 'QA',
+            dest: vm.basePath + 'qa',
           },
         ];
       } else {
         links = [
           {
-            name: "Annotate",
-            dest: vm.basePath + "annotate",
+            name: 'Annotate',
+            dest: vm.basePath + 'annotate',
           },
           {
-            name: "Review",
-            dest: vm.basePath + "review",
+            name: 'Review',
+            dest: vm.basePath + 'review',
           },
         ];
       }
 
       links = links.concat([
         {
-          name: "Stats",
-          dest: vm.basePath + "stats",
+          name: 'Stats',
+          dest: vm.basePath + 'stats',
         },
       ]);
       return links;
@@ -94,11 +94,11 @@ export default {
         vm.batch = response.data;
         ProjectService.getProjectById(response.data.project.id)
           .then(function (res) {
-            vm.$store.commit("task/SET_TASK_LIST", res.data.tasks);
+            vm.$store.commit('task/SET_TASK_LIST', res.data.tasks);
           })
-          .catch((error) => console.log(error));
+          .catch(error => console.log(error));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
     this.getProgress();
     BatchService.getNumToReview(vm.batchId).then(function (response) {
       vm.to_review_count = response.data.count;
@@ -108,11 +108,11 @@ export default {
     getProgress() {
       var vm = this;
       BatchService.getBatchByIdProgress(vm.batchId)
-        .then((res) => {
+        .then(res => {
           vm.total_units = res.data.total;
           vm.num_done_units = res.data.num_done_units;
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
       return;
     },
   },

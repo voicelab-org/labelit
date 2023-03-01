@@ -14,25 +14,19 @@
 </template>
 
 <script>
-import LocalStorageService from "@/services/local.storage.service.js";
+import LocalStorageService from '@/services/local.storage.service.js';
 
 export default {
-  name: "BlueFilter",
+  name: 'BlueFilter',
   data() {
     return {
       slider: 45,
     };
   },
-  created() {
-    if (LocalStorageService.getBlueFilterValue() == null) {
-      LocalStorageService.setBlueFilterValue(this.slider);
-    }
-    this.slider = LocalStorageService.getBlueFilterValue();
-  },
   computed: {
     overlayStyle() {
       return {
-        background: "rgba(255, 255, 0, " + this.slider / 100 + ")",
+        background: 'rgba(255, 255, 0, ' + this.slider / 100 + ')',
       };
     },
   },
@@ -40,6 +34,12 @@ export default {
     slider() {
       LocalStorageService.setBlueFilterValue(this.slider);
     },
+  },
+  created() {
+    if (LocalStorageService.getBlueFilterValue() == null) {
+      LocalStorageService.setBlueFilterValue(this.slider);
+    }
+    this.slider = LocalStorageService.getBlueFilterValue();
   },
 };
 </script>

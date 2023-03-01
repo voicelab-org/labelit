@@ -7,7 +7,7 @@
       </v-checkbox>
     </div>
     <div v-if="loaded && project">
-      <div id="doc-container" v-if="document">
+      <div v-if="document" id="doc-container">
         <Document :document="document" :project="project" />
       </div>
       <div v-for="task in tasks" :key="task.id">
@@ -29,7 +29,7 @@
         </div>
       </div>
       <template v-if="!noMore">
-        <v-btn @click="skip" style="margin-right: 5px"> Skip </v-btn>
+        <v-btn style="margin-right: 5px" @click="skip"> Skip </v-btn>
         <v-btn @click="getNextDocument(false)"> Next </v-btn>
       </template>
     </div>
@@ -37,19 +37,19 @@
 </template>
 
 <script>
-import BatchService from "@/services/batch.service";
-import DoneAnnotationService from "@/services/done_annotation.service";
-import QAForm from "./QAForm.vue";
-import Document from "./Document";
-import QA from "./mixins/QA.js";
+import BatchService from '@/services/batch.service';
+import DoneAnnotationService from '@/services/done_annotation.service';
+import QAForm from './QAForm.vue';
+import Document from './Document.vue';
+import QA from './mixins/QA.js';
 
 export default {
-  name: "QA",
-  mixins: [QA],
+  name: 'QA',
   components: {
     QAForm,
     Document,
   },
+  mixins: [QA],
   props: {
     batchId: {
       type: String,
@@ -69,6 +69,10 @@ export default {
       annotation_index: 0,
     };
   },
+  created() {
+    this.done_annotation_service = new DoneAnnotationService();
+    this.getNextDocument();
+  },
   methods: {
     resetIndex() {
       this.annotation_index = 0;
@@ -79,7 +83,7 @@ export default {
     getNextDocument(skip = false) {
       let vm = this;
 
-      this.$store.commit("entities/CLEAR_ANNOTATED_ENTITIES");
+      this.$store.commit('entities/CLEAR_ANNOTATED_ENTITIES');
       vm.annotations = null;
       vm.tasks = null;
 
@@ -87,7 +91,7 @@ export default {
         this.skipped_document_ids.push(this.document.id);
       }
 
-      BatchService.getBatchById(vm.batchId).then((res) => {
+      BatchService.getBatchById(vm.batchId).then(res => {
         vm.project = res.data.project;
       });
 
@@ -95,13 +99,13 @@ export default {
         only_non_reviewed_annotations: this.only_non_reviewed_annotations,
         index: this.annotation_index,
       })
-        .then((response) => {
+        .then(response => {
           vm.annotations = response.data.annotations;
           vm.document = response.data.document;
           vm.tasks = response.data.tasks;
           vm.loaded = true;
         })
-        .catch((err) => {
+        .catch(err => {
           if (err.response.status == 404) {
             this.noMore = true;
             this.document = null;
@@ -110,15 +114,11 @@ export default {
       this.annotation_index++;
     },
     taskAnnotations(task) {
-      return this.annotations.filter((a) => a.task == task.id);
+      return this.annotations.filter(a => a.task == task.id);
     },
     getFormForTask(task) {
-      return task.resourcetype + "Form";
+      return task.resourcetype + 'Form';
     },
-  },
-  created() {
-    this.done_annotation_service = new DoneAnnotationService();
-    this.getNextDocument();
   },
 };
 </script>

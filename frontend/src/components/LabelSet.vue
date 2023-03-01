@@ -14,14 +14,14 @@
     <div></div>
     <div class="button-list">
       <v-btn
-        class="label"
         v-for="(label, i) in orderedLabels"
         :key="label.name"
-        @click="toggleLabel(label)"
+        class="label"
         :class="getLabelClasses(label, i)"
         :depressed="isLabelSelected(label)"
         :color="getLabelColor(label)"
         :disabled="readOnly"
+        @click="toggleLabel(label)"
       >
         <span class="label-pill" :style="getLabelPillStyle(label)"></span>
         {{ label[valueField] }}
@@ -31,7 +31,7 @@
 </template>
 <script>
 export default {
-  name: "label-set",
+  name: 'LabelSet',
   props: {
     labels: {
       type: Array,
@@ -48,11 +48,11 @@ export default {
     },
     valueField: {
       type: String,
-      default: "name",
+      default: 'name',
     },
     orderBy: {
       type: String,
-      default: "name",
+      default: 'name',
     },
     readOnly: {
       type: Boolean,
@@ -68,65 +68,6 @@ export default {
       cursor_index: 0,
     };
   },
-  methods: {
-    getLabelPillStyle(label) {
-      return {
-        "background-color": label.color,
-      };
-    },
-    isLabelSelected(label) {
-      return (
-        this.value.filter((l) => l[this.valueField] == label[this.valueField])
-          .length > 0
-      );
-    },
-    getLabelClasses(label, i) {
-      var classes = {
-        selected: false,
-        focused: i == this.cursor_index && this.focused,
-      };
-      if (this.isLabelSelected(label)) {
-        classes["selected"] = true;
-      }
-      return classes;
-    },
-    toggleLabel(label) {
-      var newLabels = [];
-      Object.assign(newLabels, this.value);
-
-      if (newLabels.find((l) => l.name == label.name)) {
-        newLabels = newLabels.filter((l) => l.name != label.name);
-      } else {
-        if (this.areLabelsExclusive) {
-          newLabels = [];
-        }
-        newLabels.push(label);
-      }
-      this.$emit("input", newLabels);
-    },
-    getLabelColor(label) {
-      if (this.isLabelSelected(label)) {
-        return "primary";
-      }
-    },
-    browseLabels(direction) {
-      if (direction == "right") {
-        if (this.cursor_index == this.orderedLabels.length - 1) {
-          this.cursor_index = 0;
-        } else {
-          this.cursor_index++;
-        }
-      }
-
-      if (direction == "left") {
-        if (this.cursor_index == 0) {
-          this.cursor_index = this.orderedLabels.length - 1;
-        } else {
-          this.cursor_index--;
-        }
-      }
-    },
-  },
   computed: {
     orderedLabels() {
       var vm = this;
@@ -136,6 +77,65 @@ export default {
       return labelsCopy.sort((a, b) => {
         return a[vm.valueField] > b[vm.valueField] ? 1 : -1;
       });
+    },
+  },
+  methods: {
+    getLabelPillStyle(label) {
+      return {
+        'background-color': label.color,
+      };
+    },
+    isLabelSelected(label) {
+      return (
+        this.value.filter(l => l[this.valueField] == label[this.valueField])
+          .length > 0
+      );
+    },
+    getLabelClasses(label, i) {
+      var classes = {
+        selected: false,
+        focused: i == this.cursor_index && this.focused,
+      };
+      if (this.isLabelSelected(label)) {
+        classes['selected'] = true;
+      }
+      return classes;
+    },
+    toggleLabel(label) {
+      var newLabels = [];
+      Object.assign(newLabels, this.value);
+
+      if (newLabels.find(l => l.name == label.name)) {
+        newLabels = newLabels.filter(l => l.name != label.name);
+      } else {
+        if (this.areLabelsExclusive) {
+          newLabels = [];
+        }
+        newLabels.push(label);
+      }
+      this.$emit('input', newLabels);
+    },
+    getLabelColor(label) {
+      if (this.isLabelSelected(label)) {
+        return 'primary';
+      }
+    },
+    browseLabels(direction) {
+      if (direction == 'right') {
+        if (this.cursor_index == this.orderedLabels.length - 1) {
+          this.cursor_index = 0;
+        } else {
+          this.cursor_index++;
+        }
+      }
+
+      if (direction == 'left') {
+        if (this.cursor_index == 0) {
+          this.cursor_index = this.orderedLabels.length - 1;
+        } else {
+          this.cursor_index--;
+        }
+      }
     },
   },
 };

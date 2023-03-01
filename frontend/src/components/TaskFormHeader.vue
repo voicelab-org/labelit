@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import Guidelines from "./Guidelines";
+import Guidelines from './Guidelines';
 
 export default {
-  name: "TaskFormHeader",
+  name: 'TaskFormHeader',
   components: { Guidelines },
   props: {
     task: {

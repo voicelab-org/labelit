@@ -22,7 +22,7 @@
         <div v-if="user" id="user-corner">
           <BlueFilter />
           <!--          <v-btn text rounded>{{ user.email }}</v-btn>-->
-          <v-btn text rounded @click="logout()" :title="user.email">
+          <v-btn text rounded :title="user.email" @click="logout()">
             <v-icon>mdi-logout</v-icon>
           </v-btn>
         </div>
@@ -47,32 +47,32 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import BlueFilter from "@/components/BlueFilter";
+import { mapGetters } from 'vuex';
+import BlueFilter from '@/components/BlueFilter.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     BlueFilter,
   },
   data: () => ({
-    links: ["Projects", "Datasets"],
+    links: ['Projects', 'Datasets'],
   }),
   computed: {
     ...mapGetters({
-      user: "auth/user",
+      user: 'auth/user',
     }),
   },
   methods: {
     logout() {
-      this.$store.dispatch("auth/logout");
+      this.$store.dispatch('auth/logout');
     },
   },
 };
 </script>
 
 <style lang="scss">
-@import "@/styles/app.scss";
+@import '@/styles/app.scss';
 
 #user-corner {
   display: flex;

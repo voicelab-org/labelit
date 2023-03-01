@@ -5,18 +5,18 @@
 </template>
 
 <script>
-import Annotate from "./Annotate.vue";
+import Annotate from './Annotate.vue';
 
 export default {
-  name: "Review",
+  name: 'Review',
+  components: {
+    Annotate,
+  },
   props: {
     batchId: {
       type: String,
       required: true,
     },
-  },
-  components: {
-    Annotate,
   },
 };
 </script>

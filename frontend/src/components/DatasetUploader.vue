@@ -24,8 +24,8 @@
 
         <v-btn
           v-show="!$refs.upload || !$refs.upload.active"
-          @click.prevent="$refs.upload.active = true"
           :style="{ position: 'relative', top: '-17px' }"
+          @click.prevent="$refs.upload.active = true"
         >
           2. Upload
         </v-btn>
@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import { baseURL } from "@/app.config";
-import LocalStorageService from "@/services/local.storage.service";
+import { baseURL } from '@/app.config';
+import LocalStorageService from '@/services/local.storage.service';
 
 export default {
-  name: "DatasetUploader",
+  name: 'DatasetUploader',
   data() {
     return {
       files: [],
@@ -50,15 +50,20 @@ export default {
       dataset_uploaded: false,
     };
   },
-  created() {
-    this.access_token = LocalStorageService.getAccessToken();
-  },
   computed: {
     headers() {
       return {
         Authorization: `Bearer ${this.access_token}`,
       };
     },
+  },
+  watch: {
+    dataset_uploaded() {
+      console.log('&change');
+    },
+  },
+  created() {
+    this.access_token = LocalStorageService.getAccessToken();
   },
   methods: {
     /**
@@ -68,16 +73,16 @@ export default {
      * @return undefined
      */
     inputFile: function (newFile, oldFile) {
-      console.log("&newFile, oldFile", newFile, oldFile);
+      console.log('&newFile, oldFile', newFile, oldFile);
       if (newFile && oldFile && !newFile.active && oldFile.active) {
         // Get response data
-        console.log("response", newFile.response);
+        console.log('response', newFile.response);
         if (newFile.xhr) {
           //  Get the response status code
-          console.log("status", newFile.xhr.status);
+          console.log('status', newFile.xhr.status);
           if (200 == newFile.xhr.status) {
             this.dataset_uploaded = true;
-            this.$emit("imported");
+            this.$emit('imported');
           }
         }
       }
@@ -99,16 +104,11 @@ export default {
       }*/
 
       // Create a blob field
-      newFile.blob = "";
+      newFile.blob = '';
       let URL = window.URL || window.webkitURL;
       if (URL && URL.createObjectURL) {
         newFile.blob = URL.createObjectURL(newFile.file);
       }
-    },
-  },
-  watch: {
-    dataset_uploaded() {
-      console.log("&change");
     },
   },
 };

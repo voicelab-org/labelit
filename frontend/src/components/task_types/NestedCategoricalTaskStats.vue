@@ -2,7 +2,7 @@
   <div class="task-stats">
     <h4>Stats for task: {{ task.name }}</h4>
     <div v-if="stats">
-      <table class="stats-table" v-if="stats.agreement">
+      <table v-if="stats.agreement" class="stats-table">
         <tr>
           <td class="left">{{ stats.agreement.metric }}</td>
           <td>{{ stats.agreement.value }}</td>
@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import TaskStats from "@/components/mixins/TaskStats.js";
-import BarChart from "@/components/BarChart";
+import TaskStats from '@/components/mixins/TaskStats.js';
+import BarChart from '@/components/BarChart.vue';
 
 export default {
-  name: "NestedCategoricalTaskStats",
-  mixins: [TaskStats],
+  name: 'NestedCategoricalTaskStats',
   components: {
     BarChart,
   },
+  mixins: [TaskStats],
   computed: {
     barchart_options() {
       return {
@@ -64,16 +64,16 @@ export default {
   methods: {
     getBarChartData(distribution, name_prop, color_prop) {
       //labels__name, labels__color
-      if (!name_prop) name_prop = "labels__name";
-      if (!color_prop) color_prop = "labels__color";
+      if (!name_prop) name_prop = 'labels__name';
+      if (!color_prop) color_prop = 'labels__color';
       let data = {};
-      data.labels = distribution.map((d) => d[name_prop]);
+      data.labels = distribution.map(d => d[name_prop]);
       data.datasets = [
         {
-          data: distribution.map((d) => d.count),
+          data: distribution.map(d => d.count),
           borderWidth: 2,
           barThickness: 60,
-          backgroundColor: distribution.map((d) => d[color_prop]),
+          backgroundColor: distribution.map(d => d[color_prop]),
         },
       ];
       return data;

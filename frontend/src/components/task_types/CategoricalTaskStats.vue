@@ -2,7 +2,7 @@
   <div class="task-stats">
     <h4>Stats for task: {{ task.name }}</h4>
     <div v-if="stats">
-      <table class="stats-table" v-if="stats.agreement">
+      <table v-if="stats.agreement" class="stats-table">
         <tr>
           <td class="left">{{ stats.agreement.metric }}</td>
           <td>{{ stats.agreement.value }}</td>
@@ -34,15 +34,15 @@
 </template>
 
 <script>
-import TaskStats from "@/components/mixins/TaskStats.js";
-import BarChart from "@/components/BarChart";
+import TaskStats from '@/components/mixins/TaskStats.js';
+import BarChart from '@/components/BarChart.vue';
 
 export default {
-  name: "CategoricalTaskStats",
-  mixins: [TaskStats],
+  name: 'CategoricalTaskStats',
   components: {
     BarChart,
   },
+  mixins: [TaskStats],
   computed: {
     barchart_options() {
       return {
@@ -67,13 +67,13 @@ export default {
   methods: {
     getBarChartData(distribution) {
       let data = {};
-      data.labels = distribution.map((d) => d.labels__name);
+      data.labels = distribution.map(d => d.labels__name);
       data.datasets = [
         {
-          data: distribution.map((d) => d.count),
+          data: distribution.map(d => d.count),
           borderWidth: 2,
           barThickness: 60,
-          backgroundColor: distribution.map((d) => d.labels__color),
+          backgroundColor: distribution.map(d => d.labels__color),
         },
       ];
       return data;

@@ -32,7 +32,7 @@ export const regions = {
     },
     ADD_TASK(state, task) {
       if (
-        state.region_tasks.find((t) => {
+        state.region_tasks.find(t => {
           return t.id == task.id;
         })
       )

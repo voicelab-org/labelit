@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="list-actions">
-      <v-btn @click="openAdd" color="primary">Add</v-btn>
+      <v-btn color="primary" @click="openAdd">Add</v-btn>
     </div>
     <div v-if="adding">
       <v-text-field v-model="addedName" />
-      <v-btn @click="add" color="primary">Confirm</v-btn>
+      <v-btn color="primary" @click="add">Confirm</v-btn>
     </div>
     <div v-if="lexicons">
       <div v-for="lexicon in lexicons" :key="lexicon.name">
@@ -18,15 +18,15 @@
 </template>
 
 <script>
-import LexiconService from "@/services/lexicon.service";
+import LexiconService from '@/services/lexicon.service';
 
 export default {
-  name: "LexiconList",
+  name: 'LexiconList',
   data() {
     return {
       lexicons: null,
       adding: false,
-      addedName: "",
+      addedName: '',
     };
   },
   created() {
@@ -45,7 +45,7 @@ export default {
       });
     },
     getList() {
-      LexiconService.getList().then((res) => {
+      LexiconService.getList().then(res => {
         this.lexicons = res.data;
       });
     },

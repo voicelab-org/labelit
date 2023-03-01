@@ -1,5 +1,5 @@
-import axios from "axios";
-import { baseURL } from "@/app.config";
+import axios from 'axios';
+import { baseURL } from '@/app.config';
 
 class ApiService {
   constructor() {
@@ -17,7 +17,7 @@ class ApiService {
   }
 
   refreshToken(token) {
-    return this.post("auth/login/refresh/", token);
+    return this.post('auth/login/refresh/', token);
   }
 
   request(method, url, data = {}, config = {}) {
@@ -30,23 +30,23 @@ class ApiService {
   }
 
   get(url, config = {}) {
-    return this.request("GET", url, {}, config);
+    return this.request('GET', url, {}, config);
   }
 
   post(url, data, config = {}) {
-    return this.request("POST", url, data, config);
+    return this.request('POST', url, data, config);
   }
 
   put(url, data, config = {}) {
-    return this.request("PUT", url, data, config);
+    return this.request('PUT', url, data, config);
   }
 
   patch(url, data, config = {}) {
-    return this.request("PATCH", url, data, config);
+    return this.request('PATCH', url, data, config);
   }
 
   delete(url, config = {}) {
-    return this.request("DELETE", url, {}, config);
+    return this.request('DELETE', url, {}, config);
   }
 }
 

@@ -1,4 +1,4 @@
-import TaskService from "@/services/task.service";
+import TaskService from '@/services/task.service';
 
 export const task = {
   namespaced: true,
@@ -7,8 +7,8 @@ export const task = {
   },
   actions: {
     getTaskList({ commit }, projectId) {
-      return TaskService.getTaskList({ project_id: projectId }).then((res) => {
-        commit("SET_TASK_LIST", res.data).catch(function (error) {
+      return TaskService.getTaskList({ project_id: projectId }).then(res => {
+        commit('SET_TASK_LIST', res.data).catch(function (error) {
           console.log(error);
         });
       });

@@ -14,18 +14,18 @@
     <div id="doc">
       <div v-if="project.is_audio_annotated">
         <player
+          v-model="annotated_regions"
           :document="document"
           :enable-regions="project.enable_region_annotation"
-          @loaded="audio_loaded = true"
-          v-model="annotated_regions"
           :region-tasks="region_tasks"
+          @loaded="audio_loaded = true"
         />
       </div>
-      <div id="text-container" v-if="project.is_text_annotated">
+      <div v-if="project.is_text_annotated" id="text-container">
         <!--<span v-if="document.text" v-html="document.text"></span>-->
         <TextWithEntities
-          :text="document.text"
           v-model="annotated_entities"
+          :text="document.text"
           :tasks="entity_tasks"
           :enabled="annotation_enabled"
         /><!--:labels="labels"-->
@@ -37,12 +37,12 @@
   </div>
 </template>
 <script>
-import Player from "@/components/Player";
-import TextWithEntities from "@/components/TextWithEntities";
-import { mapGetters } from "vuex";
+import Player from '@/components/Player.vue';
+import TextWithEntities from '@/components/TextWithEntities.vue';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "document",
+  name: 'Document',
   components: {
     Player,
     TextWithEntities,
@@ -61,22 +61,22 @@ export default {
     };
   },
   created() {
-    this.$store.commit("entities/RESET_ALL");
-    this.$store.commit("regions/RESET_ALL");
+    this.$store.commit('entities/RESET_ALL');
+    this.$store.commit('regions/RESET_ALL');
   },
   computed: {
     ...mapGetters({
-      entity_tasks: "entities/entity_tasks",
-      annotation_enabled: "entities/annotation_enabled",
-      region_tasks: "regions/region_tasks",
-      region_annotation_enabled: "regions/annotation_enabled",
+      entity_tasks: 'entities/entity_tasks',
+      annotation_enabled: 'entities/annotation_enabled',
+      region_tasks: 'regions/region_tasks',
+      region_annotation_enabled: 'regions/annotation_enabled',
     }),
     annotated_regions: {
       get() {
         return this.$store.state.regions.annotated_regions;
       },
       set(value) {
-        this.$store.commit("regions/SET_ANNOTATED_REGIONS", value);
+        this.$store.commit('regions/SET_ANNOTATED_REGIONS', value);
       },
     },
     annotated_entities: {
@@ -84,7 +84,7 @@ export default {
         return this.$store.state.entities.annotated_entities;
       },
       set(value) {
-        this.$store.commit("entities/SET_ANNOTATED_ENTITIES", value);
+        this.$store.commit('entities/SET_ANNOTATED_ENTITIES', value);
       },
     },
     loaded() {
@@ -111,17 +111,17 @@ export default {
   },
   watch: {
     loaded() {
-      if (this.loaded) this.$emit("loaded");
+      if (this.loaded) this.$emit('loaded');
     },
     annotated_entities() {
       this.$store.commit(
-        "entities/SET_ANNOTATED_ENTITIES",
+        'entities/SET_ANNOTATED_ENTITIES',
         this.annotated_entities
       );
     },
     annotated_regions() {
       this.$store.commit(
-        "regions/SET_ANNOTATED_REGIONS",
+        'regions/SET_ANNOTATED_REGIONS',
         this.annotated_regions
       );
     },

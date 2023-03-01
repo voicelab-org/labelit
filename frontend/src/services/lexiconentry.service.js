@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class LexiconEntryService {
   constructor() {
@@ -6,11 +6,11 @@ class LexiconEntryService {
   }
 
   create(data) {
-    return this.request.post("/lexicon_entries/", data);
+    return this.request.post('/lexicon_entries/', data);
   }
 
   delete(id) {
-    return this.request.delete(`/lexicon_entries/${id}` + "/");
+    return this.request.delete(`/lexicon_entries/${id}` + '/');
   }
 }
 

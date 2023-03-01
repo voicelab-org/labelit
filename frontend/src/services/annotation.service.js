@@ -1,4 +1,4 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
 class AnnotationService {
   constructor() {
@@ -6,11 +6,11 @@ class AnnotationService {
   }
 
   getAnnotationList(params = {}) {
-    return this.request.get("/annotations/", params);
+    return this.request.get('/annotations/', params);
   }
 
   createAnnotation(data) {
-    return this.request.post("/annotations/", data);
+    return this.request.post('/annotations/', data);
   }
 
   updateAnnotation(annotationId, payload) {

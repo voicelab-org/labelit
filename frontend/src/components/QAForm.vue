@@ -2,8 +2,8 @@
   <div class="qa-form-container">
     <div>
       <div v-if="!is_invalidating">
-        <v-btn @click="validate" v-if="!a.has_qa_validated"> Validate </v-btn>
-        <v-btn @click="invalidate" v-if="!a.has_qa_invalidated">
+        <v-btn v-if="!a.has_qa_validated" @click="validate"> Validate </v-btn>
+        <v-btn v-if="!a.has_qa_invalidated" @click="invalidate">
           Invalidate
         </v-btn>
       </div>
@@ -12,7 +12,7 @@
         <v-btn @click="confirmInvalidation">Send for Review</v-btn>
       </div>
       <div v-else>
-        <div class="invalidation-comment" v-if="a.qa_invalidation_comment">
+        <div v-if="a.qa_invalidation_comment" class="invalidation-comment">
           {{ a.qa_invalidation_comment }}
         </div>
       </div>
@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import AnnotationService from "@/services/annotation.service";
+import AnnotationService from '@/services/annotation.service';
 
 export default {
-  name: "QAForm",
+  name: 'QAForm',
   props: {
     value: {
       type: Object,
@@ -35,19 +35,19 @@ export default {
     return {
       a: this.value,
       is_invalidating: false,
-      invalidation_comment: "",
+      invalidation_comment: '',
     };
   },
   methods: {
     validate() {
       this.is_invalidating = false;
-      this.a.qa_invalidation_comment = "";
+      this.a.qa_invalidation_comment = '';
       this.a.has_qa_validated = true;
       this.a.has_qa_invalidated = false;
       let payload = JSON.parse(JSON.stringify(this.a));
       payload.annotator = payload.annotator.id;
       AnnotationService.updateAnnotation(this.a.id, payload);
-      this.$emit("input", this.a);
+      this.$emit('input', this.a);
     },
     invalidate() {
       this.is_invalidating = true;
@@ -59,7 +59,7 @@ export default {
       let payload = JSON.parse(JSON.stringify(this.a));
       payload.annotator = payload.annotator.id;
       AnnotationService.updateAnnotation(this.a.id, payload);
-      this.$emit("input", this.a);
+      this.$emit('input', this.a);
       this.is_invalidating = false;
     },
   },

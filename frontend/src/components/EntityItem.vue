@@ -8,7 +8,7 @@
     >
       <span class="highlight__content"
         >{{ content
-        }}<v-icon class="delete" @click.stop="remove" v-show="enabled"
+        }}<v-icon v-show="enabled" class="delete" @click.stop="remove"
           >mdi-close-circle
         </v-icon>
       </span>
@@ -27,7 +27,7 @@ export default {
   props: {
     content: {
       type: String,
-      default: "",
+      default: '',
       required: true,
     },
     label: {
@@ -36,7 +36,7 @@ export default {
     },
     color: {
       type: String,
-      default: "#64FFDA",
+      default: '#64FFDA',
     },
     labels: {
       type: Array,
@@ -63,11 +63,11 @@ export default {
   },
   methods: {
     update(label) {
-      this.$emit("update", label);
+      this.$emit('update', label);
       this.showMenu = false;
     },
     remove() {
-      this.$emit("remove");
+      this.$emit('remove');
     },
     idealColor(hexString) {
       // W3c offers a formula for calculating ideal color:
@@ -75,7 +75,7 @@ export default {
       const r = parseInt(hexString.substr(1, 2), 16);
       const g = parseInt(hexString.substr(3, 2), 16);
       const b = parseInt(hexString.substr(5, 2), 16);
-      return (r * 299 + g * 587 + b * 114) / 1000 < 128 ? "#ffffff" : "#000000";
+      return (r * 299 + g * 587 + b * 114) / 1000 < 128 ? '#ffffff' : '#000000';
     },
   },
 };
@@ -126,7 +126,7 @@ export default {
 }
 
 .highlight.bottom .highlight__content:after {
-  content: " ";
+  content: ' ';
   padding-right: 3px;
 }
 

@@ -1,9 +1,9 @@
-import ApiService from "@/services/api.service";
+import ApiService from '@/services/api.service';
 
-const ACCESS_TOKEN_KEY = "access_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
-const USER_TOKEN_KEY = "user";
-const BLUE_FILTER_KEY = "blue_filter";
+const ACCESS_TOKEN_KEY = 'access_token';
+const REFRESH_TOKEN_KEY = 'refresh_token';
+const USER_TOKEN_KEY = 'user';
+const BLUE_FILTER_KEY = 'blue_filter';
 
 class LocalStorageService {
   constructor() {

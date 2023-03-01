@@ -8,11 +8,11 @@
 
 <script>
 export default {
-  name: "ValidationError",
+  name: 'ValidationError',
   props: {
     message: {
       type: String,
-      default: "",
+      default: '',
     },
   },
 };

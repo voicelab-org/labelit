@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "ProjectStats",
+  name: 'ProjectStats',
   props: {
     project: {
       type: Object,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-menu open-on-hover offset-y>
-      <template v-slot:activator="{ on }">
+      <template #activator="{ on }">
         <span v-on="on" @click.stop>
           <v-icon>mdi-dots-vertical</v-icon>
         </span>
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import BatchService from "@/services/batch.service";
+import BatchService from '@/services/batch.service';
 
 export default {
-  name: "BatchMenu",
+  name: 'BatchMenu',
   props: {
     value: {
       type: Object,
@@ -36,16 +36,16 @@ export default {
   computed: {
     archiveAction() {
       if (this.batch.archived) {
-        return "Unarchive";
+        return 'Unarchive';
       }
-      return "Archive";
+      return 'Archive';
     },
   },
   watch: {
     batch: {
       deep: true,
       handler() {
-        this.$emit("input", this.batch);
+        this.$emit('input', this.batch);
       },
     },
   },
@@ -53,7 +53,7 @@ export default {
     toggleArchived() {
       BatchService.updateBatch(this.batch.id, {
         archived: !this.batch.archived,
-        resourcetype: "Batch",
+        resourcetype: 'Batch',
       }).then(() => {
         this.batch.archived = !this.batch.archived;
       });
