@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import DatasetService from '@/services/dataset.service';
+import DatasetService from '@/services/dataset.service.js';
 
-import DatasetUploader from './DatasetUploader';
+import DatasetUploader from '@/components/DatasetUploader.vue';
 
 export default {
   name: 'DatasetList',
