@@ -38,8 +38,8 @@ services:
 
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile.backend.dev
+      context: backend
+      dockerfile: Dockerfile.dev
     volumes:
       - ./backend/src:/code
     environment:
@@ -72,8 +72,8 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend.dev
+      context: frontend
+      dockerfile: frontend/Dockerfile.dev
     volumes:
       - ./frontend:/app
     ports:

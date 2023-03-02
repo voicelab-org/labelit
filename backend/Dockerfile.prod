@@ -55,15 +55,16 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev zlib1g-dev\
  && apt-get clean
- 
+
 COPY --from=build /usr/local/bin/audiowaveform /usr/local/bin/
 
 WORKDIR /code
-COPY backend/requirements.txt /code/
+COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 
-COPY ./backend/src /code/
+COPY src /code/
 
+RUN python manage.py collectstatic
 RUN pip install uwsgi
 
 WORKDIR /code/
