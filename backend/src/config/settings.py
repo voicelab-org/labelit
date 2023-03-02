@@ -22,8 +22,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 import os
+import secrets
+import string
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+choices = string.ascii_letters + string.digits + "<>()[]*?@!#~,.;"
+key = "".join(secrets.choice(choices) for n in range(100))
+
+SECRET_KEY = os.environ.get("SECRET_KEY", key)
 
 import logging
 
@@ -39,7 +44,7 @@ def compute_django_debug_from_env_var():
 
 DEBUG = compute_django_debug_from_env_var()
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", os.environ["ALLOWED_HOST"]]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", os.environ.get("ALLOWED_HOST", "")]
 
 # & TEMP
 # APPEND_SLASH = False
