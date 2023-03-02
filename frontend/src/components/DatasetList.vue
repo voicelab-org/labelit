@@ -42,7 +42,7 @@ export default {
         .then(response => {
           this.datasets = response.data;
         })
-        .catch(error => console.log(error))
+        .catch(error => console.error(error))
         .finally(() => (this.loading = false));
     },
     getLink(dataset) {

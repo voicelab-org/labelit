@@ -63,7 +63,7 @@ let router = new VueRouter({
     {
       path: '/task/:id',
       component: () => import('@/components/Task.vue'),
-      props: route => ({ taskId: route.params.id }),
+      props: route => ({ taskId: parseInt(route.params.id) }),
     },
     {
       path: '/datasets',
@@ -115,7 +115,7 @@ let router = new VueRouter({
         },
       ],
     },
-    //  { path: '*', redirect: '/projects' }
+    { path: '*', redirect: '/projects' },
   ],
 });
 

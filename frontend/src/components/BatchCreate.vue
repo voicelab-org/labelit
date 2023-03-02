@@ -178,7 +178,7 @@ export default {
         .then(function (response) {
           vm.datasetRemainingUnits = response.data.count;
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
     },
   },
   mounted() {
@@ -187,13 +187,13 @@ export default {
       .then(function (response) {
         vm.datasetList = response.data;
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
 
     UserService.getUserList()
       .then(function (response) {
         vm.annotatorsList = response.data;
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   },
   methods: {
     createBatch() {
@@ -212,7 +212,7 @@ export default {
             vm.dialog = false;
             vm.$emit('batchCreated');
           })
-          .catch(error => console.log(error));
+          .catch(error => console.error(error));
       }
     },
   },

@@ -9,7 +9,7 @@ export const task = {
     getTaskList({ commit }, projectId) {
       return TaskService.getTaskList({ project_id: projectId }).then(res => {
         commit('SET_TASK_LIST', res.data).catch(function (error) {
-          console.log(error);
+          console.error(error);
         });
       });
     },

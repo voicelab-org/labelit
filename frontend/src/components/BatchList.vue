@@ -85,12 +85,7 @@ export default {
   },
   methods: {
     exportProject() {
-      //ProjectService.exportProject(this.projectId).then(
-      ProjectService.downloadExportedProject(this.projectId); /*.then(
-          (res) => {
-            console.log("&res: ", res.data)
-          }
-      )*/
+      ProjectService.downloadExportedProject(this.projectId);
     },
     getLink(batch) {
       return '/batch/' + batch.id;
@@ -108,7 +103,7 @@ export default {
           vm.batches = response.data;
           vm.loading = false;
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
     },
   },
 };

@@ -72,20 +72,14 @@ export default {
       LexiconService.getList({
         tasks: this.task.id,
       }).then(res => {
-        //this.lexicons = res.data
         this.lexicon = [];
 
         res.data.forEach(l => {
           this.lexicon = this.lexicon.concat(l.entries.map(e => e.entry));
         });
 
-        //this.$refs.input
-
-        console.log('this.$refs.edited', this.$refs.edited);
-
         const editor = new TextareaEditor(this.$refs.edited);
 
-        //const textcomplete =
         new Textcomplete(editor, [
           {
             match: /(\S{3,}|\(\w*)$/,

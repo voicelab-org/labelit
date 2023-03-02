@@ -15,7 +15,6 @@ export const player = {
   mutations: {
     SET_PLAYBACK_TIME(state, playbackTime) {
       state.playbackTime = playbackTime;
-      //console.log('SET_PLAYBACK_TIME' ,playbackTime )
     },
     SET_IS_PLAYING(state, isPlaying) {
       state.isPlaying = isPlaying;

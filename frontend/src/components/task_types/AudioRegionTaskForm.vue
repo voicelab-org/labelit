@@ -113,7 +113,7 @@ export default {
               this.validationError = '';
             })
             .catch(error => {
-              console.log(JSON.stringify(error));
+              console.error(JSON.stringify(error));
             });
         });
         this.showAnnotatedRegions = true;

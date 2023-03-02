@@ -37,7 +37,7 @@ export const auth = {
             commit('SET_USER', response.data);
           })
           .catch(function (error) {
-            console.log(error);
+            console.error(error);
           });
       });
     },

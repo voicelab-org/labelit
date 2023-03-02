@@ -79,7 +79,6 @@ export default {
   },
   methods: {
     showEdit(task) {
-      console.log('showEdit for task', { ...task });
       this.edited_task = task;
       this.show_edit_task = true;
     },
@@ -87,19 +86,9 @@ export default {
       TaskService.getTaskList()
         .then(response => {
           this.tasks = response.data;
-          console.log(
-            'this.tasks after getting list',
-            JSON.parse(JSON.stringify(this.tasks))
-          );
-          this.$nextTick(() => {
-            console.log(
-              'this.shown_tasks',
-              JSON.parse(JSON.stringify(this.shown_tasks))
-            );
-          });
           this.edited_task = { some: 'task' };
         })
-        .catch(error => console.log(error))
+        .catch(error => console.error(error))
         .finally(() => (this.loading = false));
     },
     getLink(task) {
