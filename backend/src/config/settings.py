@@ -156,6 +156,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+
 # Django REST Framework (DRF)
 
 REST_FRAMEWORK = {
@@ -199,7 +205,7 @@ CORS_ORIGIN_WHITELIST = [
 
 # CSRF
 
-CSRF_TRUSTED_ORIGINS = ["localhost:8080"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
 
 
 AWS_S3_REGION_NAME = os.getenv("AWS_REGION_NAME")

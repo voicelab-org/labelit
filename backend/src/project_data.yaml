@@ -2,22 +2,22 @@
   pk: 8
   fields:
     polymorphic_ctype:
-    - labelit
-    - categoricaltask
+      - labelit
+      - categoricaltask
     name: Categorical task 1
     html_guidelines: <h2>Customize guidelines</h2>
     can_documents_be_invalidated: true
-    image: ''
+    image: ""
 - model: labelit.task
   pk: 9
   fields:
     polymorphic_ctype:
-    - labelit
-    - ordinaltask
+      - labelit
+      - ordinaltask
     name: Ordinal task 1
     html_guidelines: <h2>Customize guidelines</h2>
     can_documents_be_invalidated: true
-    image: ''
+    image: ""
 - model: labelit.categoricaltask
   pk: 8
   fields:
@@ -36,8 +36,8 @@
     are_sequences_annotated: false
     timer_inactivity_threshold: 60000
     tasks:
-    - 8
-    - 9
+      - 8
+      - 9
 - model: labelit.dataset
   pk: 3
   fields:
@@ -130,8 +130,8 @@
     password: pbkdf2_sha256$216000$WRZisMRVJd5d$WEsY8YAotyKX1BiznBrprDKSlP9reQ0AREUuclQ+Vbo=
     last_login: 2021-07-06 19:26:50.250935+00:00
     is_superuser: true
-    first_name: ''
-    last_name: ''
+    first_name: ""
+    last_name: ""
     is_staff: true
     is_active: true
     date_joined: 2021-07-06 19:26:43.334073+00:00
@@ -159,8 +159,8 @@
   pk: 10
   fields:
     polymorphic_ctype:
-    - labelit
-    - batch
+      - labelit
+      - batch
     name: Batch 1
     dataset: 3
     project: 6
@@ -171,5 +171,5 @@
     annotation_limit: null
     num_documents: 3
     annotators:
-    - - eric@gmail.com
-    - - demo@demo.com
+      - - eric@gmail.com
+      - - demo@demo.com

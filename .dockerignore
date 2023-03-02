@@ -5,5 +5,4 @@ notes/
 __pycache__/
 Makefile
 *.pyc
-package.lock.json
 **/node_modules
