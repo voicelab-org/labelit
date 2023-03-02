@@ -2,22 +2,21 @@ site_name: Labelit documentation
 
 # Documentation and theme
 theme:
-  name: 'material'
-  logo: 'assets/logo_le_voice_lab.png'
+  name: "material"
+  logo: "assets/logo_le_voice_lab.png"
   features:
     - toc.integrate
 
 # Options
 extra:
   palette:
-    primary: '#AC00A9'
-    accent: '#AC00A9'
+    primary: "#AC00A9"
+    accent: "#AC00A9"
   font:
-    text: 'Roboto'
-    code: 'Roboto Mono'
+    text: "Roboto"
+    code: "Roboto Mono"
 
-
-extra_css: [ extra.css ]
+extra_css: [extra.css]
 
 plugins:
   - i18n:
@@ -30,27 +29,31 @@ plugins:
         en: "This page isn't translated to English"
       translate_nav:
         fr:
-          Getting started: "Guide de prise en main"
-          How to deploy ?: "Comment deployer ?"
+          Development: Développement
+          Usage: Utilisation
+          Update documentation: Mise à jour de la documentation
+          Deployment: Déploiement
 
 nav:
   - index.md
   # TODO
   # - index.fr.md
-  - Getting started:
-    - getting_started/01.local_installation.md
-    # TODO
-    # - getting_started/01.local_installation.fr.md
-    - getting_started/02.register_users.md
-    - getting_started/03.first_dataset.md
-    - getting_started/04.first_task.md
-    - getting_started/05.first_project.md
-    - getting_started/06.assign_work.md
-    - getting_started/07.annotate.md
+  - Development:
+      - development/01.setup.md
+  - Usage:
+      - usage/01.register_users.md
+      - usage/02.first_dataset.md
+      - usage/03.first_task.md
+      - usage/04.first_project.md
+      - usage/05.assign_work.md
+      - usage/06.annotate.md
   - Update documentation:
-    - update_documentation/01.update_documentation.md
-  - How to deploy ?:
-    - how_to_deploy/01.requirements.md
-    - how_to_deploy/02.helm_chart.md
-    - how_to_deploy/03.environment_variables.md
-    - how_to_deploy/04.cloud_formation.md
+      - update_documentation/01.update_documentation.md
+  - Deployment:
+      - deployment/01.requirements.md
+      - deployment/02.helm_chart.md
+      - deployment/03.environment_variables.md
+      - deployment/04.cloud_formation.md
+
+markdown_extensions:
+  - pymdownx.superfences

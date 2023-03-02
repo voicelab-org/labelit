@@ -2,22 +2,22 @@
   pk: 8
   fields:
     polymorphic_ctype:
-    - labelit
-    - categoricaltask
+      - labelit
+      - categoricaltask
     name: Categorical task 1
     html_guidelines: <h2>Customize guidelines</h2>
     can_documents_be_invalidated: true
-    image: ''
+    image: ""
 - model: labelit.task
   pk: 9
   fields:
     polymorphic_ctype:
-    - labelit
-    - ordinaltask
+      - labelit
+      - ordinaltask
     name: Ordinal task 1
     html_guidelines: <h2>Customize guidelines</h2>
     can_documents_be_invalidated: true
-    image: ''
+    image: ""
 - model: labelit.categoricaltask
   pk: 8
   fields:
@@ -38,8 +38,8 @@
     target_num_documents: 20
     target_deadline: 2023-12-12
     tasks:
-    - 8
-    - 9
+      - 8
+      - 9
 - model: labelit.dataset
   pk: 3
   fields:

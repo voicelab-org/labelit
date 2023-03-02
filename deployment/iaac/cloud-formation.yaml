@@ -16,21 +16,20 @@ Resources:
   # LABELIT_<CLIENT_NAME>
   # This user will be used in the backend pod to access audio / image files from S3
   LabelItUser:
-    Type: 'AWS::IAM::User'
+    Type: "AWS::IAM::User"
     Properties:
-      UserName:
-        !Join
-          - '_'
-          - - LABELIT
-            - !Ref ClientName
+      UserName: !Join
+        - "_"
+        - - LABELIT
+          - !Ref ClientName
   LabelItPolicy:
-    Type: 'AWS::IAM::Policy'
+    Type: "AWS::IAM::Policy"
     Properties:
       Users:
         - !Ref LabelItUser
       PolicyName: ReadWebsiteBucket
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Sid: ReadWriteLabelItBuckets
             Effect: Allow
@@ -39,22 +38,22 @@ Resources:
             Resource:
               # Website audios bucket
               - !Join
-                - ''
-                - - 'arn:aws:s3:::'
+                - ""
+                - - "arn:aws:s3:::"
                   - !Ref WebsiteBucket
               - !Join
-                - ''
-                - - 'arn:aws:s3:::'
+                - ""
+                - - "arn:aws:s3:::"
                   - !Ref WebsiteBucket
                   - /*
               # Static files bucket
               - !Join
-                - ''
-                - - 'arn:aws:s3:::'
+                - ""
+                - - "arn:aws:s3:::"
                   - !Ref StaticFilesBucket
               - !Join
-                - ''
-                - - 'arn:aws:s3:::'
+                - ""
+                - - "arn:aws:s3:::"
                   - !Ref StaticFilesBucket
                   - /*
 
@@ -62,28 +61,28 @@ Resources:
 
   # Website audios bucket
   WebsiteBucket:
-    Type: 'AWS::S3::Bucket'
+    Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub 'labelit-${ClientName}-website'
+      BucketName: !Sub "labelit-${ClientName}-website"
       CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders:
+        CorsRules:
+          - AllowedHeaders:
               - "*"
-              AllowedMethods:
+            AllowedMethods:
               - GET
-              AllowedOrigins:
+            AllowedOrigins:
               - !Sub ${URL}
 
   # Static files bucket
   StaticFilesBucket:
-    Type: 'AWS::S3::Bucket'
+    Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub 'labelit-${ClientName}-static-files'
+      BucketName: !Sub "labelit-${ClientName}-static-files"
       CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders:
+        CorsRules:
+          - AllowedHeaders:
               - "*"
-              AllowedMethods:
+            AllowedMethods:
               - GET
-              AllowedOrigins:
+            AllowedOrigins:
               - !Sub ${URL}
