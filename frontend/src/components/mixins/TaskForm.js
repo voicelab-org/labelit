@@ -79,7 +79,6 @@ export default {
           })
           .catch(error => {
             this.validationError = error.response.data.non_field_errors[0];
-            console.log(JSON.stringify(error));
           });
       },
     },

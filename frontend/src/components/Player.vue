@@ -159,29 +159,9 @@ export default {
         this.updateRegions();
       },
     },
-    /*'player.regions.list': {
-      deep: true,
-      handler(){
-        console.log("&regions changed")
-        console.log("&&list", JSON.stringify(this.player.regions.list))
-        Object.entries(this.player.regions.list).forEach(
-            (entry) => {
-              console.log("entry", entry)
-              let region = entry[1]
-              console.log("&region", region)
-              region.on('dblclick', () => {
-                console.log("&removing!!!")
-                //region.remove()
-                // TODO: remove in backend and send input event
-              })
-            }
-        )
-      }
-    }*/
   },
   created() {
     this.$store.commit('player/SET_PLAYBACK_TIME', 0);
-    //console.log('created' , this.$store.state.player.playbackTime)
     if (this.regionTasks.length > 1) {
       alert(
         'Multiple Region tasks are currently not supported in the same project'
@@ -248,7 +228,6 @@ export default {
     },
     fetchAudio() {
       this.$store.commit('player/SET_PLAYBACK_TIME', 0);
-      //console.log('fetchAudio' , this.$store.state.player.playbackTime)
 
       if (this.player) {
         this.player.pause();
@@ -445,7 +424,6 @@ export default {
           });
 
           this.player.addEventListener('timeupdate', () => {
-            //console.log('timeupdate')
             this.$store.commit(
               'player/SET_PLAYBACK_TIME',
               this.player.currentTime
@@ -483,7 +461,6 @@ export default {
         this.player.zoom(this.zoomingValue);
         this.player.setPlaybackRate(this.playbackSpeed.toFixed(2) / 100.0);
         this.player.getCurrentTime();
-        //console.log(vm.player.getCurrentTime())
         this.player.on('ready', () => {
           this.duration = this.player.getDuration();
           this.audioLoading = false;
@@ -504,7 +481,6 @@ export default {
         });
 
         this.player.on('audioprocess', () => {
-          // console.log('audioprocess',vm.player.getCurrentTime())
           this.$store.commit(
             'player/SET_PLAYBACK_TIME',
             vm.player.getCurrentTime()
@@ -553,7 +529,6 @@ export default {
       isAdmin: 'auth/isAdmin',
     }),
     currentPlayBackTime() {
-      //console.log('CurrentPlaybackTime' , this.$store.state.player.playbackTime)
       return this.$store.state.player.playbackTime;
     },
   },

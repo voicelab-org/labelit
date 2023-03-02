@@ -187,7 +187,7 @@ export default {
           vm.numberOfAnnotations = res.data;
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     },
     getBatch() {

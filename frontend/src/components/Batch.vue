@@ -96,9 +96,9 @@ export default {
           .then(function (res) {
             vm.$store.commit('task/SET_TASK_LIST', res.data.tasks);
           })
-          .catch(error => console.log(error));
+          .catch(error => console.error(error));
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
     this.getProgress();
     BatchService.getNumToReview(vm.batchId).then(function (response) {
       vm.to_review_count = response.data.count;
@@ -112,7 +112,7 @@ export default {
           vm.total_units = res.data.total;
           vm.num_done_units = res.data.num_done_units;
         })
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
       return;
     },
   },

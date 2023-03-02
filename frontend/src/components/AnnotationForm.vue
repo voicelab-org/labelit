@@ -36,7 +36,7 @@ export default {
       .then(function (response) {
         vm.task = response.data;
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>Lexicon: {{ lexicon.name }}</h4>
+    <h4>Lexicon: {{ lexicon?.name }}</h4>
     <div v-if="lexicon">
       <div>
         <v-btn v-if="!adding" @click="adding = true"> Add </v-btn>

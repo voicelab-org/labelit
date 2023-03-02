@@ -57,11 +57,6 @@ export default {
       };
     },
   },
-  watch: {
-    dataset_uploaded() {
-      console.log('&change');
-    },
-  },
   created() {
     this.access_token = LocalStorageService.getAccessToken();
   },
@@ -73,13 +68,10 @@ export default {
      * @return undefined
      */
     inputFile: function (newFile, oldFile) {
-      console.log('&newFile, oldFile', newFile, oldFile);
       if (newFile && oldFile && !newFile.active && oldFile.active) {
         // Get response data
-        console.log('response', newFile.response);
         if (newFile.xhr) {
           //  Get the response status code
-          console.log('status', newFile.xhr.status);
           if (200 == newFile.xhr.status) {
             this.dataset_uploaded = true;
             this.$emit('imported');

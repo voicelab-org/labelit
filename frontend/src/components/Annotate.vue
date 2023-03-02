@@ -151,7 +151,7 @@ export default {
           this.batch = response.data;
         })
         .catch(function (error) {
-          console.log(error);
+          console.error(error);
         });
     },
     undo() {
@@ -207,7 +207,7 @@ export default {
             if (vm.tasks == null) vm.tasks = [];
             vm.tasks.push(response.data);
           })
-          .catch(err => console.log(err));
+          .catch(err => console.error(err));
       });
     },
     getTaskForAnnotation(annotation) {

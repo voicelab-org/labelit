@@ -43,7 +43,6 @@ class ProjectService {
     return this.request
       .get(`/export_project/${id}/download`, { responseType: 'blob' })
       .then(response => {
-        console.log(response);
         const blob = new Blob([response.data], {
           type: response.headers['content-type'],
         });

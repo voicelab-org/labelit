@@ -109,22 +109,17 @@ export default {
         //vm.$store.commit('task/SET_TASK_LIST', response.data.tasks)
         vm.loading = false;
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
 
     ProjectService.getProjectWithStats(vm.projectId)
       .then(function (response) {
         vm.project_with_stats = response.data;
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   },
   methods: {
     exportProject() {
-      //ProjectService.exportProject(this.projectId).then(
-      ProjectService.downloadExportedProject(this.projectId); /*.then(
-          (res) => {
-            console.log("&res: ", res.data)
-          }
-      )*/
+      ProjectService.downloadExportedProject(this.projectId);
     },
     getLink(batch) {
       return '/batch/' + batch.id;

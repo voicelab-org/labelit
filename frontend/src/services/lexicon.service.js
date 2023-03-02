@@ -14,7 +14,6 @@ class LexiconService {
   }
 
   create(data) {
-    console.log('&d', data);
     return this.request.post('/lexicons/', data);
   }
 }

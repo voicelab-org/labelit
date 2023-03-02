@@ -30,8 +30,8 @@ export default {
           name: 'export-' + name,
           formateDate: 'yyyy-mm-dd',
         });
-      } catch (e) {
-        console.log('xport error', e);
+      } catch (error) {
+        console.error('error');
       }
     },
   },

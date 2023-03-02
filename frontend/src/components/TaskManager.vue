@@ -43,15 +43,12 @@ import LabelService from '@/services/label.service.js';
 import CategoricalTaskSchema from '@/components/task_types/task_manager_schemas/CategoricalTaskSchema.json';
 import TaskSchemas from '@/components/task_types/task_manager_schemas/index.js';
 
-console.log('schemas:', TaskSchemas);
-
-let resourcetype_choices = Object.keys(TaskSchemas).map(schema_name => {
+Object.keys(TaskSchemas).map(schema_name => {
   return {
     const: schema_name.replace('Schema', ''),
     title: schema_name.replace('Schema', '').split('Task')[0] + ' task',
   };
 });
-console.log('resourcetype_choices', resourcetype_choices);
 
 export default {
   name: 'TaskManager',
@@ -124,7 +121,6 @@ export default {
       this.show_dialog = this.value;
     },
     task() {
-      console.log('task', JSON.parse(JSON.stringify(this.task)));
       let schema = this.TaskSchemas[this.task.resourcetype + 'Schema'];
       this.schema.properties = {
         ...this.base_schema.properties,
@@ -204,25 +200,18 @@ export default {
     create() {
       let t = { ...this.model };
 
-      console.log('t.labels', t.labels);
       let schema = TaskSchemas[t.resourcetype + 'Schema'];
-      console.log('&schema keys', Object.keys(schema));
       let promises = [];
       if (Object.keys(this.schema.properties).includes('labels')) {
-        console.log('labels in schema');
         promises = this.createLabels(t.labels, t.resourcetype);
-      } else {
-        console.log('labels not in schema');
       }
       Promise.all(promises).then(ids => {
-        console.log('label ids', ids);
         let task_payload = {
           resourcetype: t.resourcetype,
           //name: this.model.name,
           //can_documents_be_invalidated: this.model.can_documents_be_invalidated,
         };
         Object.keys(this.schema.properties).forEach(schema_key => {
-          console.log('schema_key', schema_key);
           if (schema_key == 'labels') return;
           task_payload[schema_key] = this.model[schema_key];
         });
@@ -261,27 +250,6 @@ export default {
 
       Promise.all(create_labels_promises.concat(edit_labels_promises)).then(
         label_ids => {
-          /*
-            let task_payload = {
-              resourcetype: t.resourcetype,
-              //name: this.model.name,
-              //can_documents_be_invalidated: this.model.can_documents_be_invalidated,
-            }
-            Object.keys(this.schema.properties).forEach(
-                (schema_key) => {
-                  console.log("schema_key", schema_key)
-                  if (schema_key == "labels") return
-                  task_payload[schema_key] = this.model[schema_key]
-                }
-            )
-            if ("labels" in Object.keys(schema)) {
-              task_payload = {
-                labels: ids,
-                ...task_payload
-              }
-            }
-             */
-
           let task_payload = {
             id: this.task.id,
             resourcetype: t.resourcetype,
@@ -293,7 +261,6 @@ export default {
             };
           }
           Object.keys(this.schema.properties).forEach(schema_key => {
-            console.log('schema_key', schema_key);
             if (schema_key == 'labels') return;
             task_payload[schema_key] = this.model[schema_key];
           });
