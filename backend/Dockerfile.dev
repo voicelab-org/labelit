@@ -60,10 +60,10 @@ RUN apt-get update \
 COPY --from=build-stage /usr/local/bin/audiowaveform /usr/local/bin/
 
 WORKDIR /code
-COPY ./backend/requirements-dev.txt /code/
+COPY requirements-dev.txt /code/
 RUN pip install -r requirements-dev.txt
 
-COPY ./backend/src /code/
+COPY src /code/
 
 CMD python manage.py runserver 0.0.0.0:8000
 
