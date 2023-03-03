@@ -1,25 +1,23 @@
-
 export const player = {
   namespaced: true,
   state: {
-    playbackTime : 0,
+    playbackTime: 0,
     isPlaying: false,
   },
-  getters : {
+  getters: {
     playbackTime(state) {
-      return state.playbackTime
+      return state.playbackTime;
     },
     isPlaying(state) {
-      return state.isPlaying
-    }
+      return state.isPlaying;
+    },
   },
   mutations: {
     SET_PLAYBACK_TIME(state, playbackTime) {
-      state.playbackTime = playbackTime
-      //console.log('SET_PLAYBACK_TIME' ,playbackTime )
+      state.playbackTime = playbackTime;
     },
     SET_IS_PLAYING(state, isPlaying) {
-      state.isPlaying = isPlaying
+      state.isPlaying = isPlaying;
     },
-  }
+  },
 };

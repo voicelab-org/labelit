@@ -1,65 +1,55 @@
 <template>
   <div>
     <div class="header">
-      <h2 class="headline">Projects </h2>
+      <h2 class="headline">Projects</h2>
       <div class="header-right">
-        <project-manager v-if="isAdmin" @changed="getProjects"/>
-        <project-manager @changed="projectEdited" :project="edited_project" v-model="show_edit_project" />
+        <project-manager v-if="isAdmin" @changed="getProjects" />
+        <project-manager
+          v-model="show_edit_project"
+          :project="edited_project"
+          @changed="projectEdited"
+        />
       </div>
     </div>
     <div id="projects">
       <v-tabs>
-        <v-tab @click="show_archived=false">
-          Live
-        </v-tab>
-        <v-tab @click="show_archived=true">
-          Archived
-        </v-tab>
+        <v-tab @click="show_archived = false"> Live </v-tab>
+        <v-tab @click="show_archived = true"> Archived </v-tab>
       </v-tabs>
       <v-simple-table v-if="shown_projects.length">
         <thead>
-        <tr>
-          <th class="text-left">
-            Name
-          </th>
-          <th class="text-left">
-            Tasks
-          </th>
-        </tr>
+          <tr>
+            <th class="text-left">Name</th>
+            <th class="text-left">Tasks</th>
+          </tr>
         </thead>
         <tbody>
-        <tr
+          <tr
             v-for="(project, i) in shown_projects"
             :key="project.id"
             @click="goTo(project)"
-        >
-          <td>{{ project.name }}</td>
-          <td>{{ printProjectTasks(project.tasks) }}</td>
-          <td>
-            <ProjectMenu
-                v-model="shown_projects[i]"
-                @edit="showEdit"
-            />
-          </td>
-        </tr>
+          >
+            <td>{{ project.name }}</td>
+            <td>{{ printProjectTasks(project.tasks) }}</td>
+            <td>
+              <ProjectMenu v-model="shown_projects[i]" @edit="showEdit" />
+            </td>
+          </tr>
         </tbody>
       </v-simple-table>
-      <div v-else>
-        No projects
-      </div>
+      <div v-else>No projects</div>
     </div>
   </div>
 </template>
 
 <script>
-import ProjectService from '@/services/project.service'
-import ProjectMenu from '@/components/ProjectMenu'
-import ProjectManager from "./ProjectManager";
-import {mapGetters} from 'vuex'
-
+import ProjectService from '@/services/project.service.js';
+import ProjectMenu from '@/components/ProjectMenu.vue';
+import ProjectManager from './ProjectManager.vue';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: 'project-list',
+  name: 'ProjectList',
   components: {
     ProjectMenu,
     ProjectManager,
@@ -69,39 +59,39 @@ export default {
       projects: [],
       show_archived: false,
       loading: true,
-      edited_project: {some: 'project'},
+      edited_project: { some: 'project' },
       show_edit_project: false,
-    }
+    };
   },
   created() {
-    this.getProjects()
+    this.getProjects();
   },
   methods: {
-    projectEdited(){
-      this.edited_project = {some: 'project'}
-      this.getProjects()
+    projectEdited() {
+      this.edited_project = { some: 'project' };
+      this.getProjects();
     },
-    showEdit(project){
-      this.edited_project = project
-      this.show_edit_project = true
+    showEdit(project) {
+      this.edited_project = project;
+      this.show_edit_project = true;
     },
-    getProjects(){
-      this.loading = true
+    getProjects() {
+      this.loading = true;
       ProjectService.getProjectList()
-          .then( (response) => {
-            this.projects = response.data
-          })
-          .catch(error => console.log(error))
-          .finally(() => this.loading = false)
+        .then(response => {
+          this.projects = response.data;
+        })
+        .catch(error => console.error(error))
+        .finally(() => (this.loading = false));
     },
     getLink(project) {
-      return "/project/" + project.id
+      return '/project/' + project.id;
     },
     printProjectTasks(tasks) {
-      return tasks.map(t => t.name).join(", ")
+      return tasks.map(t => t.name).join(', ');
     },
     goTo(project) {
-      this.$router.push('/project/' + project.id)
+      this.$router.push('/project/' + project.id);
     },
   },
   computed: {
@@ -110,18 +100,17 @@ export default {
     }),
     shown_projects() {
       if (this.show_archived) {
-        var projects = this.projects.filter(p => p.archived)
+        var projects = this.projects.filter(p => p.archived);
       } else {
-        projects = this.projects.filter(p => !p.archived)
+        projects = this.projects.filter(p => !p.archived);
       }
-      return projects.sort((a, b) => (a.created_at < b.created_at) ? 1 : -1)
+      return projects.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -152,7 +141,5 @@ export default {
     color: rgb(4, 144, 174) !important;
     text-decoration: none;
   }
-
 }
-
 </style>

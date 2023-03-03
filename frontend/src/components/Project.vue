@@ -1,54 +1,66 @@
 <template>
   <div>
     <div class="header">
-      <h2 class="headline" v-if="project">Project: {{ project.name }} </h2>
+      <h2 v-if="project" class="headline">Project: {{ project.name }}</h2>
       <div class="header-right">
         <v-btn @click="exportProject"> Export</v-btn>
-        <batch-create v-if="isAdmin" :projectId="projectId" @batchCreated="updateListToggle=!updateListToggle"/>
+        <batch-create
+          v-if="isAdmin"
+          :project-id="projectId"
+          @batchCreated="updateListToggle = !updateListToggle"
+        />
       </div>
     </div>
 
-    <div
-        v-if="project"
-        class="d-flex flex-row justify-space-between"
-    >
-      <div>Created on: {{project.created_at}}</div>
-      <div v-if="project.created_by">By: {{project.created_by.first_name}} {{project.created_by.last_name}} </div>
-      <div>Last modified: {{project.updated_at}} </div>
+    <div v-if="project" class="d-flex flex-row justify-space-between">
+      <div>Created on: {{ project.created_at }}</div>
+      <div v-if="project.created_by">
+        By: {{ project.created_by.first_name }}
+        {{ project.created_by.last_name }}
+      </div>
+      <div>Last modified: {{ project.updated_at }}</div>
     </div>
     <div
-        v-if="project_with_stats"
-        class="d-flex flex-row justify-space-between"
+      v-if="project_with_stats"
+      class="d-flex flex-row justify-space-between"
     >
-          <div># documents annotated: {{project_with_stats.num_done_documents}}</div>
-          <div>Target (# documents to annotate): {{project_with_stats.target_num_documents}} </div>
-          <div>Target date: {{project_with_stats.target_deadline}} </div>
-          <v-progress-linear
-          v-if="project_with_stats.target_num_documents && project_with_stats.num_done_documents"
-          :value="Math.round(
-            100 * project_with_stats.num_done_documents / project_with_stats.target_num_documents
-            )"
-            height="25"
-        ></v-progress-linear>
-        <p v-if="project_with_stats.description">
-          <b>Description: </b><br>
-          <span style="white-space: pre;">{{project_with_stats.description}}</span>
-        </p>
+      <div>
+        # documents annotated: {{ project_with_stats.num_done_documents }}
       </div>
-
+      <div>
+        Target (# documents to annotate):
+        {{ project_with_stats.target_num_documents }}
+      </div>
+      <div>Target date: {{ project_with_stats.target_deadline }}</div>
+      <v-progress-linear
+        v-if="
+          project_with_stats.target_num_documents &&
+          project_with_stats.num_done_documents
+        "
+        :value="
+          Math.round(
+            (100 * project_with_stats.num_done_documents) /
+              project_with_stats.target_num_documents
+          )
+        "
+        height="25"
+      ></v-progress-linear>
+      <p v-if="project_with_stats.description">
+        <b>Description: </b><br />
+        <span style="white-space: pre">{{
+          project_with_stats.description
+        }}</span>
+      </p>
+    </div>
 
     <v-tabs>
-      <v-tab @click="show_batch_list=true">
-        Batches
-      </v-tab>
-      <v-tab  @click="show_batch_list=false">
-        Stats
-      </v-tab>
+      <v-tab @click="show_batch_list = true"> Batches </v-tab>
+      <v-tab @click="show_batch_list = false"> Stats </v-tab>
     </v-tabs>
     <router-view />
 
     <template v-if="project && show_batch_list">
-      <BatchList :project="project" :update="updateListToggle"/>
+      <BatchList :project="project" :update="updateListToggle" />
     </template>
     <template v-if="!show_batch_list && project">
       <Stats :project-id="project.id" />
@@ -57,21 +69,20 @@
 </template>
 
 <script>
+import ProjectService from '@/services/project.service.js';
+import BatchCreate from '@/components/BatchCreate.vue';
+import Stats from '@/components/Stats.vue';
+import { mapGetters } from 'vuex';
 
-import ProjectService from '@/services/project.service'
-import BatchCreate from '@/components/BatchCreate'
-import Stats from '@/components/Stats'
-import {mapGetters} from 'vuex'
-
-import BatchList from '@/components/BatchList'
+import BatchList from '@/components/BatchList.vue';
 
 export default {
-  name: 'project',
-  components: {BatchCreate, BatchList, Stats},
+  name: 'Project',
+  components: { BatchCreate, BatchList, Stats },
   props: {
     projectId: {
       type: String,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -83,49 +94,41 @@ export default {
       show_batch_list: true,
       updateListToggle: true,
       project_with_stats: null,
-    }
+    };
   },
   computed: {
     ...mapGetters({
       isAdmin: 'auth/isAdmin',
     }),
-
   },
   created() {
-
-    let vm = this
+    let vm = this;
     ProjectService.getProjectById(vm.projectId)
-        .then(function (response) {
-          vm.project = response.data
-          //vm.$store.commit('task/SET_TASK_LIST', response.data.tasks)
-          vm.loading = false
-        })
-        .catch(error => console.log(error))
+      .then(function (response) {
+        vm.project = response.data;
+        //vm.$store.commit('task/SET_TASK_LIST', response.data.tasks)
+        vm.loading = false;
+      })
+      .catch(error => console.error(error));
 
     ProjectService.getProjectWithStats(vm.projectId)
-        .then(function (response) {
-          vm.project_with_stats = response.data
-        })
-        .catch(error => console.log(error))
+      .then(function (response) {
+        vm.project_with_stats = response.data;
+      })
+      .catch(error => console.error(error));
   },
   methods: {
     exportProject() {
-      //ProjectService.exportProject(this.projectId).then(
-      ProjectService.downloadExportedProject(this.projectId)/*.then(
-          (res) => {
-            console.log("&res: ", res.data)
-          }
-      )*/
+      ProjectService.downloadExportedProject(this.projectId);
     },
     getLink(batch) {
-      return "/batch/" + batch.id
+      return '/batch/' + batch.id;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -136,11 +139,9 @@ export default {
   }
 }
 
-
 .loading {
   margin: 10px 0;
   display: flex;
   justify-content: center;
 }
 </style>
-

@@ -116,7 +116,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          file: Dockerfile.backend.prod
+          context: backend
+          file: backend/Dockerfile.prod
           push: true
           tags: ${{ steps.full-docker-tags.outputs.DOCKER_TAGS }}
 
@@ -146,7 +147,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          file: Dockerfile.frontend.prod
+          context: frontend
+          file: frontend/Dockerfile.prod
           push: true
           tags: ${{ steps.full-docker-tags.outputs.DOCKER_TAGS }}
   tag-master-branch:

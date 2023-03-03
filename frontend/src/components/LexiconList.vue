@@ -1,61 +1,60 @@
 <template>
   <div>
     <div class="list-actions">
-      <v-btn @click="openAdd" color="primary">Add</v-btn>
+      <v-btn color="primary" @click="openAdd">Add</v-btn>
     </div>
     <div v-if="adding">
-      <v-text-field v-model="addedName"/>
-      <v-btn @click="add" color="primary">Confirm</v-btn>
+      <v-text-field v-model="addedName" />
+      <v-btn color="primary" @click="add">Confirm</v-btn>
     </div>
     <div v-if="lexicons">
       <div v-for="lexicon in lexicons" :key="lexicon.name">
-        <router-link :to="'lexicon/'+lexicon.id">{{ lexicon.name }}</router-link>
+        <router-link :to="'lexicon/' + lexicon.id">{{
+          lexicon.name
+        }}</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
-import LexiconService from "@/services/lexicon.service";
+import LexiconService from '@/services/lexicon.service';
 
 export default {
-  name: "LexiconList",
+  name: 'LexiconList',
   data() {
     return {
       lexicons: null,
       adding: false,
       addedName: '',
-    }
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     openAdd() {
-      this.adding = true
+      this.adding = true;
     },
     add() {
-      LexiconService.create(
-          {
-            name: this.addedName
-          }
-      ).then(() => {
-        this.getList()
-        this.adding = false
-      })
+      LexiconService.create({
+        name: this.addedName,
+      }).then(() => {
+        this.getList();
+        this.adding = false;
+      });
     },
     getList() {
-      LexiconService.getList().then((res) => {
-        this.lexicons = res.data
-      })
+      LexiconService.getList().then(res => {
+        this.lexicons = res.data;
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>
-.list-actions{
+.list-actions {
   margin-bottom: 20px;
 }
 </style>

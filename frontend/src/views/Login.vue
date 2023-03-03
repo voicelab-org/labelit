@@ -1,6 +1,5 @@
 <template>
   <v-layout text-center wrap>
-
     <span v-shortkey="['enter']" @shortkey="handleLogin"></span>
     <v-flex xs12>
       <v-img
@@ -17,17 +16,17 @@
       <v-card-text>
         <v-form>
           <v-text-field
-            label="Email"
             v-model="user.email"
+            label="Email"
             prepend-icon="mdi-account-circle"
           />
           <v-text-field
+            v-model="user.password"
             :type="showPassword ? 'text' : 'password'"
             label="Password"
             prepend-icon="mdi-lock"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showPassword = !showPassword"
-            v-model="user.password"
           />
         </v-form>
       </v-card-text>
@@ -45,20 +44,20 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
 export default {
-  name: "LoginPage",
+  name: 'LoginPage',
   data() {
     return {
-      user: { email: "", password: "" },
+      user: { email: '', password: '' },
       loading: false,
-      message: "",
-      showPassword: false
+      message: '',
+      showPassword: false,
     };
   },
   computed: {
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn
+      return this.$store.state.auth.status.loggedIn;
     },
   },
   methods: {
@@ -68,7 +67,7 @@ export default {
       if (this.user.email && this.user.password) {
         this.authenticateUser(this.user).then(
           () => {
-            this.$router.push("/projects");
+            this.$router.push('/projects');
           },
           error => {
             this.loading = false;
@@ -79,8 +78,8 @@ export default {
           }
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

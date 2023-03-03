@@ -1,15 +1,13 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import { auth } from "./auth.module";
-import { task } from "./task.module";
-import { player } from "./player.module";
+import { auth } from './auth.module';
+import { task } from './task.module';
+import { player } from './player.module';
 
-import { entities } from "./entities.module";
+import { entities } from './entities.module';
 
-
-import { regions } from "./audioregions.module";
-
+import { regions } from './audioregions.module';
 
 Vue.use(Vuex);
 
@@ -20,5 +18,5 @@ export default new Vuex.Store({
     player,
     entities,
     regions,
-  }
+  },
 });

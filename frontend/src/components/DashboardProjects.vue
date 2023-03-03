@@ -1,5 +1,3 @@
 <template>
-    <div>
-        In construction...
-    </div>
+  <div>In construction...</div>
 </template>

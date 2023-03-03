@@ -1,10 +1,9 @@
-
 export const entities = {
   namespaced: true,
   state: {
-    entity_tasks : [
-        // TEMP
-        /*{
+    entity_tasks: [
+      // TEMP
+      /*{
           id: 1,
           name: "Task 1",
           labels: [
@@ -18,46 +17,50 @@ export const entities = {
               {"id":8,"name":"Adresse e-mail","prefix_key":null,"suffix_key":"7","background_color":"#1E88E5","text_color":"#ffffff"}
           ],
         },*/
-        // END TEMP
+      // END TEMP
     ],
     annotated_entities: [],
     annotation_enabled: true,
   },
-  getters : {
+  getters: {
     entity_tasks(state) {
-      return state.entity_tasks
+      return state.entity_tasks;
     },
     annotated_entities(state) {
-      return state.annotated_entities
+      return state.annotated_entities;
     },
     annotation_enabled(state) {
-      return state.annotation_enabled
+      return state.annotation_enabled;
     },
   },
   mutations: {
-    CLEAR_ANNOTATED_ENTITIES(state,) {
-      state.annotated_entities = []
+    CLEAR_ANNOTATED_ENTITIES(state) {
+      state.annotated_entities = [];
     },
     SET_ANNOTATED_ENTITIES(state, entities) {
-      state.annotated_entities = entities
+      state.annotated_entities = entities;
     },
     ADD_TASK(state, task) {
-      if (state.entity_tasks.find((t) => {return t.id == task.id}))
-        return
-      state.entity_tasks.push(task)
+      if (
+        state.entity_tasks.find(t => {
+          return t.id == task.id;
+        })
+      )
+        return;
+      state.entity_tasks.push(task);
     },
     ADD_ANNOTATED_ENTITIES(state, entities) {
-      state.annotated_entities = state.annotated_entities.concat(entities)
+      state.annotated_entities = state.annotated_entities.concat(entities);
     },
-    RESET_ALL(state){
-      state.entity_tasks = []
-      state.annotated_entities = []
+    RESET_ALL(state) {
+      state.entity_tasks = [];
+      state.annotated_entities = [];
     },
-    DISABLE_ANNOTATION(state){
-      state.annotation_enabled = false
+    DISABLE_ANNOTATION(state) {
+      state.annotation_enabled = false;
     },
-    ENABLE_ANNOTATION(state){
-      state.annotation_enabled = true
+    ENABLE_ANNOTATION(state) {
+      state.annotation_enabled = true;
     },
-  }
+  },
 };

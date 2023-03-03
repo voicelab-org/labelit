@@ -1,46 +1,28 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar
-        app
-        color="white"
-        flat
-    >
+    <v-app-bar app color="white" flat>
       <v-container class="py-0 fill-height">
-        <img src="/logo_le_voice_lab.png" style="height:32px;"/>
+        <img src="/logo_le_voice_lab.png" style="height: 32px" />
 
         <template v-if="user">
-          <v-btn v-if="user.is_staff" to="/dashboard"
-                 plain rounded
-          >
+          <v-btn v-if="user.is_staff" to="/dashboard" plain rounded>
             Dashboard
           </v-btn>
 
-          <v-btn to="/projects"
-                 plain rounded
-          >
-            Projects
-          </v-btn>
-          <v-btn v-if="user.is_staff" to="/datasets"
-                 plain rounded
-          >
+          <v-btn to="/projects" plain rounded> Projects </v-btn>
+          <v-btn v-if="user.is_staff" to="/datasets" plain rounded>
             Datasets
           </v-btn>
-          <v-btn v-if="user.is_staff" to="/tasks"
-                 plain rounded
-          >
-            Tasks
-          </v-btn>
-          <v-btn v-if="user.is_staff" to="/lexicons"
-                 plain rounded
-          >
+          <v-btn v-if="user.is_staff" to="/tasks" plain rounded> Tasks </v-btn>
+          <v-btn v-if="user.is_staff" to="/lexicons" plain rounded>
             Lexicons
           </v-btn>
         </template>
         <v-spacer></v-spacer>
         <div v-if="user" id="user-corner">
-          <BlueFilter/>
+          <BlueFilter />
           <!--          <v-btn text rounded>{{ user.email }}</v-btn>-->
-          <v-btn text rounded @click="logout()" :title="user.email">
+          <v-btn text rounded :title="user.email" @click="logout()">
             <v-icon>mdi-logout</v-icon>
           </v-btn>
         </div>
@@ -54,11 +36,7 @@
       <v-container>
         <v-row>
           <v-col>
-            <v-sheet
-                min-height="70vh"
-                rounded="lg"
-                class="container"
-            >
+            <v-sheet min-height="70vh" rounded="lg" class="container">
               <router-view></router-view>
             </v-sheet>
           </v-col>
@@ -69,9 +47,8 @@
 </template>
 
 <script>
-
-import {mapGetters} from 'vuex'
-import BlueFilter from '@/components/BlueFilter'
+import { mapGetters } from 'vuex';
+import BlueFilter from '@/components/BlueFilter.vue';
 
 export default {
   name: 'App',
@@ -79,26 +56,22 @@ export default {
     BlueFilter,
   },
   data: () => ({
-    links: [
-      'Projects',
-      'Datasets',
-    ],
+    links: ['Projects', 'Datasets'],
   }),
   computed: {
     ...mapGetters({
       user: 'auth/user',
-    })
+    }),
   },
   methods: {
     logout() {
-      this.$store.dispatch("auth/logout");
-    }
-  }
-}
+      this.$store.dispatch('auth/logout');
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-
 @import '@/styles/app.scss';
 
 #user-corner {
@@ -114,7 +87,6 @@ export default {
   color: #2c3e50;
   /*margin-top: 60px;*/
 }
-
 
 #header {
   border-bottom: 1px solid lightgrey;
@@ -154,7 +126,6 @@ export default {
   margin-bottom: 20px;
 }
 
-
 .label-pill {
   border-radius: 50%;
   height: 11px;
@@ -187,7 +158,6 @@ tr {
   margin-bottom: 20px;
 }
 
-
 // TODO: check use of the commented lines below
 /*
 .container {
@@ -197,14 +167,14 @@ tr {
 
 //
 
-
 .stats-table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-.stats-table td, .stats-table th {
+.stats-table td,
+.stats-table th {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
@@ -234,6 +204,4 @@ tr {
 .stats-table tr:hover {
   background-color: #ddd;
 }
-
-
 </style>

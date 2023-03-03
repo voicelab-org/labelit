@@ -1,2 +1,0 @@
-mkdocs >= 1.2.2
-mkdocs-i18n

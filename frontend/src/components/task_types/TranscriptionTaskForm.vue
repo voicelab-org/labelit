@@ -1,137 +1,125 @@
 <template>
   <div class="task-form-container">
-    <TaskFormHeader
-        :task="task"
-        :read-only="readOnly"
-    />
+    <TaskFormHeader :task="task" :read-only="readOnly" />
     <div v-if="label">
-      <textarea @focus='$emit("focus")' class="transcript" v-show="label" v-model="label.transcript" :ref="'transcript'"/>
+      <textarea
+        v-show="label"
+        :ref="'transcript'"
+        v-model="label.transcript"
+        class="transcript"
+        @focus="$emit('focus')"
+      />
     </div>
-    <ValidationError :message="validationError"/>
+    <ValidationError :message="validationError" />
   </div>
 </template>
 <script>
-
 import Vue from 'vue';
-import TaskForm from '@/components/mixins/TaskForm'
-import LabelService from '@/services/label.service.js'
-import LexiconService from '@/services/lexicon.service.js'
-import ValidationError from '@/components/ValidationError'
-import TaskFormHeader from '@/components/TaskFormHeader'
+import TaskForm from '@/components/mixins/TaskForm.js';
+import LabelService from '@/services/label.service.js';
+import LexiconService from '@/services/lexicon.service.js';
+import ValidationError from '@/components/ValidationError.vue';
+import TaskFormHeader from '@/components/TaskFormHeader.vue';
 
-const {Textcomplete} = require("@textcomplete/core")
-const {TextareaEditor} = require("@textcomplete/textarea")
+const { Textcomplete } = require('@textcomplete/core');
+const { TextareaEditor } = require('@textcomplete/textarea');
 
 export default {
-  name: 'transcription-task-form',
-  mixins: [TaskForm],
+  name: 'TranscriptionTaskForm',
   components: {
     ValidationError,
     TaskFormHeader,
   },
+  mixins: [TaskForm],
   data() {
     return {
       label: null,
       lexicon: null,
-
-    }
-  },
-  created() {
-    if (!this.selected_labels.length) {
-      LabelService.create(
-          {
-            resourcetype: "TranscriptionLabel",
-            transcript: "",
-            task: this.task.id,
-          }
-      ).then((res) => {
-        this.label = res.data
-      })
-    } else {
-      LabelService.get(this.selected_labels[0].id).then(
-          (res) => {
-            this.label = res.data
-          }
-      )
-    }
-    LexiconService.getList(
-        {
-          tasks: this.task.id,
-        }
-    )
-        .then(res => {
-          //this.lexicons = res.data
-          this.lexicon = []
-
-          res.data.forEach(
-              l => {
-                this.lexicon = this.lexicon.concat(l.entries.map(e => e.entry))
-              }
-          )
-
-          //this.$refs.input
-
-          const editor = new TextareaEditor(this.$refs.transcript)
-
-          //const textcomplete =
-          new Textcomplete(editor, [
-            {
-              match: /(\S{3,}|\(\w*)$/,
-              search: (term, callback) => {
-                callback(this.lexicon.filter((l) => {
-                  return l.startsWith(term)
-                }))
-              },
-              index: 1,
-              replace: function (element) {
-                return element + ' ';
-              }
-            }
-          ])
-
-        })
-  },
-  mounted() {
-    this.setFocus()
+    };
   },
   watch: {
     label: {
       deep: true,
       handler() {
-        LabelService.update(this.label.id, this.label).then(
-            () => {
-              Vue.set(this.selected_labels, 0, this.label)
-            }
-        )
+        LabelService.update(this.label.id, this.label).then(() => {
+          Vue.set(this.selected_labels, 0, this.label);
+        });
         this.$nextTick(() => {
-
-          this.setFocus()
-        })
+          this.setFocus();
+        });
       },
     },
     focused() {
-      this.setFocus()
+      this.setFocus();
     },
+  },
+  created() {
+    if (!this.selected_labels.length) {
+      LabelService.create({
+        resourcetype: 'TranscriptionLabel',
+        transcript: '',
+        task: this.task.id,
+      }).then(res => {
+        this.label = res.data;
+      });
+    } else {
+      LabelService.get(this.selected_labels[0].id).then(res => {
+        this.label = res.data;
+      });
+    }
+    LexiconService.getList({
+      tasks: this.task.id,
+    }).then(res => {
+      //this.lexicons = res.data
+      this.lexicon = [];
+
+      res.data.forEach(l => {
+        this.lexicon = this.lexicon.concat(l.entries.map(e => e.entry));
+      });
+
+      //this.$refs.input
+
+      const editor = new TextareaEditor(this.$refs.transcript);
+
+      //const textcomplete =
+      new Textcomplete(editor, [
+        {
+          match: /(\S{3,}|\(\w*)$/,
+          search: (term, callback) => {
+            callback(
+              this.lexicon.filter(l => {
+                return l.startsWith(term);
+              })
+            );
+          },
+          index: 1,
+          replace: function (element) {
+            return element + ' ';
+          },
+        },
+      ]);
+    });
+  },
+  mounted() {
+    this.setFocus();
   },
   methods: {
     setFocus() {
       if (this.focused) {
         if (this.$refs.transcript) {
-          this.$refs.transcript.focus()
+          this.$refs.transcript.focus();
         }
       } else {
-
         if (this.$refs.transcript) {
-          this.$refs.transcript.blur()
+          this.$refs.transcript.blur();
         }
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
-
 .task-form-container {
   margin-bottom: 15px;
 
@@ -177,5 +165,4 @@ export default {
 textarea.transcript {
   padding: 10px;
 }
-
 </style>

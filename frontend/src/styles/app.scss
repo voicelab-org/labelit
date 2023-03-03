@@ -1,27 +1,26 @@
-.annotation{
-    padding: 15px;
-    border-radius: 4px;
-    border: 2px solid grey;
-    margin-bottom: 15px;
-    &.validated {
-        border: 2px solid green;
-    }
+.annotation {
+  padding: 15px;
+  border-radius: 4px;
+  border: 2px solid grey;
+  margin-bottom: 15px;
+  &.validated {
+    border: 2px solid green;
+  }
 
-    &.invalidated {
-        border: 2px solid red;
-    }
+  &.invalidated {
+    border: 2px solid red;
+  }
 
-    &.resubmitted {
-        border: 2px solid rgb(3, 169, 244);
-    }
+  &.resubmitted {
+    border: 2px solid rgb(3, 169, 244);
+  }
 
-    &.is_focused {
-        border: 2px solid #03a9f4;
-    }
+  &.is_focused {
+    border: 2px solid #03a9f4;
+  }
 }
 
 .v-btn {
-    margin-top: 5px;
-    margin-right: 5px;
+  margin-top: 5px;
+  margin-right: 5px;
 }
-

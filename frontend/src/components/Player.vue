@@ -1,20 +1,20 @@
 <template>
   <div class="player-container">
-    <span v-shortkey="['ctrl', 'space',]" @shortkey="togglePlay"></span>
-    <span v-shortkey="['ctrl', 'arrowleft',]" @shortkey="skipBackward"></span>
-    <span v-shortkey="['ctrl', 'arrowright',]" @shortkey="skipForward"></span>
+    <span v-shortkey="['ctrl', 'space']" @shortkey="togglePlay"></span>
+    <span v-shortkey="['ctrl', 'arrowleft']" @shortkey="skipBackward"></span>
+    <span v-shortkey="['ctrl', 'arrowright']" @shortkey="skipForward"></span>
 
     <div id="wave-timeline"></div>
     <audio v-if="uses_hls" id="stream-audio-hls" ref="streamAudio"></audio>
     <div v-else id="stream-audio-raw"></div>
 
-    <div class="stream-player" v-if="!audioLoading && audioInfo">
+    <div v-if="!audioLoading && audioInfo" class="stream-player">
       <div class="stream-waves">
         <StreamWaveForms
-            :current-play-back-time="currentPlayBackTime"
-            :waveform-data="audioInfo.waveform"
-            :duration="duration"
-            @waveform-clicked="updateTimeByCursor"
+          :current-play-back-time="currentPlayBackTime"
+          :waveform-data="audioInfo.waveform"
+          :duration="duration"
+          @waveform-clicked="updateTimeByCursor"
         />
       </div>
     </div>
@@ -31,32 +31,31 @@
               :max="300"
               :min="50"
               inverse-label
-
               track-color="#a0dcf8"
-          ></v-slider>
+            ></v-slider>
           </div>
           <div>
-            <v-slider v-if="enableRegions"
+            <v-slider
+              v-if="enableRegions"
               v-model="zoomingValue"
               prepend-icon="mdi-magnify-plus"
-              :label="'   '+ zoomingValue"
+              :label="'   ' + zoomingValue"
               hide-details
               :max="100"
               :min="0"
               inverse-label
               track-color="#a0dcf8"
-          ></v-slider>
+            ></v-slider>
           </div>
-
         </div>
-        
+
         <div class="player-controls">
           <v-btn rounded color="primary" @click="skipBackward()">
             <v-icon>mdi-skip-backward</v-icon>
           </v-btn>
 
           <v-btn rounded color="primary" @click="togglePlay()">
-            <v-icon v-if="this.isPlaying">mdi-pause</v-icon>
+            <v-icon v-if="isPlaying">mdi-pause</v-icon>
             <v-icon v-else>mdi-play</v-icon>
           </v-btn>
 
@@ -67,8 +66,8 @@
         <div class="duration-container">
           <span class="duration">
             <timer-display
-                :seconds="currentPlayBackTime"
-                :max="duration"
+              :seconds="currentPlayBackTime"
+              :max="duration"
             ></timer-display>
             /
             <timer-display :seconds="duration"></timer-display>
@@ -78,10 +77,10 @@
       <template v-else>
         <div class="progress-bar">
           <v-progress-circular
-              v-show="audioLoading"
-              indeterminate
-              color="primary"
-              :size="48"
+            v-show="audioLoading"
+            indeterminate
+            color="primary"
+            :size="48"
           ></v-progress-circular>
         </div>
       </template>
@@ -90,27 +89,45 @@
 </template>
 
 <script>
-import Hls from "hls.js";
-import StreamWaveForms from '@/components/StreamWaveForms'
-import WaveSurfer from "wavesurfer.js";
-import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js"
-import Minimap from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js"
-import Timeline from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js"
-import DocumentService from "@/services/document.service"
-import LabelService from "../services/label.service";
-import TimerDisplay from "./TimerDisplay"
-import {mapGetters} from 'vuex'
-
+import Hls from 'hls.js';
+import StreamWaveForms from '@/components/StreamWaveForms.vue';
+import WaveSurfer from 'wavesurfer.js';
+import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions.js';
+import Minimap from 'wavesurfer.js/dist/plugin/wavesurfer.minimap.js';
+import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js';
+import DocumentService from '@/services/document.service.js';
+import LabelService from '../services/label.service.js';
+import TimerDisplay from './TimerDisplay.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
     StreamWaveForms,
     TimerDisplay,
   },
+  props: {
+    document: {
+      type: Object,
+      required: true,
+    },
+    enableRegions: {
+      type: Boolean,
+      default: false,
+    },
+    value: {
+      // annotated regions
+      type: Array,
+      required: true,
+    },
+    regionTasks: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       playbackSpeed: 100,
-      zoomingValue:0,
+      zoomingValue: 0,
       duration: 0,
       hls: null,
       uses_hls: false,
@@ -122,186 +139,180 @@ export default {
       are_initial_regions_loaded: false,
     };
   },
-  props: {
+  watch: {
+    playbackSpeed(newVal) {
+      this.player.setPlaybackRate(newVal.toFixed(2) / 100.0);
+    },
+    zoomingValue(newVal) {
+      this.player.zoom(newVal);
+    },
     document: {
-      type: Object,
-      required: true,
+      deep: true,
+      handler() {
+        this.fetchAudio();
+      },
     },
-    enableRegions: {
-      type: Boolean,
-      default: false,
-    },
-    value: { // annotated regions
-      type: Array,
-      required: true,
-    },
-    regionTasks: {
-      type: Array,
-      required: true,
+    value: {
+      deep: true,
+      handler() {
+        this.annotated_regions = this.value;
+        this.updateRegions();
+      },
     },
   },
   created() {
-      this.$store.commit('player/SET_PLAYBACK_TIME', 0)
-      //console.log('created' , this.$store.state.player.playbackTime)
+    this.$store.commit('player/SET_PLAYBACK_TIME', 0);
     if (this.regionTasks.length > 1) {
-      alert("Multiple Region tasks are currently not supported in the same project")
+      alert(
+        'Multiple Region tasks are currently not supported in the same project'
+      );
     }
   },
   mounted() {
-    this.$store.commit('player/SET_PLAYBACK_TIME', 0)
-    this.fetchAudio()
+    this.$store.commit('player/SET_PLAYBACK_TIME', 0);
+    this.fetchAudio();
   },
   methods: {
     updateRegions() {
       if (!this.annotated_regions.length && this.player) {
-        Object.entries(this.player.regions.list).forEach(
-            (r) => {
-              r[1].remove()
-            }
-        )
+        Object.entries(this.player.regions.list).forEach(r => {
+          r[1].remove();
+        });
       }
 
       if (this.annotated_regions.length) {
+        this.annotated_regions.forEach(r => {
+          try {
+            parseInt(r.id);
+          } catch {
+            return;
+          }
 
-        this.annotated_regions.forEach(
-            (r) => {
-              try {
-                parseInt(r.id)
-              } catch {
-                return
-              }
+          let existing_frontend_region = Object.entries(
+            this.player.regions.list
+          ).find(entry => {
+            let id = entry[0];
+            let region = entry[1];
+            return id != r.id && region.start == r.start && region.end == r.end;
+          });
 
-              let existing_frontend_region = Object.entries(this.player.regions.list).find(
-                  (entry) => {
-                    let id = entry[0]
-                    let region = entry[1]
-                    return id != r.id && region.start == r.start && region.end == r.end
-                  }
-              )
+          if (existing_frontend_region) {
+            existing_frontend_region.id = r.id;
+            return;
+          }
 
-              if (existing_frontend_region) {
-                existing_frontend_region.id = r.id
-                return
-              }
-
-              let existing_db_region = Object.keys(this.player.regions.list).find(
-                  (id) => {
-                    return id == r.id
-                  }
-              )
-
-              if (existing_db_region) return
-              this.player.addRegion(
-                  {
-                    id: r.id,
-                    start: r.start,
-                    end: r.end,
-                    resize: this.isAdmin ? false : true,
-                    drag: this.isAdmin ? false : true,
-                  }
-              )
-              if(!this.isAdmin && this.enableRegions ){
-                this.setupRemoveListeners()
-                //this.setupRegionEventListeners()
-              }
+          let existing_db_region = Object.keys(this.player.regions.list).find(
+            id => {
+              return id == r.id;
             }
-        )
-        this.are_initial_regions_loaded = true
+          );
+
+          if (existing_db_region) return;
+          this.player.addRegion({
+            id: r.id,
+            start: r.start,
+            end: r.end,
+            resize: this.isAdmin ? false : true,
+            drag: this.isAdmin ? false : true,
+          });
+          if (!this.isAdmin && this.enableRegions) {
+            this.setupRemoveListeners();
+            //this.setupRegionEventListeners()
+          }
+        });
+        this.are_initial_regions_loaded = true;
       }
-      if(this.isAdmin && this.enableRegions){
-        this.player.disableDragSelection()
+      if (this.isAdmin && this.enableRegions) {
+        this.player.disableDragSelection();
       }
     },
     fetchAudio() {
-      this.$store.commit('player/SET_PLAYBACK_TIME', 0)
-      //console.log('fetchAudio' , this.$store.state.player.playbackTime)
+      this.$store.commit('player/SET_PLAYBACK_TIME', 0);
 
       if (this.player) {
-        this.player.pause()
+        this.player.pause();
       }
-      DocumentService.doesUseHls(this.document.id).then((res) => {
-        if (res.data["use_hls"]) {
+      DocumentService.doesUseHls(this.document.id).then(res => {
+        if (res.data['use_hls']) {
           this.uses_hls = true;
           this.$nextTick(() => {
             if (Hls.isSupported()) {
               this.hls = new Hls({
                 audioLoadingTimeOut: 60000,
-                xhrSetup: (xhr) => {
-                  xhr.setRequestHeader("Authorization", `Bearer ${this.$store.state.auth.accessToken}`);
+                xhrSetup: xhr => {
+                  xhr.setRequestHeader(
+                    'Authorization',
+                    `Bearer ${this.$store.state.auth.accessToken}`
+                  );
                 },
               });
               this.fetchAudioHls(this.document.id);
             } else {
-              alert("Player is not supported by your browser !");
+              alert('Player is not supported by your browser !');
             }
           });
         } else {
           this.uses_hls = false;
-          let vm = this
+          let vm = this;
           this.$nextTick(() => {
-
-            let plugins = []
+            let plugins = [];
             if (this.enableRegions) {
-              
-              if (!this.isAdmin){
+              if (!this.isAdmin) {
                 plugins.push(
-                    RegionsPlugin.create({
-                      regionsMinLength: 0.1,
-                      dragSelection: {
-                        slop: 5
-                      },
-                    })
-                )
-              }
-              else{
+                  RegionsPlugin.create({
+                    regionsMinLength: 0.1,
+                    dragSelection: {
+                      slop: 5,
+                    },
+                  })
+                );
+              } else {
                 plugins.push(
-                    RegionsPlugin.create({
-                      regionsMinLength: 0.1,
-
-                    })
-                )
+                  RegionsPlugin.create({
+                    regionsMinLength: 0.1,
+                  })
+                );
               }
               plugins.push(
                 Minimap.create({
-                height: 30,
-                waveColor: '#f5cc89',
-                progressColor: '#faa316',
-                cursorColor: '#999'
+                  height: 30,
+                  waveColor: '#f5cc89',
+                  progressColor: '#faa316',
+                  cursorColor: '#999',
                 })
-              )
+              );
 
               plugins.push(
-              Timeline.create({
-                container: '#wave-timeline'
+                Timeline.create({
+                  container: '#wave-timeline',
                 })
-              )
-
+              );
             }
-            if (vm.player){
-              vm.player.destroy()
-              delete vm.player
+            if (vm.player) {
+              vm.player.destroy();
+              delete vm.player;
             }
             vm.player = WaveSurfer.create({
               backend: 'MediaElement',
-              container: "#stream-audio-raw",
-              waveColor: "#a0dcf8",
-              progressColor: "#03a9f4",
+              container: '#stream-audio-raw',
+              waveColor: '#a0dcf8',
+              progressColor: '#03a9f4',
               hideScrollbar: 'true',
               barWidth: '0',
               minPxPerSec: '1000',
               height: 75,
-              closeAudioContext:true,
-              cursorColor: "#03a9f4",
-              plugins: plugins
+              closeAudioContext: true,
+              cursorColor: '#03a9f4',
+              plugins: plugins,
             });
-            if (this.enableRegions && !this.isAdmin ) {
-              this.setupRegionEventListeners()
+            if (this.enableRegions && !this.isAdmin) {
+              this.setupRegionEventListeners();
             }
-            if (this.enableRegions && this.isAdmin){
-              this.player.disableDragSelection()
+            if (this.enableRegions && this.isAdmin) {
+              this.player.disableDragSelection();
             }
             // vm.player.enableDragSelection()
-            vm.fetchAudioRaw()
+            vm.fetchAudioRaw();
             /*vm.player.addRegion(
                 {
                   start: 1.0,
@@ -315,194 +326,188 @@ export default {
       });
     },
     setupRegionEventListeners() {
+      this.player.on('region-update-end', e => {
+        let existing_region = this.annotated_regions.find(r => r.id == e.id);
 
-      this.player.on("region-update-end", (e) => {
-        let existing_region = this.annotated_regions.find(r => r.id == e.id)
-
-        let promises = []
+        let promises = [];
         if (existing_region) {
-          existing_region.start = e.start
-          existing_region.end = e.end
-          promises.push(LabelService.update(e.id, {
-            resourcetype: "AudioRegionLabel",
-            end: e.end,
-            start: e.start
-          }))
+          existing_region.start = e.start;
+          existing_region.end = e.end;
+          promises.push(
+            LabelService.update(e.id, {
+              resourcetype: 'AudioRegionLabel',
+              end: e.end,
+              start: e.start,
+            })
+          );
         } else {
-          promises.push(LabelService.create(
-              {
+          promises.push(
+            LabelService.create({
+              start: e.start,
+              end: e.end,
+              resourcetype: 'AudioRegionLabel',
+              task: this.regionTasks[0].id,
+            }).then(res => {
+              this.annotated_regions.push({
+                id: res.data.id,
+                wavesurfer_region_id: e.id,
                 start: e.start,
                 end: e.end,
-                resourcetype: "AudioRegionLabel",
-                task: this.regionTasks[0].id,
+                task: this.regionTasks[0].id, // assuming a single region task for now
+              });
+
+              let matching_wavesurfer_region = Object.entries(
+                this.player.regions.list
+              ).find(entry => {
+                return entry[0] == e.id;
+              });
+
+              //matching_wavesurfer_region.id = res.data.id
+              if (matching_wavesurfer_region) {
+                matching_wavesurfer_region[1].remove();
               }
-          ).then(
-              (res) => {
-                this.annotated_regions.push(
-                    {
-                      id: res.data.id,
-                      wavesurfer_region_id: e.id,
-                      start: e.start,
-                      end: e.end,
-                      task: this.regionTasks[0].id, // assuming a single region task for now
-                    }
-                )
-
-                let matching_wavesurfer_region = Object.entries(this.player.regions.list).find(
-                    (entry) => {
-                      return entry[0] == e.id
-                    }
-                )
-
-                //matching_wavesurfer_region.id = res.data.id
-                if (matching_wavesurfer_region) {
-                  matching_wavesurfer_region[1].remove()
-                }
-                this.player.addRegion({
-                  id: res.data.id,
-                  start: e.start,
-                  end: e.end,
-                })
-              }
-          ))
-
+              this.player.addRegion({
+                id: res.data.id,
+                start: e.start,
+                end: e.end,
+              });
+            })
+          );
         }
 
         Promise.all(promises).then(() => {
-          this.setupRemoveListeners()
-          this.$emit('input', this.annotated_regions)
-        })
-
+          this.setupRemoveListeners();
+          this.$emit('input', this.annotated_regions);
+        });
       });
     },
     setupRemoveListeners() {
-      Object.entries(this.player.regions.list).forEach(
-          (entry) => {
-            let region = entry[1]
-            region.on('dblclick', () => {
-              LabelService.delete(region.id).then(
-                  () => {
-                    this.annotated_regions = this.annotated_regions.filter(r => r.id != region.id)
-                    this.$emit('input', this.annotated_regions)
-                    region.remove()
-                  }
-              )
-              //region.remove()
-              // TODO: remove in backend and send input event
-            })
-          }
-      )
+      Object.entries(this.player.regions.list).forEach(entry => {
+        let region = entry[1];
+        region.on('dblclick', () => {
+          LabelService.delete(region.id).then(() => {
+            this.annotated_regions = this.annotated_regions.filter(
+              r => r.id != region.id
+            );
+            this.$emit('input', this.annotated_regions);
+            region.remove();
+          });
+          //region.remove()
+          // TODO: remove in backend and send input event
+        });
+      });
     },
     fetchAudioHls() {
       this.audioLoading = true;
-      DocumentService.getAudioInfo(this.document.id)
-          .then((res) => {
-            this.audioInfo = res.data;
-            this.duration = this.audioInfo.duration;
-          });
+      DocumentService.getAudioInfo(this.document.id).then(res => {
+        this.audioInfo = res.data;
+        this.duration = this.audioInfo.duration;
+      });
 
       this.hls.attachMedia(this.$refs.streamAudio);
       this.hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-        this.hls.loadSource(DocumentService.getDocumentAudioUrl(this.document.id));
+        this.hls.loadSource(
+          DocumentService.getDocumentAudioUrl(this.document.id)
+        );
         this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
           this.player = this.$refs.streamAudio;
           this.audioLoading = false;
 
-          this.player.addEventListener("play", () => {
+          this.player.addEventListener('play', () => {
             this.isPlaying = true;
-            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
+            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying);
           });
 
-          this.player.addEventListener("pause", () => {
+          this.player.addEventListener('pause', () => {
             this.isPlaying = false;
-            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
+            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying);
           });
 
-          this.player.addEventListener("timeupdate", () => {
-            //console.log('timeupdate')
-            this.$store.commit('player/SET_PLAYBACK_TIME', this.player.currentTime);
+          this.player.addEventListener('timeupdate', () => {
+            this.$store.commit(
+              'player/SET_PLAYBACK_TIME',
+              this.player.currentTime
+            );
           });
 
-          this.player.addEventListener("ended", () => {
+          this.player.addEventListener('ended', () => {
             this.player.currentTime = 0;
           });
 
           this.player.skipForward = function (val) {
             this.currentTime += val;
-          }
+          };
 
           this.player.skipBackward = function (val) {
             this.currentTime -= val;
-          }
+          };
 
           this.player.setPlaybackRate = function (val) {
             this.playbackRate = val;
-          }
+          };
 
-          this.hls.on(Hls.Events.FRAG_LOADING, () => {
-          });
+          this.hls.on(Hls.Events.FRAG_LOADING, () => {});
         });
       });
     },
     fetchAudioRaw() {
-      let vm = this
+      let vm = this;
       this.audioLoading = true;
-      DocumentService.getAudioUrl(vm.document.id).then((res) => {
-            var data = res.data
-            var waveform = data.waveform 
-            this.player.load(data.url , waveform , null);
-            this.player.setPlayEnd(0)
-            this.player.zoom(this.zoomingValue)
-            this.player.setPlaybackRate(this.playbackSpeed.toFixed(2) / 100.0);
-            this.player.getCurrentTime()
-            //console.log(vm.player.getCurrentTime())
-            this.player.on("ready", () => {
-              this.duration = this.player.getDuration();
-              this.audioLoading = false;
-            });
-        
-            this.player.on("play", () => {
-              this.isPlaying = true;
-              this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
-            });
-            
-            this.player.on("pause", () => {
-              this.isPlaying = false;
-              this.$store.commit('player/SET_IS_PLAYING', this.isPlaying)
-            });
+      DocumentService.getAudioUrl(vm.document.id).then(res => {
+        var data = res.data;
+        var waveform = data.waveform;
+        this.player.load(data.url, waveform, null);
+        this.player.setPlayEnd(0);
+        this.player.zoom(this.zoomingValue);
+        this.player.setPlaybackRate(this.playbackSpeed.toFixed(2) / 100.0);
+        this.player.getCurrentTime();
+        this.player.on('ready', () => {
+          this.duration = this.player.getDuration();
+          this.audioLoading = false;
+        });
 
-            this.player.on("finish", () => {
-              this.player.currentTime = 0;
-            });
-            
-            this.player.on("audioprocess", () => {
-              // console.log('audioprocess',vm.player.getCurrentTime())
-              this.$store.commit('player/SET_PLAYBACK_TIME', vm.player.getCurrentTime())
-            });
-            
-            this.player.on('region-click', function(region, e) {
-              e.stopPropagation();
-              // Play on click, loop on shift click
-              e.shiftKey ? region.playLoop() : region.play();
-            });
-            
-            this.player.on("region-out", () => {
-              this.player.pause()
-            });
-            this.player.on("region-in", () => {
-              this.player.play()
-            });
-            
-            this.player.disableDragSelection()
-            
+        this.player.on('play', () => {
+          this.isPlaying = true;
+          this.$store.commit('player/SET_IS_PLAYING', this.isPlaying);
+        });
 
-          })
-          
-          // setInterval(() => {
-            //   this.$store.commit('player/SET_PLAYBACK_TIME', this.player.getCurrentTime())
-            // }, 500);
-          },
-          skipForward() {
+        this.player.on('pause', () => {
+          this.isPlaying = false;
+          this.$store.commit('player/SET_IS_PLAYING', this.isPlaying);
+        });
+
+        this.player.on('finish', () => {
+          this.player.currentTime = 0;
+        });
+
+        this.player.on('audioprocess', () => {
+          this.$store.commit(
+            'player/SET_PLAYBACK_TIME',
+            vm.player.getCurrentTime()
+          );
+        });
+
+        this.player.on('region-click', function (region, e) {
+          e.stopPropagation();
+          // Play on click, loop on shift click
+          e.shiftKey ? region.playLoop() : region.play();
+        });
+
+        this.player.on('region-out', () => {
+          this.player.pause();
+        });
+        this.player.on('region-in', () => {
+          this.player.play();
+        });
+
+        this.player.disableDragSelection();
+      });
+
+      // setInterval(() => {
+      //   this.$store.commit('player/SET_PLAYBACK_TIME', this.player.getCurrentTime())
+      // }, 500);
+    },
+    skipForward() {
       this.player.skipForward(1);
     },
     skipBackward() {
@@ -519,60 +524,18 @@ export default {
       this.player.currentTime = newTime;
     },
   },
-  watch: {
-    playbackSpeed(newVal) {
-      this.player.setPlaybackRate(newVal.toFixed(2) / 100.0);
-    },
-    zoomingValue(newVal){
-      this.player.zoom(newVal);
-    },
-    document: {
-      deep: true,
-      handler() {
-        this.fetchAudio()
-      },
-    },
-    value: {
-      deep: true,
-      handler() {
-        this.annotated_regions = this.value
-        this.updateRegions()
-      }
-    },
-    /*'player.regions.list': {
-      deep: true,
-      handler(){
-        console.log("&regions changed")
-        console.log("&&list", JSON.stringify(this.player.regions.list))
-        Object.entries(this.player.regions.list).forEach(
-            (entry) => {
-              console.log("entry", entry)
-              let region = entry[1]
-              console.log("&region", region)
-              region.on('dblclick', () => {
-                console.log("&removing!!!")
-                //region.remove()
-                // TODO: remove in backend and send input event
-              })
-            }
-        )
-      }
-    }*/
-  },
   computed: {
     ...mapGetters({
       isAdmin: 'auth/isAdmin',
     }),
     currentPlayBackTime() {
-      //console.log('CurrentPlaybackTime' , this.$store.state.player.playbackTime)
       return this.$store.state.player.playbackTime;
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .player-container {
   margin: 10px 0;
 }

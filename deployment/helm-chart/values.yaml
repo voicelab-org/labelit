@@ -1,0 +1,51 @@
+backend:
+  docker:
+    image: levoicelab/labelit-backend
+    tag: latest
+  # You can add as much env variables as you want
+  env:
+    # You can add as much env variables as you want
+    # The documentation list all available environments variable.
+    # ALLOWED_HOST is automatically computed using ingress.host value
+  nodeSelector:
+    role: worker
+  tolerations:
+    - key: instancetype
+      value: worker
+      effect: NoSchedule
+  resources:
+    requests:
+      cpu: "400m"
+      memory: "1Gi"
+    limits:
+      cpu: "500m"
+      memory: "1.5Gi"
+
+frontend:
+  docker:
+    image: levoicelab/labelit-frontend
+    tag: latest
+  nodeSelector:
+    role: worker
+  tolerations:
+    - key: instancetype
+      value: worker
+      effect: NoSchedule
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "50Mi"
+    limits:
+      cpu: "100m"
+      memory: "100Mi"
+  env:
+    # You can add as much env variables as you want
+    # VUE_APP_BACKEND_API is automatically computed using ingress.host value
+    VUE_APP_I18N_FALLBACK_LOCALE: en
+ingress:
+  # Without https and slashes
+  # host: labelit.my-domain-name.cool
+  annotations:
+  # As many ingress annotations as you want
+  # Example:
+  #   cert-manager.io/cluster-issuer: letsencrypt-dns01-gandi

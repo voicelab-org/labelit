@@ -1,0 +1,59 @@
+site_name: Labelit documentation
+
+# Documentation and theme
+theme:
+  name: "material"
+  logo: "assets/logo_le_voice_lab.png"
+  features:
+    - toc.integrate
+
+# Options
+extra:
+  palette:
+    primary: "#AC00A9"
+    accent: "#AC00A9"
+  font:
+    text: "Roboto"
+    code: "Roboto Mono"
+
+extra_css: [extra.css]
+
+plugins:
+  - i18n:
+      languages:
+        fr: "Français"
+        en: "English"
+      default_language: "en"
+      no_translation:
+        fr: "Cette page n'est pas encore traduite en français."
+        en: "This page isn't translated to English"
+      translate_nav:
+        fr:
+          Development: Développement
+          Usage: Utilisation
+          Update documentation: Mise à jour de la documentation
+          Deployment: Déploiement
+
+nav:
+  - index.md
+  # TODO
+  # - index.fr.md
+  - Development:
+      - development/01.setup.md
+  - Usage:
+      - usage/01.register_users.md
+      - usage/02.first_dataset.md
+      - usage/03.first_task.md
+      - usage/04.first_project.md
+      - usage/05.assign_work.md
+      - usage/06.annotate.md
+  - Update documentation:
+      - update_documentation/01.update_documentation.md
+  - Deployment:
+      - deployment/01.requirements.md
+      - deployment/02.helm_chart.md
+      - deployment/03.environment_variables.md
+      - deployment/04.cloud_formation.md
+
+markdown_extensions:
+  - pymdownx.superfences

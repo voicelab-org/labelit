@@ -4,34 +4,28 @@
       <li v-for="file in files" :key="file.name">{{ file.name }} - Error: {{ file.error }}, Success: {{ file.success }}</li>
     </ul>-->
     <div v-if="dataset_uploaded"></div>
-    <v-btn
-        v-if="!import_in_progress"
-        @click="import_in_progress=true"
-    >
+    <v-btn v-if="!import_in_progress" @click="import_in_progress = true">
       Import a dataset
     </v-btn>
     <div v-else>
-      <div v-if="dataset_uploaded">
-        Import successful.
-      </div>
+      <div v-if="dataset_uploaded">Import successful.</div>
       <div v-else>
         <file-upload
-            ref="upload"
-            v-model="files"
-            accept="application/zip"
-            :post-action="base_url + 'datasets/upload_dataset/'"
-            :headers="headers"
-            @input-file="inputFile"
-            @input-filter="inputFilter"
+          ref="upload"
+          v-model="files"
+          accept="application/zip"
+          :post-action="base_url + 'datasets/upload_dataset/'"
+          :headers="headers"
+          @input-file="inputFile"
+          @input-filter="inputFilter"
         >
-          <v-btn>
-            1. Select file
-          </v-btn>
+          <v-btn> 1. Select file </v-btn>
         </file-upload>
 
         <v-btn
-            v-show="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true"
-            :style="{position: 'relative', top: '-17px'}"
+          v-show="!$refs.upload || !$refs.upload.active"
+          :style="{ position: 'relative', top: '-17px' }"
+          @click.prevent="$refs.upload.active = true"
         >
           2. Upload
         </v-btn>
@@ -41,13 +35,11 @@
 </template>
 
 <script>
-
-import {baseURL} from '@/app.config';
-import LocalStorageService from '@/services/local.storage.service'
-
+import { baseURL } from '@/app.config';
+import LocalStorageService from '@/services/local.storage.service';
 
 export default {
-  name: "DatasetUploader",
+  name: 'DatasetUploader',
   data() {
     return {
       files: [],
@@ -56,18 +48,17 @@ export default {
       import_in_progress: false,
       import_complete: false,
       dataset_uploaded: false,
-    }
-  },
-  created() {
-
-    this.access_token = LocalStorageService.getAccessToken()
+    };
   },
   computed: {
     headers() {
       return {
-        "Authorization": `Bearer ${this.access_token}`,
-      }
+        Authorization: `Bearer ${this.access_token}`,
+      };
     },
+  },
+  created() {
+    this.access_token = LocalStorageService.getAccessToken();
   },
   methods: {
     /**
@@ -77,16 +68,13 @@ export default {
      * @return undefined
      */
     inputFile: function (newFile, oldFile) {
-      console.log("&newFile, oldFile", newFile, oldFile)
       if (newFile && oldFile && !newFile.active && oldFile.active) {
         // Get response data
-        console.log('response', newFile.response)
         if (newFile.xhr) {
           //  Get the response status code
-          console.log('status', newFile.xhr.status)
           if (200 == newFile.xhr.status) {
-            this.dataset_uploaded = true
-            this.$emit('imported')
+            this.dataset_uploaded = true;
+            this.$emit('imported');
           }
         }
       }
@@ -98,7 +86,8 @@ export default {
      * @param  Function           prevent   Prevent changing
      * @return undefined
      */
-    inputFilter: function (newFile) {//, oldFile, prevent
+    inputFilter: function (newFile) {
+      //, oldFile, prevent
       /*if (newFile && !oldFile) {
         // Filter non-image file
         if (!/\.(jpeg|jpe|jpg|gif|png|webp)$/i.test(newFile.name)) {
@@ -107,21 +96,14 @@ export default {
       }*/
 
       // Create a blob field
-      newFile.blob = ''
-      let URL = window.URL || window.webkitURL
+      newFile.blob = '';
+      let URL = window.URL || window.webkitURL;
       if (URL && URL.createObjectURL) {
-        newFile.blob = URL.createObjectURL(newFile.file)
+        newFile.blob = URL.createObjectURL(newFile.file);
       }
-    }
-  },
-  watch: {
-    dataset_uploaded() {
-      console.log("&change")
     },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

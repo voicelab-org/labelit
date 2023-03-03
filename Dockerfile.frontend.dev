@@ -1,9 +1,0 @@
-FROM node:15-alpine3.13 as build-stage
-
-WORKDIR /app
-
-COPY ./frontend /app/
-
-RUN npm install && npm cache clean --force
-
-CMD npm run serve
