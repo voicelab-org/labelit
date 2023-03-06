@@ -8,7 +8,8 @@
     <v-simple-table v-if="shown_batches.length && !loading">
       <thead>
         <tr>
-          <th class="text-left">Name</th>
+          <th class="text-left">Batch name</th>
+          <th class="text-left actions-table-column"></th>
         </tr>
       </thead>
       <tbody>

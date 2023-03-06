@@ -25,7 +25,7 @@
 </template>
 
 <script>
-var VueScrollTo = require('vue-scrollto');
+import VueScrollTo from 'vue-scrollto';
 
 export default {
   name: 'LiveCorrect',

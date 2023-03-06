@@ -3,7 +3,7 @@
     <span v-shortkey="['enter']" @shortkey="handleLogin"></span>
     <v-flex xs12>
       <v-img
-        :src="require('../assets/logo_le_voice_lab.png')"
+        src="/logo_le_voice_lab.png"
         class="my-3"
         contain
         height="150"
@@ -30,14 +30,41 @@
           />
         </v-form>
       </v-card-text>
-      <v-divider></v-divider>
-      <template v-if="message">
-        <v-card-text>
-          Could not login. Did you enter the correct username and password ?
-        </v-card-text>
-      </template>
-      <v-card-actions class="card-Action">
-        <v-btn class="loginBtn" color="info" @click="handleLogin">Login</v-btn>
+      <v-card-actions class="d-flex justify-center">
+        <v-btn
+          class="loginBtn"
+          color="info"
+          :loading="loading"
+          @click="handleLogin"
+        >
+          Login
+        </v-btn>
+        <div v-if="isDevEnv()">
+          <v-btn
+            class="loginBtn"
+            color="info"
+            :loading="loading"
+            @click="handleLoginDev('qa@qa.com', 'QApassword')"
+          >
+            Login QA
+          </v-btn>
+          <v-btn
+            class="loginBtn"
+            color="info"
+            :loading="loading"
+            @click="handleLoginDev('a1@annotator.com', 'a1password')"
+          >
+            Login A1
+          </v-btn>
+          <v-btn
+            class="loginBtn"
+            color="info"
+            :loading="loading"
+            @click="handleLoginDev('a2@annotator.com', 'a2password')"
+          >
+            Login A2
+          </v-btn>
+        </div>
       </v-card-actions>
     </v-card>
   </v-layout>
@@ -62,6 +89,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['authenticateUser']),
+    ...mapActions('snackbar', ['showSnackbar']),
     handleLogin() {
       this.loading = true;
       if (this.user.email && this.user.password) {
@@ -69,15 +97,24 @@ export default {
           () => {
             this.$router.push('/projects');
           },
-          error => {
+          () => {
             this.loading = false;
-            this.message =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
+            this.showSnackbar({
+              color: 'error',
+              text: 'Could not login. Did you enter the correct username and password ?',
+            });
           }
         );
       }
+    },
+    handleLoginDev(email, password) {
+      this.loading = true;
+      this.authenticateUser({ email, password }).then(() => {
+        this.$router.push('/projects');
+      });
+    },
+    isDevEnv() {
+      return import.meta.env.DEV;
     },
   },
 };
@@ -86,10 +123,5 @@ export default {
 <style scoped>
 .card-Action {
   position: relative;
-}
-
-.loginBtn {
-  position: relative;
-  left: 40%;
 }
 </style>

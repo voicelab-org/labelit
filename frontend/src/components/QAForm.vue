@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import AnnotationService from '@/services/annotation.service';
+import AnnotationService from '@/services/annotation.service.js';
 
 export default {
   name: 'QAForm',

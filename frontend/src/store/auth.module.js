@@ -20,7 +20,7 @@ export const auth = {
       return state.accessToken != null;
     },
     isAdmin(state) {
-      return state.user.is_staff;
+      return state.user?.is_staff;
     },
     user(state) {
       return state.user;
@@ -44,7 +44,7 @@ export const auth = {
     logout({ dispatch }) {
       ApiService.removeHeader();
       dispatch('resetState');
-      router.push('login');
+      router.push('/login');
     },
     resetState({ commit }) {
       commit('CLEAR_ACCESS_TOKEN');

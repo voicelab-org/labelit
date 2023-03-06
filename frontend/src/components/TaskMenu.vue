@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import TaskService from '@/services/task.service';
+import TaskService from '@/services/task.service.js';
 
 export default {
   name: 'TaskMenu',

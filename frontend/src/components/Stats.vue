@@ -106,20 +106,24 @@
 
       <template v-if="batch">
         <div v-for="task in proj.tasks" :key="task.id">
-          <component
-            :is="getTaskStatsComponent(task)"
-            :task="task"
-            :batch-id="batch.id"
-          />
+          <template v-if="statsComponentExist(task)">
+            <component
+              :is="getTaskStatsComponent(task)"
+              :task="task"
+              :batch-id="batch.id"
+            />
+          </template>
         </div>
       </template>
       <template v-if="project">
         <div v-for="task in proj.tasks" :key="task.id">
-          <component
-            :is="getTaskStatsComponent(task)"
-            :task="task"
-            :project-id="project.id"
-          />
+          <template v-if="statsComponentExist(task)">
+            <component
+              :is="getTaskStatsComponent(task)"
+              :task="task"
+              :project-id="project.id"
+            />
+          </template>
         </div>
       </template>
     </div>
@@ -127,8 +131,8 @@
 </template>
 
 <script>
-import BatchService from '@/services/batch.service';
-import ProjectService from '@/services/project.service';
+import BatchService from '@/services/batch.service.js';
+import ProjectService from '@/services/project.service.js';
 
 export default {
   name: 'Stats',
@@ -177,6 +181,11 @@ export default {
     vm.getStats();
   },
   methods: {
+    statsComponentExist(task) {
+      return Object.keys(this.$options.components).includes(
+        this.getTaskStatsComponent(task)
+      );
+    },
     getTaskStatsComponent(task) {
       return task.resourcetype + 'Stats';
     },

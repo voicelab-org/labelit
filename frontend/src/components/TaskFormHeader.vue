@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Guidelines from './Guidelines';
+import Guidelines from '@/components/Guidelines.vue';
 
 export default {
   name: 'TaskFormHeader',

@@ -78,6 +78,7 @@ services:
       - ./frontend:/app
     ports:
       - 8080:8080
+      - 9229:9229
     depends_on:
       - backend
 

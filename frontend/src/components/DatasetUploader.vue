@@ -3,81 +3,101 @@
     <!--<ul>
       <li v-for="file in files" :key="file.name">{{ file.name }} - Error: {{ file.error }}, Success: {{ file.success }}</li>
     </ul>-->
-    <div v-if="dataset_uploaded"></div>
-    <v-btn v-if="!import_in_progress" @click="import_in_progress = true">
+    <v-btn v-if="!displayForm" @click="displayForm = true">
       Import a dataset
     </v-btn>
     <div v-else>
-      <div v-if="dataset_uploaded">Import successful.</div>
-      <div v-else>
-        <file-upload
-          ref="upload"
-          v-model="files"
-          accept="application/zip"
-          :post-action="base_url + 'datasets/upload_dataset/'"
-          :headers="headers"
-          @input-file="inputFile"
-          @input-filter="inputFilter"
-        >
-          <v-btn> 1. Select file </v-btn>
-        </file-upload>
-
-        <v-btn
-          v-show="!$refs.upload || !$refs.upload.active"
-          :style="{ position: 'relative', top: '-17px' }"
-          @click.prevent="$refs.upload.active = true"
-        >
-          2. Upload
-        </v-btn>
-      </div>
+      <file-upload
+        ref="upload"
+        accept="application/zip"
+        :post-action="baseUrl + 'datasets/upload_dataset/'"
+        :headers="headers"
+        @input-file="inputFile"
+        @input-filter="inputFilter"
+      >
+        <v-btn>{{ fileName || 'Select a file' }}</v-btn>
+      </file-upload>
+      <v-btn
+        :disabled="!fileSelected || importInProgress"
+        :loading="importInProgress"
+        :style="{ position: 'relative', top: '-17px' }"
+        @click.prevent="startUpload()"
+      >
+        Upload
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import { baseURL } from '@/app.config';
-import LocalStorageService from '@/services/local.storage.service';
+import { mapActions } from 'vuex';
+import { baseURL } from '@/app.config.js';
+import LocalStorageService from '@/services/local.storage.service.js';
 
 export default {
   name: 'DatasetUploader',
   data() {
     return {
-      files: [],
-      access_token: null,
-      base_url: baseURL,
-      import_in_progress: false,
-      import_complete: false,
-      dataset_uploaded: false,
+      accessToken: null,
+      baseUrl: baseURL,
+      displayForm: false,
+      importInProgress: false,
+      fileName: null,
+      fileSelected: false,
+      MAX_FILE_NAME: 25,
     };
   },
   computed: {
     headers() {
       return {
-        Authorization: `Bearer ${this.access_token}`,
+        Authorization: `Bearer ${this.accessToken}`,
       };
     },
   },
   created() {
-    this.access_token = LocalStorageService.getAccessToken();
+    this.accessToken = LocalStorageService.getAccessToken();
   },
   methods: {
+    ...mapActions('snackbar', ['showSnackbar']),
     /**
      * Has changed
      * @param  Object|undefined   newFile   Read only
      * @param  Object|undefined   oldFile   Read only
      * @return undefined
      */
+    startUpload: function () {
+      this.importInProgress = true;
+      this.$refs.upload.active = true;
+    },
     inputFile: function (newFile, oldFile) {
       if (newFile && oldFile && !newFile.active && oldFile.active) {
         // Get response data
         if (newFile.xhr) {
           //  Get the response status code
-          if (200 == newFile.xhr.status) {
+          let notification = {};
+          if (newFile.xhr.status === 200) {
             this.dataset_uploaded = true;
-            this.$emit('imported');
+            this.$emit('new-dataset-imported');
+            notification = {
+              text: 'The dataset has been successfully uploaded.',
+            };
+          } else {
+            notification = {
+              text: 'Something wrong happened. Contact the support if the problem persist.',
+              color: 'error',
+            };
           }
+          this.resetForm();
+          this.showSnackbar(notification);
         }
       }
+    },
+    resetForm: function () {
+      this.displayForm = false;
+      this.fileName = null;
+      this.fileSelected = false;
+      this.importInProgress = false;
+      this.$refs.upload.clear();
     },
     /**
      * Pretreatment
@@ -87,13 +107,8 @@ export default {
      * @return undefined
      */
     inputFilter: function (newFile) {
-      //, oldFile, prevent
-      /*if (newFile && !oldFile) {
-        // Filter non-image file
-        if (!/\.(jpeg|jpe|jpg|gif|png|webp)$/i.test(newFile.name)) {
-          return prevent()
-        }
-      }*/
+      this.fileSelected = true;
+      this.fileName = this.cleanFileName(newFile.name);
 
       // Create a blob field
       newFile.blob = '';
@@ -101,6 +116,13 @@ export default {
       if (URL && URL.createObjectURL) {
         newFile.blob = URL.createObjectURL(newFile.file);
       }
+    },
+    cleanFileName(dirtyFileName) {
+      let fileName = dirtyFileName.trim();
+      if (fileName.length > this.MAX_FILE_NAME) {
+        fileName = `${fileName.substring(0, this.MAX_FILE_NAME)}...`;
+      }
+      return fileName;
     },
   },
 };

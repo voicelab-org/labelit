@@ -11,7 +11,7 @@
 </template>
 <script>
 import Vue from 'vue';
-import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskForm from '@/components/mixins/TaskForm.js';
 import TaskFormHeader from '@/components/TaskFormHeader.vue';
 import LiveCorrect from '@/components/LiveCorrect.vue';
 import LabelService from '@/services/label.service.js';

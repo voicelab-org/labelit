@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskForm from '@/components/mixins/TaskForm.js';
 import TaskFormHeader from '@/components/TaskFormHeader.vue';
 import { mapGetters } from 'vuex';
 import AnnotationService from '@/services/annotation.service.js';

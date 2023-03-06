@@ -13,7 +13,7 @@
 </template>
 <script>
 import NestedLabelSet from '@/components/NestedLabelSet.vue';
-import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskForm from '@/components/mixins/TaskForm.js';
 import ValidationError from '@/components/ValidationError.vue';
 import TaskFormHeader from '@/components/TaskFormHeader.vue';
 
