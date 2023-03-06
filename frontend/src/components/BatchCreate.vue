@@ -103,10 +103,10 @@
 </template>
 
 <script>
-import ProjectService from '@/services/project.service';
-import DatasetService from '@/services/dataset.service';
-import BatchService from '@/services/batch.service';
-import UserService from '@/services/user.service';
+import ProjectService from '@/services/project.service.js';
+import DatasetService from '@/services/dataset.service.js';
+import BatchService from '@/services/batch.service.js';
+import UserService from '@/services/user.service.js';
 
 export default {
   name: 'BatchCreate',

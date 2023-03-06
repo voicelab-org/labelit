@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="header">
-      <h2 v-if="project" class="headline">Project: {{ project.name }}</h2>
+      <div class="d-flex align-center">
+        <v-btn icon @click="$router.push('/projects')">
+          <v-icon> mdi-arrow-left </v-icon>
+        </v-btn>
+        <h2 v-if="project" class="headline">Project: {{ project.name }}</h2>
+      </div>
       <div class="header-right">
         <v-btn @click="exportProject"> Export</v-btn>
         <batch-create

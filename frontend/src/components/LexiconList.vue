@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import LexiconService from '@/services/lexicon.service';
+import LexiconService from '@/services/lexicon.service.js';
 
 export default {
   name: 'LexiconList',

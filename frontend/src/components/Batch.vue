@@ -1,9 +1,14 @@
 <template>
   <div>
     <div v-if="batch">
-      <div class="header">
-        <h2>Batch: {{ batch.name }}</h2>
-        <h4 v-if="total_units">
+      <div>
+        <div class="d-flex align-center">
+          <v-btn icon @click="$router.push(`/project/${projectId}`)">
+            <v-icon> mdi-arrow-left </v-icon>
+          </v-btn>
+          <h2 class="headline">Batch: {{ batch.name }}</h2>
+        </div>
+        <h4 v-if="total_units" class="mt-5">
           Progress (batch-level): {{ num_done_units }} / {{ total_units }}
         </h4>
       </div>
@@ -29,8 +34,8 @@
 </template>
 
 <script>
-import BatchService from '@/services/batch.service';
-import ProjectService from '@/services/project.service';
+import BatchService from '@/services/batch.service.js';
+import ProjectService from '@/services/project.service.js';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -41,6 +46,15 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      batch: null,
+      total_units: null,
+      num_done_units: null,
+      to_review_count: null,
+      projectId: null,
+    };
+  },
   computed: {
     ...mapGetters({
       user: 'auth/user',
@@ -50,7 +64,7 @@ export default {
     },
     links() {
       var vm = this;
-      if (this.user.is_staff) {
+      if (this.user?.is_staff) {
         var links = [
           {
             name: 'QA',
@@ -79,19 +93,12 @@ export default {
       return links;
     },
   },
-  data() {
-    return {
-      batch: null,
-      total_units: null,
-      num_done_units: null,
-      to_review_count: null,
-    };
-  },
   created() {
     let vm = this;
     BatchService.getBatchById(vm.batchId)
       .then(function (response) {
         vm.batch = response.data;
+        vm.projectId = response.data.project.id;
         ProjectService.getProjectById(response.data.project.id)
           .then(function (res) {
             vm.$store.commit('task/SET_TASK_LIST', res.data.tasks);

@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import BatchService from '@/services/batch.service';
-import DoneAnnotationService from '@/services/done_annotation.service';
+import BatchService from '@/services/batch.service.js';
+import DoneAnnotationService from '@/services/done_annotation.service.js';
 import QAForm from './QAForm.vue';
 import Document from './Document.vue';
 import QA from './mixins/QA.js';

@@ -174,7 +174,11 @@ export default {
   },
   methods: {
     updateRegions() {
-      if (!this.annotated_regions.length && this.player) {
+      if (
+        !this.annotated_regions.length &&
+        this.player &&
+        this.player.regions
+      ) {
         Object.entries(this.player.regions.list).forEach(r => {
           r[1].remove();
         });
@@ -499,8 +503,9 @@ export default {
         this.player.on('region-in', () => {
           this.player.play();
         });
-
-        this.player.disableDragSelection();
+        if (this.enableRegions) {
+          this.player.disableDragSelection();
+        }
       });
 
       // setInterval(() => {

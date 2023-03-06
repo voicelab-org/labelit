@@ -21,8 +21,8 @@ import LexiconService from '@/services/lexicon.service.js';
 import ValidationError from '@/components/ValidationError.vue';
 import TaskFormHeader from '@/components/TaskFormHeader.vue';
 
-const { Textcomplete } = require('@textcomplete/core');
-const { TextareaEditor } = require('@textcomplete/textarea');
+import { Textcomplete } from '@textcomplete/core';
+import { TextareaEditor } from '@textcomplete/textarea';
 
 export default {
   name: 'TranscriptionTaskForm',
@@ -54,8 +54,9 @@ export default {
     },
   },
   created() {
+    let labelPromise;
     if (!this.selected_labels.length) {
-      LabelService.create({
+      labelPromise = LabelService.create({
         resourcetype: 'TranscriptionLabel',
         transcript: '',
         task: this.task.id,
@@ -63,41 +64,39 @@ export default {
         this.label = res.data;
       });
     } else {
-      LabelService.get(this.selected_labels[0].id).then(res => {
+      labelPromise = LabelService.get(this.selected_labels[0].id).then(res => {
         this.label = res.data;
       });
     }
-    LexiconService.getList({
-      tasks: this.task.id,
-    }).then(res => {
-      //this.lexicons = res.data
-      this.lexicon = [];
+    labelPromise.then(() => {
+      LexiconService.getList({
+        tasks: this.task.id,
+      }).then(res => {
+        this.lexicon = [];
 
-      res.data.forEach(l => {
-        this.lexicon = this.lexicon.concat(l.entries.map(e => e.entry));
+        res.data.forEach(l => {
+          this.lexicon = this.lexicon.concat(l.entries.map(e => e.entry));
+        });
+
+        const editor = new TextareaEditor(this.$refs.transcript);
+
+        new Textcomplete(editor, [
+          {
+            match: /(\S{3,}|\(\w*)$/,
+            search: (term, callback) => {
+              callback(
+                this.lexicon.filter(l => {
+                  return l.startsWith(term);
+                })
+              );
+            },
+            index: 1,
+            replace: function (element) {
+              return element + ' ';
+            },
+          },
+        ]);
       });
-
-      //this.$refs.input
-
-      const editor = new TextareaEditor(this.$refs.transcript);
-
-      //const textcomplete =
-      new Textcomplete(editor, [
-        {
-          match: /(\S{3,}|\(\w*)$/,
-          search: (term, callback) => {
-            callback(
-              this.lexicon.filter(l => {
-                return l.startsWith(term);
-              })
-            );
-          },
-          index: 1,
-          replace: function (element) {
-            return element + ' ';
-          },
-        },
-      ]);
     });
   },
   mounted() {

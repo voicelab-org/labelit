@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import LexiconService from '@/services/lexicon.service';
-import LexiconEntryService from '@/services/lexiconentry.service';
+import LexiconService from '@/services/lexicon.service.js';
+import LexiconEntryService from '@/services/lexiconentry.service.js';
 
 export default {
   name: 'Lexicon',

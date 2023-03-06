@@ -7,7 +7,7 @@ export default {
       timer: '',
       time: 0, // total time spent annotating, excluding periods of inactivity
       t0: 0, // the start time of the current period of activity
-      isInactive: true,
+      isInactive: false,
       inactivityTimeout: null,
       has_timing_started: false,
       debounceTimeout: null,

@@ -46,8 +46,8 @@
 <script>
 import VJsf from '@koumoul/vjsf/lib/VJsf.js';
 import '@koumoul/vjsf/lib/VJsf.css';
-import ProjectService from '../services/project.service';
-import ApiService from '../services/api.service';
+import ProjectService from '../services/project.service.js';
+import ApiService from '../services/api.service.js';
 
 export default {
   name: 'ProjectManager',

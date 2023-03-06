@@ -14,6 +14,7 @@ async function handleError(error) {
     originalRequest._retry = true;
     store.dispatch('auth/resetState');
     router.replace('login');
+    return;
   }
   if (error.response.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
@@ -23,6 +24,12 @@ async function handleError(error) {
     originalRequest.headers['Authorization'] = 'Bearer ' + res.data.access;
     ApiService.setHeader(res.data.access);
     return ApiService.instance(originalRequest);
+  }
+  if (error.response.status === 500) {
+    store.dispatch('snackbar/showSnackbar', {
+      text: 'Something went while contacting the server. If the error persists, please contact the support.',
+      color: 'error',
+    });
   }
   return Promise.reject(error);
 }

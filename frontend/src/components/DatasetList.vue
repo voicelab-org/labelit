@@ -1,9 +1,12 @@
 <template>
   <div id="datasets">
-    <div class="actions">
-      <DatasetUploader @imported="getDatasets()" />
+    <div class="actions d-flex justify-end">
+      <DatasetUploader @new-dataset-imported="getDatasets()" />
     </div>
-    <v-simple-table>
+    <div v-if="datasets.length === 0" class="mt-12 text-center">
+      No dataset imported yet
+    </div>
+    <v-simple-table v-else>
       <thead>
         <tr>
           <th class="text-left">Name</th>

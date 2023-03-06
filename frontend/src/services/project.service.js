@@ -47,6 +47,7 @@ class ProjectService {
           type: response.headers['content-type'],
         });
         const link = document.createElement('a');
+        link.setAttribute('target', '_blank');
         link.href = URL.createObjectURL(blob);
         //link.download = label
         link.click();

@@ -21,7 +21,9 @@
       <v-simple-table>
         <thead>
           <tr>
-            <th class="text-left">Name</th>
+            <th class="text-left">Task name</th>
+            <th class="text-left">Type</th>
+            <th class="text-left actions-table-column"></th>
           </tr>
         </thead>
         <tbody>
@@ -30,7 +32,8 @@
             :key="task.id"
             @click="goTo(task)"
           >
-            <td>{{ task.name }} ({{ task.resourcetype }})</td>
+            <td>{{ task.name }}</td>
+            <td>{{ task.resourcetype }}</td>
             <td>
               <TaskMenu v-model="shown_tasks[i]" @edit="showEdit" />
             </td>

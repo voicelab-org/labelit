@@ -200,7 +200,7 @@ class AudioViewSet(viewsets.ViewSet):
         response[
             "Cache-Control"
         ] = f"private, max-age={settings.SEGMENT_EXPIRATION_TIME_IN_SECONDS}, immutable"
-        gzip_middleware = GZipMiddleware()
+        gzip_middleware = GZipMiddleware(request)
         return gzip_middleware.process_response(request, response)
 
     @action(methods=["GET"], detail=True, url_path=r"segments/(?P<segment_id>.*\..*)")

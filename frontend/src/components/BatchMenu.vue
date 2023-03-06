@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import BatchService from '@/services/batch.service';
+import BatchService from '@/services/batch.service.js';
 
 export default {
   name: 'BatchMenu',

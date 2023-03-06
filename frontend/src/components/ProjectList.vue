@@ -19,8 +19,9 @@
       <v-simple-table v-if="shown_projects.length">
         <thead>
           <tr>
-            <th class="text-left">Name</th>
+            <th class="text-left">Project name</th>
             <th class="text-left">Tasks</th>
+            <th class="text-left actions-table-column"></th>
           </tr>
         </thead>
         <tbody>
