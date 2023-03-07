@@ -6,14 +6,16 @@ import App from './App.vue';
 import i18n from '@/plugins/i18n';
 import VJsf from '@koumoul/vjsf';
 import '@koumoul/vjsf/dist/main.css';
-// load third-party dependencies (markdown-it, vuedraggable)
-// you can also load them separately based on your needs
-// import '@koumoul/vjsf/dist/third-party.js'
+import draggable from 'vuedraggable';
+
+import upperFirst from 'lodash/upperFirst';
+import camelCase from 'lodash/camelCase';
 
 import VueUploadComponent from 'vue-upload-component';
 Vue.component('FileUpload', VueUploadComponent);
 
 Vue.component('VJsf', VJsf);
+Vue.component('draggable', draggable);
 
 import interceptorsSetup from '@/services/interceptors';
 interceptorsSetup();
@@ -23,51 +25,28 @@ import vuetify from './plugins/vuetify';
 import VueShortkey from 'vue-shortkey';
 Vue.use(VueShortkey);
 
-//Vue.use(require('vue-shortkey'))
-
 import VueScrollTo from 'vue-scrollto';
 Vue.use(VueScrollTo);
 
-/* START auto global component registration */
+// We must register these components because they will be dynamically called
 
-// import upperFirst from 'lodash/upperFirst';
-// import camelCase from 'lodash/camelCase';
+const files = import.meta.globEager('@/components/task_types/*.vue');
 
-// const requireComponent = require.context(
-//   // The relative path of the components folder
-//   './components/task_types/',
-//   // Whether or not to look in subfolders
-//   false,
-//   // The regular expression used to match base component filenames
-//   /[A-Z]\w+\.(vue|js)$/
-// );
+for (const fileName in files) {
+  // Get PascalCase name of component
+  const componentName = upperFirst(
+    camelCase(
+      // Gets the file name regardless of folder depth
+      fileName
+        .split('/')
+        .pop()
+        .replace(/\.\w+$/, '')
+    )
+  );
 
-// requireComponent.keys().forEach(fileName => {
-//   // Get component config
-//   const componentConfig = requireComponent(fileName);
-
-//   // Get PascalCase name of component
-//   const componentName = upperFirst(
-//     camelCase(
-//       // Gets the file name regardless of folder depth
-//       fileName
-//         .split('/')
-//         .pop()
-//         .replace(/\.\w+$/, '')
-//     )
-//   );
-
-//   // Register component globally
-//   Vue.component(
-//     componentName,
-//     // Look for the component options on `.default`, which will
-//     // exist if the component was exported with `export default`,
-//     // otherwise fall back to module's root.
-//     componentConfig.default || componentConfig
-//   );
-// });
-
-// /* END auto global component registration */
+  // Register component
+  Vue.component(componentName, files[fileName].default);
+}
 
 Vue.config.productionTip = false;
 

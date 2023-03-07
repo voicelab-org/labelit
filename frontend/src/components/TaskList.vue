@@ -17,26 +17,36 @@
         <v-tab @click="show_archived = false"> Live </v-tab>
         <v-tab @click="show_archived = true"> Archived </v-tab>
       </v-tabs>
-
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th class="text-left">Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(task, i) in shown_tasks"
-            :key="task.id"
-            @click="goTo(task)"
-          >
-            <td>{{ task.name }} ({{ task.resourcetype }})</td>
-            <td>
-              <TaskMenu v-model="shown_tasks[i]" @edit="showEdit" />
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
+      <div v-if="loading" class="d-flex justify-center mt-12">
+        <v-progress-circular
+          color="blue-grey"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <v-simple-table>
+          <thead>
+            <tr>
+              <th class="text-left">Task name</th>
+              <th class="text-left">Type</th>
+              <th class="text-left actions-table-column"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(task, i) in shown_tasks"
+              :key="task.id"
+              @click="goTo(task)"
+            >
+              <td>{{ task.name }}</td>
+              <td>{{ task.resourcetype }}</td>
+              <td>
+                <TaskMenu v-model="shown_tasks[i]" @edit="showEdit" />
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +69,7 @@ export default {
       show_archived: false,
       edited_task: { some: 'task' },
       show_edit_task: false,
+      loading: true,
     };
   },
   computed: {

@@ -44,7 +44,7 @@ def compute_django_debug_from_env_var():
 
 DEBUG = compute_django_debug_from_env_var()
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", os.environ.get("ALLOWED_HOST", "")]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "backend", os.environ.get("ALLOWED_HOST", "")]
 
 # & TEMP
 # APPEND_SLASH = False

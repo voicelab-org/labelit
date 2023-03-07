@@ -133,9 +133,9 @@ export default {
         }
       }
       /*if (val == this.tasks.length && val!==0){
-            vm.submitting = false
-            vm.getNextDocument()
-        }*/
+        vm.submitting = false
+        vm.getNextDocument()
+      }*/
     },
   },
   created() {

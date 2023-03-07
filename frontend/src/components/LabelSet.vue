@@ -15,7 +15,7 @@
     <div class="button-list">
       <v-btn
         v-for="(label, i) in orderedLabels"
-        :key="label.name"
+        :key="i"
         class="label"
         :class="getLabelClasses(label, i)"
         :depressed="isLabelSelected(label)"

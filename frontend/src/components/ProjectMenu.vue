@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import ProjectService from '@/services/project.service';
+import ProjectService from '@/services/project.service.js';
 
 export default {
   name: 'ProjectMenu',

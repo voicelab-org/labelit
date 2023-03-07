@@ -98,6 +98,12 @@
         ></v-progress-circular>
       </div>
     </div>
+    <div v-else class="mt-12 d-flex justify-center">
+      <v-progress-circular
+        color="blue-grey"
+        indeterminate
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 <script>

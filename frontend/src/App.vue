@@ -43,17 +43,20 @@
         </v-row>
       </v-container>
     </v-main>
+    <labelit-snackbar></labelit-snackbar>
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import BlueFilter from '@/components/BlueFilter.vue';
+import LabelitSnackbar from '@/components/LabelitSnackbar.vue';
 
 export default {
   name: 'App',
   components: {
     BlueFilter,
+    LabelitSnackbar,
   },
   data: () => ({
     links: ['Projects', 'Datasets'],

@@ -29,11 +29,11 @@
   </div>
 </template>
 <script>
-import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskForm from '@/components/mixins/TaskForm.js';
 import TaskFormHeader from '@/components/TaskFormHeader.vue';
 import { mapGetters } from 'vuex';
-import AnnotationService from '@/services/annotation.service.vue';
-import LabelService from '@/services/label.service.vue';
+import AnnotationService from '@/services/annotation.service.js';
+import LabelService from '@/services/label.service.js';
 
 export default {
   name: 'RegionTaskForm',

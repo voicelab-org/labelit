@@ -14,14 +14,14 @@
 </template>
 <script>
 import Vue from 'vue';
-import TaskForm from '@/components/mixins/TaskForm.vue';
+import TaskForm from '@/components/mixins/TaskForm.js';
 import LabelService from '@/services/label.service.js';
 import LexiconService from '@/services/lexicon.service.js';
 import ValidationError from '@/components/ValidationError.vue';
 import TaskFormHeader from '@/components/TaskFormHeader.vue';
 
-const { Textcomplete } = require('@textcomplete/core');
-const { TextareaEditor } = require('@textcomplete/textarea');
+import { Textcomplete } from '@textcomplete/core';
+import { TextareaEditor } from '@textcomplete/textarea';
 
 export default {
   name: 'TextEditionTaskForm',
@@ -53,9 +53,9 @@ export default {
     },
   },
   created() {
-    '';
+    let promise;
     if (!this.selected_labels.length) {
-      var promise = LabelService.create({
+      promise = LabelService.create({
         resourcetype: 'TextEditionLabel',
         edited_text: this.document.text,
         task: this.task.id,
@@ -68,10 +68,13 @@ export default {
       });
     }
 
-    Promise.all([promise]).then(() => {
-      LexiconService.getList({
-        tasks: this.task.id,
-      }).then(res => {
+    promise
+      .then(() => {
+        return LexiconService.getList({
+          tasks: this.task.id,
+        });
+      })
+      .then(res => {
         this.lexicon = [];
 
         res.data.forEach(l => {
@@ -93,7 +96,6 @@ export default {
           },
         ]);
       });
-    });
   },
   mounted() {
     this.setFocus();

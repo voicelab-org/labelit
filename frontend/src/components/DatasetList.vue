@@ -1,20 +1,36 @@
 <template>
   <div id="datasets">
-    <div class="actions">
-      <DatasetUploader @imported="getDatasets()" />
+    <div class="d-flex align-center justify-space-between">
+      <h2 class="headline">Datasets</h2>
+      <div class="actions">
+        <DatasetUploader @new-dataset-imported="getDatasets()" />
+      </div>
     </div>
-    <v-simple-table>
-      <thead>
-        <tr>
-          <th class="text-left">Name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="dataset in datasets" :key="dataset.id" class="no-click">
-          <td>{{ dataset.name }}</td>
-        </tr>
-      </tbody>
-    </v-simple-table>
+    <div class="mt-12">
+      <div v-if="loading" class="d-flex justify-center">
+        <v-progress-circular
+          color="blue-grey"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <div v-if="datasets.length === 0" class="mt-12 text-center">
+          No dataset imported yet
+        </div>
+        <v-simple-table v-else>
+          <thead>
+            <tr>
+              <th class="text-left">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="dataset in datasets" :key="dataset.id" class="no-click">
+              <td>{{ dataset.name }}</td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,6 +47,7 @@ export default {
   data() {
     return {
       datasets: [],
+      loading: true,
     };
   },
   created() {
