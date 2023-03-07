@@ -16,29 +16,37 @@
         <v-tab @click="show_archived = false"> Live </v-tab>
         <v-tab @click="show_archived = true"> Archived </v-tab>
       </v-tabs>
-      <v-simple-table v-if="shown_projects.length">
-        <thead>
-          <tr>
-            <th class="text-left">Project name</th>
-            <th class="text-left">Tasks</th>
-            <th class="text-left actions-table-column"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(project, i) in shown_projects"
-            :key="project.id"
-            @click="goTo(project)"
-          >
-            <td>{{ project.name }}</td>
-            <td>{{ printProjectTasks(project.tasks) }}</td>
-            <td>
-              <ProjectMenu v-model="shown_projects[i]" @edit="showEdit" />
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-      <div v-else>No projects</div>
+      <div v-if="loading" class="d-flex justify-center mt-12">
+        <v-progress-circular
+          color="blue-grey"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <v-simple-table v-if="shown_projects.length">
+          <thead>
+            <tr>
+              <th class="text-left">Project name</th>
+              <th class="text-left">Tasks</th>
+              <th class="text-left actions-table-column"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(project, i) in shown_projects"
+              :key="project.id"
+              @click="goTo(project)"
+            >
+              <td>{{ project.name }}</td>
+              <td>{{ printProjectTasks(project.tasks) }}</td>
+              <td>
+                <ProjectMenu v-model="shown_projects[i]" @edit="showEdit" />
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+        <div class="text-center" v-else>No projects yet...</div>
+      </div>
     </div>
   </div>
 </template>
