@@ -93,25 +93,31 @@ export default {
     handleLogin() {
       this.loading = true;
       if (this.user.email && this.user.password) {
-        this.authenticateUser(this.user).then(
-          () => {
+        this.authenticateUser(this.user)
+          .then(() => {
+            this.showSnackbar({
+              color: 'success',
+              text: 'Successfully logged in. Good work on LabelIt 🚀',
+            });
             this.$router.push('/projects');
-          },
-          () => {
-            this.loading = false;
+          })
+          .catch(() => {
             this.showSnackbar({
               color: 'error',
               text: 'Could not login. Did you enter the correct username and password ?',
             });
-          }
-        );
+          })
+          .finally(() => {
+            this.loading = false;
+          });
       }
     },
     handleLoginDev(email, password) {
-      this.loading = true;
-      this.authenticateUser({ email, password }).then(() => {
-        this.$router.push('/projects');
-      });
+      this.user = {
+        email,
+        password,
+      };
+      this.handleLogin();
     },
     isDevEnv() {
       return import.meta.env.DEV;

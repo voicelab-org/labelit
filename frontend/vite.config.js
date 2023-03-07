@@ -11,9 +11,9 @@ export default defineConfig({
   server: {
     port: 8080,
     proxy: {
-      '^/api': {
-        target: 'http://127.0.0.1:8000/',
-        //target: 'https://labelit.staging.hosting.call.watch/',
+      '/api': {
+        target: 'http://backend:8000/',
+        // target: 'https://labelit.batvoice.ai/',
         changeOrigin: true,
         secure: false,
       },
