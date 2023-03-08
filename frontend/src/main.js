@@ -4,8 +4,8 @@ import store from './store/index.js';
 import App from './App.vue';
 
 import i18n from '@/plugins/i18n';
-import VJsf from '@koumoul/vjsf';
-import '@koumoul/vjsf/dist/main.css';
+import VJsf from '@koumoul/vjsf/lib/VJsf.js';
+import '@koumoul/vjsf/lib/VJsf.css';
 import draggable from 'vuedraggable';
 
 import upperFirst from 'lodash/upperFirst';
