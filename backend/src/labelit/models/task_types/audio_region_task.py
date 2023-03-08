@@ -6,7 +6,6 @@ from django.http import Http404
 from statsmodels.stats.inter_rater import fleiss_kappa
 import math
 from django.db.models import F
-from django.http import Http404
 
 
 class AudioRegionTask(Task):

@@ -26,7 +26,7 @@ signal_disconnect_kwargs = {
 class BatchDocumentSequenceModelTests(TestCase):
     def setUp(self):
         self.project = Project.objects.create(
-            name="Feelin",
+            name="Feelin", target_deadline="2023-03-08", target_num_documents=100
         )
         self.task1 = OrdinalTask.objects.create(
             name="Valence scale",

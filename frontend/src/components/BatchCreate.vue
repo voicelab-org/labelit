@@ -2,7 +2,7 @@
   <div>
     <v-dialog v-model="dialog" persistent max-width="800px">
       <template #activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on"> Add Batch </v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">Add a batch</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -93,9 +93,7 @@
           <v-btn color="blue darken-1" text @click="dialog = false">
             Close
           </v-btn>
-          <v-btn color="blue darken-1" text @click="createBatch">
-            Create
-          </v-btn>
+          <v-btn color="primary" @click="createBatch"> Create </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

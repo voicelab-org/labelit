@@ -1,14 +1,19 @@
 <template>
   <div>
-    <div v-if="task">
-      <h3>{{ task.name }}</h3>
-      <div>Edit guidelines:</div>
-      <vue-editor
-        v-model="task.html_guidelines"
-        use-custom-image-handler
-        @image-added="handleImageAdded"
-      ></vue-editor>
+    <div class="d-flex align-center">
+      <v-btn icon @click="$router.push('/tasks')">
+        <v-icon> mdi-arrow-left </v-icon>
+      </v-btn>
+      <h2 class="headline">Task: {{ task?.name }}</h2>
     </div>
+    <div class="mt-12">Edit guidelines:</div>
+    <vue-editor
+      v-if="task"
+      v-model="task.html_guidelines"
+      class="mt-5"
+      use-custom-image-handler
+      @image-added="handleImageAdded"
+    ></vue-editor>
   </div>
 </template>
 
@@ -33,17 +38,23 @@ export default {
   data() {
     return {
       task: null,
+      loading: true,
     };
   },
   watch: {
     'task.html_guidelines': function () {
+      if (this.loading) return;
       TaskService.updateTask(this.task.id, this.task);
     },
   },
   created() {
-    TaskService.getTaskById(this.taskId).then(res => {
-      this.task = res.data;
-    });
+    TaskService.getTaskById(this.taskId)
+      .then(res => {
+        this.task = res.data;
+      })
+      .finally(() => {
+        this.loading = false;
+      });
   },
   methods: {
     handleImageAdded: function (file, Editor, cursorLocation, resetUploader) {
@@ -70,5 +81,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

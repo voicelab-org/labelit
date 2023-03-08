@@ -13,8 +13,8 @@
     </div>
     <div id="projects">
       <v-tabs>
-        <v-tab @click="show_archived = false"> Live </v-tab>
-        <v-tab @click="show_archived = true"> Archived </v-tab>
+        <v-tab @click="show_archived = false">Live projects</v-tab>
+        <v-tab @click="show_archived = true">Archived projects</v-tab>
       </v-tabs>
       <div v-if="loading" class="d-flex justify-center mt-12">
         <v-progress-circular

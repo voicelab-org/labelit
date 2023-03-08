@@ -109,7 +109,8 @@ export default {
           }
         });
         Promise.all(promises).then(() => {
-          editedAnnotation['labels'] = this.selected_labels.map(l => l.id);
+          editedAnnotation.labels = this.selected_labels.map(l => l.id);
+          editedAnnotation.annotator = editedAnnotation.annotator.id;
           AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
             .then(() => {
               this.validationError = '';

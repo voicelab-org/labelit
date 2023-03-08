@@ -4,7 +4,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 
 from labelit.serializers import (
@@ -75,7 +74,7 @@ class BatchViewSet(viewsets.ModelViewSet):
         batch = Batch.objects.get(pk=pk)
         document = batch.get_next_document_to_review(request.user)
         if document is None:
-            raise Http404
+            return Response()
 
         annotations = []
         for task in batch.project.tasks.all():
@@ -89,7 +88,7 @@ class BatchViewSet(viewsets.ModelViewSet):
                     )
                 )
             except ObjectDoesNotExist:
-                raise Http404
+                return Response()
 
         data = {
             "document": DocumentSerializer(instance=document).data,
@@ -116,11 +115,11 @@ class BatchViewSet(viewsets.ModelViewSet):
         if only_non_reviewed_annotations:
             document = batch.get_next_document_to_qa(skipped_document_ids=skip_doc_ids)
             if document is None:
-                raise Http404
+                return Response()
         else:
             document = batch.get_next_done_document(index=request.GET["index"])
             if document is None:
-                raise Http404
+                return Response()
 
         annotations = []
         for task in batch.project.tasks.all():
@@ -149,7 +148,7 @@ class BatchViewSet(viewsets.ModelViewSet):
         batch = Batch.objects.get(pk=pk)
         document = batch.get_next_document_to_annotate(request.user)
         if document is None:
-            raise Http404
+            return Response()
 
         # create an annotation for each task, user
         annotations = []
@@ -186,7 +185,7 @@ class BatchViewSet(viewsets.ModelViewSet):
         batch = Batch.objects.get(pk=pk)
         document = batch.get_document_to_undo(request.user)
         if document is None:
-            raise Http404
+            return Response()
 
         annotations = []
         for task in batch.project.tasks.all():

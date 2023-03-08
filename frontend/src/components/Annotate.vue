@@ -178,19 +178,17 @@ export default {
       vm.submitting = false;
       vm.numTasksSubmitted = 0;
       let getNext = vm.reviewMode
-        ? 'getNextDocumentToReview'
-        : 'getBatchNextDocument';
-      BatchService[getNext](vm.batchId)
-        .then(function (response) {
-          vm.annotations = response.data.annotations;
-          vm.document = response.data.document;
-          vm.getTasks();
-        })
-        .catch(function (error) {
-          if (error.response.status == 404) {
-            vm.moreToAnnotate = false;
-          }
-        });
+        ? BatchService.getNextDocumentToReview(vm.batchId)
+        : BatchService.getBatchNextDocument(vm.batchId);
+      getNext.then(function (response) {
+        if (response.data === '') {
+          vm.moreToAnnotate = false;
+          return;
+        }
+        vm.annotations = response.data.annotations;
+        vm.document = response.data.document;
+        vm.getTasks();
+      });
       vm.isUndoing = false;
       if (!isFirstAnnotation) {
         vm.isFirstAnnotation = false;

@@ -13,7 +13,6 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.exceptions import ParseError, ValidationError
 from rest_framework import status
 import tempfile
-from django.http.response import Http404
 import zipfile
 
 from labelit.services.dataset_importer import DatasetImporter
@@ -60,7 +59,6 @@ class DatasetViewSet(viewsets.ModelViewSet):
 
         importer.import_dataset()
 
-        # raise Http404
         return Response()
 
 

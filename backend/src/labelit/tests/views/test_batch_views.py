@@ -16,7 +16,9 @@ class BatchViewSetTests(TestCase):
             email="janedoe", password="janedoe"
         )
         self.request_factory = APIRequestFactory()
-        self.project = Project.objects.create(name="Feelin")
+        self.project = Project.objects.create(
+            name="Feelin", target_deadline="2023-03-08", target_num_documents=100
+        )
         self.task1 = OrdinalTask.objects.create(
             name="Valence",
         )
@@ -33,7 +35,9 @@ class BatchViewSetTests(TestCase):
         )
         self.batch.annotators.set([self.user, self.user2])
         self.batch.documents.add(self.doc1)
-        self.project2 = Project.objects.create(name="Scriber")
+        self.project2 = Project.objects.create(
+            name="Scriber", target_deadline="2023-03-08", target_num_documents=100
+        )
         self.batch2 = SequenceBatch.objects.create(
             name="Batch2", dataset=self.dataset, project=self.project2
         )

@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-tabs>
-      <v-tab @click="show_archived = false"> Live </v-tab>
-      <v-tab @click="show_archived = true"> Archived </v-tab>
+      <v-tab @click="show_archived = false">Live batches</v-tab>
+      <v-tab @click="show_archived = true">Archived batches</v-tab>
     </v-tabs>
 
     <v-simple-table v-if="shown_batches.length && !loading">
