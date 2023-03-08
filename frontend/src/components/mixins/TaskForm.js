@@ -72,6 +72,7 @@ export default {
         Object.assign(editedAnnotation, vm.annotation);
 
         editedAnnotation['labels'] = val.map(l => l.id);
+        editedAnnotation.annotator = editedAnnotation.annotator.id;
 
         AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
           .then(() => {

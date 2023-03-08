@@ -13,7 +13,9 @@ class ProjectViewSetTests(TestCase):
             password="tester",
         )
         self.request_factory = APIRequestFactory()
-        self.project = Project.objects.create(name="Feelin")
+        self.project = Project.objects.create(
+            name="Feelin", target_deadline="2023-03-08", target_num_documents=100
+        )
 
     def _authenticate(self, request):
         force_authenticate(request, user=self.user)

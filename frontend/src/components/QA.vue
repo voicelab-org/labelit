@@ -6,8 +6,8 @@
         <div slot="label">View only non-reviewed annotations</div>
       </v-checkbox>
     </div>
-    <div v-if="loaded && project">
-      <div v-if="document" id="doc-container">
+    <div v-if="loaded && project && document">
+      <div id="doc-container">
         <Document :document="document" :project="project" />
       </div>
       <div v-for="task in tasks" :key="task.id">
@@ -24,6 +24,7 @@
             :task="task"
             :submitting="false"
             :read-only="true"
+            :document="document"
           />
           <QAForm v-model="taskAnnotations(task)[idx]" />
         </div>
@@ -98,19 +99,17 @@ export default {
       BatchService.getNextDocumentToQA(vm.batchId, this.skipped_document_ids, {
         only_non_reviewed_annotations: this.only_non_reviewed_annotations,
         index: this.annotation_index,
-      })
-        .then(response => {
-          vm.annotations = response.data.annotations;
-          vm.document = response.data.document;
-          vm.tasks = response.data.tasks;
-          vm.loaded = true;
-        })
-        .catch(err => {
-          if (err.response.status == 404) {
-            this.noMore = true;
-            this.document = null;
-          }
-        });
+      }).then(response => {
+        if (response.data == '') {
+          this.noMore = true;
+          this.document = null;
+          return;
+        }
+        vm.annotations = response.data.annotations;
+        vm.document = response.data.document;
+        vm.tasks = response.data.tasks;
+        vm.loaded = true;
+      });
       this.annotation_index++;
     },
     taskAnnotations(task) {

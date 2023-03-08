@@ -171,6 +171,8 @@ class BatchModelTests(TestSetup, TestCase):
         # availability is per-project
         project2 = Project.objects.create(
             name="my other project",
+            target_deadline="2023-03-08",
+            target_num_documents=100,
         )
         batch2 = Batch.objects.create(
             name="Batch 2",

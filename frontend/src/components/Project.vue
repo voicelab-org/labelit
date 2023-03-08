@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="header">
+    <div class="d-flex justify-space-between align-center">
       <div class="d-flex align-center">
         <v-btn icon @click="$router.push('/projects')">
           <v-icon> mdi-arrow-left </v-icon>
         </v-btn>
         <h2 v-if="project" class="headline">Project: {{ project.name }}</h2>
       </div>
-      <div class="header-right">
+      <div class="d-flex">
         <v-btn @click="exportProject"> Export</v-btn>
         <batch-create
           v-if="isAdmin"
@@ -16,60 +16,89 @@
         />
       </div>
     </div>
-
-    <div v-if="project" class="d-flex flex-row justify-space-between">
-      <div>Created on: {{ project.created_at }}</div>
-      <div v-if="project.created_by">
-        By: {{ project.created_by.first_name }}
-        {{ project.created_by.last_name }}
-      </div>
-      <div>Last modified: {{ project.updated_at }}</div>
-    </div>
-    <div
-      v-if="project_with_stats"
-      class="d-flex flex-row justify-space-between"
-    >
-      <div>
-        # documents annotated: {{ project_with_stats.num_done_documents }}
-      </div>
-      <div>
-        Target (# documents to annotate):
-        {{ project_with_stats.target_num_documents }}
-      </div>
-      <div>Target date: {{ project_with_stats.target_deadline }}</div>
+    <div class="d-flex justify-center mt-12">
       <v-progress-linear
-        v-if="
-          project_with_stats.target_num_documents &&
-          project_with_stats.num_done_documents
-        "
         :value="
-          Math.round(
-            (100 * project_with_stats.num_done_documents) /
-              project_with_stats.target_num_documents
-          )
+          project_with_stats === null
+            ? 0
+            : Math.round(
+                (100 * project_with_stats.num_done_documents) /
+                  project_with_stats.target_num_documents
+              )
         "
-        height="25"
-      ></v-progress-linear>
-      <p v-if="project_with_stats.description">
-        <b>Description: </b><br />
-        <span style="white-space: pre">{{
-          project_with_stats.description
-        }}</span>
-      </p>
+        height="30"
+      >
+        <template #default="{ value }">
+          <strong>{{ Math.ceil(value) }}%&nbsp;&nbsp;</strong>
+          <small>
+            ({{ project_with_stats?.num_done_documents }}/{{
+              project_with_stats?.target_num_documents
+            }}
+            documents)
+          </small>
+        </template>
+      </v-progress-linear>
     </div>
-
-    <v-tabs>
-      <v-tab @click="show_batch_list = true"> Batches </v-tab>
-      <v-tab @click="show_batch_list = false"> Stats </v-tab>
+    <v-tabs v-model="currentTab" class="mt-12">
+      <v-tab v-for="tab in tabs" :key="tab">
+        {{ tab }}
+      </v-tab>
     </v-tabs>
-    <router-view />
-
-    <template v-if="project && show_batch_list">
-      <BatchList :project="project" :update="updateListToggle" />
-    </template>
-    <template v-if="!show_batch_list && project">
-      <Stats :project-id="project.id" />
-    </template>
+    <v-tabs-items v-model="currentTab">
+      <v-tab-item key="Batches">
+        <div v-if="project">
+          <BatchList :project="project" :update="updateListToggle" />
+        </div>
+      </v-tab-item>
+      <v-tab-item key="Information">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Created on</v-list-item-title>
+            <v-list-item-subtitle>{{
+              project?.created_at
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Created by</v-list-item-title>
+            <v-list-item-subtitle
+              >{{ project?.created_by.first_name }}
+              {{ project?.created_by.last_name }}</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Last modified</v-list-item-title>
+            <v-list-item-subtitle>{{
+              project?.updated_at
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="project_with_stats?.target_deadline">
+          <v-list-item-content>
+            <v-list-item-title>Target date</v-list-item-title>
+            <v-list-item-subtitle>{{
+              project_with_stats.target_deadline
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content v-if="project_with_stats?.description">
+            <v-list-item-title>Description</v-list-item-title>
+            <v-list-item-subtitle>{{
+              project_with_stats.description
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-tab-item>
+      <v-tab-item key="Statistics">
+        <div v-if="project">
+          <Stats :project-id="project.id" />
+        </div>
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -95,8 +124,8 @@ export default {
       batches: [],
       project: null,
       loading: true,
-      show_archived: false,
-      show_batch_list: true,
+      currentTab: 'Batches',
+      tabs: ['Batches', 'Informations', 'Statististics'],
       updateListToggle: true,
       project_with_stats: null,
     };

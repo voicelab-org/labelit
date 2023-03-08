@@ -14,6 +14,7 @@ class AnnotationService {
   }
 
   updateAnnotation(annotationId, payload) {
+    debugger;
     return this.request.patch(`/annotations/${annotationId}/`, payload);
   }
 

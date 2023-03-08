@@ -17,7 +17,9 @@ class BatchSerializerTests(TestCase):
 
         for text in ["some text", "other text", "lorem ipsum", "doloris"]:
             self.docs.append(Document.objects.create(text=text, dataset=self.dataset))
-        self.project = Project.objects.create(name="Sentiment")
+        self.project = Project.objects.create(
+            name="Sentiment", target_deadline="2023-03-08", target_num_documents=100
+        )
 
         self.users = []
 
