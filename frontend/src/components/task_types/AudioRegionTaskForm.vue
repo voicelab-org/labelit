@@ -86,28 +86,10 @@ export default {
         var editedAnnotation = {};
         Object.assign(editedAnnotation, vm.annotation);
         let promises = [];
-        /*this.selected_labels.forEach(
-            (selected_label) => {
-              let is_label_in_labels_to_add = this.labels_to_add.find(
-                  (l) => {
-                    return l.start == selected_label.start && l.end == selected_label.end
-                  }
-              )
-              if (is_label_in_labels_to_add) {
-                let label_to_add = is_label_in_labels_to_add
-                selected_label.id = label_to_add.id
-              } else {
-                if (!selected_label.id) { //&& !this.labels_to_add.find(l => l.name == selected_label.name && l.start_offset == selected_label.start_offset)
-                  let selected_clone = JSON.parse(JSON.stringify(selected_label))
-                  this.labels_to_add.push(selected_label)
 
-                  selected_clone.resourcetype = "AudioRegionLabel"
-                }
-              }
-            }
-        )*/
         Promise.all(promises).then(() => {
-          editedAnnotation['labels'] = this.selected_labels.map(l => l.id);
+          editedAnnotation.labels = this.selected_labels.map(l => l.id);
+          editedAnnotation.annotator = editedAnnotation.annotator.id;
           AnnotationService.updateAnnotation(vm.annotation.id, editedAnnotation)
             .then(() => {
               this.validationError = '';

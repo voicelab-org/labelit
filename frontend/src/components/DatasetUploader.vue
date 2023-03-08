@@ -1,9 +1,6 @@
 <template>
   <div>
-    <!--<ul>
-      <li v-for="file in files" :key="file.name">{{ file.name }} - Error: {{ file.error }}, Success: {{ file.success }}</li>
-    </ul>-->
-    <v-btn v-if="!displayForm" @click="displayForm = true">
+    <v-btn v-if="!displayForm" @click="displayForm = true" color="primary">
       Import a dataset
     </v-btn>
     <div v-else>

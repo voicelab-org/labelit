@@ -35,6 +35,8 @@
     is_text_annotated: true
     are_sequences_annotated: false
     timer_inactivity_threshold: 60000
+    target_deadline: 2023-07-26 12:44:30.615633+00:00
+    target_num_documents: 100
     tasks:
       - 8
       - 9

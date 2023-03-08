@@ -14,7 +14,9 @@ class LabelViewSetTests(TestCase):
         )
         self.request_factory = APIRequestFactory()
 
-        self.project = Project.objects.create(name="Feelin")
+        self.project = Project.objects.create(
+            name="Feelin", target_deadline="2023-03-08", target_num_documents=100
+        )
         self.task = OrdinalTask.objects.create(
             name="Valence scale",
         )
