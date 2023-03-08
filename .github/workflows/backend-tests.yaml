@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,6 +22,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Test with pytest
-        working-directory: backend
+        working-directory: backend/src
         run: |
           pytest
