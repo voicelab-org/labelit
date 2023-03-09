@@ -26,7 +26,7 @@ services:
       - postgres
 
   minio:
-    image: minio/minio:RELEASE.2023-01-02T09-40-09Z
+    image: minio/minio:RELEASE.2022-10-24T18-35-07Z.hotfix.ce525fdaf
     ports:
       - 9000:9000
     volumes:
@@ -73,7 +73,7 @@ services:
   frontend:
     build:
       context: frontend
-      dockerfile: frontend/Dockerfile.dev
+      dockerfile: Dockerfile.dev
     volumes:
       - ./frontend:/app
     ports:
