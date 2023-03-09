@@ -41,7 +41,7 @@ services:
       context: backend
       dockerfile: Dockerfile.dev
     volumes:
-      - ./backend/src:/code
+      - ./backend:/code
     environment:
       DJANGO_DEBUG: "true"
       DB_HOST: postgres
