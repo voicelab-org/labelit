@@ -74,7 +74,7 @@ class AudioViewSet(viewsets.ViewSet):
                 Params={"Bucket": storage.bucket_name, "Key": segment_key},
                 ExpiresIn=settings.SEGMENT_EXPIRATION_TIME_IN_SECONDS,
             )
-            if os.environ["AWS_S3_OPTIONS"] == "local":
+            if os.environ.get("AWS_S3_OPTIONS", "") == "local":
                 url = url.replace("minio", "localhost")
             response = HttpResponseRedirect(url)
             # Added so avoid unnecessary requests to the django server if the user reloads or it has been there in the
@@ -191,7 +191,7 @@ class AudioViewSet(viewsets.ViewSet):
         except:
             data = {"duration": 0, "waveform": None}
 
-        if os.environ["AWS_S3_OPTIONS"] == "local":
+        if os.environ.get("AWS_S3_OPTIONS", "") == "local":
             url = url.replace("minio", "localhost")
 
         data["url"] = url
