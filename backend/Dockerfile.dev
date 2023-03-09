@@ -54,7 +54,13 @@ RUN apt-get update \
 # libmad, libsndfile, libid3tag, gd and boost are req for audiowaveform
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    libsndfile-dev libmad0-dev libid3tag0-dev libboost-all-dev libgd-dev zlib1g-dev\
+    libsndfile-dev \
+    libmad0-dev \
+    libid3tag0-dev \
+    libboost-all-dev \
+    libgd-dev \
+    zlib1g-dev \
+    make \
  && apt-get clean
  
 COPY --from=build-stage /usr/local/bin/audiowaveform /usr/local/bin/
@@ -63,9 +69,9 @@ WORKDIR /code
 COPY requirements-dev.txt /code/
 RUN pip install -r requirements-dev.txt
 
-COPY src /code/
+COPY . /code/
 
-CMD python manage.py runserver 0.0.0.0:8000
+CMD python src/manage.py runserver 0.0.0.0:8000
 
 # RUN pip install debugpy
 
