@@ -94,7 +94,8 @@ setuptools.setup(
     extras_require={
         "dev": [
             # Do not forget to update .pre-commit.yaml
-            "black >= 23.1.0"
+            "black >= 23.1.0",
+            "pip-tools >= 6.12.3",
         ],
     },
 )

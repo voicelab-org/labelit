@@ -42,6 +42,7 @@ nav:
   # - index.fr.md
   - Development:
       - development/01.setup.md
+      - development/02.update-dependencies.md
   - Usage:
       - usage/01.register_users.md
       - usage/02.first_dataset.md
