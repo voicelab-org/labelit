@@ -54,42 +54,42 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>Created on</v-list-item-title>
-            <v-list-item-subtitle>{{
-              project?.created_at
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ project?.created_at }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>Created by</v-list-item-title>
-            <v-list-item-subtitle
-              >{{ project?.created_by.first_name }}
-              {{ project?.created_by.last_name }}</v-list-item-subtitle
-            >
+            <v-list-item-subtitle>
+              {{ project?.created_by?.first_name || 'Unknown' }}
+              {{ project?.created_by?.last_name }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>Last modified</v-list-item-title>
-            <v-list-item-subtitle>{{
-              project?.updated_at
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ project?.updated_at }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="project_with_stats?.target_deadline">
           <v-list-item-content>
             <v-list-item-title>Target date</v-list-item-title>
-            <v-list-item-subtitle>{{
-              project_with_stats.target_deadline
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ project_with_stats.target_deadline }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content v-if="project_with_stats?.description">
             <v-list-item-title>Description</v-list-item-title>
-            <v-list-item-subtitle>{{
-              project_with_stats.description
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ project_with_stats.description }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-tab-item>
