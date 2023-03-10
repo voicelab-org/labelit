@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import Hls from 'hls.js';
+import Hls from 'hls.js/dist/hls.min.js';
 import StreamWaveForms from '@/components/StreamWaveForms.vue';
 import WaveSurfer from 'wavesurfer.js';
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions.js';
