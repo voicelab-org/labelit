@@ -36,7 +36,7 @@
       <v-container>
         <v-row>
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg" class="container">
+            <v-sheet rounded="lg" class="container">
               <router-view></router-view>
             </v-sheet>
           </v-col>

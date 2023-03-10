@@ -42,3 +42,10 @@ A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https:
 - QA account:
     - Username: `qa@qa.com`
     - Password: `demo`
+
+## Maintainers
+
+This project is maintained by :
+
+[![BatvoiceAI](documentation/docs/assets/logo_batvoice.png)](https://www.batvoice.com/)
+[![LeVoiceLab](documentation/docs/assets/logo_le_voice_lab.png)](https://www.levoicelab.org/)
