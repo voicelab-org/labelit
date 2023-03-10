@@ -36,16 +36,21 @@ We maintain a documentation:
 
 A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https://labelit.demo.batvoice.ai)
 
-- Annotator account: 
-    - Username: `demo@demo.com`
-    - Password: `dem0#nnotator`
-- QA account:
-    - Username: `qa@qa.com`
-    - Password: `demo`
 
-## Maintainers
+| Account type | Username | Password |
+|---|---|---|
+| Annotator account | `demo@demo.com` | `dem0#nnotator` |
+| QA account | `qa@qa.com` | `demo` |
 
-This project is maintained by :
+## Maintainers / Sponsors
 
-[![BatvoiceAI](documentation/docs/assets/logo_batvoice.png)](https://www.batvoice.com/)
-[![LeVoiceLab](documentation/docs/assets/logo_le_voice_lab.png)](https://www.levoicelab.org/)
+This project is activly maintained by :
+
+<p align="center">
+  <a href="https://www.batvoice.com/">
+    <img src="documentation/docs/assets/logo_batvoice.png" alt="BatvoiceAI">
+  </a>&nbsp;&nbsp;
+  <a href="https://www.levoicelab.org/">
+    <img src="documentation/docs/assets/logo_le_voice_lab.png" alt="LeVoiceLab">
+  </a>
+</p>
