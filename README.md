@@ -47,10 +47,11 @@ A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https:
 This project is activly maintained by :
 
 <p align="center">
-  <a href="https://www.batvoice.com/">
+  <a href="https://www.batvoice.com/" target="_blank">
     <img src="documentation/docs/assets/logo_batvoice.png" alt="BatvoiceAI">
-  </a>&nbsp;&nbsp;
-  <a href="https://www.levoicelab.org/">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.levoicelab.org/" target="_blank">
     <img src="documentation/docs/assets/logo_le_voice_lab.png" alt="LeVoiceLab">
   </a>
 </p>
