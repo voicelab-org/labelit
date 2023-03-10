@@ -5,7 +5,7 @@
         <v-btn icon @click="$router.push('/projects')">
           <v-icon> mdi-arrow-left </v-icon>
         </v-btn>
-        <h2 v-if="project" class="headline">Project: {{ project.name }}</h2>
+        <h2 class="headline">Project : {{ project?.name || '...' }}</h2>
       </div>
       <div class="d-flex">
         <v-btn @click="exportProject"> Export</v-btn>
@@ -49,49 +49,62 @@
         <div v-if="project">
           <BatchList :project="project" :update="updateListToggle" />
         </div>
+        <div v-else class="mt-12 d-flex justify-center">
+          <v-progress-circular
+            color="blue-grey"
+            indeterminate
+          ></v-progress-circular>
+        </div>
       </v-tab-item>
       <v-tab-item key="Information">
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Created on</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ project?.created_at }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Created by</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ project?.created_by?.first_name || 'Unknown' }}
-              {{ project?.created_by?.last_name }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Last modified</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ project?.updated_at }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item v-if="project_with_stats?.target_deadline">
-          <v-list-item-content>
-            <v-list-item-title>Target date</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ project_with_stats.target_deadline }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content v-if="project_with_stats?.description">
-            <v-list-item-title>Description</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ project_with_stats.description }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
+        <v-list>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Created on</v-list-item-title>
+              <v-list-item-subtitle>
+                {{ project?.created_at }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Created by</v-list-item-title>
+              <v-list-item-subtitle>
+                {{ project?.created_by?.first_name || 'Unknown' }}
+                {{ project?.created_by?.last_name }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Last modified</v-list-item-title>
+              <v-list-item-subtitle>
+                {{ project?.updated_at }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="project_with_stats?.target_deadline">
+            <v-list-item-content>
+              <v-list-item-title>Target date</v-list-item-title>
+              <v-list-item-subtitle>
+                {{ project_with_stats.target_deadline }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-group>
+            <template #activator>
+              <v-list-item-content>
+                <v-list-item-title>Description</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ project_with_stats?.description || '...' }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+            <p class="mx-4 black--text">
+              {{ project_with_stats?.description || '...' }}
+            </p>
+          </v-list-group>
+        </v-list>
       </v-tab-item>
       <v-tab-item key="Statistics">
         <div v-if="project">

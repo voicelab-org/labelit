@@ -20,6 +20,9 @@ async function handleError(error) {
     originalRequest._retry = true;
     const refreshBody = { refresh: store.state.auth.refreshToken };
     let res = await AuthService.refreshToken(refreshBody);
+    if (!res?.data?.access) {
+      return;
+    }
     store.commit('auth/SET_ACCESS_TOKEN', res.data.access);
     originalRequest.headers['Authorization'] = 'Bearer ' + res.data.access;
     ApiService.setHeader(res.data.access);

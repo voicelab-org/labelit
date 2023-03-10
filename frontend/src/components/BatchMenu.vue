@@ -8,8 +8,8 @@
       </template>
       <v-card>
         <v-list>
-          <v-list-item>
-            <a @click="toggleArchived"> {{ archiveAction }} </a>
+          <v-list-item @click="toggleArchived">
+            {{ archiveAction }}
           </v-list-item>
         </v-list>
       </v-card>
