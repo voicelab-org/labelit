@@ -336,7 +336,7 @@ class LiveCorrectTaskSerializer(serializers.ModelSerializer):
 
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {
+    model_serializer_mapping = {  # TODO: generate this mapping automatically for automatic registration of plugins / task types
         Task: TaskSerializer,
         CategoricalTask: CategoricalTaskSerializer,
         OrdinalTask: OrdinalTaskSerializer,

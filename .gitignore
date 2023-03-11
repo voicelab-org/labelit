@@ -9,3 +9,5 @@ docker-compose-dev.yml
 package-lock.json
 export.json
 temp/
+camion-labo_example_dataset/
+*.zip
