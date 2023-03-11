@@ -73,7 +73,7 @@ services:
   frontend:
     build:
       context: frontend
-      dockerfile: frontend/Dockerfile.dev
+      dockerfile: Dockerfile.dev
     volumes:
       - ./frontend:/app
     ports:
