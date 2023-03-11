@@ -23,6 +23,9 @@ class Task(PolymorphicModel):
         default=False,
     )
 
+    priority = models.IntegerField(null=True, default=1)
+
+
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
