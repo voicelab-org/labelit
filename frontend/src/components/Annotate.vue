@@ -164,7 +164,6 @@ export default {
       }
 
       throw new Error('Unsupported task presentation type.');
-
     },
     getBatch() {
       BatchService.getBatchById(this.batchId)
