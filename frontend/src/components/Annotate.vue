@@ -2,12 +2,12 @@
   <div>
     <div v-if="moreToAnnotate" class="annotation-form">
       <span
-        v-shortkey="['ctrl', 'alt', 'arrowup']"
-        @shortkey.stop="browseTasks('left')"
+          v-shortkey="['ctrl', 'alt', 'arrowup']"
+          @shortkey.stop="browseTasks('left')"
       ></span>
       <span
-        v-shortkey="['ctrl', 'alt', 'arrowdown']"
-        @shortkey.stop="browseTasks('right')"
+          v-shortkey="['ctrl', 'alt', 'arrowdown']"
+          @shortkey.stop="browseTasks('right')"
       ></span>
 
       <span v-shortkey="['ctrl', 'enter']" @shortkey="submit"></span>
@@ -16,9 +16,9 @@
       </div>
       <div v-if="document && batch" id="doc-container">
         <Document
-          :document="document"
-          :project="batch.project"
-          @loaded="startTiming"
+            :document="document"
+            :project="batch.project"
+            @loaded="startTiming"
         />
         <div v-if="batch.project.do_display_timer_time">
           Time: {{ time_display }}
@@ -26,23 +26,31 @@
       </div>
       <div v-if="annotations" id="annotation-forms-t">
         <div v-if="tasksLoaded">
+          <component
+              :is="getAnnotationContainerForProject()"
+          />
+        </div>
+      </div>
+
+      <div v-if="annotations" id="annotation-forms-t">
+        <div v-if="tasksLoaded">
           <div
-            v-for="(annotation, i) in annotations"
-            :key="annotation.id"
-            :class="getAnnotationClasses(annotation, i == focus_index)"
+              v-for="(annotation, i) in annotations"
+              :key="annotation.id"
+              :class="getAnnotationClasses(annotation, i == focus_index)"
           >
             <component
-              :is="getFormForTask(getTaskForAnnotation(annotation))"
-              :annotation="annotation"
-              :time="time"
-              :task="getTaskForAnnotation(annotation)"
-              :submitting="submitting"
-              :review-mode="reviewMode"
-              :document="document"
-              :focused="i == focus_index"
-              @submitted="numTasksSubmitted++"
-              @submiterror="handleSubmitError()"
-              @focus="focus_index = i"
+                :is="getFormForTask(getTaskForAnnotation(annotation))"
+                :annotation="annotation"
+                :time="time"
+                :task="getTaskForAnnotation(annotation)"
+                :submitting="submitting"
+                :review-mode="reviewMode"
+                :document="document"
+                :focused="i == focus_index"
+                @submitted="numTasksSubmitted++"
+                @submiterror="handleSubmitError()"
+                @focus="focus_index = i"
             />
             <div v-if="annotation.qa_invalidation_comment">
               {{ annotation.qa_invalidation_comment }}
@@ -52,11 +60,11 @@
       </div>
       <div v-if="annotations" id="actions-container">
         <v-btn color="primary" @click="submit()">SUBMIT</v-btn>
-        <hotkey-guide />
+        <hotkey-guide/>
       </div>
       <div
-        v-if="isInactive && batch && !batch.project.do_display_timer_time"
-        id="inactive"
+          v-if="isInactive && batch && !batch.project.do_display_timer_time"
+          id="inactive"
       >
         <v-icon>mdi-pause</v-icon>
       </div>
@@ -145,14 +153,27 @@ export default {
     this.$store.commit('entities/ENABLE_ANNOTATION');
   },
   methods: {
+    getAnnotationContainerForProject() {
+
+      if(this.batch.project.task_presentation == "list"){
+        return "ListAnnotationContainer"
+      }
+
+      if(this.batch.project.task_presentation == "sequence"){
+        return "SequenceAnnotationContainer"
+      }
+
+      throw new Error('Unsupported task presentation type.');
+
+    },
     getBatch() {
       BatchService.getBatchById(this.batchId)
-        .then(response => {
-          this.batch = response.data;
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+          .then(response => {
+            this.batch = response.data;
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
     },
     undo() {
       let vm = this;
@@ -178,8 +199,8 @@ export default {
       vm.submitting = false;
       vm.numTasksSubmitted = 0;
       let getNext = vm.reviewMode
-        ? BatchService.getNextDocumentToReview(vm.batchId)
-        : BatchService.getBatchNextDocument(vm.batchId);
+          ? BatchService.getNextDocumentToReview(vm.batchId)
+          : BatchService.getBatchNextDocument(vm.batchId);
       getNext.then(function (response) {
         if (response.data === '') {
           vm.moreToAnnotate = false;
@@ -201,11 +222,11 @@ export default {
       let vm = this;
       vm.annotations.forEach(function (annotation) {
         TaskService.getTaskById(annotation.task)
-          .then(function (response) {
-            if (vm.tasks == null) vm.tasks = [];
-            vm.tasks.push(response.data);
-          })
-          .catch(err => console.error(err));
+            .then(function (response) {
+              if (vm.tasks == null) vm.tasks = [];
+              vm.tasks.push(response.data);
+            })
+            .catch(err => console.error(err));
       });
     },
     getTaskForAnnotation(annotation) {
@@ -250,6 +271,7 @@ export default {
 .annotation-form {
   position: relative;
   padding: 10px 0;
+
   #inactive {
     display: flex;
     justify-content: space-around;
@@ -263,6 +285,7 @@ export default {
     z-index: 2000;
     width: calc(100% + 52px);
     left: -50px;
+
     > .v-icon {
       opacity: 1;
       color: white;
