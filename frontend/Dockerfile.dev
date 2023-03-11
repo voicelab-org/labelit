@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . /app/
 
-CMD npm run dev -- --host
+CMD npm i && npm run dev -- --host
