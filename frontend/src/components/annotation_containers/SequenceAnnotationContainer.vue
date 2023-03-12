@@ -1,6 +1,13 @@
 <template>
   <div>
-
+    <span
+        v-shortkey="['ctrl', 'alt', 'arrowright']"
+        @shortkey.stop="next()"
+    ></span>
+    <span
+        v-shortkey="['ctrl', 'alt', 'arrowleft']"
+        @shortkey.stop="previous()"
+    ></span>
     <v-card elevation="0">
       <div class="bv-section">
         <v-stepper v-model="step" elevation="0">
@@ -11,7 +18,7 @@
                 :complete="step > i + 1"
                 :step="i+1"
             >
-              {{getTaskName(i)}}
+              {{ getTaskName(i) }}
             </v-stepper-step>
           </v-stepper-header>
 
@@ -123,13 +130,13 @@ export default {
     }
   },
   methods: {
-    getTaskName(annotation_index){
+    getTaskName(annotation_index) {
       return this.tasks.find(t => t.id == this.annotations[annotation_index].task).name
     },
-    next(){
+    next() {
       this.step = this.step + 1
     },
-    previous(){
+    previous() {
       if (this.step == 1) return
       this.step = this.step - 1
     },
