@@ -10,7 +10,9 @@
                 :key="annotation.id"
                 :complete="step > i + 1"
                 :step="i+1"
-            />
+            >
+              {{getTaskName(i)}}
+            </v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
@@ -38,7 +40,7 @@
 
               <div>
                 <v-btn
-                    v-if="i != 1"
+                    v-if="i != 0"
                     @click="previous(i)"
                 >
                   Previous
@@ -46,6 +48,7 @@
                 <v-btn
                     color="primary"
                     @click="next(i)"
+                    v-if="i < annotations.length - 1"
                 >
                   Next
                 </v-btn>
@@ -120,10 +123,13 @@ export default {
     }
   },
   methods: {
-    next(annotation_index){
+    getTaskName(annotation_index){
+      return this.tasks.find(t => t.id == this.annotations[annotation_index].task).name
+    },
+    next(){
       this.step = this.step + 1
     },
-    previous(annotation_index){
+    previous(){
       if (this.step == 1) return
       this.step = this.step - 1
     },
