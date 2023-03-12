@@ -2,6 +2,7 @@
   <div>
     <div v-if="moreToAnnotate" class="annotation-form">
 
+
       <span v-shortkey="['ctrl', 'enter']" @shortkey="submit"></span>
       <div v-if="isUndoButtonShown && !reviewMode">
         <v-btn class="primary" @click="undo">UNDO</v-btn>
@@ -11,7 +12,6 @@
             :document="document"
             :project="batch.project"
             @loaded="startTiming"
-            @submitted="numTasksSubmitted++"
         />
         <div v-if="batch.project.do_display_timer_time">
           Time: {{ time_display }}
@@ -21,16 +21,11 @@
         <div v-if="tasksLoaded">
           <component
               :is="getAnnotationContainerForProject()"
-              :annotations="annotations"
-              :tasks="tasks"
-              :submitting="submitting"
-              @submitted="numTasksSubmitted++"
-              :document="document"
           />
         </div>
       </div>
 
-      <!--<div v-if="annotations" id="annotation-forms-t">
+      <div v-if="annotations" id="annotation-forms-t">
         <div v-if="tasksLoaded">
           <div
               v-for="(annotation, i) in annotations"
@@ -55,10 +50,10 @@
             </div>
           </div>
         </div>
-      </div>-->
+      </div>
       <div v-if="annotations" id="actions-container">
-        <hotkey-guide/>
         <v-btn color="primary" @click="submit()">SUBMIT</v-btn>
+        <hotkey-guide/>
       </div>
       <div
           v-if="isInactive && batch && !batch.project.do_display_timer_time"
@@ -161,7 +156,7 @@ export default {
         return "SequenceAnnotationContainer"
       }
 
-      throw new Error('Unsupported task presentation type.');
+      throw new Error('Unsupported task prefsentation type.');
     },
     getBatch() {
       BatchService.getBatchById(this.batchId)
