@@ -44,7 +44,7 @@ A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https:
 
 ## Maintainers / Sponsors
 
-This project is activly maintained by :
+This project is actively maintained by :
 
 <p align="center">
   <a href="https://www.batvoice.com/" target="_blank">
