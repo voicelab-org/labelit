@@ -31,7 +31,7 @@ async function handleError(error) {
   }
   if (error.response.status === 500) {
     store.dispatch('snackbar/showSnackbar', {
-      text: 'Something went while contacting the server. If the error persists, please contact the support.',
+      text: 'Something went wrong while contacting the server. If the error persists, please contact the support.',
       type: SNACKBAR_TYPE.ERROR,
     });
   }
@@ -39,10 +39,6 @@ async function handleError(error) {
 }
 
 function handleSuccess(response) {
-  store.dispatch('snackbar/showSnackbar', {
-    text: 'Something went while contacting the server. If the error persists, please contact the support.',
-    type: SNACKBAR_TYPE.ERROR,
-  });
   return response;
 }
 
