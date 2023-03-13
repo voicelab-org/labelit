@@ -2,6 +2,7 @@ import ApiService from './api.service';
 import AuthService from './auth.service';
 
 import store from '@/store/index';
+import { SNACKBAR_TYPE } from '@/store/snackbar.module';
 import router from '@/router';
 
 async function handleError(error) {
@@ -31,13 +32,17 @@ async function handleError(error) {
   if (error.response.status === 500) {
     store.dispatch('snackbar/showSnackbar', {
       text: 'Something went while contacting the server. If the error persists, please contact the support.',
-      color: 'error',
+      type: SNACKBAR_TYPE.ERROR,
     });
   }
   return Promise.reject(error);
 }
 
 function handleSuccess(response) {
+  store.dispatch('snackbar/showSnackbar', {
+    text: 'Something went while contacting the server. If the error persists, please contact the support.',
+    type: SNACKBAR_TYPE.ERROR,
+  });
   return response;
 }
 

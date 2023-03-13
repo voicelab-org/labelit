@@ -42,6 +42,7 @@ export default defineConfig({
     // }),
   ],
   resolve: {
+    // These aliases must also be configured in the jsconfig.json file
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
