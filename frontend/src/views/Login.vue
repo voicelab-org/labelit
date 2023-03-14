@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { SNACKBAR_TYPE } from '@/store/snackbar.module';
 import { mapActions } from 'vuex';
 export default {
   name: 'LoginPage',
@@ -96,14 +97,14 @@ export default {
         this.authenticateUser(this.user)
           .then(() => {
             this.showSnackbar({
-              color: 'success',
+              color: SNACKBAR_TYPE.SUCCESS,
               text: 'Successfully logged in. Good work on LabelIt 🚀',
             });
             this.$router.push('/projects');
           })
           .catch(() => {
             this.showSnackbar({
-              color: 'error',
+              color: SNACKBAR_TYPE.ERROR,
               text: 'Could not login. Did you enter the correct username and password ?',
             });
           })
