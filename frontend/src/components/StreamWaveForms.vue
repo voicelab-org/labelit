@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="stream-waveforms" @click="waveFormClicked" >
-      <div class="stream-waveforms-cursor" ref="cursor"></div>
+    <div class="stream-waveforms" @click="waveFormClicked">
+      <div ref="cursor" class="stream-waveforms-cursor"></div>
       <div class="stream-waveforms-bars"></div>
     </div>
   </div>
 </template>
 
 <script>
-import * as d3 from "d3v4";
+import * as d3 from 'd3v4';
 
 export default {
-  name: "StreamWaveForms",
+  name: 'StreamWaveForms',
   components: {},
   props: {
     currentPlayBackTime: {
@@ -19,23 +19,42 @@ export default {
     },
     waveformData: {
       type: Array,
-      required : true
+      required: true,
     },
-    duration : {
-      type : Number,
-      required : true
-    }
+    duration: {
+      type: Number,
+      required: true,
+    },
   },
-  mounted(){
-
-    this.drawWaveform(this.waveformData, ".stream-waveforms-bars");
-
+  watch: {
+    currentPlayBackTime: {
+      handler(newval) {
+        if (this.$refs.cursor) {
+          this.$refs.cursor.style.marginLeft =
+            (newval / this.duration) * 100 + '%';
+          let bars = document.getElementsByClassName('bar');
+          if (bars.length) {
+            [].forEach.call(bars, function (el) {
+              el.classList.remove('active');
+            });
+            let activeIndex = (newval / this.duration) * bars.length;
+            for (let index = 0; index <= activeIndex; index++) {
+              const element = bars[index];
+              element.classList.add('active');
+            }
+          }
+        }
+      },
+    },
+  },
+  mounted() {
+    this.drawWaveform(this.waveformData, '.stream-waveforms-bars');
   },
   methods: {
     drawWaveform(data, div) {
       // const MAX_POINTS = 1024;
       // let data = waveformData.slice(1, MAX_POINTS);
-      let waveform = document.getElementsByClassName("stream-waveforms");
+      let waveform = document.getElementsByClassName('stream-waveforms');
       let { width } = waveform[0].getBoundingClientRect();
       let height = 50;
       var y = d3.scaleLinear().range([height, -height]);
@@ -45,24 +64,24 @@ export default {
       });
       y.domain([-max_val, max_val]);
       var bar_width = width / data.length;
-      d3.select(div)
-        .selectAll("div")
-        .data(data)
+      let selection = d3.select(div).selectAll('div').data(data);
+      selection
         .enter()
-        .append("div")
-        .attr("class", "bar")
-        .style("width", bar_width + "px")
-        .style("height", function (d) {
-          return y(d) + "px";
+        .append('div')
+        .attr('class', 'bar')
+        .style('width', bar_width + 'px')
+        .style('height', function (d) {
+          return y(d) + 'px';
         })
-        .style("bottom", function (d) {
+        .style('bottom', function (d) {
           var bottom = height - Math.abs(y(d) / 2) - height / 2 + 2;
-          return bottom + "px";
+          return bottom + 'px';
         })
-        .style("left", function (d, i) {
+        .style('left', function (d, i) {
           var left = x(i) * width;
-          return left + "px";
+          return left + 'px';
         });
+      selection.exit().remove();
     },
     waveFormClicked(e) {
       var left = parseInt(e.target.style.left, 10);
@@ -73,31 +92,10 @@ export default {
       } else {
         x = Math.abs(e.clientX - rect.left);
       }
-      let waveform = document.getElementsByClassName("stream-waveforms");
+      let waveform = document.getElementsByClassName('stream-waveforms');
       let { width } = waveform[0].getBoundingClientRect();
       let newTime = (x / width) * this.duration;
-      this.$emit("waveform-clicked", newTime);
-    },
-  },
-  watch: {
-    currentPlayBackTime: {
-      handler(newval) {
-        if (this.$refs.cursor) {
-          this.$refs.cursor.style.marginLeft =
-            (newval / this.duration) * 100 + "%";
-          let bars = document.getElementsByClassName("bar");
-          if (bars.length) {
-            [].forEach.call(bars, function (el) {
-              el.classList.remove("active");
-            });
-            let activeIndex = (newval / this.duration) * bars.length;
-            for (let index = 0; index <= activeIndex; index++) {
-              const element = bars[index];
-              element.classList.add("active");
-            }
-          }
-        }
-      },
+      this.$emit('waveform-clicked', newTime);
     },
   },
 };
@@ -134,7 +132,7 @@ export default {
   position: absolute;
 }
 .bar.active {
-  background-color: #03a9f4!important;
+  background-color: #03a9f4 !important;
   position: absolute;
 }
 
@@ -146,5 +144,4 @@ export default {
 .axis g path.domain {
   display: none;
 }
-
 </style>

@@ -1,40 +1,38 @@
-import Vue from 'vue'
-import router from "./router";
-import store from "./store/index.js";
-import App from './App.vue'
+import Vue from 'vue';
+import router from './router';
+import store from './store/index.js';
+import App from './App.vue';
 
-import interceptorsSetup from '@/services/interceptors'
-interceptorsSetup()
+import i18n from '@/plugins/i18n';
+import VJsf from '@koumoul/vjsf/lib/VJsf.js';
+import '@koumoul/vjsf/lib/VJsf.css';
+import draggable from 'vuedraggable';
+
+import upperFirst from 'lodash/upperFirst';
+import camelCase from 'lodash/camelCase';
+
+import VueUploadComponent from 'vue-upload-component';
+Vue.component('FileUpload', VueUploadComponent);
+
+Vue.component('VJsf', VJsf);
+Vue.component('draggable', draggable);
+
+import interceptorsSetup from '@/services/interceptors';
+interceptorsSetup();
 
 import vuetify from './plugins/vuetify';
 
 import VueShortkey from 'vue-shortkey';
-Vue.use(VueShortkey)
+Vue.use(VueShortkey);
 
-//Vue.use(require('vue-shortkey'))
+import VueScrollTo from 'vue-scrollto';
+Vue.use(VueScrollTo);
 
-var VueScrollTo = require('vue-scrollto');
-Vue.use(VueScrollTo)
+// We must register these components because they will be dynamically called
 
-/* START auto global component registration */
+const files = import.meta.globEager('@/components/task_types/*.vue');
 
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
-
-const requireComponent = require.context(
-  // The relative path of the components folder
-  './components/task_types/',
-  // Whether or not to look in subfolders
-  false,
-  // The regular expression used to match base component filenames
-  /[A-Z]\w+\.(vue|js)$/
-)
-
-
-requireComponent.keys().forEach(fileName => {
-  // Get component config
-  const componentConfig = requireComponent(fileName)
-
+for (const fileName in files) {
   // Get PascalCase name of component
   const componentName = upperFirst(
     camelCase(
@@ -44,26 +42,18 @@ requireComponent.keys().forEach(fileName => {
         .pop()
         .replace(/\.\w+$/, '')
     )
-  )
+  );
 
-  // Register component globally
-  Vue.component(
-    componentName,
-    // Look for the component options on `.default`, which will
-    // exist if the component was exported with `export default`,
-    // otherwise fall back to module's root.
-    componentConfig.default || componentConfig
-  )
-})
+  // Register component
+  Vue.component(componentName, files[fileName].default);
+}
 
-
-/* END auto global component registration */
-
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-      vuetify,
-      store,
-      router,
-      render: h => h(App),
-    }).$mount('#app')
+  i18n,
+  vuetify,
+  store,
+  router,
+  render: h => h(App),
+}).$mount('#app');

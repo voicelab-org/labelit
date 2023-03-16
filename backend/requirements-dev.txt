@@ -1,0 +1,307 @@
+# Generated 2023-03-09 08:47:01.923909159
+# =======================================
+
+appdirs==1.4.4
+    # via labelit (setup.py)
+asgiref==3.6.0
+    # via
+    #   django
+    #   labelit (setup.py)
+attrs==22.2.0
+    # via
+    #   labelit (setup.py)
+    #   pytest
+audeer==1.19.0
+    # via
+    #   audiofile
+    #   labelit (setup.py)
+audiofile==1.2.1
+    # via labelit (setup.py)
+audioread==3.0.0
+    # via
+    #   labelit (setup.py)
+    #   librosa
+audmath==1.2.1
+    # via audiofile
+backports-zoneinfo==0.2.1
+    # via django
+black==23.1.0
+    # via labelit (setup.py)
+boto3==1.26.87
+    # via labelit (setup.py)
+botocore==1.29.87
+    # via
+    #   boto3
+    #   labelit (setup.py)
+    #   s3transfer
+certifi==2022.12.7
+    # via
+    #   labelit (setup.py)
+    #   requests
+cffi==1.15.1
+    # via
+    #   labelit (setup.py)
+    #   soundfile
+chardet==5.1.0
+    # via labelit (setup.py)
+charset-normalizer==3.1.0
+    # via requests
+click==8.1.3
+    # via
+    #   black
+    #   labelit (setup.py)
+    #   nltk
+coloredlogs==15.0.1
+    # via labelit (setup.py)
+decorator==5.1.1
+    # via
+    #   labelit (setup.py)
+    #   librosa
+django==4.1.7
+    # via
+    #   django-cors-headers
+    #   django-extensions
+    #   django-filter
+    #   django-polymorphic
+    #   django-rest-polymorphic
+    #   django-storages
+    #   djangorestframework
+    #   djangorestframework-simplejwt
+    #   labelit (setup.py)
+django-cors-headers==3.14.0
+    # via labelit (setup.py)
+django-extensions==3.2.1
+    # via labelit (setup.py)
+django-filter==22.1
+    # via labelit (setup.py)
+django-polymorphic==3.1.0
+    # via
+    #   django-rest-polymorphic
+    #   labelit (setup.py)
+django-rest-polymorphic==0.1.10
+    # via labelit (setup.py)
+django-storages==1.13.2
+    # via labelit (setup.py)
+djangorestframework==3.14.0
+    # via
+    #   django-rest-polymorphic
+    #   djangorestframework-simplejwt
+    #   labelit (setup.py)
+djangorestframework-simplejwt==5.2.2
+    # via labelit (setup.py)
+et-xmlfile==1.1.0
+    # via labelit (setup.py)
+exceptiongroup==1.1.0
+    # via pytest
+humanfriendly==10.0
+    # via coloredlogs
+idna==3.4
+    # via
+    #   labelit (setup.py)
+    #   requests
+importlib-metadata==6.0.0
+    # via
+    #   labelit (setup.py)
+    #   markdown
+    #   numba
+iniconfig==2.0.0
+    # via
+    #   labelit (setup.py)
+    #   pytest
+iso8601==1.1.0
+    # via m3u8
+jmespath==1.0.1
+    # via
+    #   boto3
+    #   botocore
+    #   labelit (setup.py)
+joblib==1.2.0
+    # via
+    #   labelit (setup.py)
+    #   librosa
+    #   nltk
+    #   scikit-learn
+json-log-formatter==0.5.1
+    # via labelit (setup.py)
+lazy-loader==0.1
+    # via librosa
+librosa==0.10.0
+    # via labelit (setup.py)
+llvmlite==0.39.1
+    # via
+    #   labelit (setup.py)
+    #   numba
+m3u8==3.4.0
+    # via labelit (setup.py)
+markdown==3.4.1
+    # via labelit (setup.py)
+msgpack==1.0.5
+    # via librosa
+mypy-extensions==1.0.0
+    # via black
+nltk==3.8.1
+    # via labelit (setup.py)
+numba==0.56.4
+    # via
+    #   labelit (setup.py)
+    #   librosa
+    #   resampy
+numpy==1.23.5
+    # via
+    #   audiofile
+    #   labelit (setup.py)
+    #   librosa
+    #   numba
+    #   pandas
+    #   patsy
+    #   resampy
+    #   scikit-learn
+    #   scipy
+    #   sox
+    #   statsmodels
+packaging==23.0
+    # via
+    #   black
+    #   labelit (setup.py)
+    #   pooch
+    #   pytest
+    #   statsmodels
+pandas==1.5.3
+    # via
+    #   labelit (setup.py)
+    #   statsmodels
+pathspec==0.11.0
+    # via black
+patsy==0.5.3
+    # via
+    #   labelit (setup.py)
+    #   statsmodels
+pillow==9.4.0
+    # via labelit (setup.py)
+platformdirs==3.1.0
+    # via
+    #   black
+    #   pooch
+pluggy==1.0.0
+    # via
+    #   labelit (setup.py)
+    #   pytest
+pooch==1.7.0
+    # via
+    #   labelit (setup.py)
+    #   librosa
+psycopg2==2.9.5
+    # via labelit (setup.py)
+py==1.11.0
+    # via labelit (setup.py)
+pycparser==2.21
+    # via
+    #   cffi
+    #   labelit (setup.py)
+pyjwt==2.6.0
+    # via
+    #   djangorestframework-simplejwt
+    #   labelit (setup.py)
+pyparsing==3.0.9
+    # via labelit (setup.py)
+pytest==7.2.2
+    # via
+    #   labelit (setup.py)
+    #   pytest-django
+pytest-django==4.5.2
+    # via labelit (setup.py)
+python-dateutil==2.8.2
+    # via
+    #   botocore
+    #   labelit (setup.py)
+    #   pandas
+pytz==2022.7.1
+    # via
+    #   djangorestframework
+    #   labelit (setup.py)
+    #   pandas
+pyyaml==6.0
+    # via labelit (setup.py)
+regex==2022.10.31
+    # via
+    #   labelit (setup.py)
+    #   nltk
+requests==2.28.2
+    # via
+    #   labelit (setup.py)
+    #   pooch
+resampy==0.4.2
+    # via labelit (setup.py)
+s3transfer==0.6.0
+    # via
+    #   boto3
+    #   labelit (setup.py)
+scikit-learn==1.2.1
+    # via
+    #   labelit (setup.py)
+    #   librosa
+scipy==1.10.1
+    # via
+    #   labelit (setup.py)
+    #   librosa
+    #   scikit-learn
+    #   statsmodels
+six==1.16.0
+    # via
+    #   django-rest-polymorphic
+    #   labelit (setup.py)
+    #   patsy
+    #   python-dateutil
+soundfile==0.12.1
+    # via
+    #   audiofile
+    #   labelit (setup.py)
+    #   librosa
+sox==1.4.1
+    # via labelit (setup.py)
+soxr==0.3.4
+    # via librosa
+sqlparse==0.4.3
+    # via
+    #   django
+    #   labelit (setup.py)
+statsmodels==0.13.5
+    # via labelit (setup.py)
+threadpoolctl==3.1.0
+    # via
+    #   labelit (setup.py)
+    #   scikit-learn
+toml==0.10.2
+    # via labelit (setup.py)
+tomli==2.0.1
+    # via
+    #   black
+    #   pytest
+tqdm==4.65.0
+    # via
+    #   audeer
+    #   labelit (setup.py)
+    #   nltk
+typing-extensions==4.5.0
+    # via
+    #   black
+    #   labelit (setup.py)
+    #   librosa
+uritemplate==4.1.1
+    # via labelit (setup.py)
+urllib3==1.26.14
+    # via
+    #   botocore
+    #   labelit (setup.py)
+    #   requests
+whitenoise==6.4.0
+    # via labelit (setup.py)
+zipp==3.15.0
+    # via
+    #   importlib-metadata
+    #   labelit (setup.py)
+zope-dottedname==5.0
+    # via labelit (setup.py)
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

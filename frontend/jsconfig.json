@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es6",
+    // These aliases must also be configured in the vite.config.js file
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

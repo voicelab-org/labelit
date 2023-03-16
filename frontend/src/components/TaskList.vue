@@ -1,107 +1,147 @@
 <template>
-  <div id="tasks">
-    
-    <v-tabs>
-      <v-tab @click="show_archived=false">
-        Live
-      </v-tab>
-      <v-tab @click="show_archived=true">
-        Archived
-      </v-tab>
-    </v-tabs>
-    
-    <v-simple-table>
-      <thead>
-        <tr>
-          <th class="text-left">
-            Name
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(task, i) in shown_tasks"
-          :key="task.id"
-          @click="goTo(task)"
-        >
-          <td>{{ task.name }}</td>
-
-          <td>
-            <TaskMenu v-model="shown_tasks[i]" />
-          </td>
-        </tr>
-      </tbody>
-    </v-simple-table>
+  <div>
+    <div id="tasks">
+      <div class="header">
+        <h2 class="headline">Tasks</h2>
+        <div class="header-right">
+          <task-manager v-if="isAdmin" @changed="getTasks" />
+          <task-manager
+            v-if="isAdmin"
+            v-model="show_edit_task"
+            :task="edited_task"
+            @changed="getTasks"
+          />
+        </div>
+      </div>
+      <v-tabs>
+        <v-tab @click="show_archived = false">Live tasks</v-tab>
+        <v-tab @click="show_archived = true">Archived task</v-tab>
+      </v-tabs>
+      <div v-if="loading" class="d-flex justify-center mt-12">
+        <v-progress-circular
+          color="blue-grey"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <v-simple-table>
+          <thead>
+            <tr>
+              <th class="text-left">Task name</th>
+              <th class="text-left">Type</th>
+              <th class="text-left actions-table-column"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(task, i) in shown_tasks"
+              :key="task.id"
+              @click="goTo(task)"
+            >
+              <td>{{ task.name }}</td>
+              <td>{{ task.resourcetype }}</td>
+              <td>
+                <TaskMenu v-model="shown_tasks[i]" @edit="showEdit" />
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import TaskService from '@/services/task.service'
-
-import TaskMenu from '@/components/TaskMenu'
+import TaskService from '@/services/task.service.js';
+import { mapGetters } from 'vuex';
+import TaskMenu from '@/components/TaskMenu.vue';
+import TaskManager from './TaskManager.vue';
 
 export default {
-  name: 'task-list',
+  name: 'TaskList',
   components: {
     TaskMenu,
+    TaskManager,
   },
-  data(){
+  data() {
     return {
-        tasks: [],
-        show_archived: false,
-    }
+      tasks: [],
+      show_archived: false,
+      edited_task: { some: 'task' },
+      show_edit_task: false,
+      loading: true,
+    };
   },
   computed: {
-    
-    shown_tasks(){
-      
+    ...mapGetters({
+      isAdmin: 'auth/isAdmin',
+    }),
+    shown_tasks() {
       if (this.show_archived) {
-        return this.tasks.filter(t => t.archived)
+        var tasks = this.tasks.filter(t => t.archived);
       } else {
-        return this.tasks.filter(t => !t.archived)
+        tasks = this.tasks.filter(t => !t.archived);
       }
+      return tasks.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     },
-    
   },
-  created(){
-    let vm = this;
-    TaskService.getTaskList()
-          .then(function(response){
-               vm.tasks=response.data
-           })
-          .catch(error => console.log(error))
-          .finally(() => vm.loading = false)
+  created() {
+    this.getTasks();
   },
   methods: {
-    getLink(task){
-        return "/task/"+task.id
+    showEdit(task) {
+      this.edited_task = task;
+      this.show_edit_task = true;
     },
-    goTo(task){
-        this.$router.push('/task/'+task.id)
+    getTasks() {
+      TaskService.getTaskList()
+        .then(response => {
+          this.tasks = response.data;
+          this.edited_task = { some: 'task' };
+        })
+        .catch(error => console.error(error))
+        .finally(() => (this.loading = false));
+    },
+    getLink(task) {
+      return '/task/' + task.id;
+    },
+    goTo(task) {
+      this.$router.push('/task/' + task.id);
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
-
 #tasks {
-    .task {
-        border: 1px solid lightgrey;
-        border-bottom: none;
-        padding: 15px 10px;
-        cursor: pointer;
-        &:hover{
-            background: lightgrey;
-            a {color: white !important;}
-        }
+  .task {
+    border: 1px solid lightgrey;
+    border-bottom: none;
+    padding: 15px 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: lightgrey;
+
+      a {
+        color: white !important;
+      }
     }
-    a {
+  }
+
+  a {
     color: rgb(4, 144, 174) !important;
     text-decoration: none;
-    }
-
+  }
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  .header-right {
+    display: flex;
+  }
+}
 </style>

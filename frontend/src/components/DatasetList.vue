@@ -1,82 +1,100 @@
 <template>
   <div id="datasets">
-    <!--<div v-for="dataset in datasets" :key="dataset.id" class="dataset">
-        <router-link :to="getLink(dataset)">{{dataset.name}}</router-link>
+    <div class="d-flex align-center justify-space-between">
+      <h2 class="headline">Datasets</h2>
+      <div class="actions">
+        <DatasetUploader @new-dataset-imported="getDatasets()" />
+      </div>
     </div>
-    -->
-    <v-simple-table>
-      <thead>
-        <tr>
-          <th class="text-left">
-            Name
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="dataset in datasets"
-          :key="dataset.id"
-          class="no-click"
-        >
-          <td>{{ dataset.name }}</td>
-        </tr>
-      </tbody>
-    </v-simple-table>
+    <div class="mt-12">
+      <div v-if="loading" class="d-flex justify-center">
+        <v-progress-circular
+          color="blue-grey"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <div v-if="datasets.length === 0" class="mt-12 text-center">
+          No dataset imported yet
+        </div>
+        <v-simple-table v-else>
+          <thead>
+            <tr>
+              <th class="text-left">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="dataset in datasets" :key="dataset.id" class="no-click">
+              <td>{{ dataset.name }}</td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import DatasetService from '@/services/dataset.service'
+import DatasetService from '@/services/dataset.service.js';
+
+import DatasetUploader from '@/components/DatasetUploader.vue';
 
 export default {
-  name: 'dataset-list',
-  data(){
-    return {
-        datasets: []
-    }
+  name: 'DatasetList',
+  components: {
+    DatasetUploader,
   },
-  created(){
-    var vm = this;
-    DatasetService.getDatasetList()
-          .then(function(response){
-               vm.datasets=response.data
-           })
-          .catch(error => console.log(error))
-          .finally(() => this.loading = false)
+  data() {
+    return {
+      datasets: [],
+      loading: true,
+    };
+  },
+  created() {
+    this.getDatasets();
   },
   methods: {
-    getLink(dataset){
-        return "/dataset/"+dataset.id
+    getDatasets() {
+      DatasetService.getDatasetList()
+        .then(response => {
+          this.datasets = response.data;
+        })
+        .catch(error => console.error(error))
+        .finally(() => (this.loading = false));
     },
-    printDatasetTasks(tasks){
-        return tasks.map(t => t.name).join(", ")
+    getLink(dataset) {
+      return '/dataset/' + dataset.id;
     },
-    goTo(dataset){
-        this.$router.push('/dataset/'+dataset.id)
+    printDatasetTasks(tasks) {
+      return tasks.map(t => t.name).join(', ');
+    },
+    goTo(dataset) {
+      this.$router.push('/dataset/' + dataset.id);
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
-
 #datasets {
-    .dataset {
-        border: 1px solid lightgrey;
-        border-bottom: none;
-        padding: 15px 10px;
-        cursor: pointer;
-        &:hover{
-            background: lightgrey;
-            a {color: white !important;}
-        }
+  .dataset {
+    border: 1px solid lightgrey;
+    border-bottom: none;
+    padding: 15px 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: lightgrey;
+
+      a {
+        color: white !important;
+      }
     }
-    a {
+  }
+
+  a {
     color: rgb(4, 144, 174) !important;
     text-decoration: none;
-    }
-
+  }
 }
-
-
 </style>

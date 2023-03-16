@@ -1,19 +1,22 @@
 <template>
   <div>
     <v-menu
-        open-on-hover
-        offset-y
+      open-on-hover
+      offset-y
+      :close-on-content-click="false"
+      :close-on-click="false"
     >
-      <template v-slot:activator="{ on }">
-            <span v-on="on" @click.stop>
-                <v-icon>mdi-dots-vertical</v-icon>
-            </span>
+      <template #activator="{ attrs, on: menu }">
+        <span v-bind="attrs" v-on="menu">
+          <v-icon>mdi-dots-vertical</v-icon>
+        </span>
       </template>
       <v-card>
         <v-list>
-          <v-list-item>
-            <a @click="toggleArchived"> {{archiveAction}} </a>
+          <v-list-item @click="toggleArchived">
+            {{ archiveAction }}
           </v-list-item>
+          <v-list-item @click="$emit('edit', project)"> Edit </v-list-item>
         </v-list>
       </v-card>
     </v-menu>
@@ -21,11 +24,10 @@
 </template>
 
 <script>
-
-import ProjectService from "@/services/project.service";
+import ProjectService from '@/services/project.service.js';
 
 export default {
-  name: "ProjectMenu",
+  name: 'ProjectMenu',
   props: {
     value: {
       type: Object,
@@ -35,40 +37,34 @@ export default {
   data() {
     return {
       project: this.value,
-    }
+    };
   },
   computed: {
-    archiveAction(){
+    archiveAction() {
       if (this.project.archived) {
-        return "Unarchive"
+        return 'Unarchive';
       }
-      return "Archive"
+      return 'Archive';
     },
   },
   watch: {
     project: {
       deep: true,
       handler() {
-        this.$emit('input', this.project)
+        this.$emit('input', this.project);
       },
     },
   },
   methods: {
-    toggleArchived(){
-      ProjectService.updateProject(
-          this.project.id,
-          {
-            archived: !this.project.archived
-          }
-      ).then(()=>{
-
-        this.project.archived = !this.project.archived
-      })
+    toggleArchived() {
+      ProjectService.updateProject(this.project.id, {
+        archived: !this.project.archived,
+      }).then(() => {
+        this.project.archived = !this.project.archived;
+      });
     },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -2,20 +2,17 @@
   <div class="qa-form-container">
     <div>
       <div v-if="!is_invalidating">
-
-        <v-btn @click="validate" v-if="!a.has_qa_validated">
-          Validate
-        </v-btn>
-        <v-btn @click="invalidate" v-if="!a.has_qa_invalidated">
+        <v-btn v-if="!a.has_qa_validated" @click="validate"> Validate </v-btn>
+        <v-btn v-if="!a.has_qa_invalidated" @click="invalidate">
           Invalidate
         </v-btn>
       </div>
       <div v-if="is_invalidating" class="invalidation">
-        <textarea v-model="invalidation_comment"/>
+        <textarea v-model="invalidation_comment" />
         <v-btn @click="confirmInvalidation">Send for Review</v-btn>
       </div>
       <div v-else>
-        <div class="invalidation-comment" v-if="a.qa_invalidation_comment">
+        <div v-if="a.qa_invalidation_comment" class="invalidation-comment">
           {{ a.qa_invalidation_comment }}
         </div>
       </div>
@@ -24,8 +21,7 @@
 </template>
 
 <script>
-
-import AnnotationService from '@/services/annotation.service'
+import AnnotationService from '@/services/annotation.service.js';
 
 export default {
   name: 'QAForm',
@@ -40,41 +36,38 @@ export default {
       a: this.value,
       is_invalidating: false,
       invalidation_comment: '',
-    }
+    };
   },
   methods: {
     validate() {
-      this.is_invalidating = false
-      this.a.qa_invalidation_comment = ''
-      this.a.has_qa_validated = true
-      this.a.has_qa_invalidated = false
-      let payload = JSON.parse(JSON.stringify(this.a))
-      payload.annotator = payload.annotator.id
-      AnnotationService.updateAnnotation(this.a.id, payload)
-      this.$emit('input', this.a)
+      this.is_invalidating = false;
+      this.a.qa_invalidation_comment = '';
+      this.a.has_qa_validated = true;
+      this.a.has_qa_invalidated = false;
+      let payload = JSON.parse(JSON.stringify(this.a));
+      payload.annotator = payload.annotator.id;
+      AnnotationService.updateAnnotation(this.a.id, payload);
+      this.$emit('input', this.a);
     },
     invalidate() {
-      this.is_invalidating = true
+      this.is_invalidating = true;
     },
     confirmInvalidation() {
-      this.a.has_qa_validated = false
-      this.a.has_qa_invalidated = true
-      this.a.qa_invalidation_comment = this.invalidation_comment
-      let payload = JSON.parse(JSON.stringify(this.a))
-      payload.annotator = payload.annotator.id
-      AnnotationService.updateAnnotation(this.a.id, payload)
-      this.$emit('input', this.a)
-      this.is_invalidating = false
+      this.a.has_qa_validated = false;
+      this.a.has_qa_invalidated = true;
+      this.a.qa_invalidation_comment = this.invalidation_comment;
+      let payload = JSON.parse(JSON.stringify(this.a));
+      payload.annotator = payload.annotator.id;
+      AnnotationService.updateAnnotation(this.a.id, payload);
+      this.$emit('input', this.a);
+      this.is_invalidating = false;
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
-
 .qa-form-container {
-
   .invalidation textarea {
     display: block;
     border: 1px solid lightgrey !important;
@@ -88,8 +81,6 @@ export default {
     padding: 10px;
     border: 1px solid lightgrey !important;
     margin-top: 20px;
-
   }
 }
 </style>
-
