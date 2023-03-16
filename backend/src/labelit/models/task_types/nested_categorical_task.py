@@ -19,7 +19,7 @@ class NestedCategoricalTask(Task):
         default=True,
     )
 
-   def validate_labels(self, labels, is_final):
+    def validate_labels(self, labels, is_final):
         if len(list(filter(lambda l: l.parent_label == None, labels))) > 0:
             raise ValidationError(
                 """

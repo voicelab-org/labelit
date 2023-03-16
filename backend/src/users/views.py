@@ -2,7 +2,6 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-
 from .models import User
 from .serializers import UserSerializer, UserListSerializer
 
@@ -29,7 +28,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserListView(generics.ListAPIView):
-   permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     # queryset = User.objects.all()
     queryset = User.objects.filter(is_staff=False).order_by(

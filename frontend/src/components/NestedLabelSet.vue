@@ -261,4 +261,5 @@ export default {
     border: 1px solid grey !important;
     border-radius: 4px;
   }
+}
 </style>
