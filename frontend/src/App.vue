@@ -23,8 +23,8 @@
             </v-btn>
           </template>
           <v-spacer></v-spacer>
+          <BlueFilter />
           <div v-if="user" id="user-corner">
-            <BlueFilter />
             <v-btn text :title="user.email" @click="logout()">
               <v-icon>mdi-logout</v-icon>
             </v-btn>
