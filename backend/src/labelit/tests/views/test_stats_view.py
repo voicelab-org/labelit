@@ -45,10 +45,6 @@ class StatsViewTests(TestSetup, TestCase):
         self.assertEqual(response.data["stats_per_annotator_per_day"], [])
         self.assertTrue("total_duration" in response.data.keys())
 
-        print("batch", self.batch1.__dict__)
-
-        print("batch annotators", self.batch1_annotators)
-
         Annotation.objects.create(
             annotator=self.batch1_annotators[0],
             task=self.task1,
@@ -88,5 +84,4 @@ class StatsViewTests(TestSetup, TestCase):
         request = self.request_factory.get("")
         self._authenticate(request)
         response = StatsView.as_view()(request)
-        print("&response.data", response.data)
         self.assertEqual(response.data["num_docs"], 2)  # failing here, num_docs is 0

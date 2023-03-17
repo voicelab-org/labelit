@@ -183,7 +183,6 @@ class BatchModelTests(TestSetup, TestCase):
         )
         batch2.documents.add(self.doc1)
         batch2.save()
-        print("&self.dataset", self.dataset, self.dataset.documents.all().count())
         self.assertEqual(
             Batch.get_remaining_units_in_dataset(project2, self.dataset), 5
         )
