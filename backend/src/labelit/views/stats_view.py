@@ -71,9 +71,6 @@ class StatsView(APIView):
                 )
 
             num_docs = completed_document_annotator_pairs.count()
-            total_duration = completed_document_annotator_pairs.aggregate(
-                total=Sum(F("document__audio_duration"))
-            )["total"]
 
             # number of annotated docs per annotator over period
             stats_per_annotator = list(
@@ -129,7 +126,6 @@ class StatsView(APIView):
             return Response(
                 {
                     "num_docs": num_docs,
-                    # "total_duration": total_duration,
                     "total_duration": 0,
                     "stats_per_annotator": stats_per_annotator,
                     "stats_per_annotator_per_day": stats_per_annotator_per_day,
