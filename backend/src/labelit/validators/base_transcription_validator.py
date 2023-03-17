@@ -9,6 +9,7 @@ class BaseTranscriptionValidator:
         self,
         transcript,
     ):
+        print("&validate() transcript: ", transcript)
         errors = []
         valid_chars_set = set(self.valid_chars)
         for pos, c in enumerate(transcript):
@@ -18,6 +19,9 @@ class BaseTranscriptionValidator:
                 errors.append((pos, self.case1_error))
                 break
         if len(errors):
+            print("&raising error")
             raise ValidationError(
                 "; ".join([e[1] + " at character index: " + str(e[0]) for e in errors])
             )
+        else:
+            print('&no errors !')
