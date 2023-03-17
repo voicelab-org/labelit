@@ -32,6 +32,16 @@ class ProjectSerializerTests(TestCase):
                     "are_sequences_annotated",
                     "tasks",
                     "timer_inactivity_threshold",
+                    "updated_at",
+                    "created_by",
+                    "target_deadline",
+                    "does_audio_playing_count_as_activity",
+                    "description",
+                    "do_display_timer_time",
+                    "enable_region_annotation",
+                    "created_at",
+                    "archived",
+                    "target_num_documents",
                 ]
             ),
         )
