@@ -246,8 +246,6 @@ class NestedCategoricalTaskSerializer(serializers.ModelSerializer):
 
 
 class TranscriptionTaskSerializer(serializers.ModelSerializer):
-    labels = LabelPolymorphicSerializer(many=True, required=False, read_only=True)
-
     class Meta:
         model = TranscriptionTask
         fields = [
@@ -255,7 +253,6 @@ class TranscriptionTaskSerializer(serializers.ModelSerializer):
             "name",
             "projects",
             "can_documents_be_invalidated",
-            "labels",
             "image",
             "html_guidelines",
             "archived",
@@ -265,8 +262,6 @@ class TranscriptionTaskSerializer(serializers.ModelSerializer):
 
 
 class TextEditionTaskSerializer(serializers.ModelSerializer):
-    labels = LabelPolymorphicSerializer(many=True, required=False, read_only=True)
-
     class Meta:
         model = TextEditionTask
         fields = [
@@ -274,7 +269,6 @@ class TextEditionTaskSerializer(serializers.ModelSerializer):
             "name",
             "projects",
             "can_documents_be_invalidated",
-            "labels",
             "image",
             "html_guidelines",
             "archived",
@@ -284,8 +278,6 @@ class TextEditionTaskSerializer(serializers.ModelSerializer):
 
 
 class LiveCorrectTaskSerializer(serializers.ModelSerializer):
-    labels = LabelPolymorphicSerializer(many=True, required=False, read_only=True)
-
     class Meta:
         model = LiveCorrectTask
         fields = [
@@ -293,7 +285,6 @@ class LiveCorrectTaskSerializer(serializers.ModelSerializer):
             "name",
             "projects",
             "can_documents_be_invalidated",
-            "labels",
             "image",
             "html_guidelines",
             "archived",
