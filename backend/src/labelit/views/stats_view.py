@@ -29,8 +29,8 @@ class StatsView(APIView):
 
     def get(self, request):
         def _get_stats(
-            min_date="2021-08-01",
-            max_date="2022-03-01",
+            min_date="1950-08-01",
+            max_date="3022-03-01",
             projects=[],
             annotators=[],
         ):
@@ -89,6 +89,8 @@ class StatsView(APIView):
                     "time_spent",
                 )
             )
+
+            print("stats_per_annotator", stats_per_annotator)
 
             # number of annotated docs per annotator per day over period
             completed_document_annotator_pairs_per_day = (
