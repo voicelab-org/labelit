@@ -22,10 +22,8 @@ class LiveCorrectTask(Task):
     def validate_labels(self, labels, is_final):
         timed_transcript = labels[0].timed_transcript
         for segment in timed_transcript.segments.all():
-            print("&segment.transcript: ", segment.transcript)
             resolve(self.validator)().validate(segment.transcript)
             validator = resolve(self.validator)()
-            print("&validator: ", validator)
 
     def get_batch_stats(self, batch):
         stats = {}
