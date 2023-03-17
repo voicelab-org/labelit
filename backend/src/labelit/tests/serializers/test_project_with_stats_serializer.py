@@ -25,6 +25,13 @@ class ProjectWithStatsSerializerTests(TestSetup, TestCase):
                     "num_done_batches",
                     "num_done_documents",
                     "num_documents",
+                    "do_display_timer_time",
+                    "archived",
+                    "target_num_documents",
+                    "target_deadline",
+                    "description",
+                    "does_audio_playing_count_as_activity",
+                    "enable_region_annotation",
                 ]
             ),
         )
