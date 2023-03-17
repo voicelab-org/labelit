@@ -13,8 +13,8 @@
       </template>
       <v-card>
         <v-list>
-          <v-list-item>
-            <a @click="toggleArchived"> {{ archiveAction }} </a>
+          <v-list-item @click="toggleArchived">
+            {{ archiveAction }}
           </v-list-item>
           <v-list-item @click="$emit('edit', project)"> Edit </v-list-item>
         </v-list>

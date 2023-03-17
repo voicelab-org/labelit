@@ -30,6 +30,7 @@
 import { mapActions } from 'vuex';
 import { baseURL } from '@/app.config.js';
 import LocalStorageService from '@/services/local.storage.service.js';
+import { SNACKBAR_TYPE_COLOR } from '@/store/snackbar.module.js';
 
 export default {
   name: 'DatasetUploader',
@@ -81,7 +82,7 @@ export default {
           } else {
             notification = {
               text: 'Something wrong happened. Contact the support if the problem persist.',
-              color: 'error',
+              type: SNACKBAR_TYPE_COLOR.ERROR,
             };
           }
           this.resetForm();

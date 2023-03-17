@@ -1,77 +1,57 @@
 <template>
-  <div id="blue-filter">
-    <div id="blue-filter-controls">
-      <v-icon :color="'orange'">mdi-weather-night</v-icon>
-      <span>{{ slider }} %</span>
-      <v-slider
-        v-model="slider"
-        :color="'orange'"
-        :track-color="'blue'"
-      ></v-slider>
-    </div>
-    <div id="blue-filter-overlay" :style="overlayStyle"></div>
-  </div>
+  <v-menu
+    v-model="menu"
+    :close-on-content-click="false"
+    offset-y
+    :nudge-width="200"
+  >
+    <template #activator="{ on, attrs }">
+      <v-btn text v-bind="attrs" v-on="on">
+        <v-icon :color="'orange'">mdi-weather-night</v-icon>
+        <span
+          >&nbsp;{{
+            percentage.toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            })
+          }}
+          %</span
+        >
+      </v-btn>
+    </template>
+    <v-card>
+      <v-card-text>
+        <div class="text-caption">Blue filter :</div>
+        <v-slider
+          height="60px"
+          :value="percentage"
+          :hide-details="true"
+          :color="'orange'"
+          :track-color="'blue'"
+          @change="updatePercentage"
+        ></v-slider>
+      </v-card-text>
+    </v-card>
+  </v-menu>
 </template>
 
 <script>
-import LocalStorageService from '@/services/local.storage.service.js';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'BlueFilter',
-  data() {
-    return {
-      slider: 45,
-    };
-  },
+  data: () => ({
+    menu: false,
+  }),
   computed: {
-    overlayStyle() {
-      return {
-        background: 'rgba(255, 255, 0, ' + this.slider / 100 + ')',
-      };
-    },
+    ...mapGetters({
+      percentage: 'blueFilter/percentage',
+    }),
   },
-  watch: {
-    slider() {
-      LocalStorageService.setBlueFilterValue(this.slider);
+  methods: {
+    updatePercentage(value) {
+      this.$store.commit('blueFilter/SET_PERCENTAGE', parseInt(value));
     },
-  },
-  created() {
-    if (LocalStorageService.getBlueFilterValue() == null) {
-      LocalStorageService.setBlueFilterValue(this.slider);
-    }
-    this.slider = LocalStorageService.getBlueFilterValue();
   },
 };
 </script>
-
-<style lang="scss">
-#blue-filter {
-  #blue-filter-controls {
-    margin-right: 10px;
-    min-width: 150px;
-    display: flex;
-    align-items: center;
-    > .v-input {
-      max-height: 30px;
-    }
-
-    > .v-icon {
-      margin-right: 5px;
-    }
-  }
-}
-
-#blue-filter-overlay {
-  position: fixed;
-  background-blend-mode: multiply;
-  //background-color: rgba(255, 255, 0, 0.5);
-  pointer-events: none;
-  opacity: 0.5;
-  min-height: 100vh;
-  width: 100%;
-  z-index: 200000;
-  top: 0;
-  left: 0;
-  height: 100vh;
-}
-</style>
