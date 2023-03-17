@@ -68,7 +68,12 @@ def generate_waveform_from_audio(input_file, output_file, create_folder=False):
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
     signal, sr = audiofile.read(input_file)
-    signal = np.average(signal, axis=0)
+    if len(signal.shape) == 2:
+        signal = np.average(signal, axis=0)
+
+    if len(signal.shape) > 2:
+        raise ValueError("More than 2 channels not supported currently!")
+
     duration = len(signal) / sr
     num_chunks = int(math.ceil(duration / 120.0))
     chunk_size = duration / num_chunks

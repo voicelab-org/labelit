@@ -96,7 +96,7 @@ class AudioViewSetTests(TestCase):
         response = AudioViewSet.as_view(
             actions={"get": "retrieve"},
         )(request, pk=self.document.id)
-        self.assertEqual(response._headers["content-type"][1], "binary/octet-stream")
+        self.assertEqual(response.headers["content-type"], "binary/octet-stream")
         self.assertEqual(response.status_code, 200)
 
         self.dataset.is_streamed = True
@@ -104,7 +104,7 @@ class AudioViewSetTests(TestCase):
         response = AudioViewSet.as_view(
             actions={"get": "is_using_hls"},
         )(request, pk=self.document.id)
-        self.assertEqual(response._headers["content-type"][1], "application/json")
+        self.assertEqual(response.headers["content-type"], "application/json")
         self.assertEqual(response.status_code, 200)
 
     def test_audio_info(self):
@@ -118,7 +118,7 @@ class AudioViewSetTests(TestCase):
         )(request, pk=self.document.id)
         self.assertIn("duration", json.loads(response.content.decode("utf-8")).keys())
         self.assertIn("waveform", json.loads(response.content.decode("utf-8")).keys())
-        self.assertEqual(response._headers["content-type"][1], "application/json")
+        self.assertEqual(response.headers["content-type"], "application/json")
         self.assertEqual(response.status_code, 200)
 
     def test_segments(self):
@@ -137,5 +137,6 @@ class AudioViewSetTests(TestCase):
         response = AudioViewSet.as_view(
             actions={"get": "segments"},
         )(request, pk=self.document.id, segment_id=segment_id)
-        self.assertEqual(response._headers["content-type"][1], "binary/octet-stream")
+
+        self.assertEqual(response.headers["content-type"], "binary/octet-stream")
         self.assertEqual(response.status_code, 200)
