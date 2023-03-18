@@ -67,6 +67,7 @@ class FlatProjectSerializer(serializers.ModelSerializer):
             "does_audio_playing_count_as_activity",
             "target_deadline",
             "target_num_documents",
+            "task_presentation",
             "description",
             "created_at",
             "updated_at",

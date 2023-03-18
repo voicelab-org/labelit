@@ -97,6 +97,12 @@ export default {
             type: 'boolean',
             default: true,
           },
+          task_presentation: {
+            type: 'string',
+            default: 'list',
+            title: 'How to present the tasks to the annotator(s): as a list or as a sequence'
+
+          },
           target_num_documents: {type: 'integer', default: 100},
           target_deadline: {
             type: 'string',
