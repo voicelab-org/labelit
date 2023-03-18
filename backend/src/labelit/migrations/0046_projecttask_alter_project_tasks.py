@@ -52,6 +52,11 @@ class Migration(migrations.Migration):
 
 
 """
+# originally automatically created by django, but yields this error:
+  
+  Applying labelit.0046_projecttask_alter_project_tasks...[CRITICAL:2023-03-12 19:29:05.576] Uncaught exception: <class 'ValueError'> Cannot alter field labelit.Project.tasks into labelit.Project.tasks - they are not compatible types (you cannot alter to or from M2M fields, or add or remove through= on M2M fields) [log.py:12,uncaught_exception_handler()]
+
+# the alterfield has been replaced by a remove THEN an add
 migrations.AlterField(
     model_name="project",
     name="tasks",

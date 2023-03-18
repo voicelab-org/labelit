@@ -41,7 +41,6 @@ class ProjectViewSetTests(TestCase):
 
     def test_get_remaining_units_in_dataset(self):
         dataset = Dataset.objects.create(name="IMDB")
-        document = Document.objects.create(dataset=dataset, text="love the movie!")
         request = self.request_factory.get("", {"dataset_id": dataset.pk})
         self._authenticate(request)
         response = ProjectViewSet.as_view(
