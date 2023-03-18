@@ -22,7 +22,11 @@
             <v-form v-model="valid">
               <v-jsf v-model="model" :schema="schema" :options="form_options"/>
             </v-form>
+
             <template v-if="model.tasks && model.tasks.length">
+
+              Tasks: <br>{{model.tasks}}
+              <br>
               <ProjectTaskSorter
                   v-model="model.tasks"
               />
