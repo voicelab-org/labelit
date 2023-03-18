@@ -78,7 +78,6 @@ class FlatProjectSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         project = Project.objects.create(**validated_data)
         request = self.context.get("request")
-
         task_ids = request.data.get('tasks')
         for idx, t_id in enumerate(task_ids):
             ProjectTask.objects.create(
