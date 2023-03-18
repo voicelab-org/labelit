@@ -16,9 +16,9 @@
         v-shortkey="['ctrl', 'alt', 'arrowdown']"
         @shortkey.stop="browseTasks('right')"
     ></span>
-    <div v-if="annotations" id="annotation-forms-t">
+    <div v-if="sorted_annotations" id="annotation-forms-t">
       <div
-          v-for="(annotation, i) in annotations"
+          v-for="(annotation, i) in sorted_annotations"
           :key="annotation.id"
           :class="getAnnotationClasses(annotation, i == focus_index)"
       >
