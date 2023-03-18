@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from labelit.models import Project
+from labelit.models import Project, ProjectTask, Task
 from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
-
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -76,6 +74,20 @@ class FlatProjectSerializer(serializers.ModelSerializer):
         ]
 
         extra_kwargs = {"created_by": {"default": serializers.CurrentUserDefault()}}
+
+    def create(self, validated_data):
+        project = Project.objects.create(**validated_data)
+        request = self.context.get("request")
+
+        task_ids = request.data.get('tasks')
+        for idx, t_id in enumerate(task_ids):
+            ProjectTask.objects.create(
+                project=project,
+                task_id=t_id,
+                order=idx + 1
+            )
+
+        return project
 
 
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
