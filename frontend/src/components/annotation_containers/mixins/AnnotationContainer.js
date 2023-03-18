@@ -1,3 +1,6 @@
+import ProjectTaskService from "@/services/project_task.service";
+import Project_taskService from "@/services/project_task.service";
+
 export default {
   name: 'AnnotationContainer',
   props: {
@@ -5,6 +8,36 @@ export default {
       type: Object,
       required: true
     },
+    project: {
+      type: Object,
+      required: true,
+    },
+    annotations: {
+      type: Array,
+      required: true,
+    },
+    tasks: {
+      type: Array,
+      required: true,
+    },
+    time: {
+      type: Number,
+    },
+    submitting: {
+      type: Boolean,
+      required: true,
+    },
+    reviewMode: {
+      type: Boolean,
+    },
+  },
+  created(){
+    console.log("AnnotationContainer.js created()")
+    Project_taskService.list({project: this.project.id}).then(
+        (res) => {
+          console.log("res: ", res.data)
+        }
+    )
   },
   data(){
     return {}

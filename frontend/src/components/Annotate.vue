@@ -26,6 +26,7 @@
               :submitting="submitting"
               @submitted="numTasksSubmitted++"
               :document="document"
+              :project="batch.project"
           />
         </div>
       </div>

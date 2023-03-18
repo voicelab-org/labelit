@@ -5,6 +5,7 @@ from rest_framework.schemas import get_schema_view
 
 router = routers.DefaultRouter()
 router.register(r"tasks", views.TaskViewSet)
+router.register(r"project_tasks", views.ProjectTaskViewSet,)
 router.register(r"projects", views.ProjectViewSet, basename="projects")
 router.register(
     r"projects_with_stats",

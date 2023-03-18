@@ -53,24 +53,6 @@ export default {
     AnnotationContainer,
   ],
   props: {
-    annotations: {
-      type: Array,
-      required: true,
-    },
-    tasks: {
-      type: Array,
-      required: true,
-    },
-    time: {
-      type: Number,
-    },
-    submitting: {
-      type: Boolean,
-      required: true,
-    },
-    reviewMode: {
-      type: Boolean,
-    },
   },
   data() {
     return {
