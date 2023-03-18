@@ -1,19 +1,18 @@
 <template>
   <div>
-    The Sortable list <br>
-    value: {{ value }}
-    <br>
-    sorted tasks: {{ sorted_tasks }}
-    <div><!--:key="draggable_key"-->
+    <p>
+      Define the order of presentation of the tasks (you can drag the items)
+    </p>
+    <div>
 
       <draggable
           v-model="sorted_tasks"
-          :key="draggable_key"
       >
-        <transition-group :key="draggable_key + 1">
+        <transition-group>
           <div
               v-for="task in sorted_tasks"
               :key="task.id"
+              class="ordered-task"
           >
             {{ task.name }}
           </div>
@@ -41,7 +40,6 @@ export default {
     return {
       sorted_tasks: JSON.parse(JSON.stringify(this.value)),
       //sorted_tasks: this.value,
-      draggable_key: 123,
       dummy: [],
     }
   },
@@ -106,7 +104,6 @@ export default {
 
           _remove_detached_tasks()
           _add_new_tasks()
-          //vm.draggable_key++
 
           return vm.sorted_tasks
 
@@ -117,7 +114,6 @@ export default {
           let sorted_tasks = _edit_sorted_tasks()
           console.log("sorted_tasks", JSON.parse(JSON.stringify(sorted_tasks)))
           this.sorted_tasks = sorted_tasks
-          this.draggable_key++
           console.log("&sorted_tasks edited")
         }
       },
@@ -155,6 +151,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.ordered-task{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid lightgrey;
+  cursor: grab;
+}
 
 </style>

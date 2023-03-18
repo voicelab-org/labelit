@@ -24,9 +24,6 @@
             </v-form>
 
             <template v-if="model.tasks && model.tasks.length">
-
-              Tasks: <br>{{model.tasks}}
-              <br>
               <ProjectTaskSorter
                   v-model="model.tasks"
               />
