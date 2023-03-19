@@ -1,37 +1,11 @@
 from rest_framework import serializers
-from labelit.models import (
-    Task,
-    LiveCorrectTask,
-    AudioRegionTask,
-    OrdinalTask,
-    CategoricalTask,
-    NestedCategoricalTask,
-    TextEditionTask,
-    TranscriptionTask,
-    EntityTask,
-)
+from labelit.models import *
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
-from labelit.serializers.task_serializers import (
-    AudioRegionTaskSerializer,
-    CreateOrUpdateAudioRegionTaskSerializer,
-    CreateOrUpdateCategoricalTaskSerializer,
-    CategoricalTaskSerializer,
-    EntityTaskSerializer,
-    CreateOrUpdateEntityTaskSerializer,
-    LiveCorrectTaskSerializer,
-    NestedCategoricalTaskSerializer,
-    OrdinalTaskSerializer,
-    CreateOrUpdateOrdinalTaskSerializer,
-    TextEditionTaskSerializer,
-    CreateOrUpdateTextEditionTaskSerializer,
-    TranscriptionTaskSerializer,
-    CreateOrUpdateTranscriptionTaskSerializer,
-)
-
-
-# TODO: DRY the code
-
+from labelit.serializers.task_types import *
+from zope.dottedname.resolve import resolve
+from django.contrib.contenttypes.models import ContentType
+from importlib import import_module
 
 class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,9 +18,61 @@ class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
             "archived",
         ]
 
+
 def _get_mapping(
         is_create_or_update=False,
 ):
+    def _get_dotted_paths():
+
+        def _get_task_names():
+            task_contenttype_ids = Task.objects.all().values_list('polymorphic_ctype_id', flat=True)
+            def _get_class_name(contenttype_id):
+                return str(
+                    ContentType.model_class(
+                        ContentType.objects.get(id=contenttype_id)
+                    )
+                ).split("'")[1].split('.')[-1]
+
+            return list(
+                map(
+                    lambda id: _get_class_name(id),
+                    task_contenttype_ids,
+                )
+            )
+
+        task_names = _get_task_names()
+        return list(map(
+            lambda name: f'labelit.models.{name}',
+            task_names
+        ))
+
+    task_dotted_paths = _get_dotted_paths()
+
+    def _get_serializer_dotted_paths():
+        serializer_dotted_paths = []
+        corresponding_task_dotted_paths = []
+        for task_dotted_path in task_dotted_paths:
+            task_name = task_dotted_path.split('.')[-1]
+            if is_create_or_update:
+                dotted_path = f"labelit.serializers.CreateOrUpdate{task_name}Serializer"
+            else:
+                dotted_path = f"labelit.serializers.{task_name}Serializer"
+            try:
+                import_module(dotted_path)
+            except: #
+                continue
+            serializer_dotted_paths.append(dotted_path)
+            corresponding_task_dotted_paths.append(task_dotted_paths)
+
+    serializer_dotted_paths, task_dotted_paths = _get_serializer_dotted_paths()
+
+    print("serializer_dotted_paths, task_dotted_paths", serializer_dotted_paths, task_dotted_paths)
+    return {
+        import_module(task_dotted_path): import_module(serializer_dotted_path)
+        for (serializer_dotted_path, task_dotted_path) in zip(serializer_dotted_paths, task_dotted_paths)
+    }
+
+    """
     if is_create_or_update:
         return {
             Task: CreateOrUpdateTaskSerializer,
@@ -69,12 +95,13 @@ def _get_mapping(
             NestedCategoricalTask: NestedCategoricalTaskSerializer,
             AudioRegionTask: AudioRegionTaskSerializer,
         }
+    """
+
 
 create_or_update_mappping = _get_mapping(is_create_or_update=True)
 
 
 class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
-
     model_serializer_mapping = create_or_update_mappping
 
 
@@ -97,6 +124,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 mapping = _get_mapping()
+
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = mapping
