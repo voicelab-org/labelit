@@ -67,7 +67,6 @@ def _get_mapping(
             try:
                 resolve(dotted_path)
             except ModuleNotFoundError:
-                print(f"module not found for {task_name}")
                 continue
             serializer_dotted_paths.append(dotted_path)
             corresponding_task_dotted_paths.append(task_dotted_paths)
@@ -83,7 +82,6 @@ def _get_mapping(
 
 create_or_update_mappping = _get_mapping(is_create_or_update=True)
 
-print('&create_or_update_mappping', create_or_update_mappping)
 class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = create_or_update_mappping
 
@@ -107,7 +105,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 mapping = _get_mapping()
-print("&default mapping", mapping)
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = mapping
