@@ -1,6 +1,14 @@
 from rest_framework import serializers
 from labelit.models import (
     Task,
+    LiveCorrectTask,
+    AudioRegionTask,
+    OrdinalTask,
+    CategoricalTask,
+    NestedCategoricalTask,
+    TextEditionTask,
+    TranscriptionTask,
+    EntityTask,
 )
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
@@ -36,11 +44,10 @@ class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
             "archived",
         ]
 
-
-class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
-
-    @staticmethod
-    def _get_mapping():
+def _get_mapping(
+        is_create_or_update=False,
+):
+    if is_create_or_update:
         return {
             Task: CreateOrUpdateTaskSerializer,
             AudioRegionTask: CreateOrUpdateAudioRegionTaskSerializer,
@@ -50,8 +57,25 @@ class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
             TextEditionTask: CreateOrUpdateTextEditionTaskSerializer,
             TranscriptionTask: CreateOrUpdateTranscriptionTaskSerializer,
         }
+    else:
+        return {
+            Task: TaskSerializer,
+            CategoricalTask: CategoricalTaskSerializer,
+            OrdinalTask: OrdinalTaskSerializer,
+            TranscriptionTask: TranscriptionTaskSerializer,
+            LiveCorrectTask: LiveCorrectTaskSerializer,
+            EntityTask: EntityTaskSerializer,
+            TextEditionTask: TextEditionTaskSerializer,
+            NestedCategoricalTask: NestedCategoricalTaskSerializer,
+            AudioRegionTask: AudioRegionTaskSerializer,
+        }
 
-    model_serializer_mapping = CreateOrUpdateTaskPolymorphicSerializer._get_mapping()
+create_or_update_mappping = _get_mapping(is_create_or_update=True)
+
+
+class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
+
+    model_serializer_mapping = create_or_update_mappping
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -72,19 +96,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
+mapping = _get_mapping()
+
 class TaskPolymorphicSerializer(PolymorphicSerializer):
-
-    def _get_mapping(self):
-        return {
-            Task: TaskSerializer,
-            CategoricalTask: CategoricalTaskSerializer,
-            OrdinalTask: OrdinalTaskSerializer,
-            TranscriptionTask: TranscriptionTaskSerializer,
-            LiveCorrectTask: LiveCorrectTaskSerializer,
-            EntityTask: EntityTaskSerializer,
-            TextEditionTask: TextEditionTaskSerializer,
-            NestedCategoricalTask: NestedCategoricalTaskSerializer,
-            AudioRegionTask: AudioRegionTaskSerializer,
-        }
-
-    model_serializer_mapping =TaskPolymorphicSerializer._get_mapping()
+    model_serializer_mapping = mapping
