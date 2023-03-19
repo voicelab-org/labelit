@@ -77,6 +77,7 @@ class FlatProjectSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {"created_by": {"default": serializers.CurrentUserDefault()}}
 
+
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
     tasks = TaskPolymorphicSerializer(many=True, required=False)
     num_documents = serializers.SerializerMethodField()
