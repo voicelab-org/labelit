@@ -65,16 +65,6 @@ class Project(models.Model):
         blank=True,
     )
 
-    task_presentation = models.CharField(
-        "Configures how tasks are presented to annotators - as a list containing a task, in sequence, etc.",
-        max_length=3000,
-        choices=[
-            ('list', 'list'),
-            ('sequence', 'sequence'),
-        ],
-        default='list',
-    )
-
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     created_by = models.ForeignKey(

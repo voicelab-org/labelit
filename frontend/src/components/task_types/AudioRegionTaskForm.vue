@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div class="task-form-container">
     <TaskFormHeader :task="task" :read-only="readOnly" />
     <br />
