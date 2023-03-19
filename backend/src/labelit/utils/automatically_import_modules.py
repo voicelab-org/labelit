@@ -9,7 +9,7 @@ def automatically_import_modules(
         name: str,
         globals_dict: dict,
 ):
-    # iterate through the modules in the current package
+    # iterate through the modules in the package
     # package_dir = Path(__file__).resolve().parent
     for _, module_name, _ in iter_modules([package_dir_path]):
         # import the module and iterate through its attributes

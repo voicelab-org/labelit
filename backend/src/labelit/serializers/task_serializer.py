@@ -24,7 +24,14 @@ def _get_mapping(
     def _get_dotted_paths():
 
         def _get_task_names():
-            task_contenttype_ids = Task.objects.all().values_list('polymorphic_ctype_id', flat=True)
+            def _get_task_contenttype_ids():
+                task_content_types = ContentType.objects.filter(
+                    model__contains="task"
+                ).exclude(model="task")
+                return task_content_types.values_list('id', flat=True)
+
+            task_contenttype_ids = _get_task_contenttype_ids()
+
             def _get_class_name(contenttype_id):
                 return str(
                     ContentType.model_class(
@@ -40,6 +47,7 @@ def _get_mapping(
             )
 
         task_names = _get_task_names()
+
         return list(map(
             lambda name: f'labelit.models.{name}',
             task_names
@@ -59,6 +67,7 @@ def _get_mapping(
             try:
                 resolve(dotted_path)
             except ModuleNotFoundError:
+                print(f"module not found for {task_name}")
                 continue
             serializer_dotted_paths.append(dotted_path)
             corresponding_task_dotted_paths.append(task_dotted_paths)
@@ -74,7 +83,7 @@ def _get_mapping(
 
 create_or_update_mappping = _get_mapping(is_create_or_update=True)
 
-
+print('&create_or_update_mappping', create_or_update_mappping)
 class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = create_or_update_mappping
 
@@ -98,7 +107,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 mapping = _get_mapping()
-
+print("&default mapping", mapping)
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = mapping
