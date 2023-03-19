@@ -5,7 +5,6 @@ from .label_serializer import LabelPolymorphicSerializer
 from labelit.serializers.task_types import *
 from zope.dottedname.resolve import resolve
 from django.contrib.contenttypes.models import ContentType
-from importlib import import_module
 
 class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,48 +53,23 @@ def _get_mapping(
         for task_dotted_path in task_dotted_paths:
             task_name = task_dotted_path.split('.')[-1]
             if is_create_or_update:
-                dotted_path = f"labelit.serializers.CreateOrUpdate{task_name}Serializer"
+                dotted_path = f"labelit.task_types.serializers.CreateOrUpdate{task_name}Serializer"
             else:
-                dotted_path = f"labelit.serializers.{task_name}Serializer"
+                dotted_path = f"labelit.task_types.serializers.{task_name}Serializer"
             try:
-                import_module(dotted_path)
-            except: #
+                resolve(dotted_path)
+            except ModuleNotFoundError:
                 continue
             serializer_dotted_paths.append(dotted_path)
             corresponding_task_dotted_paths.append(task_dotted_paths)
+        return (serializer_dotted_paths, task_dotted_paths)
 
     serializer_dotted_paths, task_dotted_paths = _get_serializer_dotted_paths()
 
-    print("serializer_dotted_paths, task_dotted_paths", serializer_dotted_paths, task_dotted_paths)
     return {
-        import_module(task_dotted_path): import_module(serializer_dotted_path)
+        resolve(task_dotted_path): resolve(serializer_dotted_path)
         for (serializer_dotted_path, task_dotted_path) in zip(serializer_dotted_paths, task_dotted_paths)
     }
-
-    """
-    if is_create_or_update:
-        return {
-            Task: CreateOrUpdateTaskSerializer,
-            AudioRegionTask: CreateOrUpdateAudioRegionTaskSerializer,
-            CategoricalTask: CreateOrUpdateCategoricalTaskSerializer,
-            OrdinalTask: CreateOrUpdateOrdinalTaskSerializer,
-            EntityTask: CreateOrUpdateEntityTaskSerializer,
-            TextEditionTask: CreateOrUpdateTextEditionTaskSerializer,
-            TranscriptionTask: CreateOrUpdateTranscriptionTaskSerializer,
-        }
-    else:
-        return {
-            Task: TaskSerializer,
-            CategoricalTask: CategoricalTaskSerializer,
-            OrdinalTask: OrdinalTaskSerializer,
-            TranscriptionTask: TranscriptionTaskSerializer,
-            LiveCorrectTask: LiveCorrectTaskSerializer,
-            EntityTask: EntityTaskSerializer,
-            TextEditionTask: TextEditionTaskSerializer,
-            NestedCategoricalTask: NestedCategoricalTaskSerializer,
-            AudioRegionTask: AudioRegionTaskSerializer,
-        }
-    """
 
 
 create_or_update_mappping = _get_mapping(is_create_or_update=True)
