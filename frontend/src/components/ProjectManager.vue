@@ -94,7 +94,7 @@ export default {
             default: true,
           },
           target_num_documents: { type: 'integer', default: 100 },
-          target_deadline: {
+         target_deadline: {
             type: 'string',
             title: 'Target date',
             format: 'date',
