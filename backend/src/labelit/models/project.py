@@ -44,7 +44,7 @@ class Project(models.Model):
     )
     tasks = models.ManyToManyField(
         "labelit.Task",
-        related_name="projects",:
+        related_name="projects",
     )
     archived = models.BooleanField(
         default=False,
