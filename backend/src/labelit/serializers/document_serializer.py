@@ -38,6 +38,6 @@ class MinimalDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = [
-            'id',
-            'audio_filename',
+            "id",
+            "audio_filename",
         ]

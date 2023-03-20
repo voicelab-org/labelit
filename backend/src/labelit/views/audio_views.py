@@ -117,7 +117,6 @@ class AudioViewSet(viewsets.ViewSet):
         # Serve HLS
         if use_hls:
 
-
             def get_response(request):
                 playlist = storage.connection.meta.client.get_object(
                     Bucket=storage.bucket_name, Key=audio_filename
@@ -125,7 +124,9 @@ class AudioViewSet(viewsets.ViewSet):
                 data = playlist["Body"].read()
                 response = HttpResponse(content=data)
                 response["Content-Type"] = "audio/mpegurl"
-                response["Content-Disposition"] = f'''attachment; filename="playlist.m3u"'''
+                response[
+                    "Content-Disposition"
+                ] = f'''attachment; filename="playlist.m3u"'''
                 response["Cache-Control"] = "no-cache"
                 return response
 
@@ -149,7 +150,6 @@ class AudioViewSet(viewsets.ViewSet):
     @action(methods=["GET"], detail=True)
     def audio_info(self, request, pk, format=None):
         """Obtains the waveform for the audio, used for visualization."""
-
 
         def get_response(request):
             audio_document = self.get_object(pk)

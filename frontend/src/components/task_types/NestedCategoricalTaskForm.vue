@@ -1,5 +1,5 @@
 <template>
- <div class="task-form-container">
+  <div class="task-form-container">
     <TaskFormHeader :task="task" :read-only="readOnly" />
     <NestedLabelSet
       v-model="selected_labels"

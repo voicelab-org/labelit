@@ -7,9 +7,11 @@ from labelit.views import ProjectViewSet
 from labelit.tests import TestSetup
 
 
-class ProjectViewSetTests(TestSetup, TestCase,):
+class ProjectViewSetTests(
+    TestSetup,
+    TestCase,
+):
     def setUp(self):
-
         super().setUp()
         self.user = get_user_model().objects.create(
             email="tester@labelit",
@@ -35,20 +37,23 @@ class ProjectViewSetTests(TestSetup, TestCase,):
         self.assertEqual(response.status_code, 200)
 
     def test_create_project_successful(self):
-        request = self.request_factory.post("", data={
-            "name": "Transcribing meetings",
-            "is_audio_annotated": True,
-            "is_text_annotated": False,
-            "enable_region_annotation": False,
-            "are_sequenced_annotated": False,
-            'tasks': [self.task1.pk],
-            "time_inactivity_threshold": 5000,
-            "do_display_timer_time": False,
-            "does_audio_playing_count_as_activity": True,
-            "target_deadline": "2022-01-03",
-            "target_num_documents": 100,
-            "description": "This project consists in transcribing real-life meetings"
-        })
+        request = self.request_factory.post(
+            "",
+            data={
+                "name": "Transcribing meetings",
+                "is_audio_annotated": True,
+                "is_text_annotated": False,
+                "enable_region_annotation": False,
+                "are_sequenced_annotated": False,
+                "tasks": [self.task1.pk],
+                "time_inactivity_threshold": 5000,
+                "do_display_timer_time": False,
+                "does_audio_playing_count_as_activity": True,
+                "target_deadline": "2022-01-03",
+                "target_num_documents": 100,
+                "description": "This project consists in transcribing real-life meetings",
+            },
+        )
         self._authenticate(request)
         response = ProjectViewSet.as_view(actions={"post": "create"})(request)
         self.assertEqual(response.status_code, 201)

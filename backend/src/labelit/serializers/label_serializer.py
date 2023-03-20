@@ -50,7 +50,7 @@ class NestedCategoricalLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = NestedCategoricalLabel
         fields = [
-           "id",
+            "id",
             "name",
             "task",
             "parent_label",

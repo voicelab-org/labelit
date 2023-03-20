@@ -64,7 +64,7 @@ export default {
         }
         let vm = this;
 
-       if (!vm.selected_labels_loaded) {
+        if (!vm.selected_labels_loaded) {
           vm.selected_labels_loaded = true;
           return;
         }

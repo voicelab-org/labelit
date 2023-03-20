@@ -17,7 +17,7 @@
         <div class="select">
           <div class="bolder">{{ label.label.name }}</div>
           <v-select
-           :ref="'dropdown-' + label.label.id"
+            :ref="'dropdown-' + label.label.id"
             v-model="label_selections[i].selections"
             :items="label.children"
             item-text="name"
@@ -94,7 +94,7 @@ export default {
     label_selections: {
       deep: true,
       handler() {
-       if (this.label_selections == null) return;
+        if (this.label_selections == null) return;
         let selections = this.label_selections.reduce((prev, curr) => {
           return prev.concat(curr.selections);
         }, []);
@@ -134,7 +134,7 @@ export default {
       }
     },
     setSelections() {
-     let selected_labels = this.value;
+      let selected_labels = this.value;
       this.parentLabels.forEach(p_label => {
         let l = {
           parent_label: p_label,
@@ -154,7 +154,7 @@ export default {
     getLabelPillStyle(label) {
       return {
         'background-color': label.color,
-     };
+      };
     },
     isLabelSelected(label) {
       return (
@@ -208,7 +208,7 @@ export default {
     browseLabels(direction) {
       if (direction == 'right') {
         if (this.cursor_index == this.parentLabels.length - 1) {
-         this.cursor_index = 0;
+          this.cursor_index = 0;
         } else {
           this.cursor_index++;
         }
@@ -216,7 +216,7 @@ export default {
 
       if (direction == 'left') {
         if (this.cursor_index == 0) {
-         this.cursor_index = this.parentLabels.length - 1;
+          this.cursor_index = this.parentLabels.length - 1;
         } else {
           this.cursor_index--;
         }

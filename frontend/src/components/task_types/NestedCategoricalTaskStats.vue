@@ -1,7 +1,7 @@
 <template>
   <div class="task-stats">
     <h4>Stats for task: {{ task.name }}</h4>
-<div v-if="stats">
+    <div v-if="stats">
       <table v-if="stats.agreement" class="stats-table">
         <tr>
           <td class="left">{{ stats.agreement.metric }}</td>
@@ -11,7 +11,7 @@
       <div v-if="stats" class="barchart-container">
         <h5>Parent labels</h5>
         <BarChart
-         :data="
+          :data="
             getBarChartData(
               stats.parent_label_distribution,
               'labels__nestedcategoricallabel__parent_label__name',
@@ -64,7 +64,7 @@ export default {
   methods: {
     getBarChartData(distribution, name_prop, color_prop) {
       //labels__name, labels__color
-     if (!name_prop) name_prop = 'labels__name';
+      if (!name_prop) name_prop = 'labels__name';
       if (!color_prop) color_prop = 'labels__color';
       let data = {};
       data.labels = distribution.map(d => d[name_prop]);
@@ -74,7 +74,7 @@ export default {
           borderWidth: 2,
           barThickness: 60,
           backgroundColor: distribution.map(d => d[color_prop]),
-       },
+        },
       ];
       return data;
     },

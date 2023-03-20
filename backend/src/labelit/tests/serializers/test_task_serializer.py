@@ -37,7 +37,7 @@ class TaskSerializerTests(TestCase):
                     "html_guidelines",
                     "archived",
                     "created_at",
-                    "updated_at"
+                    "updated_at",
                 ]
             ),
         )
