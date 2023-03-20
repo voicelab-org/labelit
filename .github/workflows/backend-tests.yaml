@@ -18,6 +18,8 @@ env:
   DB_HOST: 127.0.0.1
   AUDIO_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
   IMAGE_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
+  AWS_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-bucket
+  AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-source-bucket
   AWS_S3_OPTIONS: local
   AWS_ENDPOINT_URL: http://127.0.0.1:9000
 
@@ -40,9 +42,12 @@ jobs:
         ports:
           - 5432:5432
       minio:
-        image: fclairamb/minio-github-actions
-        ports:
-          - 9000:9000
+        # See: https://stackoverflow.com/a/64188150/5155484
+        image: minio/minio:edge-cicd
+        options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
+        env:
+          MINIO_ROOT_USER: ${{ env.AWS_ACCESS_KEY_ID }}
+          MINIO_ROOT_PASSWORD: ${{ env.AWS_SECRET_ACCESS_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
@@ -54,6 +59,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Fetch mc client
+        run: 
+      - name: Create the test buckets
+        run: |
+          curl -o ./mc -# https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
+          ./mc alias set minio http://minio:9000 ${{ env.AWS_ACCESS_KEY_ID }} ${{ env.AWS_SECRET_ACCESS_KEY }}
+          ./mc mb minio/${{ env.AWS_AUDIO_STORAGE_BUCKET_NAME }}
+          ./mc mb minio/${{ env.AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME }}
+          ./mc ls minio
+          rm -v ./mc
       - name: Test with pytest
         working-directory: backend/src
         run: |
