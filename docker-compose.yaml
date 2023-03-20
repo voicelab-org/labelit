@@ -51,13 +51,13 @@ services:
       AUDIO_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
       AWS_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-bucket
       AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-source-bucket
+      AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
       AWS_REGION_NAME: eu-west-1
       AWS_ENDPOINT_URL: http://minio:9000/
       AWS_ACCESS_KEY_ID: EXAMPLEKEYID
       AWS_SECRET_ACCESS_KEY: EXAMPLEKEYCONTENT
       AWS_S3_OPTIONS: local
       IMAGE_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
-      AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
       S3_DIRECT_SERVE: "false" # was true
       SEGMENT_EXPIRATION_TIME_IN_SECONDS: 3600
       #SEGMENT_EXPIRATION_TIME_IN_SECONDS: 0  # for easier debugging

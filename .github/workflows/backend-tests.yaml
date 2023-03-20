@@ -20,6 +20,7 @@ env:
   IMAGE_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
   AWS_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-bucket
   AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-source-bucket
+  AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
   AWS_S3_OPTIONS: local
   AWS_ENDPOINT_URL: http://127.0.0.1:9000
 
@@ -67,6 +68,7 @@ jobs:
           ./mc alias set minio http://minio:9000 ${{ env.AWS_ACCESS_KEY_ID }} ${{ env.AWS_SECRET_ACCESS_KEY }}
           ./mc mb minio/${{ env.AWS_AUDIO_STORAGE_BUCKET_NAME }}
           ./mc mb minio/${{ env.AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME }}
+          ./mc mb minio/${{ env.AWS_IMAGE_STORAGE_BUCKET_NAME }}
           ./mc ls minio
           rm -v ./mc
       - name: Test with pytest
