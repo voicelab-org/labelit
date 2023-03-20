@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from labelit.serializers.document_serializer import MinimalDocumentSerializer
+from labelit.serializers.document_serializer import MinimalDocumentSerializer 
+from labelit.serializers.annotation_serializer import AnnotationWithLabelsSerializer
 from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
 from labelit.serializers import ExportedBatchSerializer
-from labelit.models import Project, BatchDocument, Document
+from labelit.models import Project, BatchDocument, Document, Annotation
 
 from django.db.models import Case, When, Value, IntegerField, F
 
@@ -14,7 +15,8 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
     num_done_batches = serializers.SerializerMethodField()
     batches = ExportedBatchSerializer(many=True, required=False)
     documents = serializers.SerializerMethodField()
-
+    annotations = serializers.SerializerMethodField()
+    
     class Meta:
         model = Project
         fields = [
@@ -30,6 +32,7 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
             "batches",
             "archived",
             "documents",
+            'annotations',
         ]
 
     def get_num_documents(self, obj):
@@ -58,6 +61,19 @@ class ExportedProjectSerializer(serializers.ModelSerializer):
         serializer = MinimalDocumentSerializer(documents, many=True)
         return serializer.data
 
+
+    def get_annotations(self, obj):
+        batch_annotations = Annotation.objects.filter(
+                batch__in=obj.batches.all(),
+                has_qa_invalidated=False,
+                is_done=True
+            )
+        annotation = Annotation.objects.filter(
+            id__in=batch_annotations.values("id")
+        )
+        serializer = AnnotationWithLabelsSerializer(annotation, many=True)
+        return serializer.data
+    
     def get_num_done_documents(self, obj):
         return obj.get_num_done_documents()
 

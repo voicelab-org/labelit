@@ -1,4 +1,4 @@
-export const SNACKBAR_TYPE = {
+export const SNACKBAR_TYPE_COLOR = {
   ERROR: 'error',
   SUCCESS: 'success',
   INFO: 'info',
@@ -14,9 +14,11 @@ export const snackbar = {
   mutations: {
     SHOW_MESSAGE(state, payload) {
       state.text = payload.text || 'Unknown notification';
-      state.type = payload.type || SNACKBAR_TYPE.SUCCESS;
+      state.type = payload.type || SNACKBAR_TYPE_COLOR.SUCCESS;
       state.timeout =
-        payload.timeout || payload.type === SNACKBAR_TYPE.ERROR ? -1 : 3000;
+        payload.timeout || payload.type === SNACKBAR_TYPE_COLOR.ERROR
+          ? -1
+          : 3000;
     },
   },
   actions: {
