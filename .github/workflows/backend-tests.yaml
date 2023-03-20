@@ -13,6 +13,13 @@ env:
   DB_USER: postgres
   DB_NAME: test
   DB_PASSWORD: postgres
+  AWS_ACCESS_KEY_ID: minioadmin
+  AWS_SECRET_ACCESS_KEY: minioadmin
+  DB_HOST: 127.0.0.1
+  AUDIO_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
+  IMAGE_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
+  AWS_S3_OPTIONS: local
+  AWS_ENDPOINT_URL: http://minio:9000/
 
 jobs:
   test:
@@ -32,6 +39,10 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      minio:
+        image: fclairamb/minio-github-actions
+        ports:
+          - 9000:9000
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
@@ -45,7 +56,5 @@ jobs:
           pip install -r requirements.txt
       - name: Test with pytest
         working-directory: backend/src
-        env:
-          DB_HOST: 127.0.0.1
         run: |
           pytest
