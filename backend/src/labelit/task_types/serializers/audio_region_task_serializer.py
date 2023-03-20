@@ -17,6 +17,7 @@ class CreateOrUpdateAudioRegionTaskSerializer(serializers.ModelSerializer):
             "archived",
         ]
 
+
 class AudioRegionTaskSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField("get_labels")
 

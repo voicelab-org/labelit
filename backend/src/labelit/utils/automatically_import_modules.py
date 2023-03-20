@@ -5,9 +5,9 @@ from importlib import import_module
 
 
 def automatically_import_modules(
-        package_dir_path: str,
-        name: str,
-        globals_dict: dict,
+    package_dir_path: str,
+    name: str,
+    globals_dict: dict,
 ):
     # iterate through the modules in the package
     # package_dir = Path(__file__).resolve().parent

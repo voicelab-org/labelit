@@ -5,6 +5,7 @@ from labelit.models import (
 from rest_polymorphic.serializers import PolymorphicSerializer
 from labelit.serializers.label_serializer import LabelPolymorphicSerializer
 
+
 class CreateOrUpdateTextEditionTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = TextEditionTask
@@ -14,6 +15,7 @@ class CreateOrUpdateTextEditionTaskSerializer(serializers.ModelSerializer):
             "can_documents_be_invalidated",
             "archived",
         ]
+
 
 class TextEditionTaskSerializer(serializers.ModelSerializer):
     labels = LabelPolymorphicSerializer(many=True, required=False, read_only=True)
@@ -32,4 +34,3 @@ class TextEditionTaskSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-
