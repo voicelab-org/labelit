@@ -63,7 +63,7 @@ jobs:
       - name: Create the test buckets
         run: |
           curl -o ./mc -# https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
-          ./mc alias set minio http://minio:9000 ${{ env.AWS_ACCESS_KEY_ID }} ${{ env.AWS_SECRET_ACCESS_KEY }}
+          ./mc alias set minio ${{ env.AWS_ENDPOINT_URL }} ${{ env.AWS_ACCESS_KEY_ID }} ${{ env.AWS_SECRET_ACCESS_KEY }}
           ./mc mb minio/${{ env.AWS_AUDIO_STORAGE_BUCKET_NAME }}
           ./mc mb minio/${{ env.AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME }}
           ./mc mb minio/${{ env.AWS_IMAGE_STORAGE_BUCKET_NAME }}
