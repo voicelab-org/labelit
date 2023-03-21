@@ -10,7 +10,7 @@ on:
       - develop
 
 env:
-  DB_HOST: localhost
+  DB_HOST: postgres
   DB_USER: postgres
   DB_NAME: test
   DB_PASSWORD: postgres
