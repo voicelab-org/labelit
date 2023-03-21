@@ -74,6 +74,7 @@ jobs:
       - name: Run migrations
         working-directory: backend/src
         run: |
+          python manage.py check --database default
           python manage.py migrate
       - name: Test with pytest
         working-directory: backend/src
