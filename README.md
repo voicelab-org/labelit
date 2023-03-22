@@ -36,7 +36,6 @@ We maintain a documentation:
 
 A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https://labelit.demo.batvoice.ai)
 
-
 | Account type | Username | Password |
 |---|---|---|
 | Annotator account | `demo@demo.com` | `dem0#nnotator` |
