@@ -20,35 +20,31 @@ class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
 
 
 def _get_mapping(
-        is_create_or_update=False,
+    is_create_or_update=False,
 ):
     def _get_dotted_paths():
         def _get_task_names():
-
             task_model_filenames = list(
-                    filter(
-                        lambda fname: fname.endswith('task.py'),
-                        os.listdir(
-                            os.path.join(
-                                os.path.dirname(os.path.abspath(__file__)),
-                                '../models/task_types'
-                            )
+                filter(
+                    lambda fname: fname.endswith("task.py"),
+                    os.listdir(
+                        os.path.join(
+                            os.path.dirname(os.path.abspath(__file__)),
+                            "../models/task_types",
                         )
-                    )
+                    ),
+                )
             )
 
             def _model_file_name_to_class_name(model_filename):
                 return "".join(
                     map(
                         lambda name: name.capitalize(),
-                        model_filename.split('.')[0].split('_')
+                        model_filename.split(".")[0].split("_"),
                     )
                 )
 
-            return list(map(
-                _model_file_name_to_class_name,
-                task_model_filenames
-            ))
+            return list(map(_model_file_name_to_class_name, task_model_filenames))
 
         task_names = _get_task_names()
 
