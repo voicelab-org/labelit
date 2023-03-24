@@ -34,4 +34,3 @@ class TranscriptionTaskSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-

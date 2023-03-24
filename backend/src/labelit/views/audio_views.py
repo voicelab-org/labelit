@@ -116,16 +116,23 @@ class AudioViewSet(viewsets.ViewSet):
 
         # Serve HLS
         if use_hls:
-            playlist = storage.connection.meta.client.get_object(
-                Bucket=storage.bucket_name, Key=audio_filename
-            )
-            data = playlist["Body"].read()
-            response = HttpResponse(content=data)
-            response["Content-Type"] = "audio/mpegurl"
-            response["Content-Disposition"] = f'''attachment; filename="playlist.m3u"'''
-            response["Cache-Control"] = "no-cache"
 
-            gzip_middleware = GZipMiddleware()
+            def get_response(request):
+                playlist = storage.connection.meta.client.get_object(
+                    Bucket=storage.bucket_name, Key=audio_filename
+                )
+                data = playlist["Body"].read()
+                response = HttpResponse(content=data)
+                response["Content-Type"] = "audio/mpegurl"
+                response[
+                    "Content-Disposition"
+                ] = f'''attachment; filename="playlist.m3u"'''
+                response["Cache-Control"] = "no-cache"
+                return response
+
+            response = get_response(request)
+
+            gzip_middleware = GZipMiddleware(get_response)
 
             return gzip_middleware.process_response(request, response)
 
@@ -144,28 +151,32 @@ class AudioViewSet(viewsets.ViewSet):
     def audio_info(self, request, pk, format=None):
         """Obtains the waveform for the audio, used for visualization."""
 
-        audio_document = self.get_object(pk)
+        def get_response(request):
+            audio_document = self.get_object(pk)
 
-        if not audio_document.dataset.is_streamed:
-            raise Http404
+            if not audio_document.dataset.is_streamed:
+                raise Http404
 
-        waveform_key = os.path.join(
-            os.path.dirname(audio_document.hls_audio_file_key), "waveform.json"
-        )
+            waveform_key = os.path.join(
+                os.path.dirname(audio_document.hls_audio_file_key), "waveform.json"
+            )
 
-        if not self._check_file_is_reachable(waveform_key):
-            return HttpResponseForbidden(f"Access forbidden to {waveform_key}.")
+            if not self._check_file_is_reachable(waveform_key):
+                return HttpResponseForbidden(f"Access forbidden to {waveform_key}.")
 
-        # The playlist is sent directly to the user (in this case, no redirection is needed)
-        waveform = storage.connection.meta.client.get_object(
-            Bucket=storage.bucket_name, Key=waveform_key
-        )
-        data = json.loads(waveform["Body"].read().decode("utf-8"))
-        response = JsonResponse(data)
-        # One week cache
-        response["Cache-Control"] = "private, max-age=604800, immutable"
+            # The playlist is sent directly to the user (in this case, no redirection is needed)
+            waveform = storage.connection.meta.client.get_object(
+                Bucket=storage.bucket_name, Key=waveform_key
+            )
+            data = json.loads(waveform["Body"].read().decode("utf-8"))
+            response = JsonResponse(data)
+            # One week cache
+            response["Cache-Control"] = "private, max-age=604800, immutable"
+            return response
 
-        gzip_middleware = GZipMiddleware()
+        gzip_middleware = GZipMiddleware(get_response)
+
+        response = get_response(request)
 
         return gzip_middleware.process_response(request, response)
 

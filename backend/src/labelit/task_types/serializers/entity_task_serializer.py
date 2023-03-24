@@ -5,6 +5,7 @@ from labelit.models import (
 from rest_polymorphic.serializers import PolymorphicSerializer
 from labelit.serializers.label_serializer import LabelPolymorphicSerializer
 
+
 class CreateOrUpdateEntityTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntityTask
@@ -15,6 +16,7 @@ class CreateOrUpdateEntityTaskSerializer(serializers.ModelSerializer):
             "labels",
             "archived",
         ]
+
 
 class EntityTaskSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField("get_labels")
@@ -40,4 +42,3 @@ class EntityTaskSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-

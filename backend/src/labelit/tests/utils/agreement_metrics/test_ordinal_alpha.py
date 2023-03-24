@@ -36,7 +36,7 @@ class OrdinalAlphaTests(TestCase):
         self.batch.documents.set([self.doc1, self.doc2, self.doc3])
 
         self.task = OrdinalTask.objects.create(
-            name="Arousa",
+            name="Arousal",
         )
         self.project.tasks.add(self.task)
         self.label1 = OrdinalLabel.objects.create(index=0, task=self.task)
@@ -89,13 +89,17 @@ class OrdinalAlphaTests(TestCase):
 
     def test_format_labelit_ordinal_annotations(self):
         formatted = self.metric.format_annotations_queryset(Annotation.objects.all())
+        """
+            def format_annotations_queryset(self, annotations):
+                Returns a list of tuples (annotator_id, document_id, label value).
+        """
         self.assertEqual(
             set(formatted),
             {
-                (4, 6, self.label1.pk),
-                (1, 7, self.label1.pk),
-                (1, 6, self.label1.pk),
-                (4, 7, self.label2.pk),
+                (self.u1.pk, self.doc1.pk, self.label1.pk),
+                (self.u1.pk, self.doc2.pk, self.label1.pk),
+                (self.u2.pk, self.doc1.pk, self.label1.pk),
+                (self.u2.pk, self.doc2.pk, self.label2.pk),
             },
         )
 

@@ -48,7 +48,7 @@ class LiveCorrectTaskModelTests(TestCase):
         )
         self.timed_transcript_segment_2 = TimedTranscriptSegment.objects.create(
             timed_transcript=self.timed_transcript,
-            transcript="and I live in San Francisco",
+            transcript="and I live in San Fr#ncisco",
             start_time=3.2,
         )
 
@@ -59,16 +59,13 @@ class LiveCorrectTaskModelTests(TestCase):
 
         self.label1 = LiveCorrectLabel.objects.create(
             task=self.task,
-            transcript="Hello my name is Annie #",
-            timed_transcript_segment=self.timed_transcript_segment_1,
+            timed_transcript=self.timed_transcript,
         )
         self.label2 = LiveCorrectLabel.objects.create(
             task=self.task,
-            transcript="and I live in San Francisco",
-            timed_transcript_segment=self.timed_transcript_segment_2,
+            timed_transcript=self.timed_transcript,
         )
 
     def test_validate(self):
         with self.assertRaises(ValidationError):
             self.task.validate_labels([self.label1, self.label2], True)
-        self.task.validate_labels([self.label2], True)

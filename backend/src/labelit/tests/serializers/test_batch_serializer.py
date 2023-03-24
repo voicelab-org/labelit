@@ -58,6 +58,7 @@ class BatchSerializerTests(TestCase):
                     "num_annotators_per_document",
                     "annotation_mode",
                     "annotation_limit",
+                    "archived",
                 ]
             ),
         )

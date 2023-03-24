@@ -24,6 +24,7 @@ class CategoricalTaskSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+
 class CreateOrUpdateCategoricalTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoricalTask

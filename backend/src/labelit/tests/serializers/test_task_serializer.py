@@ -35,6 +35,9 @@ class TaskSerializerTests(TestCase):
                     "can_documents_be_invalidated",
                     "labels",
                     "html_guidelines",
+                    "archived",
+                    "created_at",
+                    "updated_at",
                 ]
             ),
         )
