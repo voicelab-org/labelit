@@ -68,9 +68,9 @@ jobs:
           rm -v ./mc
       - name: Install os dependencies
         run: |
-          add-apt-repository ppa:chris-needham/ppa
-          apt-get update && \
-          apt-get install -y --no-install-recommends \
+          sudo add-apt-repository ppa:chris-needham/ppa
+          sudo apt-get update && \
+          sudo apt-get install -y --no-install-recommends \
             ffmpeg \
             audiowaveform
       - name: Install python dependencies
