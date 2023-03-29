@@ -25,8 +25,8 @@ A demo version of `LabelIt` is hosted at [https://labelit.demo.batvoice.ai](http
     - Username: `demo@demo.com`
     - Password: `dem0#nnotator`
 - QA account:
-    - Username: `dem0Q#235711`
-    - Password: `demo`
+    - Username: `qa@qa.com`
+    - Password: `dem0Q#235711`
 
 ## Supported installation types
 
