@@ -40,7 +40,7 @@ A demo version of LabelIt is hosted at [https://labelit.demo.batvoice.ai](https:
 | Account type | Username | Password |
 |---|---|---|
 | Annotator account | `demo@demo.com` | `dem0#nnotator` |
-| QA account | `qa@qa.com` | `demo` |
+| QA account | `qa@qa.com` | `dem0Q#235711` |
 
 
 ## Maintainers / Sponsors
