@@ -55,13 +55,8 @@ def get_audio_duration_in_seconds(file_name):
     )
 
 
-def generate_dynamic_waveform_from_audio(input_file, output_file, create_folder=False):
+def generate_dynamic_waveform_from_audio(input_file, output_waveform):
     """Given an audio file, it generates its waveform and stores it into a .json file"""
-
-    if create_folder:
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
-
-    output_waveform = os.path.splitext(input_file)[0] + "_waveform.json"
     subprocess.call(
         [
             "audiowaveform",
@@ -97,15 +92,14 @@ def generate_waveform_for_dataset(dataset_name):
 
     audio_files_queryset = Document.objects.filter(dataset__name=dataset_name)
     audio_files = {
-        file for file in audio_files_queryset.values_list("audio_filename", flat=True)
+        file.audio_filename: file.audio_waveform_json for file in audio_files_queryset
     }
 
     progress_bar = tqdm(audio_files)
-    for audio_file_name in progress_bar:
+    for doc in progress_bar:
+        audio_file_name = doc
+        waveform_audio_file_name = audio_files[doc]
         progress_bar.set_description(f"Generating Wave Peaks for {audio_file_name}...")
-        waveform_audio_file_name = (
-            os.path.splitext(audio_file_name)[0] + "_waveform.json"
-        )
 
         try:
             head_obj = check_file_exists(audio_file_name)
@@ -125,7 +119,6 @@ def generate_waveform_for_dataset(dataset_name):
                 generate_dynamic_waveform_from_audio(
                     input_file=audio_file_name,
                     output_file=waveform_audio_file_name,
-                    create_folder=False,
                 )
 
                 storage.bucket.upload_file(
