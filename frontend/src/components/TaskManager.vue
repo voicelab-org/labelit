@@ -202,20 +202,29 @@ export default {
 
       let schema = TaskSchemas[t.resourcetype + 'Schema'];
       let promises = [];
+      console.log('creating ...');
       if (Object.keys(this.schema.properties).includes('labels')) {
+        console.log('labels ...');
+
         promises = this.createLabels(t.labels, t.resourcetype);
       }
       Promise.all(promises).then(ids => {
+        console.log('Promise ...');
+
         let task_payload = {
           resourcetype: t.resourcetype,
           //name: this.model.name,
           //can_documents_be_invalidated: this.model.can_documents_be_invalidated,
         };
         Object.keys(this.schema.properties).forEach(schema_key => {
+          console.log('forEach ...', schema_key);
+
           if (schema_key == 'labels') return;
           task_payload[schema_key] = this.model[schema_key];
         });
         if (Object.keys(schema).includes('labels')) {
+          console.log('Object ...');
+
           task_payload = {
             labels: ids,
             ...task_payload,
@@ -223,6 +232,8 @@ export default {
         }
 
         TaskService.createTask(task_payload).then(() => {
+          console.log('createTask ...');
+
           this.show_dialog = false;
           this.model = {};
           this.$emit('changed');

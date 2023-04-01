@@ -26,7 +26,8 @@ services:
       - postgres
 
   minio:
-    image: minio/minio:RELEASE.2023-01-02T09-40-09Z
+    image: minio/minio:RELEASE.2022-10-24T18-35-07Z.hotfix.ce525fdaf
+    #image: minio/minio:RELEASE.2023-01-02T09-40-09Z #had some issue with this ver
     ports:
       - 9000:9000
     volumes:
@@ -58,9 +59,9 @@ services:
       AWS_SECRET_ACCESS_KEY: EXAMPLEKEYCONTENT
       AWS_S3_OPTIONS: local
       IMAGE_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
-      S3_DIRECT_SERVE: "false" # was true
       SEGMENT_EXPIRATION_TIME_IN_SECONDS: 3600
       #SEGMENT_EXPIRATION_TIME_IN_SECONDS: 0  # for easier debugging
+      MIN_AUDIO_SIZE_TO_GENERATE_PEAKS: 0 # small audio for test only Prod shoud be 3 MB
       SECRET_KEY: "o4_7tyfr^o4^4nx_(-6umggzwo%ksx32y3x^amn7o&c7*o-q!d"
       ALLOWED_HOST: "localhost"
       PYTHONUNBUFFERED: "unbuffered"

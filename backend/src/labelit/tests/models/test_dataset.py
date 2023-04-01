@@ -37,9 +37,10 @@ class DatasetModelTests(TestCase):
         self.document = Document.objects.create(
             text="lovediit", audio_filename="sample_data.mp3", dataset=self.dataset
         )
-
-    def test_hls_signal(self):
-        self.dataset.is_streamed = True
         self.dataset.save()
 
-        self.assertTrue(check_file_exists(self.document.hls_audio_file_key))
+    def test_audio_waveform_json_signal(self):
+        print(
+            "check_file_exists ", check_file_exists(self.document.audio_waveform_json)
+        )
+        self.assertTrue(check_file_exists(self.document.audio_waveform_json))
