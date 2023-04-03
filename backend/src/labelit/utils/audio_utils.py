@@ -55,7 +55,7 @@ def get_audio_duration_in_seconds(file_name):
     )
 
 
-def generate_dynamic_waveform_from_audio(input_file, output_waveform):
+def generate_dynamic_waveform_from_audio(input_file, output_file):
     """Given an audio file, it generates its waveform and stores it into a .json file"""
     subprocess.call(
         [
@@ -63,7 +63,7 @@ def generate_dynamic_waveform_from_audio(input_file, output_waveform):
             "-i",
             input_file,
             "-o",
-            output_waveform,
+            output_file,
             "--pixels-per-second",
             "100",
             "-b",
@@ -72,7 +72,7 @@ def generate_dynamic_waveform_from_audio(input_file, output_waveform):
         ]
     )
 
-    with open(output_waveform) as json_file:
+    with open(output_file) as json_file:
         json_waveform = json.load(json_file)
 
     a = np.array(json_waveform["data"])
@@ -82,7 +82,7 @@ def generate_dynamic_waveform_from_audio(input_file, output_waveform):
     json_waveform["waveform"] = datascale.tolist()
     del json_waveform["data"]
 
-    with open(output_waveform, "w") as outfile:
+    with open(output_file, "w") as outfile:
         json.dump(json_waveform, outfile)
 
 
