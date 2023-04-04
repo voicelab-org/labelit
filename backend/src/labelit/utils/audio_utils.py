@@ -106,13 +106,10 @@ def generate_waveform_for_dataset(dataset_name):
         except:
             head_obj = None
 
-        MIN_AUDIO_SIZE_TO_GENERATE_PEAKS = int(
-            os.getenv("MIN_AUDIO_SIZE_TO_GENERATE_PEAKS", 4)
-        )
         if (
             head_obj
             and head_obj["ContentLength"]
-            > MIN_AUDIO_SIZE_TO_GENERATE_PEAKS * 1024 * 1024
+            > settings.MIN_AUDIO_SIZE_TO_GENERATE_PEAKS * 1024 * 1024
         ):
             if not check_file_exists(waveform_audio_file_name):  # checkwaveform
                 storage.bucket.download_file(audio_file_name, audio_file_name)
