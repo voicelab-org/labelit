@@ -23,6 +23,8 @@ env:
   AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
   AWS_S3_OPTIONS: local
   AWS_ENDPOINT_URL: http://localhost:9000
+  MIN_AUDIO_SIZE_TO_GENERATE_PEAKS: 0 # small audio for test only Prod shoud be 3 MB
+
 
 jobs:
   test:

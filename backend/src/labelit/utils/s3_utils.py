@@ -8,8 +8,9 @@ logger = logging.getLogger(__name__)
 
 
 def check_file_exists(key, current_storage=storage):
+    head_obj = None
     try:
-        current_storage.connection.meta.client.head_object(
+        head_obj = current_storage.connection.meta.client.head_object(
             Bucket=current_storage.bucket_name, Key=key
         )
     except ClientError as err:
@@ -18,7 +19,7 @@ def check_file_exists(key, current_storage=storage):
         else:
             raise
 
-    return True
+    return head_obj
 
 
 def upload_folder_to_s3_bucket_folder(

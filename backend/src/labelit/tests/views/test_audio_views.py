@@ -67,76 +67,14 @@ class AudioViewSetTests(TestCase):
     def _authenticate(self, request):
         force_authenticate(request, user=self.annotator1)
 
-    def test_use_hls(self):
+    def test_serve_url(self):
         request = self.request_factory.get("")
         self._authenticate(request)
 
-        self.dataset.is_streamed = False
         self.dataset.save()
         response = AudioViewSet.as_view(
-            actions={"get": "is_using_hls"},
+            actions={"get": "serve_url"},
         )(request, pk=self.document.id)
-        self.assertEqual(json.loads(response.content.decode("utf-8"))["use_hls"], False)
-        self.assertEqual(response.status_code, 200)
-
-        self.dataset.is_streamed = True
         self.dataset.save()
-        response = AudioViewSet.as_view(
-            actions={"get": "is_using_hls"},
-        )(request, pk=self.document.id)
-        self.assertEqual(json.loads(response.content.decode("utf-8"))["use_hls"], True)
-        self.assertEqual(response.status_code, 200)
-
-    def test_retrieve(self):
-        request = self.request_factory.get("")
-        self._authenticate(request)
-
-        self.dataset.is_streamed = False
-        self.dataset.save()
-        response = AudioViewSet.as_view(
-            actions={"get": "retrieve"},
-        )(request, pk=self.document.id)
-        self.assertEqual(response.headers["content-type"], "binary/octet-stream")
-        self.assertEqual(response.status_code, 200)
-
-        self.dataset.is_streamed = True
-        self.dataset.save()
-        response = AudioViewSet.as_view(
-            actions={"get": "is_using_hls"},
-        )(request, pk=self.document.id)
         self.assertEqual(response.headers["content-type"], "application/json")
-        self.assertEqual(response.status_code, 200)
-
-    def test_audio_info(self):
-        request = self.request_factory.get("")
-        self._authenticate(request)
-
-        self.dataset.is_streamed = True
-        self.dataset.save()
-        response = AudioViewSet.as_view(
-            actions={"get": "audio_info"},
-        )(request, pk=self.document.id)
-        self.assertIn("duration", json.loads(response.content.decode("utf-8")).keys())
-        self.assertIn("waveform", json.loads(response.content.decode("utf-8")).keys())
-        self.assertEqual(response.headers["content-type"], "application/json")
-        self.assertEqual(response.status_code, 200)
-
-    def test_segments(self):
-        request = self.request_factory.get("")
-        self._authenticate(request)
-
-        self.dataset.is_streamed = True
-        self.dataset.save()
-        response = AudioViewSet.as_view(
-            actions={"get": "retrieve"},
-        )(request, pk=self.document.id)
-        playlist_info = response.content.decode("utf-8")
-
-        playlist = m3u8.loads(playlist_info)
-        segment_id = playlist.segments[0].uri.split("/")[1]
-        response = AudioViewSet.as_view(
-            actions={"get": "segments"},
-        )(request, pk=self.document.id, segment_id=segment_id)
-
-        self.assertEqual(response.headers["content-type"], "binary/octet-stream")
         self.assertEqual(response.status_code, 200)

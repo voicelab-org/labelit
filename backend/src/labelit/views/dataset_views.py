@@ -71,15 +71,13 @@ class DatasetUploadAPI(APIView):
             raise ParseError("Empty content")
 
         self.create_dataset(
-            file=request.data["file"],
-            dataset_name=request.data["dataset_name"],
-            is_streamed=distutils.util.strtobool(request.data["is_streamed"]),
+            file=request.data["file"], dataset_name=request.data["dataset_name"]
         )
 
         return Response({"status": "created"}, status=status.HTTP_201_CREATED)
 
     @classmethod
-    def create_dataset(cls, file, dataset_name, is_streamed):
+    def create_dataset(cls, file, dataset_name):
         data = pd.read_csv(file)
         if not all(
             c in data.columns
@@ -91,7 +89,7 @@ class DatasetUploadAPI(APIView):
 
         dataset, dataset_created = Dataset.objects.get_or_create(name=dataset_name)
         cls.create_docs(data, dataset)
-        Dataset.objects.filter(id=dataset).update(is_streamed=is_streamed)
+        Dataset.objects.filter(id=dataset)
 
     @classmethod
     def create_docs(cls, docs_data, dataset):

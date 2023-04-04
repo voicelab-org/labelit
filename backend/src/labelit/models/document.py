@@ -1,5 +1,4 @@
 from django.db import models
-from labelit.utils.audio_utils import file_key_to_hls_file_key
 import os
 from django.db.models import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
@@ -39,8 +38,8 @@ class Document(models.Model):
     metadata = JSONField(encoder=DjangoJSONEncoder, blank=True, null=True)
 
     @property
-    def hls_audio_file_key(self):
-        return file_key_to_hls_file_key(os.path.splitext(self.audio_filename)[0])
+    def audio_waveform_json(self):
+        return os.path.splitext(self.audio_filename)[0] + "_waveform.json"
 
     class Meta:
         app_label = "labelit"

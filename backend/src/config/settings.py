@@ -219,19 +219,13 @@ AWS_S3_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_S3_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
 AWS_DEFAULT_ACL = None
 
-# HLS related params
-S3_DIRECT_SERVE = strtobool(
-    os.getenv("S3_DIRECT_SERVE", "true")
-)  # Set to True when in the cloud, False locally.
-
-### HACK ALERT !!
-S3_DIRECT_SERVE = False
-### END HACK
 
 SEGMENT_EXPIRATION_TIME_IN_SECONDS = int(
     os.getenv("SEGMENT_EXPIRATION_TIME_IN_SECONDS", 3600)
 )
 NUM_ELEMENTS_IN_WAVEFORM = 1024
+
+MIN_AUDIO_SIZE_TO_GENERATE_PEAKS = int(os.getenv("MIN_AUDIO_SIZE_TO_GENERATE_PEAKS", 4))
 
 LOGGING = {
     "version": 1,
