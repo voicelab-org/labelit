@@ -225,6 +225,8 @@ SEGMENT_EXPIRATION_TIME_IN_SECONDS = int(
 )
 NUM_ELEMENTS_IN_WAVEFORM = 1024
 
+MIN_AUDIO_SIZE_TO_GENERATE_PEAKS = int(os.getenv("MIN_AUDIO_SIZE_TO_GENERATE_PEAKS", 4))
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
