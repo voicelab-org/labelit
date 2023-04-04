@@ -29,7 +29,6 @@ class AudioViewSet(viewsets.ViewSet):
             raise Http404
 
     def _check_file_is_reachable(self, audio_filename):
-        print("audio_filename", audio_filename)
         head = None
         try:
             head = storage.connection.meta.client.head_object(

@@ -90,8 +90,6 @@ class StatsView(APIView):
                 )
             )
 
-            print("stats_per_annotator", stats_per_annotator)
-
             # number of annotated docs per annotator per day over period
             completed_document_annotator_pairs_per_day = (
                 completed_document_annotator_pairs.annotate(

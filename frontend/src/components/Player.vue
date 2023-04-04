@@ -386,10 +386,8 @@ export default {
       DocumentService.getAudioUrl(vm.document.id).then(res => {
         var data = res.data;
         var waveform = data.waveform;
-        console.log('waveform', res.data);
 
         if ((waveform == null) & (data.size > 5 * 1024 * 1024)) {
-          console.log('waveform', SNACKBAR_TYPE_COLOR.INFO);
           let audio_size = Math.ceil(data.size / 1024 / 1024);
           let notification = {
             type: SNACKBAR_TYPE_COLOR.INFO,

@@ -40,7 +40,4 @@ class DatasetModelTests(TestCase):
         self.dataset.save()
 
     def test_audio_waveform_json_signal(self):
-        print(
-            "check_file_exists ", check_file_exists(self.document.audio_waveform_json)
-        )
         self.assertTrue(check_file_exists(self.document.audio_waveform_json))
