@@ -40,7 +40,7 @@
             >
               <td>{{ task.name }}</td>
               <td>{{ task.resourcetype }}</td>
-              <td>
+              <td v-if="isAdmin">
                 <TaskMenu v-model="shown_tasks[i]" @edit="showEdit" />
               </td>
             </tr>
