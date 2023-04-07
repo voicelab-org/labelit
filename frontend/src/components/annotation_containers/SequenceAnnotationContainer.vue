@@ -67,30 +67,6 @@
         </v-stepper>
       </div>
     </v-card>
-    <!--<div v-if="annotations" id="annotation-forms-t">
-      <div
-          v-for="(annotation, i) in annotations"
-          :key="annotation.id"
-          :class="getAnnotationClasses(annotation, i == focus_index)"
-      >
-        <component
-            :is="getFormForTask(getTaskForAnnotation(annotation))"
-            :annotation="annotation"
-            :time="time"
-            :task="getTaskForAnnotation(annotation)"
-            :submitting="submitting"
-            :review-mode="reviewMode"
-            :document="document"
-            :focused="i == focus_index"
-            @submitted="$emit('submitted')"
-            @submiterror="$emit('submiterror')"
-            @focus="focus_index = i"
-        />
-        <div v-if="annotation.qa_invalidation_comment">
-          {{ annotation.qa_invalidation_comment }}
-        </div>
-      </div>
-    </div>-->
   </div>
 </template>
 
