@@ -18,14 +18,19 @@ class TestSetup:
     def setUp(self):
         self.dataset = Dataset.objects.get(pk=3)
         self.project = Project.objects.get(pk=6)
+
         self.batch1 = Batch.objects.get(pk=10)
         self.doc1 = Document.objects.get(pk=6)
         self.doc2 = Document.objects.get(pk=7)
         self.doc3 = Document.objects.get(pk=8)
 
+        self.batch1_annotators = self.batch1.annotators.all()
+
         self.batch2 = Batch.objects.get(pk=11)
         self.doc4 = Document.objects.get(pk=9)
         self.doc5 = Document.objects.get(pk=10)
+
+        self.batch2_annotators = self.batch2.annotators.all()
 
         self.user1 = User.objects.all().first()
         self.user2 = User.objects.all()[1]

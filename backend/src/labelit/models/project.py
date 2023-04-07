@@ -45,7 +45,6 @@ class Project(models.Model):
     tasks = models.ManyToManyField(
         "labelit.Task",
         related_name="projects",
-        through="ProjectTask"
     )
     archived = models.BooleanField(
         default=False,
@@ -63,16 +62,6 @@ class Project(models.Model):
         "Description of the project",
         null=True,
         blank=True,
-    )
-
-    task_presentation = models.CharField(
-        "Configures how tasks are presented to annotators - as a list containing a task, in sequence, etc.",
-        max_length=3000,
-        choices=[
-            ('list', 'list'),
-            ('sequence', 'sequence'),
-        ],
-        default='list',
     )
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)

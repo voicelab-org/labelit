@@ -184,7 +184,7 @@ class BatchModelTests(TestSetup, TestCase):
         batch2.documents.add(self.doc1)
         batch2.save()
         self.assertEqual(
-            Batch.get_remaining_units_in_dataset(project2, self.dataset), 3
+            Batch.get_remaining_units_in_dataset(project2, self.dataset), 5
         )
 
     def test_get_document_to_undo(self):

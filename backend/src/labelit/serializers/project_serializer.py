@@ -34,7 +34,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             "name",
             "is_audio_annotated",
             "is_text_annotated",
-            "task_presentation",
             "enable_region_annotation",
             "are_sequences_annotated",
             "tasks",

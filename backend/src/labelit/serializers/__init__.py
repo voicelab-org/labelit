@@ -14,4 +14,3 @@ from .lexicon_serializer import *
 from .timed_transcript_serializer import *
 from .timed_transcript_segment_serializer import *
 from .project_task_serializer import *
-

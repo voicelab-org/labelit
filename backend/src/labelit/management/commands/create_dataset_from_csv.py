@@ -24,15 +24,6 @@ class Command(BaseCommand):
             help="Dataset name to be created",
         )
 
-        parser.add_argument(
-            "--is-streamed",
-            type=str,
-            required=False,
-            default=False,
-            dest="is_streamed",
-            help="Will the files be streamed to the users?",
-        )
-
     def handle(self, *args, **options):
         data = pd.read_csv(options["csv_file"])
 
@@ -74,6 +65,4 @@ class Command(BaseCommand):
                     )
 
         # Should trigger the signal
-        # dataset.is_streamed = strtobool(options["is_streamed"])
         dataset.save()
-        # dataset, dataset_created = Dataset.objects.filter(id=dataset.id).update(is_streamed=True)

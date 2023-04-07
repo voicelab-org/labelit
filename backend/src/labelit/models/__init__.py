@@ -16,4 +16,3 @@ from .timed_transcript_segment import *
 from .label_types import *
 from .task_types import *
 from .completed_document_annotator_pair import *
-from .project_task import *

@@ -39,7 +39,7 @@
             >
               <td>{{ project.name }}</td>
               <td>{{ printProjectTasks(project.tasks) }}</td>
-              <td>
+              <td v-if="isAdmin">
                 <ProjectMenu v-model="shown_projects[i]" @edit="showEdit" />
               </td>
             </tr>

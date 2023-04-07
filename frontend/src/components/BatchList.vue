@@ -19,7 +19,7 @@
           @click="goTo(batch)"
         >
           <td>{{ batch.name }}</td>
-          <td>
+          <td v-if="isAdmin">
             <BatchMenu v-model="shown_batches[i]" />
           </td>
         </tr>

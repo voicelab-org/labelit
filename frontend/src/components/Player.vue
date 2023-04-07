@@ -5,8 +5,7 @@
     <span v-shortkey="['ctrl', 'arrowright']" @shortkey="skipForward"></span>
 
     <div id="wave-timeline"></div>
-    <audio v-if="uses_hls" id="stream-audio-hls" ref="streamAudio"></audio>
-    <div v-else id="stream-audio-raw"></div>
+    <div id="stream-audio-raw"></div>
 
     <div v-if="!audioLoading && audioInfo" class="stream-player">
       <div class="stream-waves">
@@ -89,7 +88,7 @@
 </template>
 
 <script>
-import Hls from 'hls.js/dist/hls.min.js';
+import { SNACKBAR_TYPE_COLOR } from '@/store/snackbar.module';
 import StreamWaveForms from '@/components/StreamWaveForms.vue';
 import WaveSurfer from 'wavesurfer.js';
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions.js';
@@ -99,6 +98,7 @@ import DocumentService from '@/services/document.service.js';
 import LabelService from '../services/label.service.js';
 import TimerDisplay from './TimerDisplay.vue';
 import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -129,8 +129,6 @@ export default {
       playbackSpeed: 100,
       zoomingValue: 0,
       duration: 0,
-      hls: null,
-      uses_hls: false,
       player: null,
       audioLoading: true,
       audioInfo: null,
@@ -173,6 +171,8 @@ export default {
     this.fetchAudio();
   },
   methods: {
+    ...mapActions('snackbar', ['showSnackbar']),
+
     updateRegions() {
       if (
         !this.annotated_regions.length &&
@@ -236,97 +236,75 @@ export default {
       if (this.player) {
         this.player.pause();
       }
-      DocumentService.doesUseHls(this.document.id).then(res => {
-        if (res.data['use_hls']) {
-          this.uses_hls = true;
-          this.$nextTick(() => {
-            if (Hls.isSupported()) {
-              this.hls = new Hls({
-                audioLoadingTimeOut: 60000,
-                xhrSetup: xhr => {
-                  xhr.setRequestHeader(
-                    'Authorization',
-                    `Bearer ${this.$store.state.auth.accessToken}`
-                  );
+
+      let vm = this;
+      this.$nextTick(() => {
+        let plugins = [];
+        if (this.enableRegions) {
+          if (!this.isAdmin) {
+            plugins.push(
+              RegionsPlugin.create({
+                regionsMinLength: 0.1,
+                dragSelection: {
+                  slop: 5,
                 },
-              });
-              this.fetchAudioHls(this.document.id);
-            } else {
-              alert('Player is not supported by your browser !');
-            }
-          });
-        } else {
-          this.uses_hls = false;
-          let vm = this;
-          this.$nextTick(() => {
-            let plugins = [];
-            if (this.enableRegions) {
-              if (!this.isAdmin) {
-                plugins.push(
-                  RegionsPlugin.create({
-                    regionsMinLength: 0.1,
-                    dragSelection: {
-                      slop: 5,
-                    },
-                  })
-                );
-              } else {
-                plugins.push(
-                  RegionsPlugin.create({
-                    regionsMinLength: 0.1,
-                  })
-                );
-              }
-              plugins.push(
-                Minimap.create({
-                  height: 30,
-                  waveColor: '#f5cc89',
-                  progressColor: '#faa316',
-                  cursorColor: '#999',
-                })
-              );
+              })
+            );
+          } else {
+            plugins.push(
+              RegionsPlugin.create({
+                regionsMinLength: 0.1,
+              })
+            );
+          }
+          plugins.push(
+            Minimap.create({
+              height: 30,
+              waveColor: '#f5cc89',
+              progressColor: '#faa316',
+              cursorColor: '#999',
+            })
+          );
 
-              plugins.push(
-                Timeline.create({
-                  container: '#wave-timeline',
-                })
-              );
-            }
-            if (vm.player) {
-              vm.player.destroy();
-              delete vm.player;
-            }
-            vm.player = WaveSurfer.create({
-              backend: 'MediaElement',
-              container: '#stream-audio-raw',
-              waveColor: '#a0dcf8',
-              progressColor: '#03a9f4',
-              hideScrollbar: 'true',
-              barWidth: '0',
-              minPxPerSec: '1000',
-              height: 75,
-              closeAudioContext: true,
-              cursorColor: '#03a9f4',
-              plugins: plugins,
-            });
-            if (this.enableRegions && !this.isAdmin) {
-              this.setupRegionEventListeners();
-            }
-            if (this.enableRegions && this.isAdmin) {
-              this.player.disableDragSelection();
-            }
-            // vm.player.enableDragSelection()
-            vm.fetchAudioRaw();
-            /*vm.player.addRegion(
-                {
-                  start: 1.0,
-                  end: 2.0,
-                  color: "rbga(0, 255, 0, 1)",
-
-                }
-            )*/
-          });
+          plugins.push(
+            Timeline.create({
+              container: '#wave-timeline',
+            })
+          );
         }
+        if (vm.player) {
+          vm.player.destroy();
+          delete vm.player;
+        }
+        vm.player = WaveSurfer.create({
+          backend: 'MediaElement',
+          container: '#stream-audio-raw',
+          waveColor: '#a0dcf8',
+          progressColor: '#03a9f4',
+          hideScrollbar: 'true',
+          barWidth: '0',
+          minPxPerSec: '1000',
+          height: 75,
+          closeAudioContext: true,
+          cursorColor: '#03a9f4',
+          plugins: plugins,
+        });
+        if (this.enableRegions && !this.isAdmin) {
+          this.setupRegionEventListeners();
+        }
+        if (this.enableRegions && this.isAdmin) {
+          this.player.disableDragSelection();
+        }
+        // vm.player.enableDragSelection()
+        vm.fetchAudioRaw();
+        /*vm.player.addRegion(
+            {
+              start: 1.0,
+              end: 2.0,
+              color: "rbga(0, 255, 0, 1)",
+
+            }
+        )*/
       });
     },
     setupRegionEventListeners() {
@@ -401,65 +379,25 @@ export default {
         });
       });
     },
-    fetchAudioHls() {
-      this.audioLoading = true;
-      DocumentService.getAudioInfo(this.document.id).then(res => {
-        this.audioInfo = res.data;
-        this.duration = this.audioInfo.duration;
-      });
 
-      this.hls.attachMedia(this.$refs.streamAudio);
-      this.hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-        this.hls.loadSource(
-          DocumentService.getDocumentAudioUrl(this.document.id)
-        );
-        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          this.player = this.$refs.streamAudio;
-          this.audioLoading = false;
-
-          this.player.addEventListener('play', () => {
-            this.isPlaying = true;
-            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying);
-          });
-
-          this.player.addEventListener('pause', () => {
-            this.isPlaying = false;
-            this.$store.commit('player/SET_IS_PLAYING', this.isPlaying);
-          });
-
-          this.player.addEventListener('timeupdate', () => {
-            this.$store.commit(
-              'player/SET_PLAYBACK_TIME',
-              this.player.currentTime
-            );
-          });
-
-          this.player.addEventListener('ended', () => {
-            this.player.currentTime = 0;
-          });
-
-          this.player.skipForward = function (val) {
-            this.currentTime += val;
-          };
-
-          this.player.skipBackward = function (val) {
-            this.currentTime -= val;
-          };
-
-          this.player.setPlaybackRate = function (val) {
-            this.playbackRate = val;
-          };
-
-          this.hls.on(Hls.Events.FRAG_LOADING, () => {});
-        });
-      });
-    },
     fetchAudioRaw() {
       let vm = this;
       this.audioLoading = true;
       DocumentService.getAudioUrl(vm.document.id).then(res => {
         var data = res.data;
         var waveform = data.waveform;
+
+        if ((waveform == null) & (data.size > 5 * 1024 * 1024)) {
+          let audio_size = Math.ceil(data.size / 1024 / 1024);
+          let notification = {
+            type: SNACKBAR_TYPE_COLOR.INFO,
+            text:
+              'Audio size ' +
+              audio_size +
+              ' MB , The audio file size excideing 5 MB, please ask the tech team to generate audio peaks for better performance',
+          };
+          this.showSnackbar(notification);
+        }
         this.player.load(data.url, waveform, null);
         this.player.setPlayEnd(0);
         this.player.zoom(this.zoomingValue);

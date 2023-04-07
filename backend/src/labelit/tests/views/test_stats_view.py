@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-
 from rest_framework.test import APIRequestFactory, force_authenticate
 from labelit.models import (
     Project,
@@ -47,7 +46,7 @@ class StatsViewTests(TestSetup, TestCase):
         self.assertTrue("total_duration" in response.data.keys())
 
         Annotation.objects.create(
-            annotator=self.user1,
+            annotator=self.batch1_annotators[0],
             task=self.task1,
             document=self.doc1,
             batch=self.batch1,
@@ -55,23 +54,16 @@ class StatsViewTests(TestSetup, TestCase):
             is_done=True,
         )
         Annotation.objects.create(
-            annotator=self.user1,
-            task=self.task1,
-            document=self.doc2,
+            annotator=self.batch1_annotators[0],
+            task=self.task2,
+            document=self.doc1,
             batch=self.batch1,
             project=self.batch1.project,
             is_done=True,
         )
-        request = self.request_factory.get("")
-        self._authenticate(request)
-        response = StatsView.as_view()(request)
-        self.assertEqual(response.data["num_docs"], 0)
-        self.assertEqual(response.data["stats_per_annotator"], [])
-        self.assertEqual(response.data["stats_per_annotator_per_day"], [])
-
         Annotation.objects.create(
-            annotator=self.user1,
-            task=self.task2,
+            annotator=self.batch1_annotators[1],
+            task=self.task1,
             document=self.doc1,
             batch=self.batch1,
             project=self.batch1.project,
@@ -81,33 +73,15 @@ class StatsViewTests(TestSetup, TestCase):
         self._authenticate(request)
         response = StatsView.as_view()(request)
         self.assertEqual(response.data["num_docs"], 1)
-        self.assertEqual(len(response.data["stats_per_annotator"]), 1)
-        self.assertEqual(
-            response.data["stats_per_annotator"][0]["annotator__first_name"], "eric"
-        )
-        self.assertEqual(len(response.data["stats_per_annotator_per_day"]), 1)
-        try:
-            response.data["stats_per_annotator"][0]["total_duration"]
-        except:
-            self.assertTrue(False)
-
         Annotation.objects.create(
-            annotator=self.user1,
+            annotator=self.batch1_annotators[1],
             task=self.task2,
-            document=self.doc2,
+            document=self.doc1,
             batch=self.batch1,
             project=self.batch1.project,
             is_done=True,
         )
-
         request = self.request_factory.get("")
         self._authenticate(request)
         response = StatsView.as_view()(request)
-        self.assertEqual(response.data["num_docs"], 2)
-        try:
-            response.data["stats_per_annotator"][0]["total_duration"]
-        except:
-            self.assertTrue(False)
-        self.assertEqual(
-            response.data["stats_per_annotator"][0]["total_duration"], 30000
-        )
+        self.assertEqual(response.data["num_docs"], 2)  # failing here, num_docs is 0

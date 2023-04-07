@@ -10,11 +10,7 @@ from django.core.management.base import BaseCommand
 from labelit.management.scripts.cutfile import treat_onefile
 from labelit.models import Document, DocumentSequence, Dataset
 from labelit.storages import audio_storage, SourceAudioStorage
-from labelit.utils.audio_utils import (
-    generate_hls_from_audio,
-    convert_raw_to_hls,
-    convert_and_upload_single_file,
-)
+
 
 import tempfile
 
@@ -222,22 +218,7 @@ def process_single_new_file(filename, dataset, source_audio_storage):
                     # except KeyError:
                     #     pass
 
-        if dataset.is_streamed:
-            # Converts audio to hls, if `is_streamed` flag is active
-            for mp3_filename in mp3_files:
-                hls_file_key = os.path.join(
-                    "hls",
-                    os.path.splitext(os.path.basename(mp3_filename))[0],
-                    "playlist.m3u",
-                )
-                hls_file_name = os.path.join(tmp_dirname, hls_file_key)
-
-                convert_and_upload_single_file(
-                    audio_file_name=mp3_filename,
-                    hls_file_name=hls_file_name,
-                    hls_file_key=hls_file_key,
-                    generate_waveform=True,
-                )
+        dataset.save()
 
 
 class Command(BaseCommand):
@@ -295,15 +276,6 @@ class Command(BaseCommand):
             help="AWS key content",
         )
 
-        parser.add_argument(
-            "--is-streamed",
-            type=str,
-            required=False,
-            default=False,
-            dest="is_streamed",
-            help="Will the files be streamed to the users?",
-        )
-
     def handle(self, *args, **options):
         source_audio_storage = SourceAudioStorage(
             source_audio_storage_bucket_name=options["source_bucket_name"],
@@ -311,9 +283,7 @@ class Command(BaseCommand):
             aws_key_content=options["aws_key_content"],
         )
 
-        dataset = Dataset.objects.create(
-            name=options["dataset_name"], is_streamed=strtobool(options["is_streamed"])
-        )
+        dataset = Dataset.objects.create(name=options["dataset_name"])
         _directories, files = source_audio_storage.listdir(".")
         for filename in tqdm(files[: options["max_files"]]):
             if DocumentSequence.objects.filter(name=filename).exists():
