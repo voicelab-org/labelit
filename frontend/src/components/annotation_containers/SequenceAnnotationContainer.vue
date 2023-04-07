@@ -129,10 +129,6 @@ export default {
       step: 1,
     }
   },
-  created(){
-    console.log("&tasks", this.tasks)
-    console.log("&annotations", this.annotations)
-  },
   methods: {
     getTaskName(annotation_index) {
       return this.tasks.find(t => t.id == this.annotations[annotation_index].task).name
