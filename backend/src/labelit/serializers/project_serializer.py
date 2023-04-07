@@ -109,6 +109,33 @@ class FlatProjectSerializer(serializers.ModelSerializer):
 
         return project
 
+    def update(self, instance, validated_data):
+        updated_fields = list(filter(
+            lambda f: not f in ("id", "tasks"),
+            self.__class__.Meta.fields,
+        ))
+        for updated_field in updated_fields:
+            setattr(
+                instance,
+                updated_field,
+                validated_data.get(updated_field, getattr(instance, updated_field))
+            )
+
+        instance.save()
+
+        # possibly re-order tasks
+        request = self.context.get("request")
+        task_ids = request.data.get('tasks')
+        for idx, t_id in enumerate(task_ids):
+            project_task = ProjectTask.objects.get(
+                project=instance,
+                task_id=t_id,
+            )
+            project_task.order = idx + 1
+            project_task.save()
+
+        return instance
+
 
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
     tasks = TaskPolymorphicSerializer(many=True, required=False)
