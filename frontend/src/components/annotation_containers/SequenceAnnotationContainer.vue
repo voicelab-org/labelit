@@ -99,7 +99,7 @@
 import AnnotationContainer from './mixins/AnnotationContainer'
 
 export default {
-  name: "SeuenceAnnotationContainer",
+  name: "SequenceAnnotationContainer",
   mixins: [
     AnnotationContainer,
   ],
@@ -128,6 +128,10 @@ export default {
       focus_index: 0,
       step: 1,
     }
+  },
+  created(){
+    console.log("&tasks", this.tasks)
+    console.log("&annotations", this.annotations)
   },
   methods: {
     getTaskName(annotation_index) {

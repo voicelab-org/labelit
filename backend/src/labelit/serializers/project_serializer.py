@@ -17,7 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    tasks = TaskPolymorphicSerializer(many=True, required=False)
+    # tasks = TaskPolymorphicSerializer(many=True, required=False)
+    tasks = serializers.SerializerMethodField()
     created_by = UserSerializer(many=False, required=False)
     created_at = serializers.DateTimeField(
         format="%Y-%m-%d", required=False, read_only=True
@@ -48,6 +49,29 @@ class ProjectSerializer(serializers.ModelSerializer):
             "updated_at",
             "created_by",
         ]
+
+    def get_tasks(self, obj):
+        tasks = obj.tasks.all()
+        project_tasks = ProjectTask.objects.filter(
+            project=obj,
+            task__in=tasks,
+        )
+
+        tasks = sorted(
+            tasks,
+            key=lambda t: project_tasks.get(task=t).order
+        )
+
+        print("&sorted_tasks: ", tasks)
+
+        tasks = map(
+            lambda t: TaskPolymorphicSerializer(t).data,
+            tasks
+        )
+
+        print("&serialized tasks: ", tasks)
+
+        return tasks
 
 
 class FlatProjectSerializer(serializers.ModelSerializer):
@@ -80,6 +104,7 @@ class FlatProjectSerializer(serializers.ModelSerializer):
         project = Project.objects.create(**validated_data)
         request = self.context.get("request")
         task_ids = request.data.get('tasks')
+        print("&task_ids: ", task_ids)
         for idx, t_id in enumerate(task_ids):
             ProjectTask.objects.create(
                 project=project,
