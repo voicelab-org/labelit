@@ -21,12 +21,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class ProjectTaskFilter(filters.FilterSet):
-
     class Meta:
         model = ProjectTask
-        fields = [
-            "project"
-        ]
+        fields = ["project"]
 
 
 class ProjectTaskViewSet(viewsets.ModelViewSet):
@@ -35,4 +32,3 @@ class ProjectTaskViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ProjectTaskFilter
-

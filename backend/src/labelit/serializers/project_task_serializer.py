@@ -12,4 +12,3 @@ class ProjectTaskSerializer(serializers.ModelSerializer):
             "project",
             "order",
         ]
-

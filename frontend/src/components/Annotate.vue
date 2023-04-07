@@ -27,13 +27,13 @@
       <div v-if="annotations" id="annotation-forms-t">
         <div v-if="tasksLoaded">
           <component
-              :is="getAnnotationContainerForProject()"
-              :annotations="annotations"
-              :tasks="tasks"
-              :submitting="submitting"
-              @submitted="numTasksSubmitted++"
-              :document="document"
-              :project="batch.project"
+            :is="getAnnotationContainerForProject()"
+            :annotations="annotations"
+            :tasks="tasks"
+            :submitting="submitting"
+            @submitted="numTasksSubmitted++"
+            :document="document"
+            :project="batch.project"
           />
         </div>
       </div>
