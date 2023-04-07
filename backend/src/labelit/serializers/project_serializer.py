@@ -62,14 +62,10 @@ class ProjectSerializer(serializers.ModelSerializer):
             key=lambda t: project_tasks.get(task=t).order
         )
 
-        print("&sorted_tasks: ", tasks)
-
         tasks = map(
             lambda t: TaskPolymorphicSerializer(t).data,
             tasks
         )
-
-        print("&serialized tasks: ", tasks)
 
         return tasks
 
@@ -104,7 +100,6 @@ class FlatProjectSerializer(serializers.ModelSerializer):
         project = Project.objects.create(**validated_data)
         request = self.context.get("request")
         task_ids = request.data.get('tasks')
-        print("&task_ids: ", task_ids)
         for idx, t_id in enumerate(task_ids):
             ProjectTask.objects.create(
                 project=project,

@@ -175,15 +175,12 @@ class BatchViewSet(viewsets.ModelViewSet):
                 )
 
         def _sort_annotations(annotations):
-            print("&batch.project: ", batch.project)
             project_tasks = ProjectTask.objects.filter(
                 project_id=batch.project.id,
             )
-            print("annot tasks", annotations[0].task, annotations[1].task)
 
             def _get_order(annotation):
                 project_task = project_tasks.get(task=annotation.task)
-                print("&project_task: ", project_task.__dict__)
                 return project_task.order
 
             return sorted(
