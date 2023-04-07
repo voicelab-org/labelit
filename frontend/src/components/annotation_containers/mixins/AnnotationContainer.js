@@ -46,7 +46,6 @@ export default {
             Project_taskService.list({params: {project: this.project.id}}).then(
                 (res) => {
                     this.project_tasks = res.data
-                    console.log("PTs", JSON.parse(JSON.stringify(this.project_tasks)))
                     this.sorted_annotations = JSON.parse(JSON.stringify(this.annotations)).sort(
                         (a, b) => {
                             let a_project_task = this.project_tasks.filter(pt => pt.task == a.task)[0]
@@ -63,8 +62,6 @@ export default {
                             return 0
                         }
                     )
-                    console.log('&sortd', this.sorted_annotations, this.annotations)
-                    console.log("&projecttakss", this.project_tasks)
                 }
             )
 
