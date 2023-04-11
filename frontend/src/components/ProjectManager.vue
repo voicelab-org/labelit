@@ -168,7 +168,10 @@ export default {
     },
     create() {
       let task_ids = this.model.tasks.map(t => t.id);
-      let p = { ...this.model };
+      let p = { 
+        ...this.model,
+        tasks: task_ids,
+      };
       //p.tasks = p.tasks.map(t => t.id);
       p.tasks = task_ids;
       ProjectService.create(p).then(() => {
