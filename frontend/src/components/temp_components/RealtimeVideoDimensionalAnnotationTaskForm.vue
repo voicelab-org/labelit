@@ -3,7 +3,8 @@
     RT dimensional annotation goes here !
 
     <br />
-    <MouseTrackingSlider />
+    <MouseTrackingSlider :do-track="do_start" v-model="position" />
+    <v-btn @click="do_start = true">Start</v-btn>
   </div>
 </template>
 
@@ -23,6 +24,12 @@ export default {
     return {
       player,
       playerOptions,
+    };
+  },
+  data() {
+    return {
+      do_start: false,
+      position: 0,
     };
   },
   components: {
