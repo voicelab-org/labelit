@@ -38,7 +38,7 @@
               </div>
 
               <div>
-                <v-btn v-if="i != 0" @click="previous(i)"> Previous </v-btn>
+                <v-btn v-if="i != 0" @click="previous()"> Previous </v-btn>
                 <v-btn
                   color="primary"
                   @click="next(i)"
