@@ -42,6 +42,7 @@ class ProjectSerializerTests(TestCase):
                     "created_at",
                     "archived",
                     "target_num_documents",
+                    "task_presentation",
                 ]
             ),
         )
