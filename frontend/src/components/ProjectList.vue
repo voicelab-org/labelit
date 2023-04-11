@@ -11,6 +11,11 @@
         />
       </div>
     </div>
+    <div>
+      <p>--TEMP--</p>
+      <LabelitVideoPlayer />
+      <p>--END TEMP--</p>
+    </div>
     <div id="projects">
       <v-tabs>
         <v-tab @click="show_archived = false">Live projects</v-tab>
@@ -57,11 +62,14 @@ import ProjectMenu from '@/components/ProjectMenu.vue';
 import ProjectManager from './ProjectManager.vue';
 import { mapGetters } from 'vuex';
 
+import LabelitVideoPlayer from '@/components/temp_components/LabelitVideoPlayer.vue';
+
 export default {
   name: 'ProjectList',
   components: {
     ProjectMenu,
     ProjectManager,
+    LabelitVideoPlayer,
   },
   data() {
     return {

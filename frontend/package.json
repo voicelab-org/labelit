@@ -25,11 +25,12 @@
     "vue-scrollto": "^2.20.0",
     "vue-shortkey": "^3.1.7",
     "vue-upload-component": "^2.8.23",
+    "vue-video-player": "^5.0.2",
     "vue2-editor": "^2.10.2",
+    "vuedraggable": "^2.24.3",
     "vuetify": "^2.6.0",
     "vuex": "^3.6.2",
-    "wavesurfer.js": "^6.4.0",
-    "vuedraggable": "^2.24.3"
+    "wavesurfer.js": "^6.4.0"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^0.8.2",
