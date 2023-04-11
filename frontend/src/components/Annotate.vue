@@ -128,6 +128,15 @@ export default {
     this.$store.commit('entities/ENABLE_ANNOTATION');
   },
   methods: {
+    getAnnotationContainerForProject() {
+      if(this.batch.project.task_presentation == "list"){
+        return "ListAnnotationContainer"
+      }
+      if(this.batch.project.task_presentation == "sequence"){
+        return "SequenceAnnotationContainer"
+      }
+      throw new Error('Unsupported task presentation type.');
+    },
     getBatch() {
       BatchService.getBatchById(this.batchId)
         .then(response => {

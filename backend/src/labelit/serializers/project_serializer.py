@@ -47,6 +47,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "created_by",
+            "task_presentation",
         ]
 
     def get_tasks(self, obj):
@@ -163,6 +164,7 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
             "do_display_timer_time",
             "does_audio_playing_count_as_activity",
             "description",
+            "task_presentation",
         ]
 
     def get_num_documents(self, obj):
