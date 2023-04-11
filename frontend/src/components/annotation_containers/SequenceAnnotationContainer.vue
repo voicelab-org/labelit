@@ -1,13 +1,5 @@
 <template>
   <div>
-    <span
-      v-shortkey="['ctrl', 'alt', 'arrowright']"
-      @shortkey.stop="next()"
-    ></span>
-    <span
-      v-shortkey="['ctrl', 'alt', 'arrowleft']"
-      @shortkey.stop="previous()"
-    ></span>
     <v-card elevation="0">
       <div class="bv-section">
         <v-stepper v-model="step" elevation="0">
@@ -107,23 +99,6 @@ export default {
     previous() {
       if (this.step == 1) return;
       this.step = this.step - 1;
-    },
-    browseTasks(direction) {
-      if (direction == 'right') {
-        if (this.focus_index == this.annotations.length - 1) {
-          this.focus_index = 0;
-        } else {
-          this.focus_index++;
-        }
-      }
-
-      if (direction == 'left') {
-        if (this.focus_index == 0) {
-          this.focus_index = this.annotations.length - 1;
-        } else {
-          this.focus_index--;
-        }
-      }
     },
   },
 };
