@@ -4,16 +4,8 @@
     ref="videoPlayer"
     :options="playerOptions"
     :playsinline="true"
-    customEventName="customstatechangedeventname"
     @play="onPlayerPlay($event)"
     @pause="onPlayerPause($event)"
-    @ended="onPlayerEnded($event)"
-    @waiting="onPlayerWaiting($event)"
-    @playing="onPlayerPlaying($event)"
-    @loadeddata="onPlayerLoadeddata($event)"
-    @timeupdate="onPlayerTimeupdate($event)"
-    @canplay="onPlayerCanplay($event)"
-    @canplaythrough="onPlayerCanplaythrough($event)"
     @statechanged="playerStateChanged($event)"
     @ready="playerReadied"
   >
@@ -21,10 +13,19 @@
 </template>
 
 <script>
-// Similarly, you can also introduce the plugin resource pack you want to use within the component
-// import 'some-videojs-plugin'
+import { useVideoPlayer } from '@/composables/video_player.js';
+
 export default {
   name: 'LabelitVideoPlayer',
+  setup() {
+    // composition API
+
+    const { player } = useVideoPlayer();
+
+    return {
+      player,
+    };
+  },
   data() {
     return {
       playerOptions: {
@@ -38,15 +39,15 @@ export default {
             src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
           },
         ],
-        poster: '/static/images/author.jpg',
       },
     };
   },
   mounted() {
     console.log('this is current player instance object', this.player);
+    this.player.value = this.computed_player;
   },
   computed: {
-    player() {
+    computed_player() {
       return this.$refs.videoPlayer.player;
     },
   },
@@ -54,6 +55,7 @@ export default {
     // listen event
     onPlayerPlay(player) {
       console.log('player play!', player);
+      console.log('current playback time: ', this.player.value.currentTime());
     },
     onPlayerPause(player) {
       console.log('player pause!', player);
@@ -62,14 +64,19 @@ export default {
 
     // or listen state event
     playerStateChanged(playerCurrentState) {
-      console.log('player current update state', playerCurrentState);
+      //console.log('player current update state', playerCurrentState);
     },
 
     // player is ready
     playerReadied(player) {
-      console.log('the player is readied', player);
+      console.log('the player is readied', player, this.player);
+      this.$emit('player-loaded');
       // you can use it to do something...
       // player.[methods]
+      //console.log("current playback time: ", this.player.currentTime())
+      /*this.player.on('ended', ()=>{
+        console.log("video ended")
+      })*/
     },
   },
 };

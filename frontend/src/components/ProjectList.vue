@@ -13,7 +13,8 @@
     </div>
     <div>
       <p>--TEMP--</p>
-      <LabelitVideoPlayer />
+      <LabelitVideoPlayer @player-loaded="player_loaded = true" />
+      <RealtimeVideoDimensionalAnnotationTaskForm v-if="player_loaded" />
       <p>--END TEMP--</p>
     </div>
     <div id="projects">
@@ -63,10 +64,12 @@ import ProjectManager from './ProjectManager.vue';
 import { mapGetters } from 'vuex';
 
 import LabelitVideoPlayer from '@/components/temp_components/LabelitVideoPlayer.vue';
+import RealtimeVideoDimensionalAnnotationTaskForm from '@/components/temp_components/RealtimeVideoDimensionalAnnotationTaskForm.vue';
 
 export default {
   name: 'ProjectList',
   components: {
+    RealtimeVideoDimensionalAnnotationTaskForm,
     ProjectMenu,
     ProjectManager,
     LabelitVideoPlayer,
@@ -78,6 +81,7 @@ export default {
       loading: true,
       edited_project: { some: 'project' },
       show_edit_project: false,
+      player_loaded: false,
     };
   },
   created() {
