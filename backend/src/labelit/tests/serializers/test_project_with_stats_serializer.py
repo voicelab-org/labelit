@@ -32,6 +32,7 @@ class ProjectWithStatsSerializerTests(TestSetup, TestCase):
                     "description",
                     "does_audio_playing_count_as_activity",
                     "enable_region_annotation",
+                    "task_presentation",
                 ]
             ),
         )

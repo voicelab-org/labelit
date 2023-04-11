@@ -22,6 +22,10 @@
             <v-form v-model="valid">
               <v-jsf v-model="model" :schema="schema" :options="form_options" />
             </v-form>
+
+            <template v-if="model.tasks && model.tasks.length">
+              <ProjectTaskSorter v-model="model.tasks" />
+            </template>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -35,10 +39,6 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-      <!--<div>
-        Project mdl: <br>
-        {{model}}
-      </div>-->
     </v-dialog>
   </div>
 </template>
@@ -48,11 +48,13 @@ import VJsf from '@koumoul/vjsf/lib/VJsf.js';
 import '@koumoul/vjsf/lib/VJsf.css';
 import ProjectService from '../services/project.service.js';
 import ApiService from '../services/api.service.js';
+import ProjectTaskSorter from './ProjectTaskSorter.vue';
 
 export default {
   name: 'ProjectManager',
   components: {
     VJsf,
+    ProjectTaskSorter,
   },
   props: {
     project: {
@@ -77,6 +79,7 @@ export default {
         httpLib: ApiService,
       },
       schema: {
+        // would be nice if the backend could automagically generate this schema
         type: 'object',
         required: ['name', 'target_deadline', 'target_num_documents'],
         properties: {
@@ -92,6 +95,12 @@ export default {
           does_audio_playing_count_as_activity: {
             type: 'boolean',
             default: true,
+          },
+          task_presentation: {
+            type: 'string',
+            default: 'list',
+            title:
+              'How to present the tasks to the annotator(s): as a list or as a sequence',
           },
           target_num_documents: { type: 'integer', default: 100 },
           target_deadline: {
@@ -158,8 +167,11 @@ export default {
       }
     },
     create() {
-      let p = { ...this.model };
-      p.tasks = p.tasks.map(t => t.id);
+      let task_ids = this.model.tasks.map(t => t.id);
+      let p = {
+        ...this.model,
+        tasks: task_ids,
+      };
       ProjectService.create(p).then(() => {
         this.show_dialog = false;
         this.model = {};

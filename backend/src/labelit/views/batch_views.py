@@ -16,7 +16,7 @@ from labelit.serializers import (
     SimpleBatchSerializer,
     AnnotationWithLabelsSerializer,
 )
-from labelit.models import Batch, Annotation
+from labelit.models import Batch, Annotation, ProjectTask
 
 
 class AnnotationsExporterPagination(PageNumberPagination):
@@ -173,6 +173,22 @@ class BatchViewSet(viewsets.ModelViewSet):
                         document_sequence=document.document_sequence,
                     )
                 )
+
+        def _sort_annotations(annotations):
+            project_tasks = ProjectTask.objects.filter(
+                project_id=batch.project.id,
+            )
+
+            def _get_order(annotation):
+                project_task = project_tasks.get(task=annotation.task)
+                return project_task.order
+
+            return sorted(
+                annotations,
+                key=_get_order,
+            )
+
+        annotations = _sort_annotations(annotations)
 
         data = {
             "document": DocumentSerializer(instance=document).data,

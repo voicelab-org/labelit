@@ -26,28 +26,15 @@
       </div>
       <div v-if="annotations" id="annotation-forms-t">
         <div v-if="tasksLoaded">
-          <div
-            v-for="(annotation, i) in annotations"
-            :key="annotation.id"
-            :class="getAnnotationClasses(annotation, i == focus_index)"
-          >
-            <component
-              :is="getFormForTask(getTaskForAnnotation(annotation))"
-              :annotation="annotation"
-              :time="time"
-              :task="getTaskForAnnotation(annotation)"
-              :submitting="submitting"
-              :review-mode="reviewMode"
-              :document="document"
-              :focused="i == focus_index"
-              @submitted="numTasksSubmitted++"
-              @submiterror="handleSubmitError()"
-              @focus="focus_index = i"
-            />
-            <div v-if="annotation.qa_invalidation_comment">
-              {{ annotation.qa_invalidation_comment }}
-            </div>
-          </div>
+          <component
+            :is="getAnnotationContainerForProject()"
+            :annotations="annotations"
+            :tasks="tasks"
+            :submitting="submitting"
+            @submitted="numTasksSubmitted++"
+            :document="document"
+            :project="batch.project"
+          />
         </div>
       </div>
       <div v-if="annotations" id="actions-container">
@@ -132,10 +119,6 @@ export default {
           vm.getNextDocument();
         }
       }
-      /*if (val == this.tasks.length && val!==0){
-        vm.submitting = false
-        vm.getNextDocument()
-      }*/
     },
   },
   created() {
@@ -145,6 +128,15 @@ export default {
     this.$store.commit('entities/ENABLE_ANNOTATION');
   },
   methods: {
+    getAnnotationContainerForProject() {
+      if (this.batch.project.task_presentation == 'list') {
+        return 'ListAnnotationContainer';
+      }
+      if (this.batch.project.task_presentation == 'sequence') {
+        return 'SequenceAnnotationContainer';
+      }
+      throw new Error('Unsupported task presentation type.');
+    },
     getBatch() {
       BatchService.getBatchById(this.batchId)
         .then(response => {
