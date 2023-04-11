@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      Define the order of presentation of the tasks (you can drag the items)
+      Define the order of presentation of the tasks (you can drag the items):
     </p>
     <div>
       <draggable v-model="sorted_tasks">
@@ -32,7 +32,6 @@ export default {
   data() {
     return {
       sorted_tasks: JSON.parse(JSON.stringify(this.value)),
-      //sorted_tasks: this.value,
       dummy: [],
     };
   },

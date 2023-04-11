@@ -17,7 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    # tasks = TaskPolymorphicSerializer(many=True, required=False)
     tasks = serializers.SerializerMethodField()
     created_by = UserSerializer(many=False, required=False)
     created_at = serializers.DateTimeField(

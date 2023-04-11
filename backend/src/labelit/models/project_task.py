@@ -9,6 +9,3 @@ class ProjectTask(models.Model):
     order = models.IntegerField(
         "order in which the task is shown during annotation", default=1
     )
-
-    # class Meta:
-    #    db_table = "labelit_project_tasks"

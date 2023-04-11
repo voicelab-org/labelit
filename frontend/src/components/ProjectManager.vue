@@ -169,7 +169,6 @@ export default {
     create() {
       let task_ids = this.model.tasks.map(t => t.id);
       let p = { ...this.model };
-      //p.tasks = p.tasks.map(t => t.id);
       p.tasks = task_ids;
       ProjectService.create(p).then(() => {
         this.show_dialog = false;
