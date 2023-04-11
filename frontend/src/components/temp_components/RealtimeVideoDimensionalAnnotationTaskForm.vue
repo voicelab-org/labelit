@@ -1,9 +1,16 @@
 <template>
-  <div class="task-form-container">RT dimensional annotation goes here !</div>
+  <div class="task-form-container">
+    RT dimensional annotation goes here !
+
+    <br />
+    <MouseTrackingSlider />
+  </div>
 </template>
 
 <script>
 import { useVideoPlayer } from '@/composables/video_player.js';
+
+import MouseTrackingSlider from '@/components/task_types/components/MouseTrackingSlider.vue';
 
 export default {
   name: 'RealtimeVideoDimensionalAnnotationTaskForm',
@@ -18,7 +25,9 @@ export default {
       playerOptions,
     };
   },
-  components: {},
+  components: {
+    MouseTrackingSlider,
+  },
   mixins: [],
   mounted() {
     console.log(
