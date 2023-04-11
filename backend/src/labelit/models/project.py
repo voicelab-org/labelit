@@ -69,10 +69,10 @@ class Project(models.Model):
         "Configures how tasks are presented to annotators - as a list containing a task, in sequence, etc.",
         max_length=3000,
         choices=[
-            ('list', 'list'),
-            ('sequence', 'sequence'),
+            ("list", "list"),
+            ("sequence", "sequence"),
         ],
-        default='list',
+        default="list",
     )
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)

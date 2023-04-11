@@ -34,13 +34,13 @@ function register_components(files) {
   for (const fileName in files) {
     // Get PascalCase name of component
     const componentName = upperFirst(
-        camelCase(
-            // Gets the file name regardless of folder depth
-            fileName
-                .split('/')
-                .pop()
-                .replace(/\.\w+$/, '')
-        )
+      camelCase(
+        // Gets the file name regardless of folder depth
+        fileName
+          .split('/')
+          .pop()
+          .replace(/\.\w+$/, '')
+      )
     );
 
     // Register component
@@ -49,13 +49,15 @@ function register_components(files) {
 }
 
 // BEGIN Annotation container types registration
-const container_files = import.meta.globEager('@/components/annotation_containers/*.vue');
-register_components(container_files)
+const container_files = import.meta.globEager(
+  '@/components/annotation_containers/*.vue'
+);
+register_components(container_files);
 // END
 
 // BEGIN Task types registration
 const files = import.meta.globEager('@/components/task_types/*.vue');
-register_components(files)
+register_components(files);
 // END Task types registration
 
 Vue.config.productionTip = false;

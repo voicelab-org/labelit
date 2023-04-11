@@ -45,13 +45,16 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.RemoveField(
-          model_name='project',
-          name='tasks',
+            model_name="project",
+            name="tasks",
         ),
         migrations.AddField(
-          model_name='project',
-          name='tasks',
-          field=models.ManyToManyField(related_name='projects', through='labelit.ProjectTask', to='labelit.Task'),
+            model_name="project",
+            name="tasks",
+            field=models.ManyToManyField(
+                related_name="projects",
+                through="labelit.ProjectTask",
+                to="labelit.Task",
+            ),
         ),
-            ]
-
+    ]

@@ -6,10 +6,10 @@
       </v-btn>
     </template>
     <v-dialog
-        v-model="show_dialog"
-        max-width="800px"
-        persistent
-        @input="dialogInputEvent"
+      v-model="show_dialog"
+      max-width="800px"
+      persistent
+      @input="dialogInputEvent"
     >
       <v-card>
         <v-card-title>
@@ -20,13 +20,11 @@
         <v-card-text>
           <v-container>
             <v-form v-model="valid">
-              <v-jsf v-model="model" :schema="schema" :options="form_options"/>
+              <v-jsf v-model="model" :schema="schema" :options="form_options" />
             </v-form>
 
             <template v-if="model.tasks && model.tasks.length">
-              <ProjectTaskSorter
-                  v-model="model.tasks"
-              />
+              <ProjectTaskSorter v-model="model.tasks" />
             </template>
           </v-container>
         </v-card-text>
@@ -50,7 +48,7 @@ import VJsf from '@koumoul/vjsf/lib/VJsf.js';
 import '@koumoul/vjsf/lib/VJsf.css';
 import ProjectService from '../services/project.service.js';
 import ApiService from '../services/api.service.js';
-import ProjectTaskSorter from "./ProjectTaskSorter.vue";
+import ProjectTaskSorter from './ProjectTaskSorter.vue';
 
 export default {
   name: 'ProjectManager',
@@ -80,19 +78,20 @@ export default {
       form_options: {
         httpLib: ApiService,
       },
-      schema: { // would be nice if the backend could automagically generate this schema
+      schema: {
+        // would be nice if the backend could automagically generate this schema
         type: 'object',
         required: ['name', 'target_deadline', 'target_num_documents'],
         properties: {
           name: {
             type: 'string',
           },
-          is_audio_annotated: {type: 'boolean', default: true},
-          enable_region_annotation: {type: 'boolean', default: false},
-          is_text_annotated: {type: 'boolean', default: true},
+          is_audio_annotated: { type: 'boolean', default: true },
+          enable_region_annotation: { type: 'boolean', default: false },
+          is_text_annotated: { type: 'boolean', default: true },
           // are_sequences_annotated
-          timer_inactivity_threshold: {type: 'integer', default: 60000},
-          do_display_timer_time: {type: 'boolean', default: false},
+          timer_inactivity_threshold: { type: 'integer', default: 60000 },
+          do_display_timer_time: { type: 'boolean', default: false },
           does_audio_playing_count_as_activity: {
             type: 'boolean',
             default: true,
@@ -100,10 +99,10 @@ export default {
           task_presentation: {
             type: 'string',
             default: 'list',
-            title: 'How to present the tasks to the annotator(s): as a list or as a sequence'
-
+            title:
+              'How to present the tasks to the annotator(s): as a list or as a sequence',
           },
-          target_num_documents: {type: 'integer', default: 100},
+          target_num_documents: { type: 'integer', default: 100 },
           target_deadline: {
             type: 'string',
             title: 'Target date',
@@ -159,8 +158,7 @@ export default {
     this.create_mode = Object.keys(this.model).length == 0;
   },
   methods: {
-    dialogInputEvent() {
-    },
+    dialogInputEvent() {},
     submit() {
       if (this.create_mode) {
         this.create();
@@ -169,10 +167,10 @@ export default {
       }
     },
     create() {
-      let task_ids = this.model.tasks.map(t=>t.id)
-      let p = {...this.model};
+      let task_ids = this.model.tasks.map(t => t.id);
+      let p = { ...this.model };
       //p.tasks = p.tasks.map(t => t.id);
-      p.tasks = task_ids
+      p.tasks = task_ids;
       ProjectService.create(p).then(() => {
         this.show_dialog = false;
         this.model = {};
@@ -180,7 +178,7 @@ export default {
       });
     },
     edit() {
-      let p = {...this.model};
+      let p = { ...this.model };
       p.tasks = p.tasks.map(t => t.id);
       ProjectService.updateProject(this.project.id, p).then(() => {
         this.show_dialog = false;

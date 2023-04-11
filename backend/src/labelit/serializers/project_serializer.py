@@ -57,15 +57,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             task__in=tasks,
         )
 
-        tasks = sorted(
-            tasks,
-            key=lambda t: project_tasks.get(task=t).order
-        )
+        tasks = sorted(tasks, key=lambda t: project_tasks.get(task=t).order)
 
-        tasks = map(
-            lambda t: TaskPolymorphicSerializer(t).data,
-            tasks
-        )
+        tasks = map(lambda t: TaskPolymorphicSerializer(t).data, tasks)
 
         return tasks
 
@@ -99,33 +93,31 @@ class FlatProjectSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         project = Project.objects.create(**validated_data)
         request = self.context.get("request")
-        task_ids = request.data.get('tasks')
+        task_ids = request.data.get("tasks")
         for idx, t_id in enumerate(task_ids):
-            ProjectTask.objects.create(
-                project=project,
-                task_id=t_id,
-                order=idx + 1
-            )
+            ProjectTask.objects.create(project=project, task_id=t_id, order=idx + 1)
 
         return project
 
     def update(self, instance, validated_data):
-        updated_fields = list(filter(
-            lambda f: not f in ("id", "tasks"),
-            self.__class__.Meta.fields,
-        ))
+        updated_fields = list(
+            filter(
+                lambda f: not f in ("id", "tasks"),
+                self.__class__.Meta.fields,
+            )
+        )
         for updated_field in updated_fields:
             setattr(
                 instance,
                 updated_field,
-                validated_data.get(updated_field, getattr(instance, updated_field))
+                validated_data.get(updated_field, getattr(instance, updated_field)),
             )
 
         instance.save()
 
         # possibly re-order tasks
         request = self.context.get("request")
-        task_ids = request.data.get('tasks')
+        task_ids = request.data.get("tasks")
         for idx, t_id in enumerate(task_ids):
             project_task = ProjectTask.objects.get(
                 project=instance,

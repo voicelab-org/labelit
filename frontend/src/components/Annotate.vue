@@ -27,13 +27,13 @@
       <div v-if="annotations" id="annotation-forms-t">
         <div v-if="tasksLoaded">
           <component
-              :is="getAnnotationContainerForProject()"
-              :annotations="annotations"
-              :tasks="tasks"
-              :submitting="submitting"
-              @submitted="numTasksSubmitted++"
-              :document="document"
-              :project="batch.project"
+            :is="getAnnotationContainerForProject()"
+            :annotations="annotations"
+            :tasks="tasks"
+            :submitting="submitting"
+            @submitted="numTasksSubmitted++"
+            :document="document"
+            :project="batch.project"
           />
         </div>
       </div>
@@ -129,11 +129,11 @@ export default {
   },
   methods: {
     getAnnotationContainerForProject() {
-      if(this.batch.project.task_presentation == "list"){
-        return "ListAnnotationContainer"
+      if (this.batch.project.task_presentation == 'list') {
+        return 'ListAnnotationContainer';
       }
-      if(this.batch.project.task_presentation == "sequence"){
-        return "SequenceAnnotationContainer"
+      if (this.batch.project.task_presentation == 'sequence') {
+        return 'SequenceAnnotationContainer';
       }
       throw new Error('Unsupported task presentation type.');
     },
