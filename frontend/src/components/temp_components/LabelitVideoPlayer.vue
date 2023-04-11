@@ -55,21 +55,6 @@ export default {
       console.log('the player is ready', player, this.player);
       this.player.value = player;
       this.$emit('player-loaded');
-      /*setTimeout(
-          ()=>{
-            player.play().then(()=>{
-              console.log("playing...")
-            }).catch(error => console.log("error: ", error))
-          },
-          300
-      )*/
-
-      // you can use it to do something...
-      // player.[methods]
-      //console.log("current playback time: ", this.player.currentTime())
-      /*this.player.on('ended', ()=>{
-        console.log("video ended")
-      })*/
     },
   },
   watch: {},
