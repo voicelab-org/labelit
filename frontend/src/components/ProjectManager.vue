@@ -172,7 +172,6 @@ export default {
         ...this.model,
         tasks: task_ids,
       };
-      p.tasks = task_ids;
       ProjectService.create(p).then(() => {
         this.show_dialog = false;
         this.model = {};
