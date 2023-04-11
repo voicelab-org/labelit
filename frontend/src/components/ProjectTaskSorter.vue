@@ -6,8 +6,12 @@
     <div>
       <draggable v-model="sorted_tasks">
         <transition-group>
-          <div v-for="task in sorted_tasks" :key="task.id" class="ordered-task">
-            {{ task.name }}
+          <div
+            v-for="(task, index) in sorted_tasks"
+            :key="task.id"
+            class="ordered-task"
+          >
+            {{ index }} - {{ task.name }}
           </div>
         </transition-group>
       </draggable>
