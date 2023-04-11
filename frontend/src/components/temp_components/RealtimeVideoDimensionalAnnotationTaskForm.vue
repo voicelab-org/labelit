@@ -9,19 +9,42 @@ export default {
   name: 'RealtimeVideoDimensionalAnnotationTaskForm',
   setup() {
     // composition API
-    const { player } = useVideoPlayer();
+    const { player, playerOptions } = useVideoPlayer();
+
+    console.log('&player options 1', playerOptions.value);
 
     return {
       player,
+      playerOptions,
     };
   },
   components: {},
   mixins: [],
   mounted() {
-    console.log('this.player.value', this.player.value);
+    console.log(
+      'this.player.value',
+      JSON.parse(JSON.stringify(this.player.value))
+    );
+    console.log(
+      'player options',
+      JSON.parse(JSON.stringify(this.playerOptions))
+    );
     this.player.value.on('ended', () => {
       console.log('&ended event');
     });
+    //this.player.value.controls(false)
+    this.playerOptions = {
+      ...this.playerOptions,
+      muted: false,
+      controls: true,
+    };
+    /*this.$nextTick(()=>{
+
+      this.player.value.play()
+    })*/
+    setTimeout(() => {
+      this.player.value.play();
+    }, 300);
   },
 };
 </script>

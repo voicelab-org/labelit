@@ -7,7 +7,7 @@
     @play="onPlayerPlay($event)"
     @pause="onPlayerPause($event)"
     @statechanged="playerStateChanged($event)"
-    @ready="playerReadied"
+    @ready="playerReady"
   >
   </video-player>
 </template>
@@ -19,32 +19,15 @@ export default {
   name: 'LabelitVideoPlayer',
   setup() {
     // composition API
-
-    const { player } = useVideoPlayer();
+    const { player, playerOptions } = useVideoPlayer();
 
     return {
       player,
-    };
-  },
-  data() {
-    return {
-      playerOptions: {
-        // videojs options
-        muted: true,
-        language: 'en',
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
-        sources: [
-          {
-            type: 'video/mp4',
-            src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
-          },
-        ],
-      },
+      playerOptions,
     };
   },
   mounted() {
     console.log('this is current player instance object', this.player);
-    this.player.value = this.computed_player;
   },
   computed: {
     computed_player() {
@@ -68,9 +51,19 @@ export default {
     },
 
     // player is ready
-    playerReadied(player) {
-      console.log('the player is readied', player, this.player);
+    playerReady(player) {
+      console.log('the player is ready', player, this.player);
+      this.player.value = player;
       this.$emit('player-loaded');
+      /*setTimeout(
+          ()=>{
+            player.play().then(()=>{
+              console.log("playing...")
+            }).catch(error => console.log("error: ", error))
+          },
+          300
+      )*/
+
       // you can use it to do something...
       // player.[methods]
       //console.log("current playback time: ", this.player.currentTime())
@@ -79,5 +72,6 @@ export default {
       })*/
     },
   },
+  watch: {},
 };
 </script>
