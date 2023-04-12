@@ -1,5 +1,5 @@
 <template>
-  <div :id="sliderContainerId">
+  <div :id="sliderContainerId" ref="slidercontainer">
     <v-slider v-model="position"></v-slider>
   </div>
 </template>
@@ -25,6 +25,7 @@ export default {
     return {
       position: this.value,
       sliderContainerId: 'slider-container',
+      throttledMousemoveCallback: null,
     };
   },
   methods: {
@@ -57,18 +58,27 @@ export default {
         };
       }
 
-      window.addEventListener(
-        'mousemove',
-        throttle(event => {
-          console.log('event.clientX', event.clientX);
-          this.updatePosition(event);
-        }, this.throttleDelay)
-      );
+      this.throttledMousemoveCallback = throttle(event => {
+        console.log('event.clientX', event.clientX);
+        this.updatePosition(event);
+      }, this.throttleDelay);
+
+      window.addEventListener('mousemove', this.throttledMousemoveCallback);
     },
     updatePosition(event) {
       console.log('&updatePosition()');
       let x_position = event.clientX;
-      let container = window.getElementById('');
+      // let container = window.getElementById('');
+      console.log(
+        'element',
+        this.$refs.slidercontainer,
+        typeof this.$refs.slidercontainer
+      );
+      let rect = this.$refs.slidercontainer.getBoundingClientRect();
+      console.log(rect.top, rect.right, rect.bottom, rect.left);
+    },
+    stopTracking() {
+      window.removeEventListener('mousemove', this.throttledMousemoveCallback);
     },
   },
   watch: {
@@ -76,6 +86,8 @@ export default {
       handler() {
         if (this.doTrack) {
           this.startTracking();
+        } else {
+          this.stopTracking();
         }
       },
     },

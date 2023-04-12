@@ -1,10 +1,10 @@
 <template>
   <div class="task-form-container">
     RT dimensional annotation goes here !
-
     <br />
     <MouseTrackingSlider :do-track="do_start" v-model="position" />
     <v-btn @click="do_start = true">Start</v-btn>
+    <v-btn @click="do_start = false">Stop</v-btn>
   </div>
 </template>
 
@@ -48,16 +48,11 @@ export default {
     this.player.value.on('ended', () => {
       console.log('&ended event');
     });
-    //this.player.value.controls(false)
     this.playerOptions = {
       ...this.playerOptions,
       muted: false,
       controls: true,
     };
-    /*this.$nextTick(()=>{
-
-      this.player.value.play()
-    })*/
     setTimeout(() => {
       this.player.value.play();
     }, 300);
