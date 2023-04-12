@@ -14,7 +14,7 @@ export default {
     },
     value: {
       type: Number,
-      default: 0,
+      default: 50,
     },
     throttleDelay: {
       type: Number,
@@ -27,6 +27,11 @@ export default {
       sliderContainerId: 'slider-container',
       throttledMousemoveCallback: null,
     };
+  },
+  computed: {
+    sliderContainerDOMRectangle() {
+      return this.$refs.slidercontainer.getBoundingClientRect();
+    },
   },
   methods: {
     startTracking() {
@@ -59,23 +64,19 @@ export default {
       }
 
       this.throttledMousemoveCallback = throttle(event => {
-        console.log('event.clientX', event.clientX);
         this.updatePosition(event);
       }, this.throttleDelay);
 
       window.addEventListener('mousemove', this.throttledMousemoveCallback);
     },
     updatePosition(event) {
-      console.log('&updatePosition()');
-      let x_position = event.clientX;
-      // let container = window.getElementById('');
-      console.log(
-        'element',
-        this.$refs.slidercontainer,
-        typeof this.$refs.slidercontainer
+      let rect = this.sliderContainerDOMRectangle;
+      let rect_width = rect.right - rect.left;
+      let x_position = Math.min(
+        Math.max(0, event.clientX - rect.left),
+        rect_width
       );
-      let rect = this.$refs.slidercontainer.getBoundingClientRect();
-      console.log(rect.top, rect.right, rect.bottom, rect.left);
+      this.position = Math.round((100 * x_position) / rect_width);
     },
     stopTracking() {
       window.removeEventListener('mousemove', this.throttledMousemoveCallback);
