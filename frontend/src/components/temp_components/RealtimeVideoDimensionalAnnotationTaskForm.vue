@@ -10,7 +10,6 @@
 
 <script>
 import { useVideoPlayer } from '@/composables/video_player.js';
-
 import MouseTrackingSlider from '@/components/task_types/components/MouseTrackingSlider.vue';
 
 export default {
@@ -18,8 +17,6 @@ export default {
   setup() {
     // composition API
     const { player, playerOptions } = useVideoPlayer();
-
-    console.log('&player options 1', playerOptions.value);
 
     return {
       player,
@@ -29,7 +26,7 @@ export default {
   data() {
     return {
       do_start: false,
-      position: 0,
+      position: 50,
     };
   },
   components: {
@@ -37,6 +34,7 @@ export default {
   },
   mixins: [],
   mounted() {
+    /*
     console.log(
       'this.player.value',
       JSON.parse(JSON.stringify(this.player.value))
@@ -48,14 +46,15 @@ export default {
     this.player.value.on('ended', () => {
       console.log('&ended event');
     });
+    */
     this.playerOptions = {
       ...this.playerOptions,
       muted: false,
       controls: true,
     };
-    setTimeout(() => {
+    /*setTimeout(() => {
       this.player.value.play();
-    }, 300);
+    }, 300);*/
   },
 };
 </script>
