@@ -14,7 +14,9 @@
     <div>
       <p>--TEMP--</p>
       <LabelitVideoPlayer @player-loaded="player_loaded = true" />
-      <RealtimeVideoDimensionalAnnotationTaskForm v-if="player_loaded" />
+      <template v-if="player_loaded">
+        <RealtimeVideoDimensionalAnnotationTaskForm />
+      </template>
       <p>--END TEMP--</p>
     </div>
     <div id="projects">

@@ -19,9 +19,10 @@ export default {
   name: 'LabelitVideoPlayer',
   setup() {
     // composition API
-    const { player, playerOptions } = useVideoPlayer();
+    const { set_player, player, playerOptions } = useVideoPlayer();
 
     return {
+      set_player,
       player,
       playerOptions,
     };
@@ -34,11 +35,16 @@ export default {
       return this.$refs.videoPlayer.player;
     },
   },
+  data() {
+    return {
+      count_ready: 0,
+    };
+  },
   methods: {
     // listen event
     onPlayerPlay(player) {
       console.log('player play!', player);
-      console.log('current playback time: ', this.player.value.currentTime());
+      console.log('current playback time: ', this.player.currentTime());
     },
     onPlayerPause(player) {
       console.log('player pause!', player);
@@ -52,9 +58,25 @@ export default {
 
     // player is ready
     playerReady(player) {
-      console.log('the player is ready', player, this.player);
-      this.player.value = player;
+      console.log('the player is ready', player, player === this.player);
+
+      this.count_ready++;
+
+      console.log('count ready: ', this.count_ready);
+
+      //if (this.count_ready == 2){ //HACK
+      this.set_player(player);
       this.$emit('player-loaded');
+      //}
+
+      /*
+      setTimeout(  // HACK
+          () => {
+            this.$emit('player-loaded');
+          },
+          50,
+      )
+       */
     },
   },
   watch: {},
