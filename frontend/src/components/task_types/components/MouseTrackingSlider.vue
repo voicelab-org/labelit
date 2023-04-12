@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="sliderContainerId">
     <v-slider v-model="position"></v-slider>
   </div>
 </template>
@@ -24,6 +24,7 @@ export default {
   data() {
     return {
       position: this.value,
+      sliderContainerId: 'slider-container',
     };
   },
   methods: {
@@ -60,10 +61,15 @@ export default {
         'mousemove',
         throttle(event => {
           console.log('event.clientX', event.clientX);
+          this.updatePosition(event);
         }, this.throttleDelay)
       );
     },
-    recordPosition() {},
+    updatePosition(event) {
+      console.log('&updatePosition()');
+      let x_position = event.clientX;
+      let container = window.getElementById('');
+    },
   },
   watch: {
     doTrack: {
@@ -82,4 +88,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+#slider-container {
+  .v-slider--horizontal {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+</style>
