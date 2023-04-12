@@ -13,10 +13,13 @@
     </div>
     <div>
       <p>--TEMP--</p>
-      <LabelitVideoPlayer @player-loaded="player_loaded = true" />
-      <template v-if="player_loaded">
-        <RealtimeVideoDimensionalAnnotationTaskForm />
-      </template>
+      <LabelitVideoPlayer
+        @player-loaded="player_loaded_toggle = !player_loaded_toggle"
+      />
+
+      <RealtimeVideoDimensionalAnnotationTaskForm
+        :player-loaded-toggle="player_loaded_toggle"
+      />
       <p>--END TEMP--</p>
     </div>
     <div id="projects">
@@ -83,7 +86,7 @@ export default {
       loading: true,
       edited_project: { some: 'project' },
       show_edit_project: false,
-      player_loaded: false,
+      player_loaded_toggle: false,
     };
   },
   created() {

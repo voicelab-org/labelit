@@ -35,7 +35,6 @@ export default {
   },
   methods: {
     startTracking() {
-      // cf. https://codedamn.com/news/javascript/throttling-in-javascript
       // TODO consider using lodash throttle function: `_.throttle()`
       function throttle(cb, delay) {
         let wait = false;

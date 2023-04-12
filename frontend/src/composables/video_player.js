@@ -18,20 +18,10 @@ const playerOptions = ref({
 
 export function useVideoPlayer() {
   function set_player(p) {
-    console.log('&setting player to: ', p);
     player.value = p;
-    player.value.on('play', () => {
-      console.log('&&play cb from composable');
-    });
-  }
-
-  function register_player_event_callback(eventName, callback) {
-    console.log('&registering event inside composable', eventName);
-    player.value.on(eventName, callback);
   }
 
   return {
-    register_player_event_callback,
     set_player,
     player,
     playerOptions,

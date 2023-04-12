@@ -2,19 +2,22 @@
   <div class="task-form-container">
     RT dimensional annotation goes here !
     <br />
+    Autoplay must be activated in your browser.
+    <br />
     <MouseTrackingSlider
       :do-track="do_track_mouse_position"
       v-model="position"
     />
-    <v-btn @click="do_track_mouse_position = true">Start</v-btn>
-    <v-btn @click="do_track_mouse_position = false">Stop</v-btn>
+    <v-btn @click="do_track_mouse_position = true"> Start</v-btn>
+    <v-btn @click="do_track_mouse_position = false"> Stop</v-btn>
     <v-btn
       @click="
-        play();
+        playVideo();
         do_track_mouse_position = true;
       "
-      >Play</v-btn
     >
+      Play
+    </v-btn>
   </div>
 </template>
 
@@ -26,11 +29,9 @@ export default {
   name: 'RealtimeVideoDimensionalAnnotationTaskForm',
   setup() {
     // composition API
-    const { player, playerOptions, register_player_event_callback } =
-      useVideoPlayer();
+    const { player, playerOptions } = useVideoPlayer();
 
     return {
-      register_player_event_callback,
       player,
       playerOptions,
     };
@@ -39,80 +40,42 @@ export default {
     return {
       do_track_mouse_position: false,
       position: 50,
+      are_player_options_set: false,
     };
   },
   components: {
     MouseTrackingSlider,
   },
   mixins: [],
-  mounted() {
-    console.log('&this.player', this.player);
-
-    this.register_player_event_callback('play', () => {
-      console.log('&play from task form!');
-    });
-
-    //this.player.on('play', ()=>{console.log("&play!")})
-
-    /*
-      console.log(
-        '&this.player.value',
-        JSON.parse(JSON.stringify(this.player.value))
-      );
-      console.log(
-        'player options',
-        JSON.parse(JSON.stringify(this.playerOptions))
-      );
-      this.player.value.on('ended', () => {
-        console.log('&ended event');
-      });
-    */
-
-    /*this.playerOptions = {
-      ...this.playerOptions,
-      muted: false,
-      controls: true,
-    };*/
-
-    /*
-      this.player.value.on('ended', () => {
-        console.log('&ended event');
-        this.do_track_mouse_position = false
-      });
-      this.player.value.on('enterFullWindow', () => {
-        console.log('&enterFullWindow event');
-        //this.do_track_mouse_position = false
-      });
-      this.player.value.on('play', () => {
-        console.log('&play event');
-        //this.do_track_mouse_position = false
-      });
-
-      this.player.value.on('pause', () => {
-        console.log('&pause event');
-        //this.do_track_mouse_position = false
-      });
-     */
-
-    //enterFullWindow
-    /*
-      setTimeout(() => {
-        this.player.value.play();
-      }, 300);
-    */
+  props: {
+    playerLoadedToggle: {
+      type: Boolean,
+      required: true,
+    },
   },
   watch: {
     position: {
       handler() {
-        console.log(
-          '&position changed in Realtime...TaskForm: ',
-          this.position
-        );
+        /*console.log(
+            '&position changed in Realtime...TaskForm: ',
+            this.position
+        );*/
+      },
+    },
+    playerLoadedToggle: {
+      handler() {
+        this.setPlayerOptions();
+        this.setupEvents();
       },
     },
   },
   methods: {
-    play() {
+    setupEvents() {
+      this.player.on('ended', () => {
+        this.do_track_mouse_position = false;
+      });
+    },
+    playVideo() {
       setTimeout(
         () => {
           this.player.currentTime(0);
@@ -120,6 +83,15 @@ export default {
         },
         10 // HACK
       );
+    },
+    setPlayerOptions() {
+      if (!this.are_player_options_set) {
+        this.playerOptions = this.player.options({
+          muted: false,
+          //controls: false,  //TODO: uncomment, leaving controls for debugging only
+        });
+        this.are_player_options_set = true;
+      }
     },
   },
 };
