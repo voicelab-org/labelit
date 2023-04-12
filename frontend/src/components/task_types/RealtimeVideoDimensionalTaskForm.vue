@@ -27,7 +27,7 @@ import MouseTrackingSlider from '@/components/task_types/components/MouseTrackin
 import TaskForm from '@/components/mixins/TaskForm.js';
 
 export default {
-  name: 'RealtimeVideoDimensionalAnnotationTaskForm',
+  name: 'RealtimeVideoDimensionalTaskForm',
   setup() {
     // composition API
     const { player, playerOptions } = useVideoPlayer();
