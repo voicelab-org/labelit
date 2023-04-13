@@ -12,6 +12,9 @@
     </div>
 
     <div id="doc">
+      <div v-if="project.is_video_annotated">
+        <VideoPlayer :document="document" />
+      </div>
       <div v-if="project.is_audio_annotated">
         <player
           v-model="annotated_regions"
@@ -38,12 +41,14 @@
 </template>
 <script>
 import Player from '@/components/Player.vue';
+import VideoPlayer from '@/components/VideoPlayer.vue';
 import TextWithEntities from '@/components/TextWithEntities.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Document',
   components: {
+    VideoPlayer,
     Player,
     TextWithEntities,
   },
