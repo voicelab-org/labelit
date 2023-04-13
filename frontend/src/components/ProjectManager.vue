@@ -88,7 +88,8 @@ export default {
           },
           is_audio_annotated: { type: 'boolean', default: true },
           enable_region_annotation: { type: 'boolean', default: false },
-          is_text_annotated: { type: 'boolean', default: true },
+          is_text_annotated: { type: 'boolean', default: false },
+          is_video_annotated: { type: 'boolean', default: false },
           // are_sequences_annotated
           timer_inactivity_threshold: { type: 'integer', default: 60000 },
           do_display_timer_time: { type: 'boolean', default: false },
