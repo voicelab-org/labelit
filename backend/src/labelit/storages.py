@@ -49,4 +49,5 @@ class SourceAudioStorage(storage_class):
 
 # create lazy objects which would be initialized on a call (we need this for settings availability)
 audio_storage = AudioStorage()
+video_storage = VideoStorage()
 image_storage = ImageStorage()
