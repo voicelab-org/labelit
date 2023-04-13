@@ -19,6 +19,7 @@
           :document="document"
           :project="batch.project"
           @loaded="startTiming"
+          @video-player-loaded="video_player_toggle = !video_player_toggle"
         />
         <div v-if="batch.project.do_display_timer_time">
           Time: {{ time_display }}
@@ -34,6 +35,7 @@
             @submitted="numTasksSubmitted++"
             :document="document"
             :project="batch.project"
+            :video-player-loaded-toggle="video_player_toggle"
           />
         </div>
       </div>
@@ -89,6 +91,7 @@ export default {
       isUndoing: false,
       isFirstAnnotation: true,
       focus_index: 0,
+      video_player_toggle: false,
     };
   },
   computed: {

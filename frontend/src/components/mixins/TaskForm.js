@@ -39,6 +39,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    videoPlayerLoadedToggle: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {

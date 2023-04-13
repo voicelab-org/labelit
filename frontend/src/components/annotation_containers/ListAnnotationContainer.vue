@@ -29,6 +29,7 @@
           :task="getTaskForAnnotation(annotation)"
           :submitting="submitting"
           :review-mode="reviewMode"
+          :video-player-loaded-toggle="videoPlayerLoadedToggle"
           :document="document"
           :focused="i == focus_index"
           @submitted="$emit('submitted')"

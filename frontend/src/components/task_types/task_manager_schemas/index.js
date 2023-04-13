@@ -4,6 +4,7 @@ import EntityTaskSchema from './EntityTaskSchema.json';
 import AudioRegionTaskSchema from './AudioRegionTaskSchema.json';
 import TextEditionTaskSchema from './TextEditionTaskSchema.json';
 import TranscriptionTaskSchema from './TranscriptionTaskSchema.json';
+import RealtimeVideoDimensionalTaskSchema from './RealtimeVideoDimensionalTaskSchema.json';
 
 export default {
   CategoricalTaskSchema,
@@ -12,4 +13,5 @@ export default {
   AudioRegionTaskSchema,
   TextEditionTaskSchema,
   TranscriptionTaskSchema,
+  RealtimeVideoDimensionalTaskSchema,
 };

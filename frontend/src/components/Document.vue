@@ -13,7 +13,10 @@
 
     <div id="doc">
       <div v-if="project.is_video_annotated">
-        <VideoPlayer :document="document" />
+        <VideoPlayer
+          :document="document"
+          @player-loaded="$emit('video-player-loaded')"
+        />
       </div>
       <div v-if="project.is_audio_annotated">
         <player
@@ -55,6 +58,7 @@ export default {
   data() {
     return {
       audio_loaded: false,
+      video_player_toggle: false,
       /*annotated_regions: [],  // TODO: move to store
       region_tasks: [  // TODO: move to store
         {
