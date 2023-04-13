@@ -45,31 +45,35 @@ def create_polymorphic_serializer_mapping(
             return (
                 list(map(_model_file_name_to_class_name, model_file_names)),
                 plugin_names,
+                model_file_names,
             )
 
-        model_names, plugin_names = _get_model_names()
+        model_names, plugin_names, model_file_names = _get_model_names()
 
         dotted_paths = list(map(lambda name: f"labelit.models.{name}", model_names))
 
-        return dotted_paths, plugin_names
+        return dotted_paths, plugin_names, model_file_names
 
     (
         model_dotted_paths,
         plugin_names,
+        model_file_names,
     ) = _get_dotted_paths_with_corresponding_plugin_names()
 
     def _get_serializer_dotted_paths():
         serializer_dotted_paths = []
         corresponding_model_dotted_paths = []
-        for model_dotted_path, plugin_name in zip(model_dotted_paths, plugin_names):
+        for model_dotted_path, plugin_name, model_filename in zip(
+            model_dotted_paths,
+            plugin_names,
+            model_file_names,
+        ):
             model_name = model_dotted_path.split(".")[-1]
 
             if is_create_or_update:
-                dotted_path = f"labelit.plugins.{plugin_name}.serializers.CreateOrUpdate{model_name}Serializer"
+                dotted_path = f"labelit.plugins.{plugin_name}.serializers.{model_filename.split('.')[0]}_serializer.CreateOrUpdate{model_name}Serializer"
             else:
-                dotted_path = (
-                    f"labelit.plugins.{plugin_name}.serializers.{model_name}Serializer"
-                )
+                dotted_path = f"labelit.plugins.{plugin_name}.serializers.{model_filename.split('.')[0]}_serializer.{model_name}Serializer"
             try:
                 resolve(dotted_path)
             except ModuleNotFoundError:
