@@ -30,6 +30,10 @@ export default {
     reviewMode: {
       type: Boolean,
     },
+    videoPlayerLoadedToggle: {
+      type: Boolean,
+      required: true,
+    },
   },
   created() {
     this.getProjectTasks();

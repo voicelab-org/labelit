@@ -47,12 +47,6 @@ export default {
     MouseTrackingSlider,
   },
   mixins: [],
-  props: {
-    playerLoadedToggle: {
-      type: Boolean,
-      required: true,
-    },
-  },
   watch: {
     position: {
       handler() {

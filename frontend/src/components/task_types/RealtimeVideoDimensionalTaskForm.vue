@@ -49,7 +49,7 @@ export default {
   },
   mixins: [TaskForm],
   props: {
-    playerLoadedToggle: {
+    videoPlayerLoadedToggle: {
       type: Boolean,
       required: true,
     },

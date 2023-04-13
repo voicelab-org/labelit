@@ -29,6 +29,7 @@
                 :review-mode="reviewMode"
                 :document="document"
                 :focused="i == focus_index"
+                :video-player-loaded-toggle="videoPlayerLoadedToggle"
                 @submitted="$emit('submitted')"
                 @submiterror="$emit('submiterror')"
                 @focus="focus_index = i"

@@ -5,6 +5,17 @@ from labelit.models import (
 from labelit.serializers.label_serializer import LabelPolymorphicSerializer
 
 
+class CreateOrUpdateRealtimeVideoDimensionalTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealtimeVideoDimensionalTask
+        fields = [
+            "id",
+            "name",
+            "can_documents_be_invalidated",
+            "archived",
+        ]
+
+
 class RealtimeVideoDimensionalTaskSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField("get_labels")
 
