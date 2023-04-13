@@ -13,7 +13,8 @@
 
     <div id="doc">
       <div v-if="project.is_video_annotated">
-        <VideoPlayer
+        VIDEO PLAYER
+        <LabelitVideoPlayer
           :document="document"
           @player-loaded="$emit('video-player-loaded')"
         />
@@ -44,14 +45,14 @@
 </template>
 <script>
 import Player from '@/components/Player.vue';
-import VideoPlayer from '@/components/VideoPlayer.vue';
+import LabelitVideoPlayer from '@/components/LabelitVideoPlayer.vue';
 import TextWithEntities from '@/components/TextWithEntities.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Document',
   components: {
-    VideoPlayer,
+    LabelitVideoPlayer,
     Player,
     TextWithEntities,
   },
