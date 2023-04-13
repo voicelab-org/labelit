@@ -23,8 +23,6 @@ create_or_update_mappping = create_polymorphic_serializer_mapping(
     is_create_or_update=True
 )
 
-print("&mapping for create/update", create_or_update_mappping)
-
 
 class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = create_or_update_mappping
@@ -49,8 +47,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 mapping = create_polymorphic_serializer_mapping()
-
-print("&mapping", mapping)
 
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
