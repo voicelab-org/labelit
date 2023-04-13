@@ -1,13 +1,17 @@
 from rest_framework import serializers
-from labelit.models import *
+from labelit.models import Task
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
+from labelit.services.polymorphic_serializer_mapping_creator import (
+    create_polymorphic_serializer_mapping,
+)
 
 # from labelit.serializers.task_types import *
 from zope.dottedname.resolve import resolve
 from django.contrib.contenttypes.models import ContentType
+import os
 
-"""
+
 class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -20,6 +24,7 @@ class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
         ]
 
 
+"""
 def _get_mapping(
     is_create_or_update=False,
 ):
@@ -78,9 +83,12 @@ def _get_mapping(
             serializer_dotted_paths, task_dotted_paths
         )
     }
+"""
 
 
-create_or_update_mappping = _get_mapping(is_create_or_update=True)
+create_or_update_mappping = create_polymorphic_serializer_mapping(
+    is_create_or_update=True
+)
 
 
 class CreateOrUpdateTaskPolymorphicSerializer(PolymorphicSerializer):
@@ -105,9 +113,8 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
-mapping = _get_mapping()
+mapping = create_polymorphic_serializer_mapping()
 
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = mapping
-"""

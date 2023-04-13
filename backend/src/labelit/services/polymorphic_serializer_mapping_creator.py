@@ -1,3 +1,8 @@
+import os
+from labelit.models import *
+from zope.dottedname.resolve import resolve
+
+
 def create_polymorphic_serializer_mapping(
     is_create_or_update=False,
     is_task_mapping=True,
@@ -7,7 +12,8 @@ def create_polymorphic_serializer_mapping(
     else:
         model_type_name = "label"
 
-    def _get_dotted_paths():
+    def _get_dotted_paths_with_corresponding_plugin_names():
+        """
         def _get_model_names():
             model_filenames = list(
                 filter(
@@ -30,23 +36,58 @@ def create_polymorphic_serializer_mapping(
                 )
 
             return list(map(_model_file_name_to_class_name, model_filenames))
+        """
 
-        model_names = _get_model_names()
+        def _get_model_names():
+            def _is_of_desired_type(model_filename):
+                return model_filename.endswith(f"{model_type_name.capitalize()}.py")
 
-        return list(map(lambda name: f"labelit.models.{name}", model_names))
+            here = os.path.abspath(os.path.dirname(__file__))
+            plugins_path = os.path.join(here, "../plugins")
+            model_file_names = []
+            plugin_names = []
+            for plugin_name in os.listdir(plugins_path):
+                plugin_model_filenames = list(
+                    filter(
+                        _is_of_desired_type,
+                        os.listdir(plugins_path, plugin_name, "models"),
+                    )
+                )
+                model_file_names += plugin_model_filenames
+                plugin_names += list(map(lambda _: plugin_name, plugin_model_filenames))
 
-    model_dotted_paths = _get_dotted_paths()
+            def _model_file_name_to_class_name(model_filename):
+                return "".join(
+                    map(
+                        lambda name: name.capitalize(),
+                        model_filename.split(".")[0].split("_"),
+                    )
+                )
+
+            return (
+                list(map(_model_file_name_to_class_name, model_file_names)),
+                plugin_names,
+            )
+
+        model_names, plugin_names = _get_model_names()
+
+        dotted_paths = list(map(lambda name: f"labelit.models.{name}", model_names))
+
+        return dotted_paths, plugin_names
+
+    (
+        model_dotted_paths,
+        plugin_names,
+    ) = _get_dotted_paths_with_corresponding_plugin_names()
 
     def _get_serializer_dotted_paths():
         serializer_dotted_paths = []
         corresponding_model_dotted_paths = []
-        for model_dotted_path in model_dotted_paths:
+        for model_dotted_path, plugin_name in zip(model_dotted_paths, plugin_names):
             model_name = model_dotted_path.split(".")[-1]
-            if model_type_name == "label":
-                model_name = model_name.replace("Task", "Label")
 
             if is_create_or_update:
-                dotted_path = f"labelit.{model_type_name}_types.serializers.CreateOrUpdate{model_name}Serializer"
+                dotted_path = f"labelit.plugins.{plugin_name}.serializers.CreateOrUpdate{model_name}Serializer"
             else:
                 dotted_path = f"labelit.{model_type_name}_types.serializers.{model_name}Serializer"
             try:
