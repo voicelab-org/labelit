@@ -4,7 +4,7 @@ from pathlib import Path
 from importlib import import_module
 
 
-def automatically_import_modules(
+def automatically_import_module_classes(
     package_dir_path: str,
     name: str,
     globals_dict: dict,
