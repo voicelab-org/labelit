@@ -50,6 +50,8 @@ services:
       DB_PASSWORD: postgres
       AUDIO_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
       AWS_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-bucket
+      VIDEO_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
+      AWS_VIDEO_STORAGE_BUCKET_NAME: labelit-video-bucket
       AWS_SOURCE_AUDIO_STORAGE_BUCKET_NAME: labelit-audio-source-bucket
       AWS_IMAGE_STORAGE_BUCKET_NAME: uploaded-images
       AWS_REGION_NAME: eu-west-1

@@ -14,6 +14,7 @@ class Project(models.Model):
     name = models.CharField(max_length=500)
     is_audio_annotated = models.BooleanField(default=True)
     is_text_annotated = models.BooleanField(default=True)
+    is_video_annotated = models.BooleanField(default=False)
     enable_region_annotation = models.BooleanField(default=False)
     are_sequences_annotated = models.BooleanField(  # TODO: rename
         """

@@ -10,6 +10,9 @@ class Document(models.Model):
         blank=True,
         null=True,
     )
+    video_filename = models.CharField(
+        "The video file name", max_length=3000, default=None, blank=True, null=True
+    )
     audio_filename = models.CharField(
         "The audio file name", max_length=3000, default=None, blank=True, null=True
     )
