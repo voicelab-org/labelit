@@ -83,18 +83,6 @@ class OrdinalLabelSerializer(serializers.ModelSerializer):
         return pattern
 
 
-class TranscriptionLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TranscriptionLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "transcript",
-        ]
-
-
 class TextEditionLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = TextEditionLabel
