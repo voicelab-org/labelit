@@ -1,3 +1,4 @@
+"""
 from django.db import models
 from labelit.models.label import Label
 
@@ -21,3 +22,4 @@ class RealtimeVideoDimensionalLabel(Label):
 
     def __str__(self):
         return "<RealtimeVideoDimensionalLabel ({})>".format(self.pk)
+"""
