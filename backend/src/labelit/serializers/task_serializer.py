@@ -2,11 +2,12 @@ from rest_framework import serializers
 from labelit.models import *
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .label_serializer import LabelPolymorphicSerializer
-from labelit.serializers.task_types import *
+
+# from labelit.serializers.task_types import *
 from zope.dottedname.resolve import resolve
 from django.contrib.contenttypes.models import ContentType
 
-
+"""
 class CreateOrUpdateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -109,3 +110,4 @@ mapping = _get_mapping()
 
 class TaskPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = mapping
+"""

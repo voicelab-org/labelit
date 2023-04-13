@@ -123,6 +123,18 @@ class LiveCorrectLabelReadSerializer(serializers.ModelSerializer):
         ]
 
 
+class TranscriptionLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TranscriptionLabel
+        fields = [
+            "id",
+            "name",
+            "task",
+            "color",
+            "transcript",
+        ]
+
+
 class LabelPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Label: LabelSerializer,
