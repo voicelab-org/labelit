@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from labelit.models import (
-    TranscriptionLabel,
+    AudioRegionLabel,
 )
 
 
