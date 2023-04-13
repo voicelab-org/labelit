@@ -14,11 +14,11 @@ import DocumentService from '@/services/document.service.js';
 import { useVideoPlayer } from '@/composables/video_player.js';
 
 export default {
-  name: 'VideoPlayer',
+  name: 'LabelitVideoPlayer',
   props: {
     document: {
       type: Object,
-      required: true,
+      //required: true,
     },
   },
   setup() {
@@ -36,16 +36,15 @@ export default {
       return this.$refs.videoPlayer.player;
     },
   },
-  data() {
-    return {};
-  },
   methods: {
     // player is ready
     playerReady(player) {
+      console.log('&playerReady()');
       this.set_player(player);
       this.$emit('player-loaded');
     },
     fetchVideo() {
+      console.log('&fetchVideo');
       DocumentService.getVideoUrl(this.document.id).then(res => {
         this.playerOptions = this.player.options({
           sources: [
@@ -62,6 +61,7 @@ export default {
     document: {
       deep: true,
       handler() {
+        console.log('&document change handler');
         this.fetchVideo();
       },
     },

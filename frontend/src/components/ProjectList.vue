@@ -11,17 +11,6 @@
         />
       </div>
     </div>
-    <div>
-      <p>--TEMP--</p>
-      <LabelitVideoPlayer
-        @player-loaded="player_loaded_toggle = !player_loaded_toggle"
-      />
-
-      <RealtimeVideoDimensionalAnnotationTaskForm
-        :player-loaded-toggle="player_loaded_toggle"
-      />
-      <p>--END TEMP--</p>
-    </div>
     <div id="projects">
       <v-tabs>
         <v-tab @click="show_archived = false">Live projects</v-tab>
@@ -68,16 +57,11 @@ import ProjectMenu from '@/components/ProjectMenu.vue';
 import ProjectManager from './ProjectManager.vue';
 import { mapGetters } from 'vuex';
 
-import LabelitVideoPlayer from '@/components/temp_components/LabelitVideoPlayer.vue';
-import RealtimeVideoDimensionalAnnotationTaskForm from '@/components/temp_components/RealtimeVideoDimensionalAnnotationTaskForm.vue';
-
 export default {
   name: 'ProjectList',
   components: {
-    RealtimeVideoDimensionalAnnotationTaskForm,
     ProjectMenu,
     ProjectManager,
-    LabelitVideoPlayer,
   },
   data() {
     return {
