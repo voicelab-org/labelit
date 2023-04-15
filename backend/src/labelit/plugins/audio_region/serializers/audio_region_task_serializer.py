@@ -15,6 +15,7 @@ class CreateOrUpdateAudioRegionTaskSerializer(serializers.ModelSerializer):
             "can_documents_be_invalidated",
             "color",
             "archived",
+            "html_guidelines",
         ]
 
 

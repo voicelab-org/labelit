@@ -13,6 +13,7 @@ class CreateOrUpdateRealtimeVideoDimensionalTaskSerializer(serializers.ModelSeri
             "name",
             "can_documents_be_invalidated",
             "archived",
+            "html_guidelines",
         ]
 
 
