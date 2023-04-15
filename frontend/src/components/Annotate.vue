@@ -91,7 +91,7 @@ export default {
       isUndoing: false,
       isFirstAnnotation: true,
       focus_index: 0,
-      video_player_toggle: false,
+      video_player_toggle: true,
     };
   },
   computed: {
@@ -245,6 +245,7 @@ export default {
 .annotation-form {
   position: relative;
   padding: 10px 0;
+
   #inactive {
     display: flex;
     justify-content: space-around;
@@ -258,6 +259,7 @@ export default {
     z-index: 2000;
     width: calc(100% + 52px);
     left: -50px;
+
     > .v-icon {
       opacity: 1;
       color: white;
