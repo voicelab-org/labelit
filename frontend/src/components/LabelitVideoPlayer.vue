@@ -1,12 +1,14 @@
 <template>
-  <video-player
-    class="video-player-box"
-    ref="videoPlayer"
-    :options="playerOptions"
-    :playsinline="true"
-    @ready="playerReady"
-  >
-  </video-player>
+  <div id="video-player-container">
+    <video-player
+      class="video-player-box"
+      ref="videoPlayer"
+      :options="playerOptions"
+      :playsinline="true"
+      @ready="playerReady"
+    >
+    </video-player>
+  </div>
 </template>
 
 <script>
@@ -35,6 +37,9 @@ export default {
     computed_player() {
       return this.$refs.videoPlayer.player;
     },
+  },
+  created() {
+    this.fetchVideo();
   },
   methods: {
     // player is ready
@@ -68,3 +73,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+#video-player-container {
+  display: flex;
+  justify-content: space-around;
+}
+</style>
