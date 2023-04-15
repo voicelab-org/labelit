@@ -40,8 +40,8 @@
         </div>
       </div>
       <div v-if="annotations" id="actions-container">
-        <v-btn color="primary" @click="submit()">SUBMIT</v-btn>
         <hotkey-guide />
+        <v-btn color="primary" @click="submit()">SUBMIT</v-btn>
       </div>
       <div
         v-if="isInactive && batch && !batch.project.do_display_timer_time"

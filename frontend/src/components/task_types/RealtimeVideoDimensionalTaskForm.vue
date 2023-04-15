@@ -1,7 +1,10 @@
 <template>
   <div class="task-form-container">
     <div v-if="step == 0">
-      <p>Autoplay must be activated in your browser.</p>
+      <p>
+        Autoplay must be activated in your browser. Please check your browser
+        settings if the video does not play or is muted.
+      </p>
 
       <p />
       <div v-if="!is_realtime_sequence_ended">
@@ -21,19 +24,35 @@
         </div>
       </div>
       <div v-if="this.is_realtime_sequence_ended">
-        Sequence: {{ current_realtime_sequence }}
         <RealtimeSequenceGraph :sequence="current_realtime_sequence" />
+        <div>
+          <v-btn @click="cancelFirstStep()"> Cancel </v-btn>
+          <v-btn @click="confirmFirstStep()"> Confirm </v-btn>
+        </div>
       </div>
     </div>
-    <div v-if="step == 1">SUMMATIVE SLIDER</div>
+    <div v-if="step == 1">
+      <p>Please assign a global evaluation:</p>
+      <v-slider v-model="summative_annotation"></v-slider>
+      <div>
+        <v-btn @click="confirmSecondStep()" v-if="!second_step_confirmed">
+          Confirm
+        </v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
 import { useVideoPlayer } from '@/composables/video_player.js';
 import MouseTrackingSlider from '@/components/task_types/components/MouseTrackingSlider.vue';
 import RealtimeSequenceGraph from '@/components/task_types/components/RealtimeSequenceGraph.vue';
 import TaskForm from '@/components/mixins/TaskForm.js';
+import LabelService from '@/services/label.service.js';
+
+const INITIAL_POSITION = 50;
+const LABEL_RESOURCE_TYPE = 'RealtimeVideoDimensionalLabel';
 
 export default {
   name: 'RealtimeVideoDimensionalTaskForm',
@@ -49,10 +68,12 @@ export default {
   data() {
     return {
       do_track_mouse_position: false,
-      position: 50,
+      position: INITIAL_POSITION,
       step: 0,
       current_realtime_sequence: [],
       is_realtime_sequence_ended: false,
+      summative_annotation: 50,
+      second_step_confirmed: false,
     };
   },
   components: {
@@ -67,6 +88,7 @@ export default {
     },
   },
   created() {
+    console.log('&created: ');
     this.setPlayerOptions();
     this.setupEvents();
   },
@@ -77,10 +99,6 @@ export default {
           this.player.currentTime(),
           this.position,
         ]);
-        /*console.log(
-            '&position changed in Realtime...TaskForm: ',
-            this.position
-        );*/
       },
     },
     playerLoadedToggle: {
@@ -91,11 +109,45 @@ export default {
     },
   },
   methods: {
-    setupEvents() {
-      this.player.on('ended', () => {
-        this.do_track_mouse_position = false;
-        this.is_realtime_sequence_ended = true;
+    confirmSecondStep() {
+      let label = this.selected_labels[0];
+      label.summative = this.summative_annotation;
+      LabelService.update(label.id, label).then(() => {
+        Vue.set(this.selected_labels, 0, label);
+        this.second_step_confirmed = true;
       });
+    },
+    cancelFirstStep() {
+      this.current_realtime_sequence = [];
+      this.is_realtime_sequence_ended = false;
+      this.position = INITIAL_POSITION;
+    },
+    confirmFirstStep() {
+      if (this.selected_labels.length) {
+        let label = this.selected_labels[0];
+        label.sequence = this.current_realtime_sequence;
+        LabelService.update(label.id, label).then(() => {
+          Vue.set(this.selected_labels, 0, label);
+        });
+      } else {
+        LabelService.create({
+          resourcetype: LABEL_RESOURCE_TYPE,
+          task: this.task.id,
+          sequence: this.current_realtime_sequence,
+          summative: INITIAL_POSITION,
+        }).then(res => {
+          Vue.set(this.selected_labels, 0, res.data);
+        });
+      }
+      this.step++;
+    },
+    setupEvents() {
+      if (this.player !== null) {
+        this.player.on('ended', () => {
+          this.do_track_mouse_position = false;
+          this.is_realtime_sequence_ended = true;
+        });
+      }
     },
     playVideo() {
       setTimeout(
