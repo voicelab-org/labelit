@@ -15,6 +15,7 @@ class CreateOrUpdateEntityTaskSerializer(serializers.ModelSerializer):
             "can_documents_be_invalidated",
             "labels",
             "archived",
+            "html_guidelines",
         ]
 
 

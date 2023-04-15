@@ -14,6 +14,7 @@ class CreateOrUpdateTextEditionTaskSerializer(serializers.ModelSerializer):
             "name",
             "can_documents_be_invalidated",
             "archived",
+            "html_guidelines",
         ]
 
 

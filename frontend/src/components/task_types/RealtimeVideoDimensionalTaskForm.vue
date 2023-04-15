@@ -12,22 +12,27 @@
           :do-track="do_track_mouse_position"
           v-model="position"
         />
+        <div class="guidelines-container">
+          <div v-html="task.html_guidelines"></div>
+        </div>
         <div class="play-container" v-if="!do_track_mouse_position">
           <v-btn
+            rounded
+            color="primary"
             @click="
               playVideo();
               do_track_mouse_position = true;
             "
           >
-            Play
+            <v-icon>mdi-play</v-icon>
           </v-btn>
         </div>
       </div>
       <div v-if="this.is_realtime_sequence_ended">
         <RealtimeSequenceGraph :sequence="current_realtime_sequence" />
         <div>
-          <v-btn @click="cancelFirstStep()"> Cancel </v-btn>
-          <v-btn @click="confirmFirstStep()"> Confirm </v-btn>
+          <v-btn @click="cancelFirstStep()"> Cancel</v-btn>
+          <v-btn @click="confirmFirstStep()"> Confirm</v-btn>
         </div>
       </div>
     </div>
@@ -153,13 +158,11 @@ export default {
     },
     setupEvents() {
       if (this.player) {
-        if (this.player.on) {
-          if (this.player.contentEl()) {
-            this.player.on('ended', () => {
-              this.do_track_mouse_position = false;
-              this.is_realtime_sequence_ended = true;
-            });
-          }
+        if (this.player.contentEl()) {
+          this.player.on('ended', () => {
+            this.do_track_mouse_position = false;
+            this.is_realtime_sequence_ended = true;
+          });
         }
       }
     },
@@ -193,6 +196,13 @@ export default {
   .play-container {
     display: flex;
     justify-content: center;
+  }
+
+  .guidelines-container {
+    max-width: 100%;
+    img {
+      max-width: 100%;
+    }
   }
 }
 </style>
