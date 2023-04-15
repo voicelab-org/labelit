@@ -1,7 +1,9 @@
 <template>
   <div>
     <p>Your annotations:</p>
-    <LineChart :x="x" :y="y" />
+    <div class="realtime-chart-container">
+      <LineChart :x="x" :y="y" />
+    </div>
   </div>
 </template>
 
@@ -30,4 +32,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.realtime-chart-container {
+  display: flex;
+  > * {
+    max-height: 300px;
+  }
+}
+</style>
