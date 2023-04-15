@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-if="step == 1">
-      <p>Please assign a global evaluation:</p>
+      <p v-if="!second_step_confirmed">Please assign a global evaluation:</p>
       <v-slider v-model="summative_annotation"></v-slider>
       <div>
         <v-btn @click="confirmSecondStep()" v-if="!second_step_confirmed">
@@ -76,6 +76,9 @@ export default {
       second_step_confirmed: false,
     };
   },
+  mounted() {
+    console.log('&mounted');
+  },
   components: {
     MouseTrackingSlider,
     RealtimeSequenceGraph,
@@ -93,6 +96,13 @@ export default {
     this.setupEvents();
   },
   watch: {
+    currentStepperStep: {
+      handler() {
+        console.log('&stepper step change !');
+        this.setPlayerOptions();
+        this.setupEvents();
+      },
+    },
     position: {
       handler() {
         this.current_realtime_sequence.push([
@@ -142,11 +152,15 @@ export default {
       this.step++;
     },
     setupEvents() {
-      if (this.player !== null) {
-        this.player.on('ended', () => {
-          this.do_track_mouse_position = false;
-          this.is_realtime_sequence_ended = true;
-        });
+      if (this.player) {
+        if (this.player.on) {
+          if (this.player.contentEl()) {
+            this.player.on('ended', () => {
+              this.do_track_mouse_position = false;
+              this.is_realtime_sequence_ended = true;
+            });
+          }
+        }
       }
     },
     playVideo() {
