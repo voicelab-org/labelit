@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>RT seq. graph</p>
-    <LineChart />
+    <p>Your annotations:</p>
+    <LineChart :x="x" :y="y" />
   </div>
 </template>
 
@@ -17,6 +17,14 @@ export default {
     sequence: {
       type: Array,
       required: true,
+    },
+  },
+  computed: {
+    x() {
+      return this.sequence.map(x => Math.round(x[0] * 100) / 100);
+    },
+    y() {
+      return this.sequence.map(x => x[1]);
     },
   },
 };
