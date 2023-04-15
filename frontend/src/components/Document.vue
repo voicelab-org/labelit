@@ -13,7 +13,6 @@
 
     <div id="doc">
       <div v-if="project.is_video_annotated">
-        VIDEO PLAYER
         <LabelitVideoPlayer
           :document="document"
           @player-loaded="$emit('video-player-loaded')"
