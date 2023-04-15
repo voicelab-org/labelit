@@ -1,23 +1,24 @@
 <template>
   <div class="task-form-container">
-    RT dimensional annotation goes here !
-    <br />
-    Autoplay must be activated in your browser.
-    <br />
-    <MouseTrackingSlider
-      :do-track="do_track_mouse_position"
-      v-model="position"
-    />
-    <v-btn @click="do_track_mouse_position = true"> Start</v-btn>
-    <v-btn @click="do_track_mouse_position = false"> Stop</v-btn>
-    <v-btn
-      @click="
-        playVideo();
-        do_track_mouse_position = true;
-      "
-    >
-      Play
-    </v-btn>
+    <div v-if="step == 0">
+      RT dimensional annotation goes here !
+      <br />
+      Autoplay must be activated in your browser.
+      <br />
+      <MouseTrackingSlider
+        :do-track="do_track_mouse_position"
+        v-model="position"
+      />
+      <v-btn
+        @click="
+          playVideo();
+          do_track_mouse_position = true;
+        "
+      >
+        Play
+      </v-btn>
+    </div>
+    <div v-if="step == 1">SUMMATIVE SLIDER</div>
   </div>
 </template>
 
@@ -41,7 +42,7 @@ export default {
     return {
       do_track_mouse_position: false,
       position: 50,
-      are_player_options_set: false,
+      step: 0,
     };
   },
   components: {
@@ -53,6 +54,10 @@ export default {
       type: Boolean,
       required: true,
     },
+  },
+  created() {
+    this.setPlayerOptions();
+    this.setupEvents();
   },
   watch: {
     position: {
@@ -80,18 +85,19 @@ export default {
       setTimeout(
         () => {
           this.player.currentTime(0);
+          this.setupEvents();
           this.player.play();
         },
         10 // HACK
       );
     },
     setPlayerOptions() {
-      if (!this.are_player_options_set) {
+      let current_options = this.player.options();
+
+      if (current_options.controls) {
         this.playerOptions = this.player.options({
-          muted: false,
-          //controls: false,  //TODO: uncomment, leaving controls for debugging only
+          controls: false, //TODO: uncomment, leaving controls for debugging only
         });
-        this.are_player_options_set = true;
       }
     },
   },
