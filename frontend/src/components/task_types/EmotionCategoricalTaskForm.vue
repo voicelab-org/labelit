@@ -196,11 +196,17 @@ export default {
           Vue.set(this.selected_labels, 0, res.data);
         });
       } else {
-        LabelService.update(this.annotation_label.id, {
+        let payload = {
           resourcetype: LABEL_RESOURCE_TYPE,
           tags_with_intensities: this.sorted_positive_labels.concat(
             this.sorted_negative_labels
           ),
+        };
+        LabelService.update(this.annotation_label.id, payload).then(() => {
+          Vue.set(this.selected_labels, 0, {
+            ...payload,
+            id: this.annotation_label.id,
+          });
         });
       }
       // TODO create or update label, then set this.selected_labels[0]
