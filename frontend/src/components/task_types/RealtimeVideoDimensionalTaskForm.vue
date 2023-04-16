@@ -12,9 +12,6 @@
           :do-track="do_track_mouse_position"
           v-model="position"
         />
-        <div class="guidelines-container">
-          <div v-html="task.html_guidelines"></div>
-        </div>
         <div class="play-container" v-if="!do_track_mouse_position">
           <v-btn
             rounded
@@ -44,6 +41,9 @@
           Confirm
         </v-btn>
       </div>
+    </div>
+    <div class="guidelines-container">
+      <div v-html="task.html_guidelines"></div>
     </div>
   </div>
 </template>
