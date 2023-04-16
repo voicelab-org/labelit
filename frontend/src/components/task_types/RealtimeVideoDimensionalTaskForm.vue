@@ -35,7 +35,7 @@
     </div>
     <div v-if="step == 1">
       <p v-if="!second_step_confirmed">Please assign a global evaluation:</p>
-      <v-slider v-model="summative_annotation"></v-slider>
+      <v-slider :thumb-label="true" v-model="summative_annotation" />
       <div>
         <v-btn @click="confirmSecondStep()" v-if="!second_step_confirmed">
           Confirm

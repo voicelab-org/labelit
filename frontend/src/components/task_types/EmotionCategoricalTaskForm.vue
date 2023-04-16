@@ -6,9 +6,12 @@
         @selected="initializeLabelIntensitySetting"
       />
       <div>
-        <div v-if="show_intensity_slider">
+        <div v-if="show_intensity_slider" style="margin-top: 50px">
           <template v-if="!intensity_confirmed">
-            <v-slider v-model="intensity_position"></v-slider>
+            <v-slider
+              v-model="intensity_position"
+              :thumb-label="true"
+            ></v-slider>
             <v-btn @click="confirmIntensity"> CONFIRM </v-btn>
           </template>
         </div>
@@ -55,6 +58,7 @@ export default {
       show_intensity_slider: false,
       intensity_confirmed: false,
       current_label: null,
+      annotation_label: null,
     };
   },
   mounted() {
@@ -180,6 +184,25 @@ export default {
       this.current_label.intensity = this.intensity_position;
 
       this.intensity_confirmed = true;
+      if (!this.annotation_label) {
+        LabelService.create({
+          resourcetype: LABEL_RESOURCE_TYPE,
+          task: this.task.id,
+          tags_with_intensities: this.sorted_positive_labels.concat(
+            this.sorted_negative_labels
+          ),
+        }).then(res => {
+          this.annotation_label = res.data;
+          Vue.set(this.selected_labels, 0, res.data);
+        });
+      } else {
+        LabelService.update(this.annotation_label.id, {
+          resourcetype: LABEL_RESOURCE_TYPE,
+          tags_with_intensities: this.sorted_positive_labels.concat(
+            this.sorted_negative_labels
+          ),
+        });
+      }
       // TODO create or update label, then set this.selected_labels[0]
       // Vue.set(this.selected_labels, 0, this.positive_labels.concat(this.negative_labels));
     },

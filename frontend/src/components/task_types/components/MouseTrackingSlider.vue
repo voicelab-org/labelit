@@ -1,6 +1,6 @@
 <template>
   <div :id="sliderContainerId" ref="slidercontainer">
-    <v-slider v-model="position"></v-slider>
+    <v-slider v-model="position" :thumb-label="true" />
   </div>
 </template>
 
