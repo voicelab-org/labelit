@@ -81,9 +81,6 @@ export default {
       second_step_confirmed: false,
     };
   },
-  mounted() {
-    console.log('&mounted');
-  },
   components: {
     MouseTrackingSlider,
     RealtimeSequenceGraph,
@@ -96,16 +93,16 @@ export default {
     },
   },
   created() {
-    console.log('&created: ');
     this.setPlayerOptions();
     this.setupEvents();
   },
   watch: {
     currentStepperStep: {
       handler() {
-        console.log('&stepper step change !');
-        this.setPlayerOptions();
-        this.setupEvents();
+        if (this.currentStepperStep == this.thisFormStepperStep) {
+          this.setPlayerOptions();
+          this.setupEvents();
+        }
       },
     },
     position: {
@@ -181,7 +178,7 @@ export default {
 
       if (current_options.controls) {
         this.playerOptions = this.player.options({
-          controls: false, //TODO: uncomment, leaving controls for debugging only
+          controls: false,
         });
       }
     },
@@ -200,6 +197,7 @@ export default {
 
   .guidelines-container {
     max-width: 100%;
+
     img {
       max-width: 100%;
     }
