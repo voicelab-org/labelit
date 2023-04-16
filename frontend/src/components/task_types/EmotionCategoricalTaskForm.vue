@@ -79,9 +79,6 @@ export default {
     },
     // END HACK
   },
-  created() {
-    this.setPlayerOptions();
-  },
   watch: {
     playerLoadedToggle: {
       handler() {
