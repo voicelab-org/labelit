@@ -1,22 +1,23 @@
 <template>
   <div class="emotion-task-form-container">
-    EMOTION task form container
-    <EmotionLabelSelector
-      :labels="negative_labels"
-      @selected="initializeLabelIntensitySetting()"
-    />
-    <div>
-      <div v-if="show_intensity_slider">
-        <v-slider v-model="intensity_position"></v-slider>
-        <v-btn v-if="!intensity_confirmed" @click="confirmIntensity">
-          CONFIRM
-        </v-btn>
+    <div v-if="negative_labels && positive_labels">
+      <EmotionLabelSelector
+        :labels="negative_labels"
+        @selected="initializeLabelIntensitySetting"
+      />
+      <div>
+        <div v-if="show_intensity_slider">
+          <v-slider v-model="intensity_position"></v-slider>
+          <v-btn v-if="!intensity_confirmed" @click="confirmIntensity">
+            CONFIRM
+          </v-btn>
+        </div>
       </div>
+      <EmotionLabelSelector
+        :labels="positive_labels"
+        @selected="initializeLabelIntensitySetting"
+      />
     </div>
-    <EmotionLabelSelector
-      :labels="positive_labels"
-      @selected="initializeLabelIntensitySetting"
-    />
   </div>
 </template>
 
@@ -31,7 +32,7 @@ import EmotionLabelSelector from '@/components/task_types/components/EmotionLabe
 const LABEL_RESOURCE_TYPE = 'EmotionCategoricalLabel';
 
 const NEGATIVE_LABELS = ['Coupable', 'Ennuyé', 'Vexé'];
-const POSITIVE_LABELS = ["Plein d'espoir", 'Fier'];
+const POSITIVE_LABELS = ["Plein d'espoir", 'Fier', 'Excité'];
 const INITIAL_POSITION = 50;
 
 export default {
@@ -98,6 +99,8 @@ export default {
   methods: {
     confirmIntensity() {
       this.current_label.intensity = this.intensity_position;
+
+      this.intensity_confirmed = true;
       // TODO create or update label, then set this.selected_labels[0]
       // Vue.set(this.selected_labels, 0, this.positive_labels.concat(this.negative_labels));
     },
@@ -110,6 +113,7 @@ export default {
           intensity: null,
         });
       });
+      return labels;
     },
     initializeLabelIntensitySetting(label) {
       this.intensity_confirmed = false;
@@ -136,8 +140,18 @@ export default {
 
 <style lang="scss">
 .emotion-task-form-container {
+  > div {
+    display: flex;
+    justify-content: space-between;
+    > div:nth-child(2) {
+      min-width: 300px;
+      .v-btn {
+        margin: 0 auto !important;
+        display: block !important;
+      }
+    }
+  }
+
   margin-bottom: 15px;
-  display: flex;
-  justify-content: space-between;
 }
 </style>

@@ -1,6 +1,10 @@
 <template>
   <div class="emotion-label-container">
-    <div v-for="label in labels" :class="getLabelClasses(label)">
+    <div
+      v-for="label in labels"
+      :class="getLabelClasses(label)"
+      @click="$emit('selected', label)"
+    >
       {{ label.name }}
     </div>
   </div>
@@ -10,8 +14,10 @@
 export default {
   name: 'EmotionLabelSelector',
   props: {
-    labels: Array,
-    required: true,
+    labels: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     getLabelClasses(label) {
@@ -27,7 +33,13 @@ export default {
   > div {
     border: 1px solid grey;
     padding: 5px 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
     &.selected {
+      background: blue;
+      color: white;
+    }
+    &:hover {
       background: lightblue;
     }
   }
