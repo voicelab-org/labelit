@@ -12,6 +12,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class Batch(PolymorphicModel):
     name = models.CharField("The name of the batch", max_length=200)
     dataset = models.ForeignKey("labelit.Dataset", on_delete=models.CASCADE)
@@ -120,14 +121,18 @@ class Batch(PolymorphicModel):
                     )
                     .annotate(
                         ratio=Cast(F("time"), output_field=FloatField())
-                        / Cast(F("document__audio_duration"), output_field=FloatField()),
+                        / Cast(
+                            F("document__audio_duration"), output_field=FloatField()
+                        ),
                         time=F("time"),
                         dur=F("document__audio_duration"),
                     )
                     .aggregate(average=Avg(F("ratio")))
                 )
             except DivisionByZero as e:
-                logger.warning(f"Cannot compute average_ratio, some documents have a duration of 0. {repr(e)}")
+                logger.warning(
+                    f"Cannot compute average_ratio, some documents have a duration of 0. {repr(e)}"
+                )
                 stats["average_ratio"] = 0
 
             stats["average_duration"] = done_annotations.values(
