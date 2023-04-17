@@ -1,6 +1,5 @@
 import AnnotationService from '@/services/annotation.service.js';
 
-
 export default {
   name: 'TaskForm',
   mixins: [],
