@@ -7,6 +7,10 @@ from .document import Document
 import math
 from django.db.models import Avg, F, ExpressionWrapper, FloatField, Count
 from django.db.models.functions import Cast
+from psycopg2.errors import DivisionByZero
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Batch(PolymorphicModel):
@@ -110,18 +114,26 @@ class Batch(PolymorphicModel):
         stats["num_qa_seen"] = stats["num_validated"] + stats["num_invalidated"]
 
         if self.project.is_audio_annotated:
-            stats["average_ratio"] = (
-                done_annotations.values(
-                    "document_id",
+            try:
+                stats["average_ratio"] = (
+                    done_annotations.values(
+                        "document_id",
+                    )
+                    .annotate(
+                        ratio=Cast(F("time"), output_field=FloatField())
+                        / Cast(
+                            F("document__audio_duration"), output_field=FloatField()
+                        ),
+                        time=F("time"),
+                        dur=F("document__audio_duration"),
+                    )
+                    .aggregate(average=Avg(F("ratio")))
                 )
-                .annotate(
-                    ratio=Cast(F("time"), output_field=FloatField())
-                    / Cast(F("document__audio_duration"), output_field=FloatField()),
-                    time=F("time"),
-                    dur=F("document__audio_duration"),
+            except DivisionByZero as e:
+                logger.warning(
+                    f"Cannot compute average_ratio, some documents have a duration of 0. {repr(e)}"
                 )
-                .aggregate(average=Avg(F("ratio")))
-            )
+                stats["average_ratio"] = 0
 
             stats["average_duration"] = done_annotations.values(
                 "document_id"
