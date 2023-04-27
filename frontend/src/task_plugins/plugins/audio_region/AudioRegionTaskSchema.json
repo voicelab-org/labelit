@@ -1,0 +1,13 @@
+{
+  "color": {
+    "type": "string",
+    "title": "Label color",
+    "format": "hexcolor",
+    "x-props": {
+      "showSwatches": true,
+      "hideCanvas": true,
+      "hideInputs": true,
+      "hideModeSwitch": true
+    }
+  }
+}
