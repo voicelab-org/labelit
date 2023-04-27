@@ -1,8 +1,5 @@
 <template>
   <div id="video-player-container">
-    <p>
-      playerOptions: {{playerOptions}}
-    </p>
     <video-player
         class="video-player-box"
         ref="videoPlayer"
@@ -42,30 +39,37 @@ export default {
     },
   },
   created() {
-    this.fetchVideo()
+    //this.fetchVideo()
   },
   methods: {
     // player is ready
-    playerReady(player) {
-      console.log('&in LabelitVideoPlayer.playerReady')
+    async playerReady(player) {
       this.set_player(player);
+      await this.fetchVideo()
       this.$emit('player-loaded');
     },
-    fetchVideo() {
-      console.log("&in LabelitVideoPlayer.fetchVideo()")
-      //if(this.document?.id){
-        return DocumentService.getVideoUrl(this.document.id).then(res => {
-          console.log("&res.data.url", res.data.url)
-          this.playerOptions = this.player.options({
-            sources: [
-              {
-                type: 'video/mp4',
-                src: res.data.url,
-              },
-            ],
-          });
-        });
-      //}
+    async fetchVideo() {
+      return new Promise(
+          (resolve) => {
+            DocumentService.getVideoUrl(this.document.id).then(res => {
+
+              let player_loaded = false
+              setInterval(
+                  () => {
+                    if (this.player.el && !player_loaded) {
+                      this.player.src({
+                        type: 'video/mp4',
+                        src: res.data.url,
+                      },)
+                      player_loaded = true
+                      resolve()
+                    }
+                  },
+                  1000
+              )
+            });
+          }
+      )
     },
   },
   watch: {
