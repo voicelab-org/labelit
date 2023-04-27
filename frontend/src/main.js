@@ -8,8 +8,7 @@ import VJsf from '@koumoul/vjsf/lib/VJsf.js';
 import '@koumoul/vjsf/lib/VJsf.css';
 import draggable from 'vuedraggable';
 
-import upperFirst from 'lodash/upperFirst';
-import camelCase from 'lodash/camelCase';
+import register_components from "@/utils/automatically_register_components";
 
 import VueUploadComponent from 'vue-upload-component';
 Vue.component('FileUpload', VueUploadComponent);
@@ -42,26 +41,6 @@ Vue.use(
 } */
 );
 // END add vue-video-player@5.0.2
-
-// We must register these components because they will be dynamically called
-
-function register_components(files) {
-  for (const fileName in files) {
-    // Get PascalCase name of component
-    const componentName = upperFirst(
-      camelCase(
-        // Gets the file name regardless of folder depth
-        fileName
-          .split('/')
-          .pop()
-          .replace(/\.\w+$/, '')
-      )
-    );
-
-    // Register component
-    Vue.component(componentName, files[fileName].default);
-  }
-}
 
 // BEGIN Annotation container types registration
 const container_files = import.meta.globEager(
