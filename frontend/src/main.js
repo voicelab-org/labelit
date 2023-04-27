@@ -70,10 +70,10 @@ const container_files = import.meta.globEager(
 register_components(container_files);
 // END
 
-// BEGIN Task types registration
-const files = import.meta.globEager('@/components/task_types/*.vue');
+// BEGIN task types registration
+const files = import.meta.globEager('@/task_plugins/*/*.vue');
 register_components(files);
-// END Task types registration
+// END task type registration
 
 Vue.config.productionTip = false;
 
