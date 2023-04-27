@@ -40,8 +40,7 @@ import '@koumoul/vjsf/lib/VJsf.css';
 import TaskService from '@/services/task.service.js';
 import ApiService from '@/services/api.service.js';
 import LabelService from '@/services/label.service.js';
-import CategoricalTaskSchema from '@/components/task_types/task_manager_schemas/CategoricalTaskSchema.json';
-import TaskSchemas from '@/components/task_types/task_manager_schemas/index.js';
+import TaskSchemas from '@/task_schemas/index.js';
 
 Object.keys(TaskSchemas).map(schema_name => {
   return {
@@ -70,7 +69,6 @@ export default {
   data() {
     return {
       TaskSchemas: TaskSchemas,
-      CategoricalTaskSchema: CategoricalTaskSchema,
       show_dialog: this.show,
       create_mode: false,
       //VJSF
