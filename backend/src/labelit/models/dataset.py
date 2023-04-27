@@ -6,7 +6,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 
 class Dataset(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
