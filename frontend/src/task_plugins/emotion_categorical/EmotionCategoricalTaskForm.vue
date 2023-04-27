@@ -30,7 +30,7 @@ import { useVideoPlayer } from '@/composables/video_player.js';
 import TaskForm from '@/components/mixins/TaskForm.js';
 import LabelService from '@/services/label.service.js';
 
-import EmotionLabelSelector from '@/components/task_types/components/EmotionLabelSelector.vue';
+import EmotionLabelSelector from './components/EmotionLabelSelector.vue';
 import { mapGetters } from 'vuex';
 
 const LABEL_RESOURCE_TYPE = 'EmotionCategoricalLabel';
@@ -60,9 +60,6 @@ export default {
       current_label: null,
       annotation_label: null,
     };
-  },
-  mounted() {
-    console.log('&mounted');
   },
   computed: {
     ...mapGetters({

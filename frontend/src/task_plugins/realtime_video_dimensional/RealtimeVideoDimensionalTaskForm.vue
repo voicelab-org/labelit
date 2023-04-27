@@ -51,8 +51,8 @@
 <script>
 import Vue from 'vue';
 import { useVideoPlayer } from '@/composables/video_player.js';
-import MouseTrackingSlider from '@/components/task_types/components/MouseTrackingSlider.vue';
-import RealtimeSequenceGraph from '@/components/task_types/components/RealtimeSequenceGraph.vue';
+import MouseTrackingSlider from './components/MouseTrackingSlider.vue';
+import RealtimeSequenceGraph from './components/RealtimeSequenceGraph.vue';
 import TaskForm from '@/components/mixins/TaskForm.js';
 import LabelService from '@/services/label.service.js';
 

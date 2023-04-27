@@ -61,9 +61,6 @@ export default {
       annotation_label: null,
     };
   },
-  mounted() {
-    console.log('&mounted');
-  },
   computed: {
     ...mapGetters({
       user: 'auth/user',

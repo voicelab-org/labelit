@@ -7,6 +7,9 @@ import TranscriptionTaskSchema from './TranscriptionTaskSchema.json';
 import RealtimeVideoDimensionalTaskSchema from './RealtimeVideoDimensionalTaskSchema.json';
 import EmotionCategoricalTaskSchema from './EmotionCategoricalTaskSchema.json';
 
+
+const schema_files = import.meta.globEager('@/task_plugins/*/*Schema.json')
+
 export default {
   CategoricalTaskSchema,
   OrdinalTaskSchema,
