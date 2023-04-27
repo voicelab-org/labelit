@@ -96,30 +96,6 @@ export default {
     this.setPlayerOptions();
     this.setupEvents();
   },
-  watch: {
-    currentStepperStep: {
-      handler() {
-        if (this.currentStepperStep == this.thisFormStepperStep) {
-          this.setPlayerOptions();
-          this.setupEvents();
-        }
-      },
-    },
-    position: {
-      handler() {
-        this.current_realtime_sequence.push([
-          this.player.currentTime(),
-          this.position,
-        ]);
-      },
-    },
-    playerLoadedToggle: {
-      handler() {
-        this.setPlayerOptions();
-        this.setupEvents();
-      },
-    },
-  },
   methods: {
     confirmSecondStep() {
       let label = this.selected_labels[0];
@@ -174,13 +150,43 @@ export default {
       );
     },
     setPlayerOptions() {
-      let current_options = this.player.options();
 
-      if (current_options.controls) {
-        this.playerOptions = this.player.options({
-          controls: false,
-        });
-      }
+        console.log("in RTVidDimTaskForm.setPlayerOptions")
+      //if (this.player?.options){
+        let current_options = this.player.options();
+
+        if (current_options.controls) {
+          this.playerOptions = this.player.options({
+            controls: false,
+          });
+        }
+
+      //}
+    },
+  },
+  watch: {
+    currentStepperStep: {
+      handler() {
+        if (this.currentStepperStep == this.thisFormStepperStep) {
+          this.setPlayerOptions();
+          this.setupEvents();
+        }
+      },
+    },
+    position: {
+      handler() {
+        this.current_realtime_sequence.push([
+          this.player.currentTime(),
+          this.position,
+        ]);
+      },
+    },
+    playerLoadedToggle: {
+      handler() {
+        console.log("in RTVidDimTaskForm.playerLoadedToggle")
+        this.setPlayerOptions();
+        this.setupEvents();
+      },
     },
   },
 };
