@@ -1,22 +1,18 @@
-import CategoricalTaskSchema from './CategoricalTaskSchema.json';
-import OrdinalTaskSchema from './OrdinalTaskSchema.json';
-import EntityTaskSchema from './EntityTaskSchema.json';
-import AudioRegionTaskSchema from './AudioRegionTaskSchema.json';
-import TextEditionTaskSchema from './TextEditionTaskSchema.json';
-import TranscriptionTaskSchema from './TranscriptionTaskSchema.json';
-import RealtimeVideoDimensionalTaskSchema from './RealtimeVideoDimensionalTaskSchema.json';
-import EmotionCategoricalTaskSchema from './EmotionCategoricalTaskSchema.json';
+let schema_files = import.meta.globEager('@/task_plugins/*/*Schema.json')
+let exported = {}
 
 
-const schema_files = import.meta.globEager('@/task_plugins/*/*Schema.json')
+for (const file_name of Object.keys(schema_files)) {
+    let added_export = schema_files[file_name].default
+    let component_name = file_name.split('/').at(-1).split('.json')[0]
 
-export default {
-  CategoricalTaskSchema,
-  OrdinalTaskSchema,
-  EntityTaskSchema,
-  AudioRegionTaskSchema,
-  TextEditionTaskSchema,
-  TranscriptionTaskSchema,
-  RealtimeVideoDimensionalTaskSchema,
-  EmotionCategoricalTaskSchema,
-};
+    let exported_object = {}
+    exported_object[component_name] = added_export
+
+    exported = {
+        ...exported,
+        ...exported_object,
+    }
+}
+
+export default exported
