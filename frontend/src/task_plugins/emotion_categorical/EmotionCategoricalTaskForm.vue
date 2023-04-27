@@ -10,7 +10,7 @@
           <template v-if="!intensity_confirmed">
             <v-slider
               v-model="intensity_position"
-              :thumb-label="true"
+              :thumb-label="'always'"
             ></v-slider>
             <v-btn @click="confirmIntensity"> CONFIRM </v-btn>
           </template>

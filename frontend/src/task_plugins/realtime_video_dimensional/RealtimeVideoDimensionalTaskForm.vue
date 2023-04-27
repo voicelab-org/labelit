@@ -1,12 +1,11 @@
 <template>
   <div class="task-form-container">
     <div v-if="step == 0">
-      <p>
+      <p style="margin-bottom: 40px;">
         Autoplay must be activated in your browser. Please check your browser
         settings if the video does not play or is muted.
       </p>
 
-      <p />
       <div v-if="!is_realtime_sequence_ended">
         <MouseTrackingSlider
           :do-track="do_track_mouse_position"
@@ -35,7 +34,7 @@
     </div>
     <div v-if="step == 1">
       <p v-if="!second_step_confirmed">Please assign a global evaluation:</p>
-      <v-slider :thumb-label="true" v-model="summative_annotation" />
+      <v-slider :thumb-label="'always'" v-model="summative_annotation" />
       <div>
         <v-btn @click="confirmSecondStep()" v-if="!second_step_confirmed">
           Confirm
