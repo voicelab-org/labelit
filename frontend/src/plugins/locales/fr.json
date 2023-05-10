@@ -13,6 +13,11 @@
     "tasks": "Toutes les tâches appartenant au projet"
   },
   "Name": "Nom",
+  "Tasks": "Tâches",
+  "Edit": "Editer",
+  "Archive": "Archiver",
+  "Unarchive": "Désarchiver",
+  "No projects": "Pas de projet",
   "Edit project": "Editer le projet",
   "Create a project": "Créer un projet",
   "Add project": "Ajouter un projet",

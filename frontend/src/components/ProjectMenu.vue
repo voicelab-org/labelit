@@ -16,7 +16,8 @@
           <v-list-item @click="toggleArchived">
             {{ archiveAction }}
           </v-list-item>
-          <v-list-item @click="$emit('edit', project)"> Edit </v-list-item>
+          <v-list-item @click="$emit('edit', project)">
+            {{$t('Edit')}} </v-list-item>
         </v-list>
       </v-card>
     </v-menu>
@@ -42,9 +43,9 @@ export default {
   computed: {
     archiveAction() {
       if (this.project.archived) {
-        return 'Unarchive';
+        return this.$t('Unarchive');
       }
-      return 'Archive';
+      return this.$t('Archive');
     },
   },
   watch: {

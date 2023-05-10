@@ -13,6 +13,11 @@
     "tasks": "All tasks in this project"
   },
   "Name": "Name",
+  "Tasks": "Tasks",
+  "Edit": "Edit",
+  "Archive": "Archive",
+  "Unarchive": "Unarchive",
+  "No projects": "No projects",
   "Edit project": "Edit project",
   "Create a project": "Create a project",
   "Add project": "Add project",

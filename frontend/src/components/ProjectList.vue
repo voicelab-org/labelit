@@ -32,8 +32,8 @@
         <v-simple-table v-if="shown_projects.length">
           <thead>
             <tr>
-              <th class="text-left">Project name</th>
-              <th class="text-left">Tasks</th>
+              <th class="text-left">{{$t('Name')}}</th>
+              <th class="text-left">{{$t('Tasks')}}</th>
               <th class="text-left actions-table-column"></th>
             </tr>
           </thead>
@@ -51,7 +51,9 @@
             </tr>
           </tbody>
         </v-simple-table>
-        <div class="text-center" v-else>No projects yet...</div>
+        <div class="text-center" v-else>
+          {{$t('No projects')}}
+        </div>
       </div>
     </div>
   </div>
