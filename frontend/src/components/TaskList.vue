@@ -2,7 +2,7 @@
   <div>
     <div id="tasks">
       <div class="header">
-        <h2 class="headline">Tasks</h2>
+        <h2 class="headline">{{$t('Tasks')}}</h2>
         <div class="header-right">
           <task-manager v-if="isAdmin" @changed="getTasks" />
           <task-manager
@@ -14,8 +14,8 @@
         </div>
       </div>
       <v-tabs>
-        <v-tab @click="show_archived = false">Live tasks</v-tab>
-        <v-tab @click="show_archived = true">Archived task</v-tab>
+        <v-tab @click="show_archived = false">{{$t('Live tasks')}}</v-tab>
+        <v-tab @click="show_archived = true">{{$t('Archived task')}}</v-tab>
       </v-tabs>
       <div v-if="loading" class="d-flex justify-center mt-12">
         <v-progress-circular
@@ -27,8 +27,8 @@
         <v-simple-table>
           <thead>
             <tr>
-              <th class="text-left">Task name</th>
-              <th class="text-left">Type</th>
+              <th class="text-left">{{ $t('Name') }}</th>
+              <th class="text-left">{{ $t('Type')}}</th>
               <th class="text-left actions-table-column"></th>
             </tr>
           </thead>

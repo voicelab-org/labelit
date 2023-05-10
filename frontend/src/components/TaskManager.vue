@@ -2,7 +2,7 @@
   <div>
     <template v-if="create_mode">
       <v-btn color="primary" dark @click.stop="show_dialog = true">
-        Add Task
+        {{$t('Add Task')}}
       </v-btn>
     </template>
     <v-dialog v-model="show_dialog" max-width="800px" persistent>
@@ -22,11 +22,11 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="show_dialog = false">
-            Close
+            {{$t('Close')}}
           </v-btn>
           <v-btn color="blue darken-1" text :disabled="!valid" @click="submit">
-            <span v-if="create_mode">Create</span>
-            <span v-else>Update</span>
+            <span v-if="create_mode">{{$t('Create')}}</span>
+            <span v-else>{{$t('Update')}}</span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -108,9 +108,9 @@ export default {
   computed: {
     dialog_title() {
       if (this.create_mode) {
-        return 'Create a task';
+        return this.$t('Create a task');
       }
-      return 'Edit task ' + this.model.name;
+      return this.$t('Edit task') + ' ' + this.model.name;
     },
   },
   watch: {
