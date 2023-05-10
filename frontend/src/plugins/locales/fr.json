@@ -38,5 +38,22 @@
   "Archived projects": "Projets archivés",
   "Live batches": "Batchs en cours",
   "Archived batches": "Batchs archivés",
-  "No batches": "Pas de batchs"
+  "No batches": "Pas de batchs",
+  "Global statistics": "Statistiques globales",
+  "Total number of annotations": "Nombre total d'annotations",
+  "Progress (documents fully annotated / total documents)": "Progression (documents complètement annotés / nombre total de documents)",
+  "Dataset": "Jeu de données",
+  "Number of annotators": "Nombre d'annotateurs",
+  "Number of annotators per document": "Nombre d'annotateurs par document",
+  "Document distribution mode": "Mode de distribution des documents",
+  "Number of documents fully annotated": "Nombre de documents complètement annotés",
+  "Average annotation time per annotated document": "Durée d'annotation moyenne par document",
+  "Average audio time": "Durée moyenne des enregistrements audios",
+  "Average annotation/audio time ratio": "Moyenne du ration durée d'annotation sur durée d'audio",
+  "Number of annotations pending review": "Nombre d'annotations en attente de revue",
+  "Number of annotations reviewed by QA": "Nombre d'annotations revues",
+  "Number of annotations validated by QA": "Nombre d'annotations validées",
+  "Number of annotations invalidated by QA": "Nombre d'annotations invalidées",
+  "Annotator statistics": "Statistiques par annotateur",
+  "Number of documents annotated": "Nombre de documents annotés"
 }

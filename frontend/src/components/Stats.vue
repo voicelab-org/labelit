@@ -4,51 +4,51 @@
       v-if="((numberOfAnnotations && batch) || project) && stats"
       class="general-stats"
     >
-      <h4>General stats</h4>
+      <h4>{{$t('Global statistics')}}</h4>
       <table class="stats-table">
         <tr>
-          <td class="left">Total number of annotations</td>
+          <td class="left">{{$t('Total number of annotations')}}</td>
           <td>{{ stats.num_annotations }}</td>
         </tr>
         <template v-if="batch">
           <tr>
             <td class="left">
-              Progress (documents fully annotated / total documents)
+              {{$t('Progress (documents fully annotated / total documents)')}}
             </td>
             <td>{{ stats.num_done }} / {{ batch.num_documents }}</td>
           </tr>
           <tr>
-            <td class="left">Dataset</td>
+            <td class="left">{{$t('Dataset')}}</td>
             <td>{{ batch.dataset.name }}</td>
           </tr>
           <tr>
-            <td class="left">Number of annotators</td>
+            <td class="left">{{$t('Number of annotators')}}</td>
             <td>{{ batch.annotators.length }}</td>
           </tr>
           <tr>
-            <td class="left">Number of annotators per document</td>
+            <td class="left">{{$t('Number of annotators per document')}}</td>
             <td>{{ batch.num_annotators_per_document }}</td>
           </tr>
           <tr>
-            <td class="left">Document distribution mode</td>
+            <td class="left">{{$t('Document distribution mode')}}</td>
             <td>{{ batch.annotation_mode }}</td>
           </tr>
         </template>
         <template v-if="project">
           <tr>
-            <td class="left"># documents fully annotated</td>
+            <td class="left">{{$t('Number of documents fully annotated')}}</td>
             <td>{{ stats.num_done }}</td>
           </tr>
         </template>
         <tr>
-          <td class="left">Average annotation time per annotated document</td>
+          <td class="left">{{$t('Average annotation time per annotated document')}}</td>
           <td>
             <span v-if="stats.num_done">{{ average_time }} s</span
             ><span v-else>N/A</span>
           </td>
         </tr>
         <tr v-if="proj.is_audio_annotated">
-          <td class="left">Average audio time</td>
+          <td class="left">{{$t('Average audio time')}}</td>
           <td>
             <span v-if="stats.num_done"
               >{{ toSeconds(stats.average_duration.average) }} s</span
@@ -56,7 +56,7 @@
           </td>
         </tr>
         <tr v-if="proj.is_audio_annotated">
-          <td class="left">Average annotation/audio time ratio</td>
+          <td class="left">{{$t('Average annotation/audio time ratio')}}</td>
           <td>
             <span v-if="stats.num_done">{{ rounded_ratio }}</span
             ><span v-else>N/A</span>
@@ -64,30 +64,36 @@
         </tr>
         <tr>
           <td class="left">
-            Number of annotations pending review by annotators
+            {{$t('Number of annotations pending review')}}
           </td>
           <td>{{ stats.num_to_review }}</td>
         </tr>
         <tr>
-          <td class="left">Number of annotations reviewed by QA</td>
+          <td class="left">
+            {{$t('Number of annotations reviewed by QA')}}
+          </td>
           <td>{{ stats.num_qa_seen }}</td>
         </tr>
         <tr>
-          <td class="left">Number of annotations validated by QA</td>
+          <td class="left">
+            {{$t('Number of annotations validated by QA')}}
+          </td>
           <td>{{ stats.num_validated }}</td>
         </tr>
         <tr>
-          <td class="left">Number of annotations invalidated by QA</td>
+          <td class="left">
+            {{$t('Number of annotations invalidated by QA')}}
+          </td>
           <td>{{ stats.num_invalidated }}</td>
         </tr>
       </table>
-      <h4>Annotator stats</h4>
+      <h4>{{$t('Annotator statistics')}}</h4>
       <table class="stats-table">
         <tr>
           <th></th>
-          <th>Number of documents annotated</th>
+          <th>{{$t('Number of documents annotated')}}</th>
           <th v-if="proj.is_audio_annotated">
-            Average annotation/audio time ratio
+            {{$t('Average annotation/audio time ratio')}}
           </th>
         </tr>
         <tr v-for="a_stats in stats.annotator_stats" :key="a_stats.name">

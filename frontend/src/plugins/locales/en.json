@@ -39,5 +39,22 @@
   "Archived projects": "Archived projects",
   "Live batches": "Live batches",
   "Archived batches": "Archived batches",
-  "No batches": "No batches"
+  "No batches": "No batches",
+  "Global statistics": "Global statistics",
+  "Total number of annotations": "Total number of annotations",
+  "Progress (documents fully annotated / total documents)": "Progress (documents fully annotated / total documents)",
+  "Dataset": "Dataset",
+  "Number of annotators": "Number of annotators",
+  "Number of annotators per document": "Number of annotators per document",
+  "Document distribution mode": "Document distribution mode",
+  "Number of documents fully annotated": "Number of documents fully annotated",
+  "Average annotation time per annotated document": "Average annotation time per annotated document",
+  "Average audio time": "Average audio time",
+  "Average annotation/audio time ratio": "Average annotation/audio time ratio",
+  "Number of annotations pending review": "Number of annotations pending review",
+  "Number of annotations reviewed by QA": "Number of annotations reviewed by QA",
+  "Number of annotations validated by QA": "Number of annotations validated by QA",
+  "Number of annotations invalidated by QA": "Number of annotations invalidated by QA",
+  "Annotator statistics": "Annotator statistics",
+  "Number of documents annotated": "Number of documents annotated"
 }
