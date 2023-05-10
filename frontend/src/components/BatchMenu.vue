@@ -36,9 +36,9 @@ export default {
   computed: {
     archiveAction() {
       if (this.batch.archived) {
-        return 'Unarchive';
+        return this.$t('Unarchive');
       }
-      return 'Archive';
+      return this.$t('Archive');
     },
   },
   watch: {

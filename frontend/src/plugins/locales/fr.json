@@ -25,7 +25,18 @@
   "Edit project": "Editer le projet",
   "Create a project": "Créer un projet",
   "Add project": "Ajouter un projet",
+  "Project": "Projet",
+  "Export": "Exporter",
+  "Created on": "Créé le",
+  "Created by": "Créé par",
+  "Last modified": "Dernière modification",
+  "Target date": "Echéance",
+  "Description": "Description",
+  "Batches": "Batchs",
   "Projects": "Projets",
   "Live projects": "Projets en cours",
-  "Archived projects": "Projets archivés"
+  "Archived projects": "Projets archivés",
+  "Live batches": "Batchs en cours",
+  "Archived batches": "Batchs archivés",
+  "No batches": "Pas de batchs"
 }

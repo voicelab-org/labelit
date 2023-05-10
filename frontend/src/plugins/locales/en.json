@@ -36,5 +36,8 @@
   "documents": "documents",
   "Projects": "Projects",
   "Live projects": "Live projects",
-  "Archived projects": "Archived projects"
+  "Archived projects": "Archived projects",
+  "Live batches": "Live batches",
+  "Archived batches": "Archived batches",
+  "No batches": "No batches"
 }
