@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn v-if="!displayForm" @click="displayForm = true" color="primary">
-      {{$t('Import a dataset')}}
+      {{ $t('Import a dataset') }}
     </v-btn>
     <div v-else>
       <file-upload
@@ -81,7 +81,9 @@ export default {
             };
           } else {
             notification = {
-              text: this.$t('Something wrong happened. Please contact support if the problem persists.'),
+              text: this.$t(
+                'Something wrong happened. Please contact support if the problem persists.'
+              ),
               type: SNACKBAR_TYPE_COLOR.ERROR,
             };
           }

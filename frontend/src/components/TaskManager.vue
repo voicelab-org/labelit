@@ -2,7 +2,7 @@
   <div>
     <template v-if="create_mode">
       <v-btn color="primary" dark @click.stop="show_dialog = true">
-        {{$t('Add Task')}}
+        {{ $t('Add Task') }}
       </v-btn>
     </template>
     <v-dialog v-model="show_dialog" max-width="800px" persistent>
@@ -22,11 +22,11 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="show_dialog = false">
-            {{$t('Close')}}
+            {{ $t('Close') }}
           </v-btn>
           <v-btn color="blue darken-1" text :disabled="!valid" @click="submit">
-            <span v-if="create_mode">{{$t('Create')}}</span>
-            <span v-else>{{$t('Update')}}</span>
+            <span v-if="create_mode">{{ $t('Create') }}</span>
+            <span v-else>{{ $t('Update') }}</span>
           </v-btn>
         </v-card-actions>
       </v-card>

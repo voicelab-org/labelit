@@ -2,7 +2,7 @@
   <div>
     <template v-if="create_mode">
       <v-btn color="primary" dark @click.stop="show_dialog = true">
-        {{$t('Add project')}}
+        {{ $t('Add project') }}
       </v-btn>
     </template>
     <v-dialog
@@ -95,7 +95,7 @@ export default {
           enable_region_annotation: {
             type: 'boolean',
             default: false,
-            title: this.$t('projectForm.enable_region_annotation')
+            title: this.$t('projectForm.enable_region_annotation'),
           },
           is_text_annotated: {
             type: 'boolean',
@@ -137,7 +137,7 @@ export default {
           description: {
             type: 'string',
             'x-display': 'textarea',
-            title: this.$t('projectForm.description')
+            title: this.$t('projectForm.description'),
           },
           tasks: {
             type: 'array',
@@ -168,7 +168,7 @@ export default {
       if (this.create_mode) {
         return this.$t('Create a project');
       }
-      return this.$t('Edit project') + " " + this.model.name;
+      return this.$t('Edit project') + ' ' + this.model.name;
     },
   },
   watch: {
