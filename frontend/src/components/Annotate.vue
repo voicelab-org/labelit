@@ -21,7 +21,7 @@
           @loaded="startTiming"
         />
         <div v-if="batch.project.do_display_timer_time">
-          Time: {{ time_display }}
+          {{$t('Time')}}: {{ time_display }}
         </div>
       </div>
       <div v-if="annotations" id="annotation-forms-t">
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div v-if="annotations" id="actions-container">
-        <v-btn color="primary" @click="submit()">SUBMIT</v-btn>
+        <v-btn color="primary" @click="submit()">{{ $t('Submit') }}</v-btn>
         <hotkey-guide />
       </div>
       <div
@@ -48,7 +48,7 @@
         <v-icon>mdi-pause</v-icon>
       </div>
     </div>
-    <div v-else>No more to annotate.</div>
+    <div v-else>{{$t('No more to annotate')}}</div>
   </div>
 </template>
 

@@ -5,23 +5,25 @@
         <v-btn icon @click="$router.push('/lexicons')">
           <v-icon> mdi-arrow-left </v-icon>
         </v-btn>
-        <h2 class="headline">Lexicon: {{ lexicon?.name }}</h2>
+        <h2 class="headline">{{$t('Lexicon')}}: {{ lexicon?.name }}</h2>
       </div>
       <v-dialog v-model="dialog" persistent max-width="800px">
         <template #activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">
-            Add an entry
+            {{$t('Add an entry')}}
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Add an entry</span>
+            <span class="headline">
+              {{$t('Add an entry')}}
+            </span>
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-text-field
                 v-model="newEntryName"
-                label="Entry name"
+                :label="$t('Entry name')"
               ></v-text-field>
             </v-container>
           </v-card-text>
@@ -30,7 +32,7 @@
             <v-btn color="blue darken-1" text @click="dialog = false">
               Close
             </v-btn>
-            <v-btn color="primary" @click="add()">Add</v-btn>
+            <v-btn color="primary" @click="add()">{{$t('Add')}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -45,7 +47,7 @@
       <v-simple-table v-if="lexicon.entries.length">
         <thead>
           <tr>
-            <th class="text-left">Entry</th>
+            <th class="text-left">{{$t('Entry')}}</th>
             <th class="text-left actions-table-column"></th>
           </tr>
         </thead>
@@ -60,7 +62,7 @@
           </tr>
         </tbody>
       </v-simple-table>
-      <div v-else class="text-center">No entries</div>
+      <div v-else class="text-center">{{$t('No entries')}}</div>
     </div>
   </div>
 </template>

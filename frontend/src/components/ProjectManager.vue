@@ -2,7 +2,7 @@
   <div>
     <template v-if="create_mode">
       <v-btn color="primary" dark @click.stop="show_dialog = true">
-        Add Project
+        {{$t('Add project')}}
       </v-btn>
     </template>
     <v-dialog
@@ -85,36 +85,64 @@ export default {
         properties: {
           name: {
             type: 'string',
+            title: this.$t('name'),
           },
-          is_audio_annotated: { type: 'boolean', default: true },
-          enable_region_annotation: { type: 'boolean', default: false },
-          is_text_annotated: { type: 'boolean', default: true },
-          // are_sequences_annotated
-          timer_inactivity_threshold: { type: 'integer', default: 60000 },
-          do_display_timer_time: { type: 'boolean', default: false },
+          is_audio_annotated: {
+            type: 'boolean',
+            default: true,
+            title: this.$t('projectForm.is_audio_annotated'),
+          },
+          enable_region_annotation: {
+            type: 'boolean',
+            default: false,
+            title: this.$t('projectForm.enable_region_annotation')
+          },
+          is_text_annotated: {
+            type: 'boolean',
+            default: true,
+            title: this.$t('projectForm.is_text_annotated'),
+          },
+          timer_inactivity_threshold: {
+            type: 'integer',
+            default: 60000,
+            title: this.$t('projectForm.timer_inactivity_threshold'),
+          },
+          do_display_timer_time: {
+            type: 'boolean',
+            default: false,
+            title: this.$t('projectForm.do_display_timer_time'),
+          },
           does_audio_playing_count_as_activity: {
             type: 'boolean',
             default: true,
+            title: this.$t('projectForm.does_audio_playing_count_as_activity'),
           },
           task_presentation: {
             type: 'string',
             default: 'list',
-            title:
-              'How to present the tasks to the annotator(s): as a list or as a sequence',
+            title: this.$t('projectForm.task_presentation'),
+            //title:'How to present the tasks to the annotator(s): as a list or as a sequence',
           },
-          target_num_documents: { type: 'integer', default: 100 },
+          target_num_documents: {
+            type: 'integer',
+            default: 100,
+            title: this.$t('projectForm.target_num_documents'),
+          },
           target_deadline: {
             type: 'string',
-            title: 'Target date',
+            //title: 'Target date',
             format: 'date',
+            title: this.$t('projectForm.target_deadline'),
           },
           description: {
             type: 'string',
             'x-display': 'textarea',
+            title: this.$t('projectForm.description')
           },
           tasks: {
             type: 'array',
-            title: 'All tasks in this project',
+            //title: 'All tasks in this project',
+            title: this.$t('projectForm.tasks'),
             'x-fromUrl': '/tasks/',
             'x-itemTitle': 'name',
             'x-itemKey': 'id',
@@ -138,9 +166,9 @@ export default {
   computed: {
     dialog_title() {
       if (this.create_mode) {
-        return 'Create a project';
+        return this.$t('Create a project');
       }
-      return 'Edit project ' + this.model.name;
+      return this.$t('Edit project') + " " + this.model.name;
     },
   },
   watch: {

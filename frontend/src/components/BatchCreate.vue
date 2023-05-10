@@ -2,11 +2,11 @@
   <div>
     <v-dialog v-model="dialog" persistent max-width="800px">
       <template #activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">Add a batch</v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">{{$t('Add a batch')}}</v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Create Batch</span>
+          <span class="headline">{{$t('Create Batch')}}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -52,7 +52,7 @@
                     :disabled="!datasetRemainingUnits ? true : false"
                     min="1"
                     :max="datasetRemainingUnits"
-                    label="Number of documents"
+                    :label="$t('Number of documents')"
                     type="number"
                     oninput="if(this.value < 0) this.value = 0;"
                     :rules="rules.numberOfDocumentsRules"
@@ -65,7 +65,7 @@
                     :disabled="!selectedAnnotators.length"
                     min="1"
                     :max="selectedAnnotators.length"
-                    label="Number of annotators per document"
+                    :label="$t('Number of annotators per document')"
                     type="number"
                     oninput="if(this.value < 0) this.value = 0;"
                     :rules="rules.numberOfAnnotatorsPerDocumentRules"
@@ -77,7 +77,7 @@
                     v-model="selectedAnnotationMode"
                     :disabled="!datasetRemainingUnits ? true : false"
                     :items="annotationModeList"
-                    label="Annotation mode"
+                    :label="$t('Annotation mode')"
                     item-text="description"
                     item-value="value"
                     :rules="rules.annotationModeRules"
@@ -91,9 +91,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">
-            Close
+            {{ $t('Close') }}
           </v-btn>
-          <v-btn color="primary" @click="createBatch"> Create </v-btn>
+          <v-btn color="primary" @click="createBatch"> {{ $t('Create') }} </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -129,41 +129,41 @@ export default {
         {
           value: 'all_you_can_annotate',
           description:
-            'Annotators can annotate as much they want (up to optional limit) By the end of the batch, annotators may have done unequal amounts of work',
+            this.$t('Annotators can annotate as much they want (up to optional limit) By the end of the batch, annotators may have done unequal amounts of work'),
         },
         {
           value: 'even',
           description:
-            'By the end of the batch, every annotator will have annotated the same number of units',
+            this.$t('By the end of the batch, every annotator will have annotated the same number of units'),
         },
       ],
       selectedAnnotationMode: null,
       rules: {
         batchNameRules: [
-          v => !!v || 'The Batch Name is required',
+          v => !!v || this.$t('The Batch name is required'),
           v =>
             (v && v.length <= 60) ||
-            'The batch name must be less than 60 characters',
+            this.$t('The batch name must be less than 60 characters'),
         ],
         numberOfDocumentsRules: [
           v =>
             !!v ||
-            'The number of documents to include to the batch is required and must be a valid number',
+            this.$t('The number of documents to include to the batch is required and must be a valid number'),
           v =>
             (v && v >= 1 && v <= this.datasetRemainingUnits) ||
-            'The number of documents must not exceed the remaining dataset units',
+            this.$t('The number of documents must not exceed the remaining dataset units'),
         ],
         numberOfAnnotatorsPerDocumentRules: [
           v =>
             !!v ||
-            'The number of annotators per document is required and must be a valid number',
+            this.$t('The number of annotators per document is required and must be a valid number'),
           v =>
             (v && v >= 1 && v <= this.datasetRemainingUnits) ||
-            'The number of annotators per document must not exceed the number of annotators',
+            this.$t('The number of annotators per document must not exceed the number of annotators'),
         ],
-        annotatorsRules: [v => !!v.length || 'Select at least one annotator'],
-        datasetRules: [v => !!v || 'Select a dataset'],
-        annotationModeRules: [v => !!v || 'Select an annotation mode'],
+        annotatorsRules: [v => !!v.length || this.$t('Select at least one annotator')],
+        datasetRules: [v => !!v || this.$t('Select a dataset')],
+        annotationModeRules: [v => !!v || this.$t('Select an annotation mode')],
       },
     };
   },
