@@ -12,6 +12,10 @@
     "description": "Description",
     "tasks": "All tasks in this project"
   },
+  "Dashboard": "Dashboard",
+  "Datasets": "Datasets",
+  "Lexicons": "Lexicons",
+  "Login": "Login",
   "Name": "Name",
   "Tasks": "Tasks",
   "Edit": "Edit",

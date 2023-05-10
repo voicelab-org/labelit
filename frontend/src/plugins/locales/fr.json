@@ -12,6 +12,10 @@
     "description": "Description",
     "tasks": "Toutes les tâches appartenant au projet"
   },
+  "Dashboard": "Tableau de bord",
+  "Datasets": "Données",
+  "Lexicons": "Lexiques",
+  "Login": "Login",
   "Name": "Nom",
   "Tasks": "Tâches",
   "Edit": "Editer",
