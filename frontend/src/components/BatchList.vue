@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-tabs>
-      <v-tab @click="show_archived = false">{{$t('Live batches')}}</v-tab>
-      <v-tab @click="show_archived = true">{{$t('Archived batches')}}</v-tab>
+      <v-tab @click="show_archived = false">{{ $t('Live batches') }}</v-tab>
+      <v-tab @click="show_archived = true">{{ $t('Archived batches') }}</v-tab>
     </v-tabs>
 
     <v-simple-table v-if="shown_batches.length && !loading">
       <thead>
         <tr>
-          <th class="text-left">{{$t('Name')}}</th>
+          <th class="text-left">{{ $t('Name') }}</th>
           <th class="text-left actions-table-column"></th>
         </tr>
       </thead>
@@ -27,7 +27,7 @@
     </v-simple-table>
 
     <div v-if="!loading && !shown_batches.length">
-      {{$t('No batches')}}
+      {{ $t('No batches') }}
     </div>
     <div v-if="loading" class="loading">
       <v-progress-circular

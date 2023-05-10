@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <h2 class="headline">
-        {{$t('Projects')}}
+        {{ $t('Projects') }}
       </h2>
       <div class="header-right">
         <project-manager v-if="isAdmin" @changed="getProjects" />
@@ -16,10 +16,10 @@
     <div id="projects">
       <v-tabs>
         <v-tab @click="show_archived = false">
-          {{$t('Live projects')}}
+          {{ $t('Live projects') }}
         </v-tab>
         <v-tab @click="show_archived = true">
-          {{$t('Archived projects')}}
+          {{ $t('Archived projects') }}
         </v-tab>
       </v-tabs>
       <div v-if="loading" class="d-flex justify-center mt-12">
@@ -32,8 +32,8 @@
         <v-simple-table v-if="shown_projects.length">
           <thead>
             <tr>
-              <th class="text-left">{{$t('Name')}}</th>
-              <th class="text-left">{{$t('Tasks')}}</th>
+              <th class="text-left">{{ $t('Name') }}</th>
+              <th class="text-left">{{ $t('Tasks') }}</th>
               <th class="text-left actions-table-column"></th>
             </tr>
           </thead>
@@ -52,7 +52,7 @@
           </tbody>
         </v-simple-table>
         <div class="text-center" v-else>
-          {{$t('No projects')}}
+          {{ $t('No projects') }}
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@
           </div>
 
           <div>
-            <h5 id="projs">{{$t('Projects')}}</h5>
+            <h5 id="projs">{{ $t('Projects') }}</h5>
             <v-select
               v-model="filters.projects"
               :items="projects"
@@ -32,7 +32,7 @@
           </div>
 
           <div>
-            <h5>{{$t('Annotators')}}</h5>
+            <h5>{{ $t('Annotators') }}</h5>
             <v-select
               v-model="filters.annotators"
               :items="annotators"
@@ -52,15 +52,15 @@
       </div>
       <br /><br /><br />
       <div v-if="stats && !loading">
-        <b> {{$t('Number of documents annotated')}}: {{ stats.num_docs }} </b>
+        <b> {{ $t('Number of documents annotated') }}: {{ stats.num_docs }} </b>
         <br />
         <b>
-          {{$t('Total duration of annotated audio')}}:
+          {{ $t('Total duration of annotated audio') }}:
           {{ toHours(stats.total_duration) }} hrs
         </b>
         <br />
         <div class="table-header">
-          <h3>{{$t('Per annotator')}}</h3>
+          <h3>{{ $t('Per annotator') }}</h3>
           <ExcelExport
             :data="stats.stats_per_annotator"
             :name="'per-annotator-stats'"
@@ -76,7 +76,7 @@
         <br />
 
         <div class="table-header">
-          <h3>{{$t('Per annotator and per day')}}</h3>
+          <h3>{{ $t('Per annotator and per day') }}</h3>
           <ExcelExport
             :data="stats.stats_per_annotator_per_day"
             :name="'per-annot-per-day-stats'"

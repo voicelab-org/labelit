@@ -1,7 +1,11 @@
 <template>
   <div>
     <p>
-      {{$t('Define the order of presentation of the tasks (you can drag the items):')}}
+      {{
+        $t(
+          'Define the order of presentation of the tasks (you can drag the items):'
+        )
+      }}
     </p>
     <div>
       <draggable v-model="sorted_tasks">

@@ -1,12 +1,12 @@
 <template>
   <div id="qa-container">
     <div v-if="noMore">
-      {{$t('No more to QA')}}
+      {{ $t('No more to QA') }}
     </div>
     <div>
       <v-checkbox v-model="only_non_reviewed_annotations" @change="resetIndex">
         <div slot="label">
-          {{$t('View only non-reviewed annotations')}}
+          {{ $t('View only non-reviewed annotations') }}
         </div>
       </v-checkbox>
     </div>
@@ -34,8 +34,10 @@
         </div>
       </div>
       <template v-if="!noMore">
-        <v-btn style="margin-right: 5px" @click="skip"> {{$t('Skip')}} </v-btn>
-        <v-btn @click="getNextDocument(false)"> {{$t('Next')}} </v-btn>
+        <v-btn style="margin-right: 5px" @click="skip">
+          {{ $t('Skip') }}
+        </v-btn>
+        <v-btn @click="getNextDocument(false)"> {{ $t('Next') }} </v-btn>
       </template>
     </div>
   </div>

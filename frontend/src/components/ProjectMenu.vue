@@ -17,7 +17,8 @@
             {{ archiveAction }}
           </v-list-item>
           <v-list-item @click="$emit('edit', project)">
-            {{$t('Edit')}} </v-list-item>
+            {{ $t('Edit') }}
+          </v-list-item>
         </v-list>
       </v-card>
     </v-menu>
