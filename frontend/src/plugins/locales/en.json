@@ -56,5 +56,9 @@
   "Number of annotations validated by QA": "Number of annotations validated by QA",
   "Number of annotations invalidated by QA": "Number of annotations invalidated by QA",
   "Annotator statistics": "Annotator statistics",
-  "Number of documents annotated": "Number of documents annotated"
+  "Number of documents annotated": "Number of documents annotated",
+  "No more to QA": "No more to QA",
+  "View only non-reviewed annotations": "View only non-reviewed annotations",
+  "Skip": "Skip",
+  "Next": "Next"
 }

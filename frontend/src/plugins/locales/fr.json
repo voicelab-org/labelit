@@ -55,5 +55,9 @@
   "Number of annotations validated by QA": "Nombre d'annotations validées",
   "Number of annotations invalidated by QA": "Nombre d'annotations invalidées",
   "Annotator statistics": "Statistiques par annotateur",
-  "Number of documents annotated": "Nombre de documents annotés"
+  "Number of documents annotated": "Nombre de documents annotés",
+  "No more to QA": "Plus de documents à revoir",
+  "View only non-reviewed annotations": "Voir uniquement les annotations non-revues",
+  "Skip": "Passer",
+  "Next": "Prochain"
 }
