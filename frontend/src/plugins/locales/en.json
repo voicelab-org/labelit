@@ -1,4 +1,21 @@
 {
+  "projectForm": {
+    "is_audio_annotated": "Show audio player",
+    "enable_region_annotation": "Enable audio region annotation",
+    "is_text_annotated": "Show text",
+    "timer_inactivity_threshold": "Timer inactivity threshold (ms)",
+    "do_display_timer_time": "Display the timer to annotators",
+    "does_audio_playing_count_as_activity": "For timing, consider audio playing only as activity",
+    "task_presentation": "How to present the tasks to the annotator(s): as a list or as a sequence",
+    "target_num_documents": "Target number of documents",
+    "target_deadline": "Target deadline",
+    "description": "Description",
+    "tasks": "All tasks in this project"
+  },
+  "Name": "Name",
+  "Edit project": "Edit project",
+  "Create a project": "Create a project",
+  "Add project": "Add project",
   "Projects": "Projects",
   "Live projects": "Live projects",
   "Archived projects": "Archived projects"

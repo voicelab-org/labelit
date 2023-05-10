@@ -1,4 +1,21 @@
 {
+  "projectForm": {
+    "is_audio_annotated": "Afficher le lecteur audio",
+    "enable_region_annotation": "Activer la segmentation de l'audio par régions",
+    "is_text_annotated": "Afficher le texte",
+    "timer_inactivity_threshold": "Seuil d'inactivité (ms) du chronomètre",
+    "do_display_timer_time": "Afficher le compteur du chronomètre",
+    "does_audio_playing_count_as_activity": "Considérer l'écoute seule de l'audio comme activité pour le chronométrage",
+    "task_presentation": "Comment présenter les tâches aux annotateurs: comme une liste tenant sur une page ('list'), ou comme une séquence ('sequence')",
+    "target_num_documents": "Nombre de documents à annoter",
+    "target_deadline": "Echéance",
+    "description": "Description",
+    "tasks": "Toutes les tâches appartenant au projet"
+  },
+  "Name": "Nom",
+  "Edit project": "Editer le projet",
+  "Create a project": "Créer un projet",
+  "Add project": "Ajouter un projet",
   "Projects": "Projets",
   "Live projects": "Projets en cours",
   "Archived projects": "Projets archivés"
