@@ -19,10 +19,6 @@ from .timed_transcript_segment import *
 from .completed_document_annotator_pair import *
 from .project_task import *
 
-# TODO: remove
-# from .label_types import *
-# from .task_types import *
-
 from labelit.services.plugin_models_importer import import_plugin_models
 
 import_plugin_models(globals())

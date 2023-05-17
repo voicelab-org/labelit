@@ -43,5 +43,4 @@ class RealtimeVideoDimensionalTask(Task):
         return self._get_stats(done_annotations)
 
     def get_agreement_stats(self, batch):
-        # raise NotImplementedError
         raise Http404

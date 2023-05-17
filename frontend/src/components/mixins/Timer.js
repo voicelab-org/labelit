@@ -53,11 +53,11 @@ export default {
       this.inactivityTimeout = setTimeout(() => {
         if (this.batch.project.does_audio_playing_count_as_activity) {
           if (!this.is_playing) {
-            //this.isInactive = true; // TODO: uncomment (temp.)
+            this.isInactive = true;
           }
           return;
         }
-        //this.isInactive = true;  // TODO: uncomment (temp.)
+        this.isInactive = true;
       }, this.inactivity_timeout_duration);
     },
     getTime() {

@@ -8,7 +8,7 @@ import VJsf from '@koumoul/vjsf/lib/VJsf.js';
 import '@koumoul/vjsf/lib/VJsf.css';
 import draggable from 'vuedraggable';
 
-import register_components from "@/utils/automatically_register_components";
+import register_components from '@/utils/automatically_register_components';
 
 import VueUploadComponent from 'vue-upload-component';
 Vue.component('FileUpload', VueUploadComponent);

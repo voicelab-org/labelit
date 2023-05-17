@@ -1,11 +1,11 @@
 <template>
   <div id="video-player-container">
     <video-player
-        class="video-player-box"
-        ref="videoPlayer"
-        :options="playerOptions"
-        :playsinline="true"
-        @ready="playerReady"
+      class="video-player-box"
+      ref="videoPlayer"
+      :options="playerOptions"
+      :playsinline="true"
+      @ready="playerReady"
     >
     </video-player>
   </div>
@@ -13,7 +13,7 @@
 
 <script>
 import DocumentService from '@/services/document.service.js';
-import {useVideoPlayer} from '@/composables/video_player.js';
+import { useVideoPlayer } from '@/composables/video_player.js';
 
 export default {
   name: 'LabelitVideoPlayer',
@@ -25,7 +25,7 @@ export default {
   },
   setup() {
     // composition API
-    const {set_player, player, playerOptions} = useVideoPlayer();
+    const { set_player, player, playerOptions } = useVideoPlayer();
 
     return {
       set_player,
@@ -45,31 +45,25 @@ export default {
     // player is ready
     async playerReady(player) {
       this.set_player(player);
-      await this.fetchVideo()
+      await this.fetchVideo();
       this.$emit('player-loaded');
     },
     async fetchVideo() {
-      return new Promise(
-          (resolve) => {
-            DocumentService.getVideoUrl(this.document.id).then(res => {
-
-              let player_loaded = false
-              setInterval(
-                  () => {
-                    if (this.player.el && !player_loaded) {
-                      this.player.src({
-                        type: 'video/mp4',
-                        src: res.data.url,
-                      },)
-                      player_loaded = true
-                      resolve()
-                    }
-                  },
-                  1000
-              )
-            });
-          }
-      )
+      return new Promise(resolve => {
+        DocumentService.getVideoUrl(this.document.id).then(res => {
+          let player_loaded = false;
+          setInterval(() => {
+            if (this.player.el && !player_loaded) {
+              this.player.src({
+                type: 'video/mp4',
+                src: res.data.url,
+              });
+              player_loaded = true;
+              resolve();
+            }
+          }, 1000);
+        });
+      });
     },
   },
   watch: {

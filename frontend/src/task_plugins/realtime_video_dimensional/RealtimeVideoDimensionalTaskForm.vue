@@ -1,7 +1,7 @@
 <template>
   <div class="task-form-container">
     <div v-if="step == 0">
-      <p style="margin-bottom: 40px;">
+      <p style="margin-bottom: 40px">
         Autoplay must be activated in your browser. Please check your browser
         settings if the video does not play or is muted.
       </p>
@@ -149,16 +149,15 @@ export default {
       );
     },
     setPlayerOptions() {
-
-        console.log("in RTVidDimTaskForm.setPlayerOptions")
+      console.log('in RTVidDimTaskForm.setPlayerOptions');
       //if (this.player?.options){
-        let current_options = this.player.options();
+      let current_options = this.player.options();
 
-        if (current_options.controls) {
-          this.playerOptions = this.player.options({
-            controls: false,
-          });
-        }
+      if (current_options.controls) {
+        this.playerOptions = this.player.options({
+          controls: false,
+        });
+      }
 
       //}
     },
@@ -182,7 +181,7 @@ export default {
     },
     playerLoadedToggle: {
       handler() {
-        console.log("in RTVidDimTaskForm.playerLoadedToggle")
+        console.log('in RTVidDimTaskForm.playerLoadedToggle');
         this.setPlayerOptions();
         this.setupEvents();
       },

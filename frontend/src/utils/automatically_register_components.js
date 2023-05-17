@@ -20,4 +20,4 @@ function register_components(files) {
   }
 }
 
-export default register_components
+export default register_components;
