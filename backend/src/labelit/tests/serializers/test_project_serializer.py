@@ -29,6 +29,7 @@ class ProjectSerializerTests(TestCase):
                     "name",
                     "is_audio_annotated",
                     "is_text_annotated",
+                    "is_video_annotated",
                     "are_sequences_annotated",
                     "tasks",
                     "timer_inactivity_threshold",
