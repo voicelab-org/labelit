@@ -1,5 +1,5 @@
 <template>
-  <v-icon color="primary" :title="'Export data'" @click="exportExcel">
+  <v-icon color="primary" :title="$t('Export data')" @click="exportExcel">
     mdi-download-box
   </v-icon>
 </template>

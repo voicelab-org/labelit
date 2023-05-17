@@ -1,13 +1,5 @@
 <template>
   <div id="dashboard">
-    <!--
-    <v-tabs>
-        <v-tab v-for="link in links" :key="link.dest" :to="link.dest">
-            {{link.name}}
-        </v-tab>
-    </v-tabs>
-    -->
-
     <router-view></router-view>
   </div>
 </template>

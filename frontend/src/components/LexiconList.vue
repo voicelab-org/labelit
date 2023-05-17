@@ -1,31 +1,31 @@
 <template>
   <div>
     <div class="d-flex justify-space-between align-center">
-      <h2 class="headline">Lexicons</h2>
+      <h2 class="headline">{{ $t('Lexicons') }}</h2>
       <v-dialog v-model="dialog" persistent max-width="800px">
         <template #activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">
-            Add a lexicon
+            {{ $t('Add a lexicon') }}
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Add a lexicon</span>
+            <span class="headline">{{ $t('Add a lexicon') }}</span>
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-text-field
                 v-model="newLexiconName"
-                label="Lexicon name"
+                :label="$t('Lexicon name')"
               ></v-text-field>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" text @click="dialog = false">
-              Close
+              {{ $t('Close') }}
             </v-btn>
-            <v-btn color="primary" @click="add()">Add</v-btn>
+            <v-btn color="primary" @click="add()">{{ $t('Add') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -40,7 +40,7 @@
       <v-simple-table v-if="lexicons.length">
         <thead>
           <tr>
-            <th class="text-left">Lexicon name</th>
+            <th class="text-left">{{ $t('Lexicon name') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +49,7 @@
           </tr>
         </tbody>
       </v-simple-table>
-      <div v-else class="text-center">No lexicon yet...</div>
+      <div v-else class="text-center">{{ $t('No lexicon') }}</div>
     </div>
   </div>
 </template>

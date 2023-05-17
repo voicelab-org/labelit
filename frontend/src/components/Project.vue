@@ -5,10 +5,12 @@
         <v-btn icon @click="$router.push('/projects')">
           <v-icon> mdi-arrow-left </v-icon>
         </v-btn>
-        <h2 class="headline">Project : {{ project?.name || '...' }}</h2>
+        <h2 class="headline">
+          {{ $t('Project') }} : {{ project?.name || '...' }}
+        </h2>
       </div>
       <div class="d-flex">
-        <v-btn @click="exportProject"> Export</v-btn>
+        <v-btn @click="exportProject"> {{ $t('Export') }}</v-btn>
         <batch-create
           v-if="isAdmin"
           :project-id="projectId"
@@ -34,7 +36,7 @@
             ({{ project_with_stats?.num_done_documents }}/{{
               project_with_stats?.target_num_documents
             }}
-            documents)
+            {{ $t('documents') }})
           </small>
         </template>
       </v-progress-linear>
@@ -60,7 +62,7 @@
         <v-list>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>Created on</v-list-item-title>
+              <v-list-item-title>{{ $t('Created on') }}</v-list-item-title>
               <v-list-item-subtitle>
                 {{ project?.created_at }}
               </v-list-item-subtitle>
@@ -68,7 +70,7 @@
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>Created by</v-list-item-title>
+              <v-list-item-title>{{ $t('Created by') }}</v-list-item-title>
               <v-list-item-subtitle>
                 {{ project?.created_by?.first_name || 'Unknown' }}
                 {{ project?.created_by?.last_name }}
@@ -77,7 +79,7 @@
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>Last modified</v-list-item-title>
+              <v-list-item-title>{{ $t('Last modified') }}</v-list-item-title>
               <v-list-item-subtitle>
                 {{ project?.updated_at }}
               </v-list-item-subtitle>
@@ -85,7 +87,7 @@
           </v-list-item>
           <v-list-item v-if="project_with_stats?.target_deadline">
             <v-list-item-content>
-              <v-list-item-title>Target date</v-list-item-title>
+              <v-list-item-title>{{ $t('Target date') }}</v-list-item-title>
               <v-list-item-subtitle>
                 {{ project_with_stats.target_deadline }}
               </v-list-item-subtitle>
@@ -94,7 +96,7 @@
           <v-list-group>
             <template #activator>
               <v-list-item-content>
-                <v-list-item-title>Description</v-list-item-title>
+                <v-list-item-title>{{ $t('Description') }}</v-list-item-title>
                 <v-list-item-subtitle>
                   {{ project_with_stats?.description || '...' }}
                 </v-list-item-subtitle>
@@ -137,8 +139,8 @@ export default {
       batches: [],
       project: null,
       loading: true,
-      currentTab: 'Batches',
-      tabs: ['Batches', 'Informations', 'Statististics'],
+      currentTab: this.$t('Batches'),
+      tabs: [this.$t('Batches'), this.$t('About'), this.$t('Statistics')],
       updateListToggle: true,
       project_with_stats: null,
     };

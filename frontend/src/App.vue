@@ -8,18 +8,18 @@
 
           <template v-if="user">
             <v-btn v-if="user.is_staff" to="/dashboard" plain rounded>
-              Dashboard
+              {{ $t('Dashboard') }}
             </v-btn>
 
             <v-btn to="/projects" plain rounded> Projects </v-btn>
             <v-btn v-if="user.is_staff" to="/datasets" plain rounded>
-              Datasets
+              {{ $t('Datasets') }}
             </v-btn>
             <v-btn v-if="user.is_staff" to="/tasks" plain rounded>
-              Tasks
+              {{ $t('Tasks') }}
             </v-btn>
             <v-btn v-if="user.is_staff" to="/lexicons" plain rounded>
-              Lexicons
+              {{ $t('Lexicons') }}
             </v-btn>
           </template>
           <v-spacer></v-spacer>
@@ -30,7 +30,9 @@
             </v-btn>
           </div>
           <div v-else>
-            <v-btn text :to="{ name: 'login' }">Login</v-btn>
+            <v-btn text :to="{ name: 'login' }">
+              {{ $t('Login') }}
+            </v-btn>
           </div>
         </v-container>
       </v-app-bar>
@@ -63,9 +65,6 @@ export default {
     BlueFilterOverlay,
     LabelitSnackbar,
   },
-  data: () => ({
-    links: ['Projects', 'Datasets'],
-  }),
   computed: {
     ...mapGetters({
       user: 'auth/user',

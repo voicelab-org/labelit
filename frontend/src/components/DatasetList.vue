@@ -1,7 +1,7 @@
 <template>
   <div id="datasets">
     <div class="d-flex align-center justify-space-between">
-      <h2 class="headline">Datasets</h2>
+      <h2 class="headline">{{ $t('Datasets') }}</h2>
       <div class="actions">
         <DatasetUploader @new-dataset-imported="getDatasets()" />
       </div>
@@ -15,12 +15,12 @@
       </div>
       <div v-else>
         <div v-if="datasets.length === 0" class="mt-12 text-center">
-          No dataset imported yet
+          {{ $t('No dataset imported yet') }}
         </div>
         <v-simple-table v-else>
           <thead>
             <tr>
-              <th class="text-left">Name</th>
+              <th class="text-left">{{ $t('Name') }}</th>
             </tr>
           </thead>
           <tbody>

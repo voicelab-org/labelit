@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn v-if="!displayForm" @click="displayForm = true" color="primary">
-      Import a dataset
+      {{ $t('Import a dataset') }}
     </v-btn>
     <div v-else>
       <file-upload
@@ -12,7 +12,7 @@
         @input-file="inputFile"
         @input-filter="inputFilter"
       >
-        <v-btn>{{ fileName || 'Select a file' }}</v-btn>
+        <v-btn>{{ fileName || $t('Select a file') }}</v-btn>
       </file-upload>
       <v-btn
         :disabled="!fileSelected || importInProgress"
@@ -77,11 +77,13 @@ export default {
             this.dataset_uploaded = true;
             this.$emit('new-dataset-imported');
             notification = {
-              text: 'The dataset has been successfully uploaded.',
+              text: this.$t('The dataset has been successfully uploaded.'),
             };
           } else {
             notification = {
-              text: 'Something wrong happened. Contact the support if the problem persist.',
+              text: this.$t(
+                'Something wrong happened. Please contact support if the problem persists.'
+              ),
               type: SNACKBAR_TYPE_COLOR.ERROR,
             };
           }

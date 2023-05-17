@@ -21,7 +21,7 @@
     </template>
     <v-card>
       <v-card-text>
-        <div class="text-caption">Blue filter :</div>
+        <div class="text-caption">{{ $t('Blue filter') }} :</div>
         <v-slider
           height="60px"
           :value="percentage"

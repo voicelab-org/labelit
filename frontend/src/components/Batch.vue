@@ -9,7 +9,7 @@
           <h2 class="headline">Batch: {{ batch.name }}</h2>
         </div>
         <h4 v-if="total_units" class="mt-5">
-          Progress (batch-level): {{ num_done_units }} / {{ total_units }}
+          {{ $t('Progress') }}: {{ num_done_units }} / {{ total_units }}
         </h4>
       </div>
       <v-tabs>

@@ -2,14 +2,18 @@
   <div class="qa-form-container">
     <div>
       <div v-if="!is_invalidating">
-        <v-btn v-if="!a.has_qa_validated" @click="validate"> Validate </v-btn>
+        <v-btn v-if="!a.has_qa_validated" @click="validate">
+          {{ $t('Validate') }}
+        </v-btn>
         <v-btn v-if="!a.has_qa_invalidated" @click="invalidate">
-          Invalidate
+          {{ $t('Invalidate') }}
         </v-btn>
       </div>
       <div v-if="is_invalidating" class="invalidation">
         <textarea v-model="invalidation_comment" />
-        <v-btn @click="confirmInvalidation">Send for Review</v-btn>
+        <v-btn @click="confirmInvalidation">
+          {{ $t('Send for Review') }}
+        </v-btn>
       </div>
       <div v-else>
         <div v-if="a.qa_invalidation_comment" class="invalidation-comment">

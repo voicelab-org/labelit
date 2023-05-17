@@ -22,7 +22,7 @@
           @video-player-loaded="video_player_toggle = !video_player_toggle"
         />
         <div v-if="batch.project.do_display_timer_time">
-          Time: {{ time_display }}
+          {{ $t('Time') }}: {{ time_display }}
         </div>
       </div>
       <div v-if="annotations" id="annotation-forms-t">
@@ -50,7 +50,7 @@
         <v-icon>mdi-pause</v-icon>
       </div>
     </div>
-    <div v-else>No more to annotate.</div>
+    <div v-else>{{ $t('No more to annotate') }}</div>
   </div>
 </template>
 

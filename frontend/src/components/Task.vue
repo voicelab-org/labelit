@@ -4,9 +4,9 @@
       <v-btn icon @click="$router.push('/tasks')">
         <v-icon> mdi-arrow-left </v-icon>
       </v-btn>
-      <h2 class="headline">Task: {{ task?.name }}</h2>
+      <h2 class="headline">{{ $t('Task') }}: {{ task?.name }}</h2>
     </div>
-    <div class="mt-12">Edit guidelines:</div>
+    <div class="mt-12">{{ $t('Edit guidelines') }}:</div>
     <vue-editor
       v-if="task"
       v-model="task.html_guidelines"
