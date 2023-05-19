@@ -19,9 +19,7 @@ class SortedSampler(Sampler):
             documents: Union[QuerySet, List[Document]],
             target_num_documents: int
     ):
-        # .order_by('-score')[:30]
         return documents.order_by(f'{"-" if not self.is_ascending else ""}{self.sorting_key}')[:target_num_documents]
-
 
     class Meta:
         app_label = "labelit"

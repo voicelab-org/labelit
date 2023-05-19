@@ -22,3 +22,5 @@ from .project_task import *
 from labelit.services.plugin_models_importer import import_plugin_models
 
 import_plugin_models(globals())
+import_plugin_models(globals(), plugin_type="samplers")
+

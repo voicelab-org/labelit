@@ -65,7 +65,14 @@ class FlatBatchSerializer(serializers.ModelSerializer):
                 batch__in=batch.project.batches.all()
             ).values("document_id")
         )
-        documents_to_add = free_documents[: batch.num_documents]
+        if batch.project.sampler is not None:
+            documents_to_add = batch.project.sampler.sample(
+                documents=free_documents,
+                target_num_documents=batch.num_documents
+            )
+        else:
+            documents_to_add = free_documents[: batch.num_documents]
+
         for document in documents_to_add:
             BatchDocument.objects.create(batch=batch, document=document)
 

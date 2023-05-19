@@ -8,6 +8,7 @@ from importlib import import_module
 
 def import_plugin_models(
     globals_dict: dict,
+    plugin_type: str="tasks"
 ):
     """
     Automatically imports model classes from plugins.
@@ -22,14 +23,14 @@ def import_plugin_models(
     """
     # iterate through the plugins
     here = os.path.abspath(os.path.dirname(__file__))
-    plugins_path = os.path.join(here, "../plugins/tasks")
+    plugins_path = os.path.join(here, f"../plugins/{plugin_type}")
     for plugin_name in os.listdir(plugins_path):
         # iterate through the models package
         models_package_path = os.path.join(plugins_path, plugin_name, "models")
         for _, module_name, _ in iter_modules([models_package_path]):
             # import the module and iterate through its attributes
             module = import_module(
-                f"labelit.plugins.tasks.{plugin_name}.models.{module_name}"
+                f"labelit.plugins.{plugin_type}.{plugin_name}.models.{module_name}"
             )
             for attribute_name in dir(module):
                 attribute = getattr(module, attribute_name)
