@@ -22,10 +22,17 @@ class SortedSamplerTests(TestCase):
         )
         self.documents = Document.objects.filter(pk__in=(6, 7, 8))
 
-
     def test_sample(self):
         self.assertEqual(
-            self.sorted_sampler.sample(documents=self.documents, target_num_documents=3).values_list('id', flat=True),
+            list(
+                self.sorted_sampler.sample(
+                    documents=self.documents,
+                    target_num_documents=3
+                ).values_list(
+                    'id',
+                    flat=True
+                ),
+            ),
             [7, 6, 8]
         )
 
@@ -33,7 +40,13 @@ class SortedSamplerTests(TestCase):
         self.sorted_sampler.save()
 
         self.assertEqual(
-            self.sorted_sampler.sample(documents=self.documents, target_num_documents=3).values_list('id', flat=True),
+            list(
+                self.sorted_sampler.sample(
+                    documents=self.documents,
+                    target_num_documents=3).values_list(
+                    'id',
+                    flat=True
+                ),
+            ),
             [8, 6, 7]
         )
-
