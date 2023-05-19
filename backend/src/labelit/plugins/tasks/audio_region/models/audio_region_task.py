@@ -1,11 +1,6 @@
 from django.db import models
 from labelit.models.task import Task
-from labelit.models.annotation import Annotation
-from django.core.exceptions import ValidationError
 from django.http import Http404
-from statsmodels.stats.inter_rater import fleiss_kappa
-import math
-from django.db.models import F
 
 
 class AudioRegionTask(Task):
@@ -25,13 +20,10 @@ class AudioRegionTask(Task):
         pass
 
     def _get_stats(self, done_annotations, annotators):
-        # raise NotImplementedError
         raise Http404
 
     def get_batch_stats(self, batch):
-        # raise NotImplementedError
         raise Http404
 
     def get_agreement_stats(self, batch):
-        # raise NotImplementedError
         raise Http404

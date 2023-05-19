@@ -18,7 +18,7 @@ def create_polymorphic_serializer_mapping(
                 return model_filename.endswith(f"{model_type_name}.py")
 
             here = os.path.abspath(os.path.dirname(__file__))
-            plugins_path = os.path.join(here, "../plugins")
+            plugins_path = os.path.join(here, "../plugins/tasks")
             model_file_names = []
             plugin_names = []
             for plugin_name in os.listdir(plugins_path):
@@ -71,9 +71,9 @@ def create_polymorphic_serializer_mapping(
             model_name = model_dotted_path.split(".")[-1]
 
             if is_create_or_update:
-                dotted_path = f"labelit.plugins.{plugin_name}.serializers.{model_filename.split('.')[0]}_serializer.CreateOrUpdate{model_name}Serializer"
+                dotted_path = f"labelit.plugins.tasks.{plugin_name}.serializers.{model_filename.split('.')[0]}_serializer.CreateOrUpdate{model_name}Serializer"
             else:
-                dotted_path = f"labelit.plugins.{plugin_name}.serializers.{model_filename.split('.')[0]}_serializer.{model_name}Serializer"
+                dotted_path = f"labelit.plugins.tasks.{plugin_name}.serializers.{model_filename.split('.')[0]}_serializer.{model_name}Serializer"
             try:
                 resolve(dotted_path)
             except ModuleNotFoundError:
