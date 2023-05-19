@@ -1,8 +1,5 @@
-import copy
 from collections import OrderedDict
-
 from django.test import TestCase
-
 from labelit.models import Label, OrdinalLabel, OrdinalTask, Project
 from labelit.serializers import TaskSerializer
 
