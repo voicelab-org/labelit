@@ -35,10 +35,7 @@ import 'video.js/dist/video-js.css';
 // import 'vue-video-player/src/custom-theme.css'
 
 Vue.use(
-  VueVideoPlayer /* {
-  options: global default options,
-  events: global videojs events
-} */
+  VueVideoPlayer
 );
 // END add vue-video-player@5.0.2
 
