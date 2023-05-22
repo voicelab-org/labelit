@@ -20,8 +20,6 @@ class RealtimeVideoDimensionalTask(Task):
         done_annotations,
     ):
         stats = {}
-        # TODO
-
         return stats
 
     def get_project_stats(self, project):

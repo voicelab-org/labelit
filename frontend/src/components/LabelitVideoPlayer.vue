@@ -38,9 +38,6 @@ export default {
       return this.$refs.videoPlayer.player;
     },
   },
-  created() {
-    //this.fetchVideo()
-  },
   methods: {
     // player is ready
     async playerReady(player) {
