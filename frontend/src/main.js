@@ -31,9 +31,7 @@ Vue.use(VueScrollTo);
 import VueVideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
 
-Vue.use(
-  VueVideoPlayer
-);
+Vue.use(VueVideoPlayer);
 // END add vue-video-player@5.0.2
 
 // BEGIN Annotation container types registration
