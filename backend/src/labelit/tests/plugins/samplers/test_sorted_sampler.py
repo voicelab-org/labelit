@@ -6,7 +6,6 @@ from labelit.models import (
     Batch,
     SortedSampler,
 )
-from users.models import User
 
 
 class SortedSamplerTests(TestCase):
@@ -33,7 +32,7 @@ class SortedSamplerTests(TestCase):
                     flat=True
                 ),
             ),
-            [7, 6, 8]
+            [7, 6, 8]  # goodbye, hello, world
         )
 
         self.sorted_sampler.is_ascending = False
@@ -43,10 +42,11 @@ class SortedSamplerTests(TestCase):
             list(
                 self.sorted_sampler.sample(
                     documents=self.documents,
-                    target_num_documents=3).values_list(
+                    target_num_documents=3
+                ).values_list(
                     'id',
                     flat=True
                 ),
             ),
-            [8, 6, 7]
+            [8, 6, 7]  # world, hello, goodbye
         )
