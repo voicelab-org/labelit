@@ -11,9 +11,14 @@ from .sequence_batch import *
 from .task import *
 from .lexicon import *
 from .lexicon_entry import *
+
+# TODO: consider removing
 from .timed_transcript import *
 from .timed_transcript_segment import *
-from .label_types import *
-from .task_types import *
+
 from .completed_document_annotator_pair import *
 from .project_task import *
+
+from labelit.services.plugin_models_importer import import_plugin_models
+
+import_plugin_models(globals())

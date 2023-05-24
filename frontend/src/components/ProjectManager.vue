@@ -92,6 +92,11 @@ export default {
             default: true,
             title: this.$t('projectForm.is_audio_annotated'),
           },
+          is_video_annotated: {
+            type: 'boolean',
+            default: false,
+            title: this.$t('projectForm.is_video_annotated'),
+          },
           enable_region_annotation: {
             type: 'boolean',
             default: false,

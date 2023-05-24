@@ -78,6 +78,7 @@ export default {
       loading: true,
       edited_project: { some: 'project' },
       show_edit_project: false,
+      player_loaded_toggle: false,
     };
   },
   created() {

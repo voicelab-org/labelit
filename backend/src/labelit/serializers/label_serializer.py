@@ -1,17 +1,9 @@
 from rest_framework import serializers
-from labelit.models import (
-    Label,
-    OrdinalLabel,
-    TranscriptionLabel,
-    LiveCorrectLabel,
-    EntityLabel,
-    TextEditionLabel,
-    NestedCategoricalLabel,
-    AudioRegionLabel,
-)
+from labelit.models import Label
 from rest_polymorphic.serializers import PolymorphicSerializer
-from django.core.exceptions import ObjectDoesNotExist
-from .timed_transcript_serializer import TimedTranscriptSerializer
+from labelit.services.polymorphic_serializer_mapping_creator import (
+    create_polymorphic_serializer_mapping,
+)
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -20,142 +12,21 @@ class LabelSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "task", "color"]
 
 
-class EntityLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EntityLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "start_offset",
-            "end_offset",
-            "source_label",
-        ]
+mapping = create_polymorphic_serializer_mapping(
+    is_task_mapping=False,
+)
 
 
-class AudioRegionLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AudioRegionLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "start",
-            "end",
-        ]
-
-
-class NestedCategoricalLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NestedCategoricalLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "parent_label",
-            "single_child_select",
-        ]
-
-
-class OrdinalLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrdinalLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "index",
-        ]
-
-    def create(self, validated_data):
-        try:
-            OrdinalLabel.objects.get(
-                task=validated_data.get("task"), index=validated_data.get("index")
-            )
-            raise serializers.ValidationError(
-                "Validation error: duplicate. A label with matching (task, index) already exists"
-            )
-        except ObjectDoesNotExist:
-            pattern = OrdinalLabel(**validated_data)
-            pattern.save()
-        return pattern
-
-
-class TranscriptionLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TranscriptionLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "transcript",
-        ]
-
-
-class TextEditionLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TextEditionLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "edited_text",
-        ]
-
-
-class LiveCorrectLabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LiveCorrectLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "timed_transcript",
-        ]
-
-
-class LiveCorrectLabelReadSerializer(serializers.ModelSerializer):
-    timed_transcript = TimedTranscriptSerializer(
-        read_only=True,
-    )
-
-    class Meta:
-        model = LiveCorrectLabel
-        fields = [
-            "id",
-            "name",
-            "task",
-            "color",
-            "timed_transcript",
-        ]
+mapping.update(
+    {
+        Label: LabelSerializer,
+    }
+)
 
 
 class LabelPolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {
-        Label: LabelSerializer,
-        OrdinalLabel: OrdinalLabelSerializer,
-        TranscriptionLabel: TranscriptionLabelSerializer,
-        LiveCorrectLabel: LiveCorrectLabelSerializer,
-        EntityLabel: EntityLabelSerializer,
-        TextEditionLabel: TextEditionLabelSerializer,
-        NestedCategoricalLabel: NestedCategoricalLabelSerializer,
-        AudioRegionLabel: AudioRegionLabelSerializer,
-    }
+    model_serializer_mapping = mapping
 
 
 class LabelPolymorphicReadSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {
-        Label: LabelSerializer,
-        OrdinalLabel: OrdinalLabelSerializer,
-        TranscriptionLabel: TranscriptionLabelSerializer,
-        LiveCorrectLabel: LiveCorrectLabelReadSerializer,
-        EntityLabel: EntityLabelSerializer,
-        TextEditionLabel: TextEditionLabelSerializer,
-        NestedCategoricalLabel: NestedCategoricalLabelSerializer,
-        AudioRegionLabel: AudioRegionLabelSerializer,
-    }
+    model_serializer_mapping = mapping

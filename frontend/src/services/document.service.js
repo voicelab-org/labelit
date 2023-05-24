@@ -17,6 +17,10 @@ class DocumentService {
   getAudioUrl(documentId, config = {}) {
     return this.request.get(`/audio/${documentId}/serve_url/`, config);
   }
+
+  getVideoUrl(documentId, config = {}) {
+    return this.request.get(`/video/${documentId}/serve_url/`, config);
+  }
 }
 
 export default new DocumentService();

@@ -3,6 +3,7 @@ from labelit.models import Project, ProjectTask, Task
 from labelit.serializers import TaskPolymorphicSerializer, TaskSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # TODO: DRY vs. ./user_serializer.py
@@ -33,6 +34,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "name",
             "is_audio_annotated",
             "is_text_annotated",
+            "is_video_annotated",
             "enable_region_annotation",
             "are_sequences_annotated",
             "tasks",
@@ -71,6 +73,7 @@ class FlatProjectSerializer(serializers.ModelSerializer):
             "name",
             "is_audio_annotated",
             "is_text_annotated",
+            "is_video_annotated",
             "enable_region_annotation",
             "are_sequences_annotated",
             "tasks",
@@ -118,10 +121,15 @@ class FlatProjectSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         task_ids = request.data.get("tasks")
         for idx, t_id in enumerate(task_ids):
-            project_task = ProjectTask.objects.get(
-                project=instance,
-                task_id=t_id,
-            )
+            try:
+                project_task = ProjectTask.objects.get(
+                    project=instance,
+                    task_id=t_id,
+                )
+            except ObjectDoesNotExist:
+                project_task = ProjectTask.objects.create(
+                    project=instance, task_id=t_id, order=idx + 1
+                )
             project_task.order = idx + 1
             project_task.save()
 
@@ -141,6 +149,7 @@ class ProjectWithStatsSerializer(serializers.ModelSerializer):
             "name",
             "is_audio_annotated",
             "is_text_annotated",
+            "is_video_annotated",
             "enable_region_annotation",
             "are_sequences_annotated",
             "tasks",

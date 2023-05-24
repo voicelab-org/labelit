@@ -28,6 +28,17 @@ class AudioStorage(LazyObject):
         )
 
 
+class VideoStorage(LazyObject):
+    @cached_property
+    def storage_class(self):
+        return get_storage_class(os.environ.get("VIDEO_FILE_STORAGE"))
+
+    def _setup(self):
+        self._wrapped = self.storage_class(
+            bucket_name=os.environ.get("AWS_VIDEO_STORAGE_BUCKET_NAME")
+        )
+
+
 class SourceAudioStorage(storage_class):
     def __init__(self, source_audio_storage_bucket_name, aws_key_id, aws_key_content):
         self.bucket_name = source_audio_storage_bucket_name
@@ -38,4 +49,5 @@ class SourceAudioStorage(storage_class):
 
 # create lazy objects which would be initialized on a call (we need this for settings availability)
 audio_storage = AudioStorage()
+video_storage = VideoStorage()
 image_storage = ImageStorage()

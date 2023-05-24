@@ -4,6 +4,12 @@ export default {
   name: 'TaskForm',
   mixins: [],
   props: {
+    currentStepperStep: {
+      type: Number,
+    },
+    thisFormStepperStep: {
+      type: Number,
+    },
     submitting: {
       type: Boolean,
       required: true,
@@ -38,6 +44,10 @@ export default {
     focused: {
       type: Boolean,
       default: false,
+    },
+    videoPlayerLoadedToggle: {
+      type: Boolean,
+      required: true,
     },
   },
   data() {

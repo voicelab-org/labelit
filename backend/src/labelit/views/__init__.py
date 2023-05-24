@@ -8,6 +8,7 @@ from .csrf_views import *
 from .document_sequence_views import *
 from .dataset_views import *
 from .audio_views import *
+from .video_views import *
 from .image_views import *
 from .lexicon_views import *
 from .lexicon_entry_views import *

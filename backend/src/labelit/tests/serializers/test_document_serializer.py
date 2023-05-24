@@ -20,6 +20,7 @@ class DocumentSerializerTests(TestCase):
                     "id",
                     "text",
                     "audio_filename",
+                    "video_filename",
                     "dataset",
                     "document_sequence",
                     "sequence_index",

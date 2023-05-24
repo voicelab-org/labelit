@@ -12,6 +12,12 @@
     </div>
 
     <div id="doc">
+      <div v-if="project.is_video_annotated">
+        <LabelitVideoPlayer
+          :document="document"
+          @player-loaded="$emit('video-player-loaded')"
+        />
+      </div>
       <div v-if="project.is_audio_annotated">
         <player
           v-model="annotated_regions"
@@ -38,18 +44,21 @@
 </template>
 <script>
 import Player from '@/components/Player.vue';
+import LabelitVideoPlayer from '@/components/LabelitVideoPlayer.vue';
 import TextWithEntities from '@/components/TextWithEntities.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Document',
   components: {
+    LabelitVideoPlayer,
     Player,
     TextWithEntities,
   },
   data() {
     return {
       audio_loaded: false,
+      video_player_toggle: false,
       /*annotated_regions: [],  // TODO: move to store
       region_tasks: [  // TODO: move to store
         {
