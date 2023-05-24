@@ -92,6 +92,11 @@ export default {
             default: true,
             title: this.$t('projectForm.is_audio_annotated'),
           },
+          is_video_annotated: {
+            type: 'boolean',
+            default: false,
+            title: this.$t('projectForm.is_video_annotated'),
+          },
           enable_region_annotation: {
             type: 'boolean',
             default: false,
@@ -112,7 +117,6 @@ export default {
             default: false,
             title: this.$t('projectForm.do_display_timer_time'),
           },
-          is_video_annotated: { type: 'boolean', default: false },
           does_audio_playing_count_as_activity: {
             type: 'boolean',
             default: true,

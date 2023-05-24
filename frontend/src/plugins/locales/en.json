@@ -78,6 +78,7 @@
   "Edit task": "Edit task",
   "projectForm": {
     "is_audio_annotated": "Show audio player",
+    "is_video_annotated": "Show video player",
     "enable_region_annotation": "Enable audio region annotation",
     "is_text_annotated": "Show text",
     "timer_inactivity_threshold": "Timer inactivity threshold (ms)",
