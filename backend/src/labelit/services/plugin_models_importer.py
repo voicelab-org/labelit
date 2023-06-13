@@ -1,8 +1,6 @@
 import os
-from pkgutil import iter_modules
 from inspect import isclass
 from pkgutil import iter_modules
-from pathlib import Path
 from importlib import import_module
 
 
@@ -17,7 +15,7 @@ def import_plugin_models(
 
     Args:
         globals_dict: pass globals() from models/__init__.py
-
+        plugin_type: the type of plugin (task, samplers, etc.)
     Returns:
         None
     """
