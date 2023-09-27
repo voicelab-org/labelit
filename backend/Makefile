@@ -18,3 +18,6 @@ update-dev:
 
 update:
 	make -j 2 update-main update-dev
+
+lint:
+	pre-commit run --all-files
