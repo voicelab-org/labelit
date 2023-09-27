@@ -10,7 +10,9 @@ class UpperCaseWithSymbolsFrenchValidator:
     VALID_CHARS = """\n !"$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}§«°º»½ÀÁÂÇÈÉÊÎÔàâçèéêëíîïñôöùûüÿŒœˢ–—’…₂€*"""
 
     UNACCEPTABLE_CHAR = "Unacceptable char!"
-    WRONG_SYMBOL_TRANSCRIPTION_POURCENT = "`Pourcent` word should be transcribed as `%`!"
+    WRONG_SYMBOL_TRANSCRIPTION_POURCENT = (
+        "`Pourcent` word should be transcribed as `%`!"
+    )
     WRONG_SYMBOL_TRANSCRIPTION_AROBASE = "`Arobase` word should be transcribed as `@`!"
 
     def validate(
@@ -23,7 +25,9 @@ class UpperCaseWithSymbolsFrenchValidator:
             if (
                 c not in valid_chars_set
             ):  # allowing new lines as well as valid characters
-                errors.append(f"{self.UNACCEPTABLE_CHAR} ({c}) at character index: {pos}")
+                errors.append(
+                    f"{self.UNACCEPTABLE_CHAR} ({c}) at character index: {pos}"
+                )
 
         for word in transcript.lower().split(" "):
             print(f"Word ***{word}****")
@@ -34,7 +38,4 @@ class UpperCaseWithSymbolsFrenchValidator:
                 errors.append(self.WRONG_SYMBOL_TRANSCRIPTION_POURCENT)
 
         if len(errors):
-            raise ValidationError(
-                "; ".join(errors)
-            )
-
+            raise ValidationError("; ".join(errors))

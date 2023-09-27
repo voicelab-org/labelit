@@ -38,15 +38,15 @@ class TranscriptionTaskModelTests(TestCase):
 
         self.task = TranscriptionTask.objects.create(
             name="Transcribe stuff",
-            validator="labelit.validators.UpperCaseWithSymbolsFrenchValidator"
+            validator="labelit.validators.UpperCaseWithSymbolsFrenchValidator",
         )
         self.project.tasks.add(self.task)
 
         self.label_forbidden = TranscriptionLabel.objects.create(
             task=self.task,
             transcript="Some forbidden characters next: #ł. "
-                       "Arobase is a not valid word (use @ instead). "
-                       "Pourcent is a not valid word (use % instead)"
+            "Arobase is a not valid word (use @ instead). "
+            "Pourcent is a not valid word (use % instead)",
         )
 
         self.label_allowed = TranscriptionLabel.objects.create(
