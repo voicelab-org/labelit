@@ -38,7 +38,7 @@
               @click="goTo(project)"
             >
               <td>{{ project.name }}</td>
-              <td>{{ printProjectTasks(project.tasks) }}</td>
+              <td>{{ printProjectTasks(project.task_names) }}</td>
               <td>
                 <ProjectMenu v-model="shown_projects[i]" @edit="showEdit" />
               </td>
@@ -97,7 +97,7 @@ export default {
       return '/project/' + project.id;
     },
     printProjectTasks(tasks) {
-      return tasks.map(t => t.name).join(', ');
+      return tasks.join(', ');
     },
     goTo(project) {
       this.$router.push('/project/' + project.id);
