@@ -10,7 +10,8 @@ const playerOptions = ref({
   sources: [
     {
       type: 'video/mp4',
-      src: 'http://techslides.com/demos/sample-videos/small.mp4',
+      // src: 'http://techslides.com/demos/sample-videos/small.mp4',
+      src: '/small_black.mp4',
     },
   ],
 });

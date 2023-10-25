@@ -1,5 +1,4 @@
 import os
-import json
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from botocore.exceptions import ClientError
@@ -54,6 +53,7 @@ class VideoViewSet(viewsets.ViewSet):
         head_obj = self._check_file_is_reachable(video_document.video_filename)
 
         video_filename = video_document.video_filename
+        print("&video_filename", video_filename)
         url = storage.connection.meta.client.generate_presigned_url(
             "get_object",
             Params={"Bucket": storage.bucket_name, "Key": video_filename},
