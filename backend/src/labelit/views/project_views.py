@@ -17,7 +17,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         "create": FlatProjectSerializer,
         "update": FlatProjectSerializer,
         "partial_update": FlatProjectSerializer,
-        "list": ProjectSerializer,
+        "list": FlatProjectSerializer,
         "detail": ProjectSerializer,
     }
     serializer_class = ProjectSerializer

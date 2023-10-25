@@ -52,6 +52,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class FlatProjectSerializer(serializers.ModelSerializer):
+
+    task_names = serializers.SerializerMethodField()
+
     class Meta:
         model = Project
         fields = [
@@ -62,6 +65,7 @@ class FlatProjectSerializer(serializers.ModelSerializer):
             "enable_region_annotation",
             "are_sequences_annotated",
             "tasks",
+            "task_names",
             "timer_inactivity_threshold",
             "archived",
             "do_display_timer_time",
@@ -76,6 +80,10 @@ class FlatProjectSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {"created_by": {"default": serializers.CurrentUserDefault()}}
 
+    def get_task_names(self, obj):
+        return list(
+            obj.tasks.all().values_list('name', flat=True)
+        )
 
 class ProjectWithStatsSerializer(serializers.ModelSerializer):
     tasks = TaskPolymorphicSerializer(many=True, required=False)
