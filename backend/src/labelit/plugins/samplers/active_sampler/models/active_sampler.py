@@ -19,4 +19,4 @@ class ActiveSampler(Sampler):
         app_label = "labelit"
 
     def __str__(self):
-        return "<SortedSampler ({}): project {}>".format(self.pk, self.project.name)
+        return "<ActiveSampler ({}): project {}>".format(self.pk, self.project.name)
