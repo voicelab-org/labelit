@@ -3,25 +3,19 @@ import { ref } from 'vue';
 // cross-component state
 const player = ref(null);
 const playerOptions = ref({
-  // videojs options
   muted: false,
   language: 'en',
   controls: true,
-  sources: [
-    {
-      type: 'video/mp4',
-      src: 'http://techslides.com/demos/sample-videos/small.mp4',
-    },
-  ],
+  playsinline: true,
 });
 
 export function useVideoPlayer() {
-  function set_player(p) {
-    player.value = p;
+  function setPlayer(newPlayer) {
+    player.value = newPlayer;
   }
 
   return {
-    set_player,
+    setPlayer,
     player,
     playerOptions,
   };

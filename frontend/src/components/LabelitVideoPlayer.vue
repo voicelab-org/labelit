@@ -1,10 +1,9 @@
 <template>
   <div id="video-player-container">
     <video-player
-      class="video-player-box"
       ref="videoPlayer"
+      class="video-player-box"
       :options="playerOptions"
-      :playsinline="true"
       @ready="playerReady"
     >
     </video-player>
@@ -24,44 +23,13 @@ export default {
     },
   },
   setup() {
-    // composition API
-    const { set_player, player, playerOptions } = useVideoPlayer();
+    const { setPlayer, player, playerOptions } = useVideoPlayer();
 
     return {
-      set_player,
+      setPlayer,
       player,
       playerOptions,
     };
-  },
-  computed: {
-    computed_player() {
-      return this.$refs.videoPlayer.player;
-    },
-  },
-  methods: {
-    // player is ready
-    async playerReady(player) {
-      this.set_player(player);
-      await this.fetchVideo();
-      this.$emit('player-loaded');
-    },
-    async fetchVideo() {
-      return new Promise(resolve => {
-        DocumentService.getVideoUrl(this.document.id).then(res => {
-          let player_loaded = false;
-          setInterval(() => {
-            if (this.player.el && !player_loaded) {
-              this.player.src({
-                type: 'video/mp4',
-                src: res.data.url,
-              });
-              player_loaded = true;
-              resolve();
-            }
-          }, 1000);
-        });
-      });
-    },
   },
   watch: {
     document: {
@@ -69,6 +37,19 @@ export default {
       handler() {
         this.fetchVideo();
       },
+    },
+  },
+  methods: {
+    async playerReady(player) {
+      this.setPlayer(player);
+      await this.fetchVideo();
+      this.$emit('player-loaded');
+    },
+    async fetchVideo() {
+      const {
+        data: { url },
+      } = await DocumentService.getVideoUrl(this.document.id);
+      this.player.src({ type: 'video/mp4', src: url });
     },
   },
 };

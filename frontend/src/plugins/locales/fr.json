@@ -78,6 +78,7 @@
   "Edit task": "Editer une tâche",
   "projectForm": {
     "is_audio_annotated": "Afficher le lecteur audio",
+    "is_video_annotated": "Afficher le lecteur video",
     "enable_region_annotation": "Activer la segmentation de l'audio par régions",
     "is_text_annotated": "Afficher le texte",
     "timer_inactivity_threshold": "Seuil d'inactivité (ms) du chronomètre",
