@@ -51,6 +51,7 @@ setuptools.setup(
         "llvmlite >= 0.31.0",
         "m3u8 >= 1.0.0",
         "Markdown >= 3.3.3",
+        "modal >= 0.55.4155",
         "nltk >= 3.5",
         "numba >= 0.48.0",
         "numpy >= 1.20.1",
