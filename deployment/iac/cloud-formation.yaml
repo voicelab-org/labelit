@@ -56,6 +56,19 @@ Resources:
                 - - "arn:aws:s3:::"
                   - !Ref StaticFilesBucket
                   - /*
+  LabelItUserCredentials:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      Status: Active
+      UserName: !Ref LabelItUser
+  LabelItUserCredentialsStored:
+    Type: AWS::SecretsManager::Secret
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Delete
+    Properties:
+      Name: !Sub labelit-${ClientName}-credentials
+      SecretString: !Sub '{"ACCESS_KEY":"${LabelItUserCredentials}","SECRET_KEY":"${LabelItUserCredentials.SecretAccessKey}"}'
+
 
   # --------------------------- S3 ---------------------------
 
