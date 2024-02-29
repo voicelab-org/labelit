@@ -67,7 +67,7 @@ class DatasetImporter:
                 dataset_docs.values_list("audio_filename", flat=True)
             )
             for idx, audio_name in enumerate(audio_doc_names):
-                print(f"Document import: {idx}/{len(audio_doc_names)}")
+                print(f"Audio import: {idx}/{len(audio_doc_names)}")
                 audio_path = os.path.join(self.dir_path, "documents", audio_name)
                 # logger.debug(f"&type of audio_storage.open(audio_path, 'wb').obj: {type(audio_storage.open(audio_path, 'wb').obj)}")
                 # audio_storage.open(audio_path, "rb").obj.upload_file(f"{audio_name}/")
