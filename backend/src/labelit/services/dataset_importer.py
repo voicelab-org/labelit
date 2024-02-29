@@ -30,8 +30,16 @@ class DatasetImporter:
             documents_dir_path = os.path.join(self.dir_path, "documents")
 
             filenames = list(os.listdir(documents_dir_path))
-            document_names = list(set(map(lambda x: x.split(".")[0], filenames)))
-            for doc_name in document_names:
+            document_names = list(
+                set(
+                    map(
+                        lambda x: ".".join(x.replace(".meta", "").split(".")[:-1]),
+                        filenames,
+                    )
+                )
+            )
+            for idx, doc_name in enumerate(document_names):
+                print(f"Document import: {idx}/{len(document_names)}")
                 doc_dict = dict(
                     dataset=dataset,
                 )
@@ -49,6 +57,7 @@ class DatasetImporter:
                         doc_dict["text"] = f.read()
                 Document.objects.create(**doc_dict)
 
+        print("Importing documents...")
         _import_documents()
 
         dataset_docs = Document.objects.filter(dataset=dataset)
@@ -57,7 +66,8 @@ class DatasetImporter:
             audio_doc_names = list(
                 dataset_docs.values_list("audio_filename", flat=True)
             )
-            for audio_name in audio_doc_names:
+            for idx, audio_name in enumerate(audio_doc_names):
+                print(f"Document import: {idx}/{len(audio_doc_names)}")
                 audio_path = os.path.join(self.dir_path, "documents", audio_name)
                 # logger.debug(f"&type of audio_storage.open(audio_path, 'wb').obj: {type(audio_storage.open(audio_path, 'wb').obj)}")
                 # audio_storage.open(audio_path, "rb").obj.upload_file(f"{audio_name}/")
@@ -66,6 +76,7 @@ class DatasetImporter:
                     writer.write(file_reader.read())
                     writer.close()
 
+        print("Uploading audios...")
         _upload_audio_to_storage()
 
     def import_dataset(self):
