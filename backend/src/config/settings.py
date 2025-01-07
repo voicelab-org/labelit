@@ -116,6 +116,9 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": os.environ.get("DB_HOST"),
         "PORT": 5432,
+        "OPTIONS": {
+            "options": f"-c search_path={os.environ.get('DB_SCHEMA', 'public')}"
+        }
     }
 }
 
