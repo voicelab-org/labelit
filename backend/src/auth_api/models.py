@@ -4,8 +4,11 @@ from django.db import models
 
 User = get_user_model()
 
+
 class LoginHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="login_histories")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="login_histories"
+    )
     connection_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     login_time = models.DateTimeField(auto_now_add=True)
     ip_address = models.GenericIPAddressField(null=True, blank=True)

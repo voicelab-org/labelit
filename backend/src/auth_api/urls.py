@@ -5,7 +5,7 @@ from .views import (
     UpdateProfileView,
     LogoutView,
     LogoutAllView,
-    CustomTokenObtainPairView
+    CustomTokenObtainPairView,
 )
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 

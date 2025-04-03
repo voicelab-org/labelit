@@ -10,24 +10,23 @@ from users.models import User, UserProfile
 from .models import LoginHistory
 
 logger = logging.getLogger(__name__)
+
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         user = self.user
         connection_id = uuid.uuid4()
-        ip_address = self.context['request'].META.get('REMOTE_ADDR')
-        user_agent = self.context['request'].META.get('HTTP_USER_AGENT', '')
+        ip_address = self.context["request"].META.get("REMOTE_ADDR")
+        user_agent = self.context["request"].META.get("HTTP_USER_AGENT", "")
 
         LoginHistory.objects.create(
             user=user,
             connection_id=connection_id,
             ip_address=ip_address,
-            user_agent=user_agent
+            user_agent=user_agent,
         )
-        logger.info(
-            f"Login - Connection ID: {connection_id} | User: {user.email}"
-        )
-
+        logger.info(f"Login - Connection ID: {connection_id} | User: {user.email}")
 
         return data
 
