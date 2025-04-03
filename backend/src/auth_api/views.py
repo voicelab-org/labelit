@@ -1,9 +1,9 @@
-import logging
-import uuid
+
 from .serializers import (
     RegisterSerializer,
     ChangePasswordSerializer,
     UpdateUserSerializer,
+    CustomTokenObtainPairSerializer
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import generics
@@ -22,21 +22,9 @@ from users.models import User
 
 
 
-logger = logging.getLogger(__name__)
-
 class CustomTokenObtainPairView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        connection_id = str(uuid.uuid4()) 
-
-        # Log user details after successful authentication
-        if response.status_code == 200:
-            email = request.data.get("email")
-            logger.info(
-                f"Login - Connection ID: {connection_id} | User: {email}"
-            )
-
-        return response
+    serializer_class = CustomTokenObtainPairSerializer
+  
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
