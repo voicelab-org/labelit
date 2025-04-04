@@ -2,6 +2,7 @@ from .serializers import (
     RegisterSerializer,
     ChangePasswordSerializer,
     UpdateUserSerializer,
+    CustomTokenObtainPairSerializer,
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import generics
@@ -13,8 +14,14 @@ from rest_framework_simplejwt.token_blacklist.models import (
     BlacklistedToken,
     OutstandingToken,
 )
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 from users.models import User
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class RegisterView(generics.CreateAPIView):
